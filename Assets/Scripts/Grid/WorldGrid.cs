@@ -8,6 +8,7 @@ public class WorldGrid : MonoBehaviour {
     public Node nodePrefab;
 
     private Node[,] m_grid;
+    
 
     private void Awake() {
         m_grid = new Node[rows, cols];
@@ -21,7 +22,16 @@ public class WorldGrid : MonoBehaviour {
         }
     }
 
-    
+    private void LateUpdate() {
+        Ray ray;
+        RaycastHit hit;
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out hit)) {
+            hit.transform.gameObject.GetComponent<Node>().setHovered();
+        }
+    }
+
+
 
 
 
