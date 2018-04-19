@@ -22,12 +22,7 @@ public class WorldGrid : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Raycasts the mouse location to the WorldGrid.
-    /// Returns the node it hit, or null if no collision occured.
-    /// </summary>
-    /// <returns>The hit node if valid, otherwise null</returns>
-    public Node getRaycastNode() {
+
         Ray ray;
         RaycastHit hit;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
