@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Node : MonoBehaviour {
     public Material hoverMaterial;
+    public Material hoverInvalidMaterial;
     public bool Occupied { get; set; }
 
 
-    private bool occupied;
+    private bool occupied = false;
     private Renderer rend;
     private Material initialMaterial;
     
@@ -25,13 +26,7 @@ public class Node : MonoBehaviour {
         setUnhovered();
     }
 
-    /// <summary>
-    /// Sets the material to the hoverMaterial attribute
-    /// </summary>
-    public void setHovered() {
-        rend.material = hoverMaterial;
-    }
-
+    
     /// <summary>
     /// Sets the material back to what it was originally
     /// </summary>
@@ -39,4 +34,14 @@ public class Node : MonoBehaviour {
         rend.material = initialMaterial;
     }
 
+    /// <summary>
+    /// Sets the material to hoverMaterial (hoverInvalidMaterial if the node is occupied).
+    /// </summary>
+    public void setHovered() {
+        if(occupied) {
+            rend.material = hoverInvalidMaterial;
+        } else {
+            rend.material = hoverMaterial;
+        }
+    }
 }

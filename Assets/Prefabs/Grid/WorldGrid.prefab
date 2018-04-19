@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4917808060764606}
   - component: {fileID: 114231163294869074}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: WorldGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,5 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 10
   cols: 10
-  nodePrefab: {fileID: 114492850989242070, guid: 4cf7d3176876d3b40ac336ba0dfa9c8a,
+  nodePrefab: {fileID: 114246487696215140, guid: 4cf7d3176876d3b40ac336ba0dfa9c8a,
     type: 2}
