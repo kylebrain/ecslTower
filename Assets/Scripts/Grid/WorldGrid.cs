@@ -22,6 +22,13 @@ public class WorldGrid: MonoBehaviour {
         }
     }
 
+    public Node getAt(int x, int y) {
+        if(x > rows || y > cols) {
+            return null;
+        }
+        return m_grid[x, y];
+    }
+
     /// <summary>
     /// Raycasts the mouse location to the WorldGrid.
     /// Returns the node it hit, or null if no collision occured.
