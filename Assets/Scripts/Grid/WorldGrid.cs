@@ -22,6 +22,13 @@ public class WorldGrid : MonoBehaviour {
         }
     }
 
+    public Node getAt(int x, int y) {
+        if(x > rows || y > cols) {
+            return null;
+        }
+        return m_grid[x, y];
+    }
+
     private void LateUpdate() {
         Ray ray;
         RaycastHit hit;
