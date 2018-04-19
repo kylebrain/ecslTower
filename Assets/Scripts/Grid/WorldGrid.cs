@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid : MonoBehaviour {
+public class WorldGrid : MonoBehaviour {
     public int rows = 1;
     public int cols = 1;
     public Node nodePrefab;
