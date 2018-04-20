@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldGrid : MonoBehaviour {
+public class WorldGrid: MonoBehaviour {
     public int rows = 1;
     public int cols = 1;
     public Node nodePrefab;
 
     private Node[,] m_grid;
-    
+
 
     private void Awake() {
         m_grid = new Node[rows, cols];
@@ -20,6 +20,13 @@ public class WorldGrid : MonoBehaviour {
                 m_grid[i, j].name = "Node (" + i + ", " + j + ")";
             }
         }
+    }
+
+    public Node getAt(int x, int y) {
+        if(x > rows || y > cols) {
+            return null;
+        }
+        return m_grid[x, y];
     }
 
     /// <summary>
