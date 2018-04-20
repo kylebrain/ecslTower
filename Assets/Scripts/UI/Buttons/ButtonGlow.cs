@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
@@ -10,6 +8,8 @@ public class ButtonGlow : MonoBehaviour
     private Color normalColor;
     private Color hoverColor;
     private Color clickDownColor;
+
+    private bool isHoverActive = false;
 
     private void Awake()
     {
@@ -24,18 +24,19 @@ public class ButtonGlow : MonoBehaviour
         Debug.Log("Click  Color: " + clickDownColor);
     }
 
-    public void SetNormalColor()
+    public void SetHoverColor(bool isHover)
     {
-        image.color = normalColor;
-    }
-
-    public void SetHoverColor()
-    {
-        image.color = hoverColor;
+        image.color = (isHover) ? hoverColor : normalColor;
+        isHoverActive = isHover;
     }
 
     public void SetClickDownColor()
     {
         image.color = clickDownColor;
+    }
+
+    public void SetClickUpColor()
+    {
+        image.color = isHoverActive ? hoverColor : normalColor;
     }
 }
