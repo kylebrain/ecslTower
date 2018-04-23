@@ -104,13 +104,13 @@ public class ButtonConatiner : MonoBehaviour
 
             RectTransform rectTransform = button.GetComponent<RectTransform>();
 
-            // Set the anchor and pivot to the top left corner
+            // Set the anchor and pivot to the bottom left corner
             rectTransform.anchorMin = new Vector2(0, 1);
             rectTransform.anchorMax = new Vector2(0, 1);
             rectTransform.pivot = new Vector2(0, 1);
 
             // Set the new position
-            button.transform.position = new Vector3(leftPosition, topPosition, rectTransform.position.z);
+            button.transform.localPosition = new Vector3(leftPosition, topPosition, rectTransform.position.z);
 
             if (orientation == StackOrientation.Vertical)
             {
@@ -165,10 +165,10 @@ public class ButtonConatiner : MonoBehaviour
         {
             // Add the margin for the left side
             CombinedButtonWidths += buttonMargin;
-
+            
             // Add the width of the game button
             RectTransform rectTransform = button.GetComponent<RectTransform>();
-            CombinedButtonWidths = rectTransform.rect.width;
+            CombinedButtonWidths += rectTransform.rect.width;
         }
 
         // Add the margin for the right of the last button
