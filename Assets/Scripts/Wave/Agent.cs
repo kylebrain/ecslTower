@@ -19,7 +19,9 @@ public abstract class Agent : MonoBehaviour {
     {
         wavePath = newWavePath;
         navAgent = GetComponent<NavMeshAgent>();
-        navAgent.SetDestination(wavePath.GetNextNode().transform.position);
+        Node firstDestination = wavePath.GetNextNode();
+        navAgent.SetDestination(firstDestination.transform.position);
+        transform.LookAt(firstDestination.transform.position);
     }
 
     private void Terminate()
