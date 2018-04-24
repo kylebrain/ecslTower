@@ -5,25 +5,51 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public abstract class Building : MonoBehaviour{
     public WorldGrid worldGrid;
-    public Color radiusColor;
-    public int numSegments;
+    public Color radiusColor = new Color(10, 10, 120);
+    public int numSegments = 100;
+    public float radiusLineWidth = 0.1f;
 
-    private float health = 0;
+    protected float health = 0;
     public float Health { get; set; }
 
-    private GridArea location;
+    protected GridArea location;
     public GridArea Location { get; set; }
 
-    private float radius = 0;
+    protected float radius = 1f;
     public float Radius { get; set; }
 
-    private LineRenderer line;
+    protected LineRenderer line;
 
-    private void Start() {
+    /// <summary>
+    /// Used to keep track of when the tower's position changes so the radius circle can be redrawn
+    /// </summary>
+    private Vector3 prevPos;
+
+    protected void initLineRenderer() {
         line = gameObject.GetComponent<LineRenderer>();
         line.positionCount = numSegments;
-        line.startColor = radiusColor;
-        line.startWidth = 0.1f;
+        line.material.color = radiusColor;
+        line.startWidth = radiusLineWidth;
+        line.alignment = LineAlignment.View;
+        line.loop = true;
+        line.useWorldSpace = false;
+
+        prevPos = transform.position;
+
+        drawRadius();
+        line.enabled = false;
+    }
+    
+    protected void drawRadius() {
+        float deltaTheta = (float)(2.0 * Mathf.PI) / numSegments;
+        float theta = 0f;
+        for(int i = 0; i < numSegments; i++) {
+            float x = radius * Mathf.Cos(theta);
+            float z = radius * Mathf.Sin(theta);
+            Vector3 pos = new Vector3(x, 0.1f, z);
+            line.SetPosition(i, pos);
+            theta += deltaTheta;
+        }
     }
 
 
@@ -59,21 +85,35 @@ public abstract class Building : MonoBehaviour{
         }
         //TODO: implement placing the tower
     }
+
+    /// <summary>
+    /// Removes the tower from the map
+    /// </summary>
     public void removeFromMap() {
         //TODO: implement removing tower based on private variable "location"
     }
 
+    /// <summary>
+    /// Shows the tower's radius as a cirlce on the map
+    /// </summary>
     public void showRadius() {
-        float deltaTheta = (float)(2.0 * Mathf.PI) / (numSegments - 1);
-        float theta = 0f;
-
-        for(int i = 0; i < numSegments; i++) {
-            float x = radius * Mathf.Cos(theta);
-            float z = radius * Mathf.Sin(theta);
-            Vector3 pos = new Vector3(x, 0.1f, z);
-            line.SetPosition(i, pos);
-            theta += deltaTheta;
+        if(prevPos != transform.position) {
+            drawRadius();
         }
+        prevPos = transform.position;
+        line.enabled = true;
     }
+
+    /// <summary>
+    /// Hides the tower's radius
+    /// </summary>
+    public void hideRadius() {
+        line.enabled = false;
+    }
+
+    /// <summary>
+    /// Action to be performed in each call of Update
+    /// </summary>
+    public abstract void updateAction();
 
 }
