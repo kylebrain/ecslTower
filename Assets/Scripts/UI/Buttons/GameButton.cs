@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameButton : MonoBehaviour, IMenuItem
+public abstract class GameButton : MonoBehaviour, IMenuItem
 {
-    public void Close()
+    public abstract void PerformAction();
+
+    #region IUserInterface functions
+    public virtual void Close()
     {
+
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
+        this.enabled = false;
     }
 
-    public void Show()
+    public virtual void Show()
     {
+        this.enabled = true;
     }
-
-    public void PerformAction()
-    {
-    }
+    #endregion
 }
