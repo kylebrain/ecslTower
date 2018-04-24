@@ -16,7 +16,7 @@ public class Node : MonoBehaviour {
     private void Start() {
         rend = GetComponent<Renderer>();
         if(rend == null) {
-            Debug.Log("Cannot find Node's renderer.\nDid you remove the component?");
+            Debug.Log("Cannot find Node's renderer. Did you remove the component?");
         }
 
         initialMaterial = rend.material;
