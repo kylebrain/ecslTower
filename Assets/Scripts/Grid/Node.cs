@@ -5,10 +5,13 @@ using UnityEngine;
 public class Node : MonoBehaviour {
     public Material hoverMaterial;
     public Material hoverInvalidMaterial;
-    public bool Occupied { get; set; }
-
 
     private bool occupied = false;
+    public bool Occupied {
+        get { return occupied; }
+        set { occupied = value; }
+    }
+
     private Renderer rend;
     private Material initialMaterial;
     
@@ -16,7 +19,7 @@ public class Node : MonoBehaviour {
     private void Start() {
         rend = GetComponent<Renderer>();
         if(rend == null) {
-            Debug.Log("Cannot find Node's renderer.\nDid you remove the component?");
+            Debug.Log("Cannot find Node's renderer. Did you remove the component?");
         }
 
         initialMaterial = rend.material;
@@ -44,4 +47,10 @@ public class Node : MonoBehaviour {
             rend.material = hoverMaterial;
         }
     }
+
+    public override string ToString() {
+        return base.ToString() + " Occupied: " + occupied;
+    }
+
+
 }

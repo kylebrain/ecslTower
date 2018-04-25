@@ -16,7 +16,7 @@ public class WorldGrid: MonoBehaviour {
         for(int i = 0; i < rows; ++i) {
             for(int j = 0; j < cols; ++j) {
                 m_grid[i, j] = Instantiate(nodePrefab, transform);
-                m_grid[i, j].transform.position = new Vector3(i + 0.5f, 0, j + 0.5f);
+                m_grid[i, j].transform.position = new Vector3(i + 0.0f, 0, j + 0.0f);
                 m_grid[i, j].name = "Node (" + i + ", " + j + ")";
             }
         }
@@ -57,7 +57,43 @@ public class WorldGrid: MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sets the location's Nodes to occupied
+    /// </summary>
+    /// <param name="loc">The location to set occupied</param>
+    public void setOccupied(GridArea loc) {
 
+        int startX = loc.bottomLeft.x;
+        int endX = startX + loc.width - 1;
+
+        int startY = loc.bottomLeft.y;
+        int endY = startY + loc.height - 1;
+
+        for(int i = startX; i <= endX; ++i) {
+            for(int j = startY; j <= endY; ++j) {
+                m_grid[i, j].Occupied = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets the location's Nodes to unoccupied
+    /// </summary>
+    /// <param name="loc">The location to set unoccupied</param>
+    public void setUnoccupied(GridArea loc) {
+
+        int startX = loc.bottomLeft.x;
+        int endX = startX + loc.width - 1;
+
+        int startY = loc.bottomLeft.y;
+        int endY = startY + loc.height - 1;
+
+        for(int i = startX; i <= endX; ++i) {
+            for(int j = startY; j <= endY; ++j) {
+                m_grid[i, j].Occupied = false;
+            }
+        }
+    }
 
 
 
