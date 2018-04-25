@@ -10,13 +10,22 @@ public abstract class Building : MonoBehaviour{
     public float radiusLineWidth = 0.1f;
 
     protected float health = 0;
-    public float Health { get; set; }
+    public float Health {
+        get { return health; }
+        set { health = value; }
+    }
 
     protected GridArea location;
-    public GridArea Location { get; set; }
+    public GridArea Location {
+        get { return location; }
+        set { location = value; }
+    }
 
     protected float radius = 1f;
-    public float Radius { get; set; }
+    public float Radius {
+        get { return radius; }
+        set { radius = value; }
+    }
 
     protected LineRenderer line;
 
@@ -25,6 +34,10 @@ public abstract class Building : MonoBehaviour{
     /// </summary>
     private Vector3 prevPos;
 
+
+    /// <summary>
+    /// Initializes settings for the radius display's LineRenderer component
+    /// </summary>
     protected void initLineRenderer() {
         line = gameObject.GetComponent<LineRenderer>();
         line.positionCount = numSegments;
@@ -39,7 +52,12 @@ public abstract class Building : MonoBehaviour{
         drawRadius();
         line.enabled = false;
     }
+
+
     
+    /// <summary>
+    /// Recalculates the points in the LineRenderer's circle
+    /// </summary>
     protected void drawRadius() {
         float deltaTheta = (float)(2.0 * Mathf.PI) / numSegments;
         float theta = 0f;
@@ -62,15 +80,24 @@ public abstract class Building : MonoBehaviour{
         health += toAdd;
     }
 
+
+
     /// <summary>
     /// Checks to see if the requested location is available, and if so places the tower there
     /// </summary>
     /// <param name=""></param>
     public void placeOnMap(GridArea loc) {
         bool available = true;
+
         //Loop through the area occupied by loc
-        for(int i = loc.topLeft.x; i <= loc.bottomRight.x; ++i) {
-            for(int j = loc.topLeft.y; j <= loc.bottomRight.y; ++j) {
+        int startX = loc.bottomLeft.x;
+        int endX = startX + loc.width - 1;
+
+        int startY = loc.bottomLeft.y;
+        int endY = startY + loc.height - 1;
+
+        for(int i = startX; i <= endX; ++i) {
+            for(int j = startY; j <= endY; ++j) {
                 Node cur = worldGrid.getAt(i, j);
                 if(cur == null) {
                     return;
@@ -83,15 +110,28 @@ public abstract class Building : MonoBehaviour{
         if(!available) {
             return;
         }
-        //TODO: implement placing the tower
+
+        Vector2 centerPoint = new Vector2((float)(startX + endX) / 2, (float)(startY + endY) / 2);
+        transform.position = new Vector3(centerPoint.x, 0f, centerPoint.y);
+
+        worldGrid.setOccupied(loc);
+        location = loc;
     }
+
+
 
     /// <summary>
     /// Removes the tower from the map
     /// </summary>
     public void removeFromMap() {
-        //TODO: implement removing tower based on private variable "location"
+        worldGrid.setUnoccupied(location);
+        Destroy(this);
     }
+
+
+    
+
+
 
     /// <summary>
     /// Shows the tower's radius as a cirlce on the map
@@ -104,6 +144,8 @@ public abstract class Building : MonoBehaviour{
         line.enabled = true;
     }
 
+
+
     /// <summary>
     /// Hides the tower's radius
     /// </summary>
@@ -111,9 +153,14 @@ public abstract class Building : MonoBehaviour{
         line.enabled = false;
     }
 
+
+
     /// <summary>
-    /// Action to be performed in each call of Update
+    /// Action to be performed in each call of FixedUpdate
     /// </summary>
     public abstract void updateAction();
+
+
+
 
 }
