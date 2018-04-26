@@ -226,6 +226,10 @@ MonoBehaviour:
   radiusColor: {r: 0.121161334, g: 0.121161334, b: 0.6102941, a: 1}
   numSegments: 100
   radiusLineWidth: 0.1
+  Location:
+    bottomLeft: {x: 0, y: 0}
+    width: 3
+    height: 4
 --- !u!120 &120229091733712840
 LineRenderer:
   m_ObjectHideFlags: 1

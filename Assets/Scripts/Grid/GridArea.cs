@@ -13,6 +13,8 @@ public class GridArea : System.Object {
         height = h;
     }
 
+    public GridArea(){}
+
     public Vector2Int bottomLeft;
     public int width;
     public int height;
