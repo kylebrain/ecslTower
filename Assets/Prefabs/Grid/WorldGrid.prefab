@@ -52,6 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rows: 10
-  cols: 10
+  cols: 11
   nodePrefab: {fileID: 114246487696215140, guid: 4cf7d3176876d3b40ac336ba0dfa9c8a,
     type: 2}
