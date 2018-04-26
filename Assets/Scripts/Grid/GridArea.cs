@@ -17,10 +17,12 @@ public class GridArea : System.Object {
     public int width;
     public int height;
 
-    public bool Contains(Vector2Int coordinate)
-    {
+
+    public bool Contains(Vector2Int coordinate) {
         return (coordinate.x >= bottomLeft.x && coordinate.x < bottomLeft.x + width) && (coordinate.y >= bottomLeft.y && coordinate.y < bottomLeft.y + height);
     }
 
-    //public static GridArea NullGridArea = new GridArea(new Vector2Int(int.MinValue, int.MinValue), int.MinValue, int.MinValue);
+    public override string ToString() {
+        return base.ToString() + " bottomLeft: " + bottomLeft + " width: " + width + " height: " + height;
+    }
 }

@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGrid: MonoBehaviour {
-    public int rows = 1;
-    public int cols = 1;
+    public int width = 1;
+    public int height = 1;
     public Node nodePrefab;
 
     private Node[,] m_grid;
 
 
     private void Awake() {
-        m_grid = new Node[rows, cols];
+        m_grid = new Node[width, height];
 
-        for(int i = 0; i < rows; ++i) {
-            for(int j = 0; j < cols; ++j) {
+        for(int i = 0; i < width; ++i) {
+            for(int j = 0; j < height; ++j) {
                 m_grid[i, j] = Instantiate(nodePrefab, transform);
-                m_grid[i, j].transform.position = new Vector3(i + 0.0f, 0, j + 0.0f);
+                m_grid[i, j].transform.position = new Vector3(i, 0, j);
                 m_grid[i, j].name = "Node (" + i + ", " + j + ")";
             }
         }
     }
 
     public Node getAt(int x, int y) {
-        if(x > rows || y > cols) {
+        if(x > width || y > height || x < 0 || y < 0) {
             return null;
         }
         return m_grid[x, y];

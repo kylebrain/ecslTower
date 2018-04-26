@@ -42,7 +42,9 @@ public class Node : MonoBehaviour {
     /// Sets the material back to what it was originally
     /// </summary>
     public void setUnhovered() {
-        rend.material = initialMaterial;
+        if(rend.material != initialMaterial) {
+            rend.material = initialMaterial;
+        }
     }
 
     /// <summary>
