@@ -27,6 +27,7 @@ public class Wave : MonoBehaviour {
         Debug.Log("Spawning!");
         Node startNode = path.GetNextNode();
         Agent newAgent = Instantiate(agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
-        newAgent.BeginMovement(path);
+        WavePath newPath = path;
+        newAgent.BeginMovement(newPath);
     }
 }

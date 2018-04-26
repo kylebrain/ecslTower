@@ -23,6 +23,13 @@ public class WavePath {
         nodeIndex = -1;
     }
 
+    public void InitializePath(List<Node> list)
+    {
+        PathList.Clear();
+        PathList = list;
+        nodeIndex = -1;
+    }
+
     /// <summary>
     /// Adds a midpoint Node before the final Node but after all other Nodes
     /// </summary>
@@ -47,6 +54,21 @@ public class WavePath {
 
         nodeIndex++;
         return PathList[nodeIndex];
+    }
+
+    public override string ToString()
+    {
+        string ret = base.ToString() + " [";
+        foreach(Node n in PathList)
+        {
+            ret += "(" + ((int)n.transform.position.x) + ", " + ((int)n.transform.position.z) + "),";
+        }
+        if (PathList.Count > 0)
+        {
+            ret = ret.Remove(ret.Length - 1, 1);
+        }
+        ret += "]";
+        return ret;
     }
 
 }

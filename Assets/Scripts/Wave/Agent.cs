@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public abstract class Agent : MonoBehaviour {
+public abstract class Agent : MonoBehaviour
+{
     public float health;
     //private Alliance alliance;
     public Color color;
@@ -12,22 +13,52 @@ public abstract class Agent : MonoBehaviour {
 
     private NavMeshAgent navAgent;
     private WavePath wavePath;
+    private Node CurrentNode
+    {
+        get
+        {
+            return currentNode;
+        }
+        set
+        {
+            navAgent.SetDestination(value.transform.position);
+            currentNode = value;
+        }
+    }
+    private Node currentNode;
 
     public abstract void DestinationAction();
+
+    private void FixedUpdate()
+    {
+        if ((currentNode.transform.position - transform.position).sqrMagnitude < 1)
+        {
+            Node nextNode = wavePath.GetNextNode();
+            if(nextNode != null)
+            {
+                CurrentNode = nextNode;
+            } else
+            {
+                Terminate();
+            }
+            
+        }
+    }
 
     public void BeginMovement(WavePath newWavePath)
     {
         wavePath = newWavePath;
         navAgent = GetComponent<NavMeshAgent>();
-        Node firstDestination = wavePath.GetNextNode();
-        navAgent.SetDestination(firstDestination.transform.position);
-        transform.LookAt(firstDestination.transform.position);
+        Node startNode = wavePath.GetNextNode();
+        CurrentNode = startNode;
+        transform.LookAt(startNode.transform.position);
     }
 
     private void Terminate()
     {
         //add animation
-        Destroy(this);
+        Debug.Log("Reached destination!");
+        Destroy(gameObject);
     }
 
 }
