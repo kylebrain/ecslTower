@@ -16,4 +16,8 @@ public struct GridArea{
     public Vector2Int bottomLeft;
     public int width;
     public int height;
+
+    public override string ToString() {
+        return base.ToString() + " bottomLeft: " + bottomLeft + " width: " + width + " height: " + height;
+    }
 }
