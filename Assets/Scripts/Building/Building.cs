@@ -15,11 +15,7 @@ public abstract class Building : MonoBehaviour{
         set { health = value; }
     }
 
-    protected GridArea location;
-    public GridArea Location {
-        get { return location; }
-        set { location = value; }
-    }
+    public GridArea Location;
 
     protected float radius = 1f;
     public float Radius {
@@ -80,7 +76,7 @@ public abstract class Building : MonoBehaviour{
             return;
         }
 
-        location = loc;
+        Location = loc;
         updatePosition();
         worldGrid.setOccupied(loc);
         placed = true;
@@ -90,7 +86,7 @@ public abstract class Building : MonoBehaviour{
     /// Removes the tower from the map
     /// </summary>
     public void removeFromMap() {
-        worldGrid.setUnoccupied(location);
+        worldGrid.setUnoccupied(Location);
         placed = false;
         Destroy(this);
     }
@@ -154,21 +150,21 @@ public abstract class Building : MonoBehaviour{
     /// <param name="pos">The new transform. Note: the actual transform after the call might be slightly different
     /// because Location will round bottomLeft to integer values.</param>
     protected void setCenterPosition(Vector3 pos) {
-        int bottomLeftX = (int)(pos.x - 0.5f * (location.width - 1));
+        int bottomLeftX = (int)(pos.x - 0.5f * (Location.width - 1));
         if(bottomLeftX < 0) {
             bottomLeftX = 0;
-        } else if(bottomLeftX > worldGrid.width - location.width) {
-            bottomLeftX = worldGrid.width - location.width;
+        } else if(bottomLeftX > worldGrid.width - Location.width) {
+            bottomLeftX = worldGrid.width - Location.width;
         }
 
-        int bottomLeftY = (int)(pos.z - 0.5f * (location.height - 1));
+        int bottomLeftY = (int)(pos.z - 0.5f * (Location.height - 1));
         if(bottomLeftY < 0) {
             bottomLeftY = 0;
-        } else if(bottomLeftY > worldGrid.height - location.height) {
-            bottomLeftY = worldGrid.height - location.height;
+        } else if(bottomLeftY > worldGrid.height - Location.height) {
+            bottomLeftY = worldGrid.height - Location.height;
         }
 
-        location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
+        Location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
         updatePosition();
     }
 
@@ -176,11 +172,11 @@ public abstract class Building : MonoBehaviour{
     /// Recalculates and moves the object's transform based on its Location attribute.
     /// </summary>
     protected void updatePosition() {
-        int startX = location.bottomLeft.x;
-        int endX = startX + location.width - 1;
+        int startX = Location.bottomLeft.x;
+        int endX = startX + Location.width - 1;
 
-        int startY = location.bottomLeft.y;
-        int endY = startY + location.height - 1;
+        int startY = Location.bottomLeft.y;
+        int endY = startY + Location.height - 1;
 
         transform.position = new Vector3((float)(startX + endX) / 2, 0f, (float)(startY + endY) / 2);
     }
@@ -203,7 +199,7 @@ public abstract class Building : MonoBehaviour{
                 }
 
                 //Place
-                placeOnMap(location);
+                placeOnMap(Location);
             }
         }
 
