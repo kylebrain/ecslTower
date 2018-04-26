@@ -12,6 +12,14 @@ public class Node : MonoBehaviour {
         set { occupied = value; }
     }
 
+    public Vector2Int Coordinate
+    {
+        get
+        {
+            return new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        }
+    }
+
     private Renderer rend;
     private Material initialMaterial;
     
@@ -19,7 +27,7 @@ public class Node : MonoBehaviour {
     private void Start() {
         rend = GetComponent<Renderer>();
         if(rend == null) {
-            Debug.Log("Cannot find Node's renderer. Did you remove the component?");
+            Debug.LogError("Cannot find Node's renderer. Did you remove the component?");
         }
 
         initialMaterial = rend.material;

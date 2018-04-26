@@ -36,7 +36,7 @@ public class Arrow : MonoBehaviour
 
         if (arrowhead == null)
         {
-            Debug.Log("Cannot find child arrowhead,\nPerhaps it was moved?");
+            Debug.LogError("Cannot find child arrowhead,\nPerhaps it was moved?");
         }
         else
         {
@@ -56,5 +56,10 @@ public class Arrow : MonoBehaviour
         DrawArrow(start.transform.position, end.transform.position, overlay);
         origin = start;
         destination = end;
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + origin.Coordinate + "->" + destination.Coordinate;
     }
 }

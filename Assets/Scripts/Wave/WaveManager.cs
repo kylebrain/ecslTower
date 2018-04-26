@@ -15,7 +15,11 @@ public class WaveManager : MonoBehaviour
     private Arrow drawArrow = null;
     public float arrowOffset = 0.5f;
     private WavePath newPath = new WavePath();
-    List<Arrow> arrowList = new List<Arrow>();
+    Stack<Arrow> arrowStack = new Stack<Arrow>();
+    //Stack<Node> nodeStack = new Stack<Node>();
+    //private Node lastNodeOfNodeQueue = null;
+    public GridArea startArea;
+    public GridArea endArea;
 
     //test
 
@@ -36,9 +40,10 @@ public class WaveManager : MonoBehaviour
             if (PushPath())
             {
                 Debug.Log("Path pushed!");
-            } else
+            }
+            else
             {
-                Debug.Log("Invalid path!");
+                Debug.LogError("Invalid path!");
             }
         }
     }
@@ -47,22 +52,42 @@ public class WaveManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1))
         {
-            List<Arrow> deleteList = new List<Arrow>();
+
             Node NodePointedAt = worldGrid.getRaycastNode();
-            foreach(Arrow a in arrowList)
+            if (NodePointedAt == null) //exit function if no node is selected
             {
-                Debug.Log("Start: " + a.Origin + ", end: " + a.Destination);
-                if(a.Origin == NodePointedAt || a.Destination == NodePointedAt)
+                return;
+            }
+
+            List<Arrow> tempArrowList = new List<Arrow>(arrowStack);
+
+            if (tempArrowList.FindIndex(a => a.Origin == NodePointedAt) >= 0) //if it is actually a selected node
+            {
+                Arrow currentArrow;
+                while(arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != NodePointedAt)
                 {
-                    deleteList.Add(a);
+                    RemoveArrow(currentArrow);
+                }
+            } else if (tempArrowList.FindIndex(a => a.Destination == NodePointedAt) >= 0)
+            {
+                Arrow endArrow = arrowStack.Peek();
+                if(endArrow.Destination == NodePointedAt)
+                {
+                    RemoveArrow(endArrow);
                 }
             }
-            foreach(Arrow a in deleteList)
-            {
-                arrowList.Remove(a);
-                Destroy(a.gameObject);
-            }
         }
+    }
+
+    private void RemoveArrow(Arrow currentArrow)
+    {
+        currentArrow.Destination.Occupied = false;
+        if (arrowStack.Count == 1)
+        {
+            currentArrow.Origin.Occupied = false;
+        }
+        arrowStack.Pop();
+        Destroy(currentArrow.gameObject);
     }
 
     private void DrawArrowIfValid()
@@ -82,128 +107,96 @@ public class WaveManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Node currentNode = worldGrid.getRaycastNode();
-
             if (currentNode == null) //exit function if no node is selected
             {
                 return;
             }
 
-            if (currStart != null) //if start node has been select, select the end node
+            if (currStart == null) //if there is no selected start node
+            {
+                if (arrowStack.Count == 0 ? (startArea.Contains(currentNode.Coordinate)) : (arrowStack.Peek().Destination == currentNode))
+                {
+                    currStart = currentNode;
+                    //Debug.Log("Start Point set to: " + currStart.name);
+                    drawArrow = Instantiate(arrowPrefab, transform) as Arrow;
+                    drawArrow.DrawArrow(currStart.transform.position, worldGrid.getRaycastNode().transform.position, arrowOffset);
+                }
+                else
+                {
+                    Debug.LogError("Node" + currentNode.Coordinate + " cannot be placed here!");
+                }
+            }
+
+            else //if start node has been select, select the end node
             {
                 currEnd = currentNode;
-                if (currEnd == currStart) //end and start cannot be the same
+                if (currEnd == currStart || currEnd.Occupied == true) //end and start cannot be the same
                 {
+                    Debug.LogError("Node" + currentNode.Coordinate + " is occupied!");
                     currEnd = null;
                 }
                 else
                 {
-                    Debug.Log("End Point set to: " + currEnd.name);
+                    //Debug.Log("End Point set to: " + currEnd.name);
                 }
-            }
-            else //start has not been select so set it
-            {
-                currStart = currentNode;
-                Debug.Log("Start Point set to: " + currStart.name);
-                drawArrow = Instantiate(arrowPrefab, transform) as Arrow;
-                drawArrow.DrawArrow(currStart.transform.position, worldGrid.getRaycastNode().transform.position, arrowOffset);
             }
 
             if (currStart != null && currEnd != null) //if both the start and end exist, set the path segment
             {
                 SetPathSegment(currStart, currEnd);
             }
+
         }
     }
 
     private void SetPathSegment(Node start, Node end)
     {
+
+        if(start == null || end == null)
+        {
+            Debug.LogError("Passed invalid nodes to create segment!");
+            return;
+        }
+        start.Occupied = true;
+        end.Occupied = true;
         drawArrow.PlaceArrow(start, end, arrowOffset);
         Arrow newArrow = drawArrow;
-        arrowList.Add(newArrow);
+        arrowStack.Push(newArrow);
+
         currStart = null;
         currEnd = null;
     }
 
-    private Arrow ArrowClosestToOrigin(List<Arrow> list)
-    {
-        Arrow min = null;
-        foreach(Arrow a in list)
-        {
-            if(min == null)
-            {
-                min = a;
-            }
-            float currentMagnitude = a.Origin.transform.position.sqrMagnitude;
-            float minMagnitude = min.Origin.transform.position.sqrMagnitude;
-            if (currentMagnitude < minMagnitude)
-            {
-                min = a;
-            }
-        }
-        return min;
-    }
-
-    private Arrow GetOriginArrow(List<Arrow> list)
-    {
-        foreach (Arrow originArrow in list)
-        {
-            int i;
-            for (i = 0; i < list.Count; i++)
-            {
-                Arrow destinationArrow = list[i];
-                if(originArrow.Origin == destinationArrow.Destination)
-                {
-                    break;
-                }
-            }
-            if(i == list.Count)
-            {
-                return originArrow;
-            }
-        }
-        return null;
-    }
-
     private bool PushPath()
     {
-        Arrow start = GetOriginArrow(arrowList);
-        
-        if(start == null)
+        if (!endArea.Contains(arrowStack.Peek().Destination.Coordinate))
         {
+            Debug.LogError("End arrow does not end in end area!");
             return false;
         }
 
-        Debug.Log("Start node is: " + start.Origin);
+        Stack<Arrow> tempArrowStack = new Stack<Arrow>(arrowStack); //copy constructor of stack reverses order
+        List<Node> nodeList = new List<Node>();
 
-        int countArrow = 1;
-        List<Node> pathNodes = new List<Node>();
-        pathNodes.Add(start.Origin);
-        pathNodes.Add(start.Destination);
-        Node currentNode = start.Destination;
-        while (countArrow < arrowList.Count)
+        Arrow startArrow = tempArrowStack.Pop();
+
+        if (!startArea.Contains(startArrow.Origin.Coordinate))
         {
-            bool sucess = false;
-            foreach(Arrow a in arrowList)
-            {
-                if(a.Origin == currentNode && a.Destination != currentNode)
-                {
-                    pathNodes.Add(a.Destination);
-                    currentNode = a.Destination;
-                    countArrow++;
-                    sucess = true;
-                    break;
-                }
-            }
-            if (!sucess)
-            {
-                break;
-            }
-        }
-        if(countArrow < arrowList.Count)
-        {
+            Debug.LogError("Start arrow does not begin in start area!");
             return false;
         }
-        newPath.InitializePath(pathNodes);
+
+        nodeList.Add(startArrow.Origin);
+        nodeList.Add(startArrow.Destination);
+
+        while (tempArrowStack.Count > 0)
+        {
+            Arrow currentArrow = tempArrowStack.Pop();
+            nodeList.Add(currentArrow.Destination);
+        }
+
+
+        newPath.InitializePath(nodeList);
         currentWave.pathList.Add(newPath);
         Debug.Log(newPath);
         return true;

@@ -57,7 +57,7 @@ public abstract class Agent : MonoBehaviour
     private void Terminate()
     {
         //add animation
-        Debug.Log("Reached destination!");
+        DestinationAction();
         Destroy(gameObject);
     }
 
