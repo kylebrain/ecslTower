@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PauseMenu : Menu
 {
-    protected override void Quit()
+    /*protected override void Quit()
     {
         // TODO: Implement later
 
-    }
+    }*/
 }

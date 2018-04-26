@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MainMenu : Menu
 {
-    protected override void Quit()
+    /*protected override void Quit()
     {
         // TODO: Implement later
 
-    }
+    }*/
 }
