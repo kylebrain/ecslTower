@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackBuilding : Building {
+public class BuffBuilding : Building {
 
     protected override void derivedStart() {
-        
+
     }
 
     protected override void updateAction() {
