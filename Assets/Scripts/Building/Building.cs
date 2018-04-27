@@ -4,25 +4,16 @@ using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
 public abstract class Building : MonoBehaviour{
-    public WorldGrid worldGrid;
+
+    //----------VARIABLES--------------
+
+    public float Radius = 1f;
     public Color radiusColor = new Color(10, 10, 120);
-    public int numSegments = 100;
     public float radiusLineWidth = 0.1f;
-
-    protected float health = 0;
-    public float Health {
-        get { return health; }
-        set { health = value; }
-    }
-
+    public float startingHealth = 0f;
     public GridArea Location;
 
-    protected float radius = 1f;
-    public float Radius {
-        get { return radius; }
-        set { radius = value; }
-    }
-
+    protected float health = 0f;
     protected bool placed = false;
     public bool Placed {
         get { return placed; }
@@ -35,10 +26,22 @@ public abstract class Building : MonoBehaviour{
     private Vector3 prevPos;
 
     /// <summary>
+    /// Holds the array of nodes that make the play area
+    /// </summary>
+    private WorldGrid worldGrid;
+
+    /// <summary>
     /// LineRenderer component of the gameobject
     /// </summary>
     protected LineRenderer line;
 
+    /// <summary>
+    /// The number of segments in the radius line.
+    /// </summary>
+    private int numSegments = 100;
+
+    //-------------------FUNCTIONS-------------------
+    
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -118,8 +121,8 @@ public abstract class Building : MonoBehaviour{
         float deltaTheta = (float)(2.0 * Mathf.PI) / numSegments;
         float theta = 0f;
         for(int i = 0; i < numSegments; i++) {
-            float x = radius * Mathf.Cos(theta);
-            float z = radius * Mathf.Sin(theta);
+            float x = Radius * Mathf.Cos(theta);
+            float z = Radius * Mathf.Sin(theta);
             Vector3 pos = new Vector3(x, 0.1f, z);
             line.SetPosition(i, pos);
             theta += deltaTheta;
@@ -202,16 +205,36 @@ public abstract class Building : MonoBehaviour{
                 placeOnMap(Location);
             }
         }
-
-        
-
     }
 
+    //------------PRIVATE-------------
+
+    private void Start() {
+        worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
+        if(worldGrid == null) {
+            Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
+        }
+        initLineRenderer();
+        derivedStart();
+    }
+
+    private void Update() {
+        handleMouse();
+        updateAction();
+    }
+
+    //------------ABSTRACT-------------
+
     /// <summary>
-    /// Action to be performed in each call of FixedUpdate. MUST BE OVERRIDEN BY CHILDREN.
+    /// Actions to be performed by the derived class in Start.
+    /// </summary>
+    protected abstract void derivedStart();
+
+    /// <summary>
+    /// Actions to be performed by the derived class in each call of Update.
     /// </summary>
     protected abstract void updateAction();
 
-
+    
 
 }
