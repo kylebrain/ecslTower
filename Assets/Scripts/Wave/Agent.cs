@@ -9,7 +9,7 @@ public abstract class Agent : MonoBehaviour
     public float health;
     //private Alliance alliance;
     public Color color;
-    public float Speed;
+    public float speed = 3.5f;
 
     private NavMeshAgent navAgent;
     private WavePath wavePath;
@@ -48,10 +48,12 @@ public abstract class Agent : MonoBehaviour
     public void BeginMovement(WavePath newWavePath)
     {
         wavePath = newWavePath;
+
         navAgent = GetComponent<NavMeshAgent>();
+        navAgent.speed = speed;
         Node startNode = wavePath.GetNextNode();
         CurrentNode = startNode;
-        transform.LookAt(startNode.transform.position);
+        transform.LookAt(CurrentNode.transform.position);
     }
 
     private void Terminate()

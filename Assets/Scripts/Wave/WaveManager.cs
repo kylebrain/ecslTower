@@ -12,12 +12,10 @@ public class WaveManager : MonoBehaviour
     private Node currEnd = null;
     public Wave wavePrefab;
     public Arrow arrowPrefab;
+    public Agent agentPrefab;
     private Arrow drawArrow = null;
     public float arrowOffset = 0.5f;
-    private WavePath newPath = new WavePath();
     Stack<Arrow> arrowStack = new Stack<Arrow>();
-    //Stack<Node> nodeStack = new Stack<Node>();
-    //private Node lastNodeOfNodeQueue = null;
     public GridArea startArea;
     public GridArea endArea;
 
@@ -169,6 +167,12 @@ public class WaveManager : MonoBehaviour
 
     private bool PushPath()
     {
+        if(arrowStack.Count == 0)
+        {
+            Debug.LogError("No arrows have been created!");
+            return false;
+        }
+
         if (!endArea.Contains(arrowStack.Peek().Destination.Coordinate))
         {
             Debug.LogError("End arrow does not end in end area!");
@@ -176,7 +180,7 @@ public class WaveManager : MonoBehaviour
         }
 
         Stack<Arrow> tempArrowStack = new Stack<Arrow>(arrowStack); //copy constructor of stack reverses order
-        List<Node> nodeList = new List<Node>();
+        Queue<Node> nodeQueue = new Queue<Node>();
 
         Arrow startArrow = tempArrowStack.Pop();
 
@@ -186,18 +190,17 @@ public class WaveManager : MonoBehaviour
             return false;
         }
 
-        nodeList.Add(startArrow.Origin);
-        nodeList.Add(startArrow.Destination);
+        nodeQueue.Enqueue(startArrow.Origin);
+        nodeQueue.Enqueue(startArrow.Destination);
 
         while (tempArrowStack.Count > 0)
         {
             Arrow currentArrow = tempArrowStack.Pop();
-            nodeList.Add(currentArrow.Destination);
+            nodeQueue.Enqueue(currentArrow.Destination);
         }
 
-
-        newPath.InitializePath(nodeList);
-        currentWave.pathList.Add(newPath);
+        WavePath newPath = new WavePath(nodeQueue);
+        currentWave.AddNewAgent(agentPrefab, newPath);
         Debug.Log(newPath);
         return true;
     }

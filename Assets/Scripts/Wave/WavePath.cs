@@ -3,67 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WavePath {
+    public Node StartNode
+    {
+        get
+        {
+            return startNode;
+        }
+    }
+    public Node EndNode
+    {
+        get
+        {
+            return endNode;
+        }
+    }
     private Node startNode;
     private Node endNode;
-    private List<Node> PathList = new List<Node>();
-    private int nodeIndex;
+    private Queue<Node> NodeQueue = new Queue<Node>();
 
-    /// <summary>
-    /// Creates a basic path given a starting Node and a final Node and sets these two values;
-    /// </summary>
-    /// <param name="start">Where the path begins</param>
-    /// <param name="end">Where the path terminates</param>
-    public void InitializePath(Node start, Node end)
+    public WavePath(Queue<Node> queue)
     {
-        PathList.Clear();
-        startNode = start;
-        endNode = end;
-        PathList.Add(startNode);
-        PathList.Add(endNode);
-        nodeIndex = -1;
+        NodeQueue = new Queue<Node>(queue);
+        endNode = queue.Peek();
+        NodeQueue = new Queue<Node>(NodeQueue);
+        startNode = queue.Peek();
     }
 
-    public void InitializePath(List<Node> list)
-    {
-        PathList.Clear();
-        PathList = list;
-        nodeIndex = -1;
-    }
+    public WavePath(WavePath other) : this(other.NodeQueue) {}
 
-    /// <summary>
-    /// Adds a midpoint Node before the final Node but after all other Nodes
-    /// </summary>
-    /// <param name="midpoint">The Node to be inserted</param>
-    /// <returns>The midpoint Node that was passed</returns>
-    public Node AddMidpoint(Node midpoint)
-    {
-        PathList.Insert(PathList.Count - 2, midpoint);
-        return midpoint;
-    }
-
-    /// <summary>
-    /// Will retrieve the next Node in the list and increment the current Node in
-    /// </summary>
-    /// <returns>Return the next Node but returns null if currently on the last Node or the startNode if called for the first time</returns>
     public Node GetNextNode()
-    { 
-        if(nodeIndex == PathList.Count - 1)
+    {
+        if(NodeQueue.Count > 0)
+        {
+            return NodeQueue.Dequeue();
+        } else
         {
             return null;
         }
-
-        nodeIndex++;
-        return PathList[nodeIndex];
+        
     }
 
     public override string ToString()
     {
+        List<Node> NodeList = new List<Node>(NodeQueue);
         string ret = base.ToString() + " [";
-        foreach(Node n in PathList)
+        foreach(Node n in NodeList)
         {
             ret += "(" + ((int)n.transform.position.x) + ", " + ((int)n.transform.position.z) + "),";
         }
-        if (PathList.Count > 0)
+        if (NodeList.Count > 0)
         {
             ret = ret.Remove(ret.Length - 1, 1);
         }
