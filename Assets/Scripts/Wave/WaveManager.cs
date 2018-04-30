@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
 
-    public WorldGrid worldGrid;
+    private WorldGrid worldGrid;
     List<Wave> waveList = new List<Wave>();
     private Wave currentWave;
     private Node currStart = null;
@@ -19,13 +19,19 @@ public class WaveManager : MonoBehaviour
     public GridArea startArea;
     public GridArea endArea;
 
-    //test
-
     private void Start()
     {
+        worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
+        if (worldGrid == null)
+        {
+            Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
+        }
+
+        /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
         waveList.Add(newWave);
         currentWave = waveList[0];
+        /*end of test area*/
     }
 
     private void Update()
