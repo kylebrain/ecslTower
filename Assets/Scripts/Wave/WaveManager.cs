@@ -2,23 +2,84 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages the waves, allows for building of the WavePaths and Waves
+/// </summary>
 public class WaveManager : MonoBehaviour
 {
 
-    private WorldGrid worldGrid;
-    List<Wave> waveList = new List<Wave>();
-    private Wave currentWave;
-    private Node currStart = null;
-    private Node currEnd = null;
+
+    /*-----------public variables-----------*/
+    /// <summary>
+    /// Mandatory prefab so a Wave can be created and used
+    /// </summary>
     public Wave wavePrefab;
+    /// <summary>
+    /// Manatory prefab so an Arrow can be drawn and placed
+    /// </summary>
     public Arrow arrowPrefab;
+    /// <summary>
+    /// How much the arrow will overlay on the grid
+    /// </summary>
+    /// <remarks>
+    /// Default works fine
+    /// </remarks>
+    public float arrowOffset = 0.1f;
+    /// <summary>
+    /// Temperary prefab to be expanded in to a list of possible Agents
+    /// </summary>
     public Agent agentPrefab;
-    private Arrow drawArrow = null;
-    public float arrowOffset = 0.5f;
-    Stack<Arrow> arrowStack = new Stack<Arrow>();
+    /// <summary>
+    /// Where the Agent must spawn and where the first Arrow must start
+    /// </summary>
     public GridArea startArea;
+    /// <summary>
+    /// Where the Agent will be terminated and where the last Arrow must end
+    /// </summary>
     public GridArea endArea;
 
+
+    /*-----------private variables-----------*/
+    /// <summary>
+    /// Reference to the WorldGrid object
+    /// </summary>
+    /// <remarks>
+    /// Necessary for raycasting to Nodes
+    /// </remarks>
+    private WorldGrid worldGrid;
+    /// <summary>
+    /// List of Waves to be pushed to the player
+    /// </summary>
+    /// <remarks>
+    /// Not implemented yet
+    /// </remarks>
+    private List<Wave> waveList = new List<Wave>();
+    /// <summary>
+    /// The Wave that the Manager is currently handling and editing
+    /// </summary>
+    private Wave currentWave;
+    /// <summary>
+    /// Used for Arrow drawing, where the base of the Arrow will lay
+    /// </summary>
+    private Node currStart = null;
+    /// <summary>
+    /// Used for Arrow drawing, where the tip of the Arrow will lay
+    /// </summary>
+    private Node currEnd = null;
+    /// <summary>
+    /// The Arrow that is currently being drawn
+    /// </summary>
+    private Arrow drawArrow = null;
+    /// <summary>
+    /// The Stack of Arrows that visually make up the path to be converted to a WavePath when pushed
+    /// </summary>
+    private Stack<Arrow> arrowStack = new Stack<Arrow>();
+
+
+    /*-----------private MonoBehavior functions-----------*/
+    /// <summary>
+    /// Assigns the WorldGrid reference and currently creates a test Wave
+    /// </summary>
     private void Start()
     {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
@@ -34,6 +95,9 @@ public class WaveManager : MonoBehaviour
         /*end of test area*/
     }
 
+    /// <summary>
+    /// Call the neccessary functions for operation
+    /// </summary>
     private void Update()
     {
         DrawArrowIfValid();
@@ -52,6 +116,11 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+
+    /*-----------private functions-----------*/
+    /// <summary>
+    /// On RightClick, the Arrow selected and every Arrow after it is removed
+    /// </summary>
     private void RemoveArrowOnClick()
     {
         if (Input.GetMouseButtonDown(1))
@@ -83,6 +152,10 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Will remove the passed Arrow from the Stack and Destroy the GameObject
+    /// </summary>
+    /// <param name="currentArrow">The Arrow to de removed, must be in Stack</param>
     private void RemoveArrow(Arrow currentArrow)
     {
         currentArrow.Destination.Occupied = false;
@@ -94,6 +167,9 @@ public class WaveManager : MonoBehaviour
         Destroy(currentArrow.gameObject);
     }
 
+    /// <summary>
+    /// Will update the Arrow about to be placed to be drawn with the mouse
+    /// </summary>
     private void DrawArrowIfValid()
     {
         if (currStart != null && drawArrow != null && currEnd == null)
@@ -106,6 +182,9 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the Node selection on LeftClick to provide currStart and currEnd valid Nodes to be used by other functions
+    /// </summary>
     private void SelectNodeOnClick()
     {
         if (Input.GetMouseButtonDown(0))
@@ -153,6 +232,11 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// When finished placing an Arrow, the Arrow will be placed and adhere to the Grid
+    /// </summary>
+    /// <param name="start">The Node in which the base of the Arrow is in</param>
+    /// <param name="end">The Node in which the tip of the Arrow is in</param>
     private void SetPathSegment(Node start, Node end)
     {
 
@@ -171,6 +255,10 @@ public class WaveManager : MonoBehaviour
         currEnd = null;
     }
 
+    /// <summary>
+    /// Pushes the WavePath to the currentWave's Path list to be used in that object
+    /// </summary>
+    /// <returns>If the Path is valid, returns true, else false</returns>
     private bool PushPath()
     {
         if(arrowStack.Count == 0)
