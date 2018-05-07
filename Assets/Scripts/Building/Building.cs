@@ -10,6 +10,10 @@ public abstract class Building : MonoBehaviour{
     public float Radius = 1f;
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
+
+    public float price;
+    public float sellPrice;
+
     public float startingHealth = 0f;
     public GridArea Location;
 
