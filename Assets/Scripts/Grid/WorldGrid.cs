@@ -20,6 +20,7 @@ public class WorldGrid: MonoBehaviour {
                 m_grid[i, j].name = "Node (" + i + ", " + j + ")";
             }
         }
+        m_grid[5, 6].Occupied = Node.nodeStates.navigation;
     }
 
     public Node getAt(int x, int y) {

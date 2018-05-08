@@ -37,7 +37,7 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// LineRenderer component of the gameobject
     /// </summary>
-    protected LineRenderer line;
+    protected LineRenderer radiusLine;
 
     /// <summary>
     /// The number of segments in the radius line.
@@ -112,14 +112,14 @@ public abstract class Building: MonoBehaviour {
             drawRadius();
         }
         prevPos = transform.position;
-        line.enabled = true;
+        radiusLine.enabled = true;
     }
 
     /// <summary>
     /// Hides the tower's radius
     /// </summary>
     public void hideRadius() {
-        line.enabled = false;
+        radiusLine.enabled = false;
     }
 
     //-----------PROTECTED-------------
@@ -134,7 +134,7 @@ public abstract class Building: MonoBehaviour {
             float x = Radius * Mathf.Cos(theta);
             float z = Radius * Mathf.Sin(theta);
             Vector3 pos = new Vector3(x, 0.1f, z);
-            line.SetPosition(i, pos);
+            radiusLine.SetPosition(i, pos);
             theta += deltaTheta;
         }
     }
@@ -143,18 +143,18 @@ public abstract class Building: MonoBehaviour {
     /// Initializes settings for the LineRenderer component which is used to display the radius.
     /// </summary>
     protected void initLineRenderer() {
-        line = gameObject.GetComponent<LineRenderer>();
-        line.positionCount = numSegments;
-        line.material.color = radiusColor;
-        line.startWidth = radiusLineWidth;
-        line.alignment = LineAlignment.View;
-        line.loop = true;
-        line.useWorldSpace = false;
+        radiusLine = gameObject.GetComponent<LineRenderer>();
+        radiusLine.positionCount = numSegments;
+        radiusLine.material.color = radiusColor;
+        radiusLine.startWidth = radiusLineWidth;
+        radiusLine.alignment = LineAlignment.View;
+        radiusLine.loop = true;
+        radiusLine.useWorldSpace = false;
 
         prevPos = transform.position;
 
         drawRadius();
-        line.enabled = false;
+        radiusLine.enabled = false;
     }
 
     /// <summary>
@@ -198,39 +198,51 @@ public abstract class Building: MonoBehaviour {
     /// Sets the object's transform to the mouse if the tower is not placed. Places the tower if the mouse button is released.
     /// </summary>
     protected void handleMouse() {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.transform.position.y;
-        Vector3 newPos = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector3 screenMousPos = Input.mousePosition;
+        screenMousPos.z = Camera.main.transform.position.y;
+        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
 
+        Vector2Int gridMousePos = new Vector2Int((int)Mathf.Round(worldMousePos.x), (int)Mathf.Round(worldMousePos.z));
+        bool mouseWithinBuilding = Location.Contains(gridMousePos);
+
+
+        //Handle mouse location
         if(!placed) {
-            setCenterPosition(newPos);
+            setCenterPosition(worldMousePos);
+            radiusLine.enabled = true;
+        }
 
-            //Handle left click
-            if(Input.GetMouseButtonUp(0)) {
-                //Make sure the mouse is over a valid tile
-                if((newPos.x < 0 || newPos.x > worldGrid.width - 1) || (newPos.z < 0 || newPos.z > worldGrid.height - 1)) {
-                    return;
+
+        //Handle left click
+        if(Input.GetMouseButtonUp(0)) {
+
+            
+            if(placed) {
+                if(mouseWithinBuilding) {
+                    radiusLine.enabled = true;
+                    //TODO: Show UI
+                } else {
+                    radiusLine.enabled = false;
+                    //TODO: Hide UI
                 }
-
-                //Place
-                placeOnMap(Location);
+                
+            } else {
+                GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
+                if(worldGridArea.Contains(gridMousePos)) {
+                    placeOnMap(Location);
+                }
             }
         }
+
 
         //Handle right click
         if(Input.GetMouseButtonUp(1)) {
-            Vector2Int mouseLocation = new Vector2Int((int)Mathf.Round(newPos.x), (int)Mathf.Round(newPos.z));
-            Debug.Log(mouseLocation);
-            //If the mouse is over the building, show/hide radius
-            if(Location.Contains(mouseLocation)) {
-                if(line.enabled) {
-                    line.enabled = false;
-                } else {
-                    line.enabled = true;
-                }
-            }
             
         }
+
+
+
+
     }
 
     //------------PRIVATE-------------
