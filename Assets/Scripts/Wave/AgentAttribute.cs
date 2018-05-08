@@ -9,7 +9,7 @@ public struct AgentAttribute {
     /// <summary>
     /// the possible colors af an agent
     /// </summary>
-    public enum possibleColors { red, green, blue };
+    public enum possibleColors { red, green, blue, dontCare };
 
     /// <summary>
     /// The current active color
@@ -20,7 +20,7 @@ public struct AgentAttribute {
     /// <summary>
     /// The possible sizes of an agent
     /// </summary>
-    public enum possibleSizes { small, medium, large};
+    public enum possibleSizes { small, medium, large, dontCare };
 
     /// <summary>
     /// The current active size
@@ -30,7 +30,7 @@ public struct AgentAttribute {
     /// <summary>
     /// The possible speeds of an agent
     /// </summary>
-    public enum possibleSpeeds { small, medium, large };
+    public enum possibleSpeeds { small, medium, large, dontCare };
 
     /// <summary>
     /// The current active speed

@@ -5,24 +5,19 @@ using UnityEngine;
 public class RouterBuilding: Building {
 
     /// <summary>
-    /// A list of exact attribute combinations which are blacklisted
+    /// Decides whther to blacklist or whitelist.
+    /// True = blacklist. False = whitelist.
     /// </summary>
-    private List<AgentAttribute> blockedAttributes;
+    public bool blacklist = true;
 
     /// <summary>
-    /// A list of colors that are blacklisted in general
+    /// A list of attribute combinations which are blacklisted
+    /// or whitelisted depending on the "blacklist" variable.
+    /// To specify more general rules that only care about some of
+    /// the attributes, put "dontCare" as the attribute for the
+    /// other fields of AgentAttribute.
     /// </summary>
-    private List<AgentAttribute.possibleColors> blockedColors;
-
-    /// <summary>
-    /// A list of sizes that are blacklisted in general
-    /// </summary>
-    private List<AgentAttribute.possibleSizes> blockedSizes;
-
-    /// <summary>
-    /// A list of speeds that are blacklisted in general
-    /// </summary>
-    private List<AgentAttribute.possibleSpeeds> blockedSpeeds;
+    private List<AgentAttribute> filter;
 
 
 
