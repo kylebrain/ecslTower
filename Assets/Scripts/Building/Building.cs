@@ -207,9 +207,18 @@ public abstract class Building: MonoBehaviour {
 
 
         //Handle mouse location
-        if(!placed) {
+        if(placed) {
+            if(Input.GetKeyUp(KeyCode.Escape)) {
+                radiusLine.enabled = false;
+                //TODO: Hide UI
+            }
+        } else {
             setCenterPosition(worldMousePos);
             radiusLine.enabled = true;
+
+            if(Input.GetKeyUp(KeyCode.Escape)) {
+                Destroy(gameObject);
+            }
         }
 
 
