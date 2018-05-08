@@ -74,7 +74,7 @@ public abstract class Building : MonoBehaviour{
                 if(cur == null) {
                     return;
                 }
-                if(cur.Occupied) {
+                if(cur.Occupied != Node.nodeStates.empty) {
                     available = false;
                 }
             }
@@ -85,7 +85,7 @@ public abstract class Building : MonoBehaviour{
 
         Location = loc;
         updatePosition();
-        worldGrid.setOccupied(loc);
+        worldGrid.setOccupied(loc, Node.nodeStates.building);
         placed = true;
     }
 

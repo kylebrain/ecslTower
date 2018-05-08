@@ -12,17 +12,17 @@ public class RouterBuilding: Building {
     /// <summary>
     /// A list of colors that are blacklisted in general
     /// </summary>
-    private List<AgentAttribute.Colors> blockedColors;
+    private List<AgentAttribute.possibleColors> blockedColors;
 
     /// <summary>
     /// A list of sizes that are blacklisted in general
     /// </summary>
-    private List<AgentAttribute.Sizes> blockedSizes;
+    private List<AgentAttribute.possibleSizes> blockedSizes;
 
     /// <summary>
     /// A list of speeds that are blacklisted in general
     /// </summary>
-    private List<AgentAttribute.Speeds> blockedSpeeds;
+    private List<AgentAttribute.possibleSpeeds> blockedSpeeds;
 
 
 

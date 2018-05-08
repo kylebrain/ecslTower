@@ -81,10 +81,10 @@ public class WaveManager : MonoBehaviour
 
     private void RemoveArrow(Arrow currentArrow)
     {
-        currentArrow.Destination.Occupied = false;
+        currentArrow.Destination.Occupied = Node.nodeStates.empty;
         if (arrowStack.Count == 1)
         {
-            currentArrow.Origin.Occupied = false;
+            currentArrow.Origin.Occupied = Node.nodeStates.empty;
         }
         arrowStack.Pop();
         Destroy(currentArrow.gameObject);
@@ -130,7 +130,7 @@ public class WaveManager : MonoBehaviour
             else //if start node has been select, select the end node
             {
                 currEnd = currentNode;
-                if (currEnd == currStart || currEnd.Occupied == true) //end and start cannot be the same
+                if (currEnd == currStart || currEnd.Occupied != Node.nodeStates.empty) //end and start cannot be the same
                 {
                     Debug.LogError("Node" + currentNode.Coordinate + " is occupied!");
                     currEnd = null;
@@ -157,8 +157,8 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Passed invalid nodes to create segment!");
             return;
         }
-        start.Occupied = true;
-        end.Occupied = true;
+        start.Occupied = Node.nodeStates.navigation;
+        end.Occupied = Node.nodeStates.navigation;
         drawArrow.PlaceArrow(start, end, arrowOffset);
         Arrow newArrow = drawArrow;
         arrowStack.Push(newArrow);

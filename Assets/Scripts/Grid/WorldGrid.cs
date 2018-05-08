@@ -61,7 +61,7 @@ public class WorldGrid: MonoBehaviour {
     /// Sets the location's Nodes to occupied
     /// </summary>
     /// <param name="loc">The location to set occupied</param>
-    public void setOccupied(GridArea loc) {
+    public void setOccupied(GridArea loc, Node.nodeStates state) {
 
         int startX = loc.bottomLeft.x;
         int endX = startX + loc.width - 1;
@@ -71,7 +71,7 @@ public class WorldGrid: MonoBehaviour {
 
         for(int i = startX; i <= endX; ++i) {
             for(int j = startY; j <= endY; ++j) {
-                m_grid[i, j].Occupied = true;
+                m_grid[i, j].Occupied = state;
             }
         }
     }
@@ -90,7 +90,7 @@ public class WorldGrid: MonoBehaviour {
 
         for(int i = startX; i <= endX; ++i) {
             for(int j = startY; j <= endY; ++j) {
-                m_grid[i, j].Occupied = false;
+                m_grid[i, j].Occupied = Node.nodeStates.empty;
             }
         }
     }
