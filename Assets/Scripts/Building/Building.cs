@@ -10,6 +10,10 @@ public abstract class Building : MonoBehaviour{
     public float Radius = 1f;
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
+
+    public float price;
+    public float sellPrice;
+
     public float startingHealth = 0f;
     public GridArea Location;
 
@@ -70,7 +74,7 @@ public abstract class Building : MonoBehaviour{
                 if(cur == null) {
                     return;
                 }
-                if(cur.Occupied) {
+                if(cur.Occupied != Node.nodeStates.empty) {
                     available = false;
                 }
             }
@@ -81,7 +85,7 @@ public abstract class Building : MonoBehaviour{
 
         Location = loc;
         updatePosition();
-        worldGrid.setOccupied(loc);
+        worldGrid.setOccupied(loc, Node.nodeStates.building);
         placed = true;
     }
 
