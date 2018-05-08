@@ -191,7 +191,7 @@ public abstract class Building: MonoBehaviour {
         int startY = Location.bottomLeft.y;
         int endY = startY + Location.height - 1;
 
-        transform.position = new Vector3((float)(startX + endX) / 2, 0f, (float)(startY + endY) / 2);
+        transform.position = new Vector3((float)(startX + endX) / 2, transform.position.y, (float)(startY + endY) / 2);
     }
 
     /// <summary>
@@ -205,6 +205,7 @@ public abstract class Building: MonoBehaviour {
         if(!placed) {
             setCenterPosition(newPos);
 
+            //Handle left click
             if(Input.GetMouseButtonUp(0)) {
                 //Make sure the mouse is over a valid tile
                 if((newPos.x < 0 || newPos.x > worldGrid.width - 1) || (newPos.z < 0 || newPos.z > worldGrid.height - 1)) {
@@ -215,6 +216,21 @@ public abstract class Building: MonoBehaviour {
                 placeOnMap(Location);
             }
         }
+
+        //Handle right click
+        if(Input.GetMouseButtonUp(1)) {
+            Vector2Int mouseLocation = new Vector2Int((int)Mathf.Round(newPos.x), (int)Mathf.Round(newPos.z));
+            Debug.Log(mouseLocation);
+            //If the mouse is over the building, show/hide radius
+            if(Location.Contains(mouseLocation)) {
+                if(line.enabled) {
+                    line.enabled = false;
+                } else {
+                    line.enabled = true;
+                }
+            }
+            
+        }
     }
 
     //------------PRIVATE-------------
@@ -224,6 +240,7 @@ public abstract class Building: MonoBehaviour {
         if(worldGrid == null) {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
+
         initLineRenderer();
         derivedStart();
     }

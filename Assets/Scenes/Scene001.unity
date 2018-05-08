@@ -194,6 +194,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 1281601564068554, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
   m_IsPrefabParent: 0
@@ -317,7 +321,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4133227700274766, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4133227700274766, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
       propertyPath: m_LocalPosition.z
@@ -355,6 +359,24 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 23221225737207090, guid: f081d3d8bca750740b79c74fb1463212,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 87dacd107b4f78b4b824fc60101f4a3e, type: 2}
+    - target: {fileID: 4805817333829060, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23717762242876628, guid: f081d3d8bca750740b79c74fb1463212,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a112b069bbb2f9c44b9a0174a6d31a6a, type: 2}
+    - target: {fileID: 4805817333829060, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114879321794508214, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: f081d3d8bca750740b79c74fb1463212, type: 2}
@@ -375,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c6e6ffbc48fca478dc76d078790dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 1
+  Radius: 5
   radiusColor: {r: 0.366, g: 1, b: 1, a: 1}
   radiusLineWidth: 0.1
   price: 0
@@ -385,3 +407,5 @@ MonoBehaviour:
     bottomLeft: {x: 0, y: 0}
     width: 4
     height: 5
+  blacklist: 1
+  RoutingRate: 3
