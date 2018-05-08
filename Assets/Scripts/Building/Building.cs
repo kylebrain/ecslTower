@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public abstract class Building : MonoBehaviour{
+public abstract class Building: MonoBehaviour {
 
     //----------VARIABLES--------------
 
@@ -45,7 +45,7 @@ public abstract class Building : MonoBehaviour{
     private int numSegments = 100;
 
     //-------------------FUNCTIONS-------------------
-    
+
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -59,27 +59,33 @@ public abstract class Building : MonoBehaviour{
     /// </summary>
     /// <param name=""></param>
     public void placeOnMap(GridArea loc) {
-        bool available = true;
+        bool invalidLocation = false;
+        bool hasNavigation = false;
 
-        //Loop through the area occupied by loc
+
         int startX = loc.bottomLeft.x;
         int endX = startX + loc.width - 1;
-
         int startY = loc.bottomLeft.y;
         int endY = startY + loc.height - 1;
 
+        //All nodes within loc must be empty or navigation, and at least 1 must be navigation
         for(int i = startX; i <= endX; ++i) {
             for(int j = startY; j <= endY; ++j) {
                 Node cur = worldGrid.getAt(i, j);
                 if(cur == null) {
                     return;
                 }
-                if(cur.Occupied != Node.nodeStates.empty) {
-                    available = false;
+
+                if(cur.Occupied == Node.nodeStates.navigation) {
+                    hasNavigation = true;
+                } else if(cur.Occupied != Node.nodeStates.empty) {
+                    invalidLocation = true;
                 }
             }
         }
-        if(!available) {
+
+        //If an invalid location, or if none of the nodes were navigation nodes, exit
+        if(invalidLocation || !hasNavigation) {
             return;
         }
 
