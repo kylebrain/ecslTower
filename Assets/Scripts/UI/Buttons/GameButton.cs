@@ -31,16 +31,12 @@ public abstract class GameButton: MonoBehaviour, IMenuItem {
 
     public virtual void Hide()
     {
-        if(!mouseIsOver) {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 
     public virtual void Show()
     {
-        if(!mouseIsOver) {
-            gameObject.SetActive(true);
-        }
+        gameObject.SetActive(true);
     }
     #endregion
 }
