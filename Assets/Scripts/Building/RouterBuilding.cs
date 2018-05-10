@@ -8,6 +8,7 @@ public class RouterBuilding: Building {
     /// Decides whther to blacklist or whitelist.
     /// True = blacklist. False = whitelist.
     /// </summary>
+    [Tooltip("True = blacklist, False = whitelist")]
     public bool blacklist = true;
 
     /// <summary>

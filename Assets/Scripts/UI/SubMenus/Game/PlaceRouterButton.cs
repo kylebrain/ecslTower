@@ -10,7 +10,7 @@ public class PlaceRouterButton: GameButton {
     public override void PerformAction() {
         Building newBuilding = Instantiate(RouterPrefab);
         newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
-        newBuilding.name = "Test Router" + count;
+        newBuilding.name = "Test Router " + count;
         count++;
     }
 }
