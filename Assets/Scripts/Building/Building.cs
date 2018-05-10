@@ -44,8 +44,9 @@ public abstract class Building: MonoBehaviour {
     /// </summary>
     private int numSegments = 100;
 
-    //-------------------FUNCTIONS-------------------
 
+    //------------PUBLIC---------------
+    #region PUBLIC
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -58,7 +59,7 @@ public abstract class Building: MonoBehaviour {
     /// Checks to see if the requested location is available, and if so places the tower there
     /// </summary>
     /// <param name=""></param>
-    public void placeOnMap(GridArea loc) {
+    public bool placeOnMap(GridArea loc) {
         bool invalidLocation = false;
         bool hasNavigation = false;
 
@@ -73,7 +74,7 @@ public abstract class Building: MonoBehaviour {
             for(int j = startY; j <= endY; ++j) {
                 Node cur = worldGrid.getAt(i, j);
                 if(cur == null) {
-                    return;
+                    return false;
                 }
 
                 if(cur.Occupied == Node.nodeStates.navigation) {
@@ -86,22 +87,23 @@ public abstract class Building: MonoBehaviour {
 
         //If an invalid location, or if none of the nodes were navigation nodes, exit
         if(invalidLocation || !hasNavigation) {
-            return;
+            return false;
         }
 
         Location = loc;
         updatePosition();
         worldGrid.setOccupied(loc, Node.nodeStates.building);
         placed = true;
+        return true;
     }
 
     /// <summary>
     /// Removes the tower from the map
     /// </summary>
     public void removeFromMap() {
-        worldGrid.setUnoccupied(Location);
+        worldGrid.setUnoccupied(Location, Node.nodeStates.building);
         placed = false;
-        Destroy(this);
+        Destroy(transform.root.gameObject);
     }
 
     /// <summary>
@@ -121,9 +123,10 @@ public abstract class Building: MonoBehaviour {
     public void hideRadius() {
         radiusLine.enabled = false;
     }
+    #endregion
 
     //-----------PROTECTED-------------
-
+    #region PROTECTED
     /// <summary>
     /// Recalculates the points in the LineRenderer's circle. Only called when the object's position changes.
     /// </summary>
@@ -205,12 +208,13 @@ public abstract class Building: MonoBehaviour {
         Vector2Int gridMousePos = new Vector2Int((int)Mathf.Round(worldMousePos.x), (int)Mathf.Round(worldMousePos.z));
         bool mouseWithinBuilding = Location.Contains(gridMousePos);
 
+        GameObject canvas = transform.Find("Canvas").gameObject;
 
         //Handle mouse location
         if(placed) {
             if(Input.GetKeyDown(KeyCode.Escape)) {
                 radiusLine.enabled = false;
-                //TODO: Hide UI
+                canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
             }
         } else {
             setCenterPosition(worldMousePos);
@@ -229,16 +233,18 @@ public abstract class Building: MonoBehaviour {
             if(placed) {
                 if(mouseWithinBuilding) {
                     radiusLine.enabled = true;
-                    //TODO: Show UI
+                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
                 } else {
                     radiusLine.enabled = false;
-                    //TODO: Hide UI
+                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
                 }
                 
             } else {
                 GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
                 if(worldGridArea.Contains(gridMousePos)) {
-                    placeOnMap(Location);
+                    if(placeOnMap(Location)) {
+                        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+                    }
                 }
             }
         }
@@ -253,9 +259,10 @@ public abstract class Building: MonoBehaviour {
 
 
     }
+    #endregion
 
-    //------------PRIVATE-------------
-
+    //------------PRIVATE--------------
+    #region PRIVATE
     private void Start() {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if(worldGrid == null) {
@@ -270,8 +277,10 @@ public abstract class Building: MonoBehaviour {
         handleMouse();
         updateAction();
     }
+    #endregion
 
     //------------ABSTRACT-------------
+    #region ABSTRACT
 
     /// <summary>
     /// Actions to be performed by the derived class in Start.
@@ -282,7 +291,7 @@ public abstract class Building: MonoBehaviour {
     /// Actions to be performed by the derived class in each call of Update.
     /// </summary>
     protected abstract void updateAction();
+    #endregion
 
-    
 
 }

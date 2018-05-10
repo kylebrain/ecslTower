@@ -222,9 +222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53120eb076319de439cec31d8e6c4f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Radius: 1
   radiusColor: {r: 0.121161334, g: 0.121161334, b: 0.6102941, a: 1}
-  numSegments: 100
   radiusLineWidth: 0.1
+  price: 0
+  sellPrice: 0
+  startingHealth: 0
   Location:
     bottomLeft: {x: 0, y: 0}
     width: 3
