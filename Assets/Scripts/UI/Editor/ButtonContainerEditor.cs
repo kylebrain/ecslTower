@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(ButtonConatiner))]
+[CustomEditor(typeof(ButtonContainer))]
 public class ButtonContainerEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -12,7 +12,7 @@ public class ButtonContainerEditor : Editor
         DrawDefaultInspector();
 
         // Get the button container component
-        ButtonConatiner buttonConatiner = (ButtonConatiner)target;
+        ButtonContainer buttonConatiner = (ButtonContainer)target;
 
         if (GUILayout.Button("Resize and position buttons"))
         {

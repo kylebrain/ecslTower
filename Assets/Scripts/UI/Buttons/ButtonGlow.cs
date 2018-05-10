@@ -19,9 +19,9 @@ public class ButtonGlow : MonoBehaviour
         hoverColor = new Color(color.r, color.g, color.b, 0.9f);
         clickDownColor = new Color(color.r, color.g, color.b, 0.2f);
 
-        Debug.Log("Normal Color: " + normalColor);
-        Debug.Log("Hover  Color: " + hoverColor);
-        Debug.Log("Click  Color: " + clickDownColor);
+        //Debug.Log("Normal Color: " + normalColor);
+        //Debug.Log("Hover  Color: " + hoverColor);
+        //Debug.Log("Click  Color: " + clickDownColor);
     }
 
     public void SetHoverColor(bool isHover)
