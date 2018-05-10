@@ -167,18 +167,7 @@ public abstract class Building: MonoBehaviour {
     /// because Location will round bottomLeft to integer values.</param>
     protected void setCenterPosition(Vector3 pos) {
         int bottomLeftX = (int)(pos.x - 0.5f * (Location.width - 1));
-        if(bottomLeftX < 0) {
-            bottomLeftX = 0;
-        } else if(bottomLeftX > worldGrid.width - Location.width) {
-            bottomLeftX = worldGrid.width - Location.width;
-        }
-
         int bottomLeftY = (int)(pos.z - 0.5f * (Location.height - 1));
-        if(bottomLeftY < 0) {
-            bottomLeftY = 0;
-        } else if(bottomLeftY > worldGrid.height - Location.height) {
-            bottomLeftY = worldGrid.height - Location.height;
-        }
 
         Location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
         updatePosition();
