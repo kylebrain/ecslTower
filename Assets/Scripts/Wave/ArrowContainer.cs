@@ -36,10 +36,10 @@ public class ArrowContainer
 
     private void RemoveArrow(Arrow currentArrow, Stack<Arrow> arrowStack) //might need to be passed by ref
     {
-        currentArrow.Destination.Occupied = false;
+        currentArrow.Destination.Occupied = Node.nodeStates.empty;
         if (arrowStack.Count == 1)
         {
-            currentArrow.Origin.Occupied = false;
+            currentArrow.Origin.Occupied = Node.nodeStates.empty;
         }
         arrowStack.Pop();
         currentArrow.KillArrrow();

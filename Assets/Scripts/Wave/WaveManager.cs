@@ -1,5 +1,4 @@
-﻿using CatchCo;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -290,7 +289,7 @@ public class WaveManager : MonoBehaviour
             else //if start node has been selected, select the end node
             {
                 currEnd = GetCardinalNode(currentNode, currStart);
-                if (currEnd == currStart || currEnd.Occupied == true) //end and start cannot be the same
+                if (currEnd == currStart || currEnd.Occupied == Node.nodeStates.navigation) //end and start cannot be the same
                 {
                     Debug.LogError("Node" + currentNode.Coordinate + " is occupied!");
                     currEnd = null;
@@ -345,8 +344,8 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Passed invalid nodes to create segment!");
             return;
         }
-        start.Occupied = true;
-        end.Occupied = true;
+        start.Occupied = Node.nodeStates.navigation;
+        end.Occupied = Node.nodeStates.navigation;
         drawArrow.PlaceArrow(start, end, arrowOffset);
         arrowContainer.AddArrowToContainer(drawArrow);
 
