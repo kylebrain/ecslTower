@@ -10,8 +10,9 @@ public class ArrowContainer
     public List<GridArea> startAreas = new List<GridArea>();
     public List<GridArea> endAreas = new List<GridArea>();
 
-    public void RemoveArrows(Node selectedNode)
+    public List<Arrow> RemoveArrows(Node selectedNode)
     {
+        List<Arrow> ret = new List<Arrow>();
         foreach (Stack<Arrow> arrowStack in arrowStacks)
         {
             List<Arrow> tempArrowList = new List<Arrow>(arrowStack);
@@ -20,6 +21,7 @@ public class ArrowContainer
                 Arrow currentArrow;
                 while (arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != selectedNode)
                 {
+                    ret.Add(currentArrow);
                     RemoveArrow(currentArrow, arrowStack);
                 }
             }
@@ -28,10 +30,12 @@ public class ArrowContainer
                 Arrow endArrow = arrowStack.Peek();
                 if (endArrow.Destination == selectedNode)
                 {
+                    ret.Add(endArrow);
                     RemoveArrow(endArrow, arrowStack);
                 }
             }
         }
+        return ret;
     }
 
     private void RemoveArrow(Arrow currentArrow, Stack<Arrow> arrowStack) //might need to be passed by ref
@@ -42,7 +46,7 @@ public class ArrowContainer
             currentArrow.Origin.Occupied = Node.nodeStates.empty;
         }
         arrowStack.Pop();
-        currentArrow.KillArrrow();
+        //currentArrow.KillArrrow();
     }
 
     public bool IsVaildNode(Node selectedNode)
@@ -86,6 +90,7 @@ public class ArrowContainer
                 return arrow;
             }
         }
+
 
         return null;
     }

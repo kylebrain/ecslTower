@@ -42,6 +42,8 @@ public class WaveManager : MonoBehaviour
 
     public Level thisLevel;
     public List<WavePath> wavePathList = new List<WavePath>();
+    public GameObject startAreaMarker;
+    public GameObject endAreaMarker;
 
 
     /*-----------private variables-----------*/
@@ -100,6 +102,9 @@ public class WaveManager : MonoBehaviour
         {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
+
+        MarkAreasInContainer(arrowContainer);
+
         Load();
         /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
@@ -146,6 +151,41 @@ public class WaveManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             MakeAgentInWave(currentWave);
+        }
+    }
+
+    private void MarkAreasInContainer(ArrowContainer container)
+    {
+        Transform markerHolder = transform.Find("MarkerHolder").transform;
+        if(markerHolder == null)
+        {
+            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
+            return;
+        }
+
+        foreach (GridArea start in arrowContainer.startAreas)
+        {
+            MarkArea(start, true, markerHolder);
+        }
+
+        foreach (GridArea end in arrowContainer.endAreas)
+        {
+            MarkArea(end, false, markerHolder);
+        }
+    }
+
+
+    private void MarkArea(GridArea area, bool start, Transform parent)
+    {
+
+        GameObject marker = start ? startAreaMarker : endAreaMarker;
+        for(int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
+        {
+            for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
+            {
+                GameObject newMarker = Instantiate(marker, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
+                newMarker.transform.parent = parent;
+            }
         }
     }
 
@@ -225,7 +265,16 @@ public class WaveManager : MonoBehaviour
             {
                 return;
             }
-            arrowContainer.RemoveArrows(NodePointedAt);
+            List<Arrow> deleteArrows = arrowContainer.RemoveArrows(NodePointedAt);
+            if(deleteArrows.Count == 0)
+            {
+                return;
+            }
+            foreach(Arrow arrow in deleteArrows)
+            {
+                SetNodeOccupation(arrow, Node.nodeStates.empty);
+                arrow.KillArrrow();
+            }
         }
     }
 
@@ -344,13 +393,45 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Passed invalid nodes to create segment!");
             return;
         }
-        start.Occupied = Node.nodeStates.navigation;
-        end.Occupied = Node.nodeStates.navigation;
         drawArrow.PlaceArrow(start, end, arrowOffset);
-        arrowContainer.AddArrowToContainer(drawArrow);
+        if(arrowContainer.AddArrowToContainer(drawArrow) != null)
+        {
+            SetNodeOccupation(drawArrow, Node.nodeStates.navigation);
+        }
 
         currStart = null;
         currEnd = null;
+    }
+
+    private void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
+    {
+        bool vertical = arrow.Origin.Coordinate.x == arrow.Destination.Coordinate.x;
+        if (vertical == (arrow.Origin.Coordinate.y == arrow.Destination.Coordinate.y))
+        {
+            Debug.LogError("Error marking an arrow occupied! The Arrow could be invalid!");
+            return;
+        }
+        int start = vertical ? arrow.Origin.Coordinate.y : arrow.Origin.Coordinate.x;
+        int end = vertical ? arrow.Destination.Coordinate.y : arrow.Destination.Coordinate.x;
+        int constCoord = vertical ? arrow.Origin.Coordinate.x : arrow.Origin.Coordinate.y;
+        if (start > end)
+        {
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+
+
+        for (int i = start + 1; i <= end; i++)
+        {
+            if (vertical)
+            {
+                worldGrid.getAt(constCoord, i).Occupied = state;
+            } else
+            {
+                worldGrid.getAt(i, constCoord).Occupied = state;
+            }
+        }
     }
 
     /// <summary>
