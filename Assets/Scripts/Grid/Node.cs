@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Node : MonoBehaviour {
     public Material hoverMaterial;
     public Material hoverInvalidMaterial;
@@ -16,11 +17,16 @@ public class Node : MonoBehaviour {
     /// </summary>
     public nodeStates Occupied;
 
+    [SerializeField]
     public Vector2Int Coordinate
     {
         get
         {
             return new Vector2Int((int)transform.position.x, (int)transform.position.z);
+        }
+        set
+        {
+            transform.position = new Vector3(value.x, transform.position.y, value.y);
         }
     }
 
