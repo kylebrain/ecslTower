@@ -2,8 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GameButton : MonoBehaviour, IMenuItem
-{
+public abstract class GameButton: MonoBehaviour, IMenuItem {
+    public bool MouseIsOver {
+        get{
+            return mouseIsOver;
+        }
+        set {
+
+        }
+    }
+    private bool mouseIsOver = false;
+
+    private void OnMouseEnter() {
+        mouseIsOver = true;
+    }
+
+    private void OnMouseExit() {
+        mouseIsOver = false;
+    }
+
     public abstract void PerformAction();
 
     #region IUserInterface functions
@@ -14,12 +31,12 @@ public abstract class GameButton : MonoBehaviour, IMenuItem
 
     public virtual void Hide()
     {
-        this.enabled = false;
+        gameObject.SetActive(false);
     }
 
     public virtual void Show()
     {
-        this.enabled = true;
+        gameObject.SetActive(true);
     }
     #endregion
 }

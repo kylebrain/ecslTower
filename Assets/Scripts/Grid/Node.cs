@@ -7,11 +7,15 @@ public class Node : MonoBehaviour {
     public Material hoverMaterial;
     public Material hoverInvalidMaterial;
 
-    private bool occupied = false;
-    public bool Occupied {
-        get { return occupied; }
-        set { occupied = value; }
-    }
+    /// <summary>
+    /// The possible values the occupied field can take
+    /// </summary>
+    public enum nodeStates { empty, building, navigation};
+
+    /// <summary>
+    /// The occupied state of the current node
+    /// </summary>
+    public nodeStates Occupied;
 
     [SerializeField]
     public Vector2Int Coordinate
@@ -57,15 +61,15 @@ public class Node : MonoBehaviour {
     /// Sets the material to hoverMaterial (hoverInvalidMaterial if the node is occupied).
     /// </summary>
     public void setHovered() {
-        if(occupied) {
-            rend.material = hoverInvalidMaterial;
-        } else {
+        if(Occupied == nodeStates.empty) {
             rend.material = hoverMaterial;
+        } else {
+            rend.material = hoverInvalidMaterial;
         }
     }
 
     public override string ToString() {
-        return base.ToString() + " Occupied: " + occupied;
+        return base.ToString() + " Occupied: " + Occupied;
     }
 
 

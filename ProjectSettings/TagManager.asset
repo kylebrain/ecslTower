@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - WorldGrid
+  - Shop
   layers:
   - Default
   - TransparentFX

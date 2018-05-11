@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public abstract class Building : MonoBehaviour{
+public abstract class Building: MonoBehaviour {
 
     //----------VARIABLES--------------
 
     public float Radius = 1f;
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
+
+    public float price;
+    public float sellPrice;
+
     public float startingHealth = 0f;
     public GridArea Location;
 
@@ -33,15 +37,16 @@ public abstract class Building : MonoBehaviour{
     /// <summary>
     /// LineRenderer component of the gameobject
     /// </summary>
-    protected LineRenderer line;
+    protected LineRenderer radiusLine;
 
     /// <summary>
     /// The number of segments in the radius line.
     /// </summary>
     private int numSegments = 100;
 
-    //-------------------FUNCTIONS-------------------
-    
+
+    //------------PUBLIC---------------
+    #region PUBLIC
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -54,44 +59,51 @@ public abstract class Building : MonoBehaviour{
     /// Checks to see if the requested location is available, and if so places the tower there
     /// </summary>
     /// <param name=""></param>
-    public void placeOnMap(GridArea loc) {
-        bool available = true;
+    public bool placeOnMap(GridArea loc) {
+        bool invalidLocation = false;
+        bool hasNavigation = false;
 
-        //Loop through the area occupied by loc
+
         int startX = loc.bottomLeft.x;
         int endX = startX + loc.width - 1;
-
         int startY = loc.bottomLeft.y;
         int endY = startY + loc.height - 1;
 
+        //All nodes within loc must be empty or navigation, and at least 1 must be navigation
         for(int i = startX; i <= endX; ++i) {
             for(int j = startY; j <= endY; ++j) {
                 Node cur = worldGrid.getAt(i, j);
                 if(cur == null) {
-                    return;
+                    return false;
                 }
-                if(cur.Occupied) {
-                    available = false;
+
+                if(cur.Occupied == Node.nodeStates.navigation) {
+                    hasNavigation = true;
+                } else if(cur.Occupied != Node.nodeStates.empty) {
+                    invalidLocation = true;
                 }
             }
         }
-        if(!available) {
-            return;
+
+        //If an invalid location, or if none of the nodes were navigation nodes, exit
+        if(invalidLocation || !hasNavigation) {
+            return false;
         }
 
         Location = loc;
         updatePosition();
-        worldGrid.setOccupied(loc);
+        worldGrid.setOccupied(loc, Node.nodeStates.building);
         placed = true;
+        return true;
     }
 
     /// <summary>
     /// Removes the tower from the map
     /// </summary>
     public void removeFromMap() {
-        worldGrid.setUnoccupied(Location);
+        worldGrid.setUnoccupied(Location, Node.nodeStates.building);
         placed = false;
-        Destroy(this);
+        Destroy(transform.root.gameObject);
     }
 
     /// <summary>
@@ -102,18 +114,19 @@ public abstract class Building : MonoBehaviour{
             drawRadius();
         }
         prevPos = transform.position;
-        line.enabled = true;
+        radiusLine.enabled = true;
     }
 
     /// <summary>
     /// Hides the tower's radius
     /// </summary>
     public void hideRadius() {
-        line.enabled = false;
+        radiusLine.enabled = false;
     }
+    #endregion
 
     //-----------PROTECTED-------------
-
+    #region PROTECTED
     /// <summary>
     /// Recalculates the points in the LineRenderer's circle. Only called when the object's position changes.
     /// </summary>
@@ -124,7 +137,7 @@ public abstract class Building : MonoBehaviour{
             float x = Radius * Mathf.Cos(theta);
             float z = Radius * Mathf.Sin(theta);
             Vector3 pos = new Vector3(x, 0.1f, z);
-            line.SetPosition(i, pos);
+            radiusLine.SetPosition(i, pos);
             theta += deltaTheta;
         }
     }
@@ -133,18 +146,18 @@ public abstract class Building : MonoBehaviour{
     /// Initializes settings for the LineRenderer component which is used to display the radius.
     /// </summary>
     protected void initLineRenderer() {
-        line = gameObject.GetComponent<LineRenderer>();
-        line.positionCount = numSegments;
-        line.material.color = radiusColor;
-        line.startWidth = radiusLineWidth;
-        line.alignment = LineAlignment.View;
-        line.loop = true;
-        line.useWorldSpace = false;
+        radiusLine = gameObject.GetComponent<LineRenderer>();
+        radiusLine.positionCount = numSegments;
+        radiusLine.material.color = radiusColor;
+        radiusLine.startWidth = radiusLineWidth;
+        radiusLine.alignment = LineAlignment.View;
+        radiusLine.loop = true;
+        radiusLine.useWorldSpace = false;
 
         prevPos = transform.position;
 
         drawRadius();
-        line.enabled = false;
+        radiusLine.enabled = false;
     }
 
     /// <summary>
@@ -181,39 +194,81 @@ public abstract class Building : MonoBehaviour{
         int startY = Location.bottomLeft.y;
         int endY = startY + Location.height - 1;
 
-        transform.position = new Vector3((float)(startX + endX) / 2, 0f, (float)(startY + endY) / 2);
+        transform.position = new Vector3((float)(startX + endX) / 2, transform.position.y, (float)(startY + endY) / 2);
     }
 
     /// <summary>
     /// Sets the object's transform to the mouse if the tower is not placed. Places the tower if the mouse button is released.
     /// </summary>
     protected void handleMouse() {
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = Camera.main.transform.position.y;
-        Vector3 newPos = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector3 screenMousPos = Input.mousePosition;
+        screenMousPos.z = Camera.main.transform.position.y;
+        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
 
-        if(!placed) {
-            setCenterPosition(newPos);
+        Vector2Int gridMousePos = new Vector2Int((int)Mathf.Round(worldMousePos.x), (int)Mathf.Round(worldMousePos.z));
+        bool mouseWithinBuilding = Location.Contains(gridMousePos);
 
-            if(Input.GetMouseButtonUp(0)) {
-                //Make sure the mouse is over a valid tile
-                if((newPos.x < 0 || newPos.x > worldGrid.width - 1) || (newPos.z < 0 || newPos.z > worldGrid.height - 1)) {
-                    return;
-                }
+        GameObject canvas = transform.Find("Canvas").gameObject;
 
-                //Place
-                placeOnMap(Location);
+        //Handle mouse location
+        if(placed) {
+            if(Input.GetKeyDown(KeyCode.Escape)) {
+                radiusLine.enabled = false;
+                canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+            }
+        } else {
+            setCenterPosition(worldMousePos);
+            radiusLine.enabled = true;
+
+            if(Input.GetKeyDown(KeyCode.Escape)) {
+                Destroy(gameObject);
             }
         }
+
+
+        //Handle left click
+        if(Input.GetMouseButtonUp(0)) {
+
+            
+            if(placed) {
+                if(mouseWithinBuilding) {
+                    radiusLine.enabled = true;
+                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+                } else {
+                    radiusLine.enabled = false;
+                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+                }
+                
+            } else {
+                GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
+                if(worldGridArea.Contains(gridMousePos)) {
+                    if(placeOnMap(Location)) {
+                        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+                    }
+                }
+            }
+        }
+
+
+        //Handle right click
+        if(Input.GetMouseButtonUp(1)) {
+            
+        }
+
+
+
+
     }
+    #endregion
 
-    //------------PRIVATE-------------
-
+    //------------PRIVATE--------------
+    #region PRIVATE
     private void Start() {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if(worldGrid == null) {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
+
         initLineRenderer();
         derivedStart();
     }
@@ -222,8 +277,10 @@ public abstract class Building : MonoBehaviour{
         handleMouse();
         updateAction();
     }
+    #endregion
 
     //------------ABSTRACT-------------
+    #region ABSTRACT
 
     /// <summary>
     /// Actions to be performed by the derived class in Start.
@@ -234,7 +291,7 @@ public abstract class Building : MonoBehaviour{
     /// Actions to be performed by the derived class in each call of Update.
     /// </summary>
     protected abstract void updateAction();
+    #endregion
 
-    
 
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ButtonConatiner : MonoBehaviour
+public class ButtonContainer : MonoBehaviour
 {
     /// <summary>Type of stack for the buttons</summary>
     public enum StackOrientation { Horizontal, Vertical }

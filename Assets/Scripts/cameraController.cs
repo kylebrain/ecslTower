@@ -59,20 +59,22 @@ public class cameraController: MonoBehaviour {
         deltaZ = movement.z;
 
         if(mouseInGameView) {
-            //-------Left, right----------------
-            if(mouse.x <= EdgeScrollTolerance) {
-                deltaX -= moveSpeed;
-            }
-            if((1 - mouse.x) <= EdgeScrollTolerance) {
-                deltaX += moveSpeed;
-            }
+            if(EdgeScrollTolerance != 0f){
+                //-------Left, right----------------
+                if(mouse.x <= EdgeScrollTolerance) {
+                    deltaX -= moveSpeed;
+                }
+                if((1 - mouse.x) <= EdgeScrollTolerance) {
+                    deltaX += moveSpeed;
+                }
 
-            //---------Forward, backward----------
-            if(mouse.y <= EdgeScrollTolerance) {
-                deltaZ -= moveSpeed;
-            }
-            if((1 - mouse.y) <= EdgeScrollTolerance) {
-                deltaZ += moveSpeed;
+                //---------Forward, backward----------
+                if(mouse.y <= EdgeScrollTolerance) {
+                    deltaZ -= moveSpeed;
+                }
+                if((1 - mouse.y) <= EdgeScrollTolerance) {
+                    deltaZ += moveSpeed;
+                }
             }
 
             //------Zoom in, out----------------
