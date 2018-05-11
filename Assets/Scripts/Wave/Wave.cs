@@ -29,6 +29,9 @@ public class Wave : MonoBehaviour {
             if(waveQueue.Count > 0)
             {
                 Spawn(waveQueue.Dequeue());
+            } else
+            {
+                Debug.LogError("Wave queue is empty!");
             }
         }
     }

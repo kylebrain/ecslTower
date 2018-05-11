@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Wrapper for a Queue of Nodes which allows Agents to follow a Path
 /// </summary>
+[System.Serializable]
 public class WavePath {
 
 
@@ -30,6 +31,21 @@ public class WavePath {
         }
     }
 
+    public Queue<Node> NodeQueue
+    {
+        get
+        {
+            return nodeQueue;
+        }
+    }
+
+    private List<Node> NodeList
+    {
+        get
+        {
+            return new List<Node>(nodeQueue);
+        }
+    }
 
     /*-----------private variables-----------*/
     private Node startNode;
@@ -37,7 +53,7 @@ public class WavePath {
     /// <summary>
     /// Holds the Path as a Queue
     /// </summary>
-    private Queue<Node> NodeQueue = new Queue<Node>();
+    private Queue<Node> nodeQueue = new Queue<Node>();
 
 
     /*-----------public functions-----------*/
@@ -47,10 +63,18 @@ public class WavePath {
     /// <param name="queue">Node Queue which should have at least a valid end and start point</param>
     public WavePath(Queue<Node> queue)
     {
-        NodeQueue = new Queue<Node>(queue);
+        nodeQueue = new Queue<Node>(queue);
         endNode = queue.Peek();
-        NodeQueue = new Queue<Node>(NodeQueue);
+        nodeQueue = new Queue<Node>(nodeQueue);
         startNode = queue.Peek();
+    }
+
+    public WavePath(SerializableWavePath path, WorldGrid grid)
+    {
+        List<Node> tempNodeList = new List<Node>();
+        foreach (Coordinate c in path.list)
+            tempNodeList.Add(grid.getAt(c.x, c.y));
+        nodeQueue = new Queue<Node>(tempNodeList);
     }
 
     /// <summary>
@@ -60,7 +84,7 @@ public class WavePath {
     /// Uses the parametrized constructor using the other Node Queue
     /// </remarks>
     /// <param name="other"></param>
-    public WavePath(WavePath other) : this(other.NodeQueue) {}
+    public WavePath(WavePath other) : this(other.nodeQueue) {}
 
     /// <summary>
     /// Removes the next Node and returns it
@@ -68,9 +92,9 @@ public class WavePath {
     /// <returns>The next Node or null if the Queue is empty</returns>
     public Node GetNextNode()
     {
-        if(NodeQueue.Count > 0)
+        if(nodeQueue.Count > 0)
         {
-            return NodeQueue.Dequeue();
+            return nodeQueue.Dequeue();
         } else
         {
             return null;
@@ -84,7 +108,7 @@ public class WavePath {
     /// <returns>String to be outputted</returns>
     public override string ToString()
     {
-        List<Node> NodeList = new List<Node>(NodeQueue);
+        List<Node> NodeList = new List<Node>(nodeQueue);
         string ret = base.ToString() + " [";
         foreach(Node n in NodeList)
         {
@@ -96,6 +120,34 @@ public class WavePath {
         }
         ret += "]";
         return ret;
+    }
+
+    //might cause problems if not changed to mirror the Equals function
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if(obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+        List<Node> otherNodeList = new List<Node>(((WavePath)obj).nodeQueue);
+        List<Node> thisNodeList = new List<Node>(nodeQueue);
+        if(thisNodeList.Count != otherNodeList.Count)
+        {
+            return false;
+        }
+        for(int i = 0; i < thisNodeList.Count; i++)
+        {
+            if(thisNodeList[i] != otherNodeList[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

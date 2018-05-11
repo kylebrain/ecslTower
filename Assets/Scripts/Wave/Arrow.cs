@@ -99,4 +99,9 @@ public class Arrow : MonoBehaviour
     {
         return base.ToString() + origin.Coordinate + "->" + destination.Coordinate;
     }
+
+    public void KillArrrow()
+    {
+        Destroy(gameObject);
+    }
 }
