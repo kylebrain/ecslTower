@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
 /// <summary>
 /// Moving unit that follows a WavePath and perform an action
@@ -11,10 +12,7 @@ public abstract class Agent : MonoBehaviour
 {
 
     /*-----------public variables-----------*/
-    public float health;
-    //public Alliance alliance;
-    public Color color;
-    public float speed = 3.5f;
+    public AgentAttribute Attribute;
 
 
     /*-----------private variables-----------*/
@@ -45,6 +43,13 @@ public abstract class Agent : MonoBehaviour
 
 
     /*-----------private MonoBehavior functions-----------*/
+
+    private void Start()
+    {
+        InitializeAttributes(GenerateAttribute());
+        //Use function for the AI, but add an Attribute to AgentPath to allow for customization before pushing
+    }
+
     /// <summary>
     /// Checks the distance to the current Node, once in range switches to the next
     /// </summary>
@@ -76,10 +81,8 @@ public abstract class Agent : MonoBehaviour
     /// <param name="newWavePath">WavePath to be followed</param>
     public void BeginMovement(WavePath newWavePath)
     {
-        wavePath = newWavePath;
-
         navAgent = GetComponent<NavMeshAgent>();
-        navAgent.speed = speed;
+        wavePath = newWavePath;
         Node startNode = wavePath.GetNextNode();
         CurrentNode = startNode;
         transform.LookAt(CurrentNode.transform.position);
@@ -102,6 +105,91 @@ public abstract class Agent : MonoBehaviour
         //add animation
         DestinationAction();
         Destroy(gameObject);
+    }
+
+    private AgentAttribute GenerateAttribute()
+    {
+        AgentAttribute attributes;
+        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
+        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
+        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
+
+        attributes.Color = (AgentAttribute.possibleColors)Random.Range(0, numberColors);
+        //Debug.Log(attributes.Color);
+        attributes.Size = (AgentAttribute.possibleSizes)Random.Range(0, numberSizes);
+        //Debug.Log(attributes.Size);
+        attributes.Speed = (AgentAttribute.possibleSpeeds)Random.Range(0, numberSpeed);
+        //Debug.Log(attributes.Speed);
+
+        return attributes;
+    }
+
+    private void InitializeAttributes(AgentAttribute attributes)
+    {
+        {
+            Renderer rend = GetComponent<Renderer>();
+            Material selectedMaterial = null;
+            switch (attributes.Color)
+            {
+                case AgentAttribute.possibleColors.red:
+                    selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Red.mat", typeof(Material));
+                    break;
+                case AgentAttribute.possibleColors.green:
+                    selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Green.mat", typeof(Material));
+                    break;
+                case AgentAttribute.possibleColors.blue:
+                    selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Blue.mat", typeof(Material));
+                    break;
+                default:
+                    Debug.LogError("Agent color not recognized!");
+                    break;
+            }
+            if (selectedMaterial != null)
+            {
+                rend.material = selectedMaterial;
+            }
+            else
+            {
+                Debug.LogError("Could not find Agent material. Perhaps it was moved?");
+            }
+        }
+        {
+            Vector3 newScale = Vector3.one;
+            switch (attributes.Size)
+            {
+                case AgentAttribute.possibleSizes.small:
+                    newScale = new Vector3(0.5f, 1, 0.5f);
+                    break;
+                case AgentAttribute.possibleSizes.medium:
+                    newScale = new Vector3(1f, 1, 1f);
+                    break;
+                case AgentAttribute.possibleSizes.large:
+                    newScale = new Vector3(1.5f, 1, 1.5f);
+                    break;
+                default:
+                    Debug.LogError("Agent scale not recognized!");
+                    break;
+            }
+            transform.localScale = newScale;
+        }
+        {
+            navAgent = GetComponent<NavMeshAgent>();
+            switch (attributes.Speed)
+            {
+                case AgentAttribute.possibleSpeeds.slow:
+                    navAgent.speed = 1.5f;
+                    break;
+                case AgentAttribute.possibleSpeeds.normal:
+                    navAgent.speed = 3.5f;
+                    break;
+                case AgentAttribute.possibleSpeeds.fast:
+                    navAgent.speed = 5.5f;
+                    break;
+                default:
+                    Debug.LogError("Agent speed not recognized!");
+                    break;
+            }
+        }
     }
 
 }

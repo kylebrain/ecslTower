@@ -935,6 +935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6f017b0c0868e428a60a73249baee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enablePathEditing: 0
   wavePrefab: {fileID: 114706130894599506, guid: 1a64016e51bf6b1488c39039fe9b2b2e,
     type: 2}
   arrowPrefab: {fileID: 114492045783636566, guid: 9a011c876ad29f443ad7726c636e35db,
@@ -976,7 +977,6 @@ MonoBehaviour:
         y: 15
       - x: 17
         y: 15
-  wavePathList: []
   startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
     type: 2}
   endAreaMarker: {fileID: 1792310069272856, guid: 8eb2c9a6e3c4e5b47a13f5b83e4bf7fa,

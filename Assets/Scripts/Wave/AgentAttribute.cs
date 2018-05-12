@@ -30,7 +30,7 @@ public struct AgentAttribute {
     /// <summary>
     /// The possible speeds of an agent
     /// </summary>
-    public enum possibleSpeeds { small, medium, large, dontCare };
+    public enum possibleSpeeds { slow, normal, fast, dontCare };
 
     /// <summary>
     /// The current active speed
