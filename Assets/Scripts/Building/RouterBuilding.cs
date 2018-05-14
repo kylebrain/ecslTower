@@ -54,7 +54,7 @@ public class RouterBuilding : Building
                 }
                 if (!processedList.Contains(delAgent) && !deleteQueue.Contains(delAgent))
                 {
-                    delAgent.navAgent.speed = 0.1f; //change from a magic number
+                    delAgent.navAgent.speed = 0.1f; //change from a magic number (learn to spell btw)
                     deleteQueue.Enqueue(delAgent);
                 }
             }
