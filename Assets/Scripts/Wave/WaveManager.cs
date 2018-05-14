@@ -41,6 +41,8 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     //public GridArea endArea;
 
+    public int makePerWave;
+
     [HideInInspector]
     public Level thisLevel;
     public GameObject startAreaMarker;
@@ -153,7 +155,11 @@ public class WaveManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
-            MakeAgentInWave(currentWave);
+            Debug.Log("Made AgentPaths!");
+            for (int i = 0; i < makePerWave; i++)
+            {
+                MakeAgentInWave(currentWave);
+            }
         }
     }
 
@@ -199,7 +205,6 @@ public class WaveManager : MonoBehaviour
             int pathIndex = Random.Range(0, wavePathList.Count);
             WavePath currentPath = wavePathList[pathIndex];
             wave.AddNewAgent(agentPrefab, currentPath);
-            Debug.Log("Made AgentPath!");
         }
         else
         {

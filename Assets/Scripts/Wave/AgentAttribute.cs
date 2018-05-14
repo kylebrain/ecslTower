@@ -36,4 +36,22 @@ public struct AgentAttribute {
     /// The current active speed
     /// </summary>
     public possibleSpeeds Speed;
+
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+        AgentAttribute other = (AgentAttribute)obj;
+        return (other.Color == Color || other.Color == possibleColors.dontCare || Color == possibleColors.dontCare)
+            && (other.Size == Size || other.Size == possibleSizes.dontCare || Size == possibleSizes.dontCare)
+            && (other.Speed == Speed || other.Speed == possibleSpeeds.dontCare || Speed == possibleSpeeds.dontCare);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
 }
