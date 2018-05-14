@@ -12,6 +12,7 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
     /*-----------public variables-----------*/
+    public bool enablePathEditing = false;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
@@ -40,8 +41,11 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     //public GridArea endArea;
 
+    [HideInInspector]
     public Level thisLevel;
-    public List<WavePath> wavePathList = new List<WavePath>();
+    public GameObject startAreaMarker;
+    public GameObject endAreaMarker;
+    public ArrowContainer arrowContainer;
 
 
     /*-----------private variables-----------*/
@@ -78,11 +82,8 @@ public class WaveManager : MonoBehaviour
     /// <summary>
     /// The Stack of Arrows that visually make up the path to be converted to a WavePath when pushed
     /// </summary>
-    //private Stack<Arrow> arrowStack = new Stack<Arrow>();
 
-    [SerializeField]
-    private ArrowContainer arrowContainer;
-
+    private List<WavePath> wavePathList = new List<WavePath>();
 
     /*-----------private MonoBehavior functions-----------*/
     /// <summary>
@@ -100,6 +101,9 @@ public class WaveManager : MonoBehaviour
         {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
+
+        MarkAreasInContainer(arrowContainer);
+
         Load();
         /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
@@ -117,35 +121,74 @@ public class WaveManager : MonoBehaviour
         {
             return;
         }
-        DrawArrowIfValid();
-        SelectNodeOnClick();
-        RemoveArrowOnClick();
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (enablePathEditing)
         {
-            if (PushPath())
+            DrawArrowIfValid();
+            SelectNodeOnClick();
+            RemoveArrowOnClick();
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Path pushed!");
+                if (PushPath())
+                {
+                    Debug.Log("Path pushed!");
+                }
+                else
+                {
+                    Debug.LogError("Invalid path!");
+                }
             }
-            else
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.LogError("Invalid path!");
+                Save();
             }
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Save();
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Load();
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            Clear();
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                Load();
+            }
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                Clear();
+            }
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
             MakeAgentInWave(currentWave);
+        }
+    }
+
+    private void MarkAreasInContainer(ArrowContainer container)
+    {
+        Transform markerHolder = transform.Find("MarkerHolder").transform;
+        if (markerHolder == null)
+        {
+            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
+            return;
+        }
+
+        foreach (GridArea start in arrowContainer.startAreas)
+        {
+            MarkArea(start, true, markerHolder);
+        }
+
+        foreach (GridArea end in arrowContainer.endAreas)
+        {
+            MarkArea(end, false, markerHolder);
+        }
+    }
+
+
+    private void MarkArea(GridArea area, bool start, Transform parent)
+    {
+
+        GameObject marker = start ? startAreaMarker : endAreaMarker;
+        for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
+        {
+            for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
+            {
+                GameObject newMarker = Instantiate(marker, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
+                newMarker.transform.parent = parent;
+            }
         }
     }
 
@@ -157,7 +200,8 @@ public class WaveManager : MonoBehaviour
             WavePath currentPath = wavePathList[pathIndex];
             wave.AddNewAgent(agentPrefab, currentPath);
             Debug.Log("Made AgentPath!");
-        } else
+        }
+        else
         {
             Debug.LogError("Wave list is empty!");
         }
@@ -225,7 +269,16 @@ public class WaveManager : MonoBehaviour
             {
                 return;
             }
-            arrowContainer.RemoveArrows(NodePointedAt);
+            List<Arrow> deleteArrows = arrowContainer.RemoveArrows(NodePointedAt);
+            if (deleteArrows.Count == 0)
+            {
+                return;
+            }
+            foreach (Arrow arrow in deleteArrows)
+            {
+                SetNodeOccupation(arrow, Node.nodeStates.empty);
+                arrow.KillArrrow();
+            }
         }
     }
 
@@ -248,11 +301,12 @@ public class WaveManager : MonoBehaviour
     {
         int distanceY = Mathf.Abs(target.Coordinate.y - origin.Coordinate.y);
         int distanceX = Mathf.Abs(target.Coordinate.x - origin.Coordinate.x);
-        
-        if(distanceX >= distanceY)
+
+        if (distanceX >= distanceY)
         {
             return worldGrid.getAt(target.Coordinate.x, origin.Coordinate.y);
-        } else
+        }
+        else
         {
             return worldGrid.getAt(origin.Coordinate.x, target.Coordinate.y);
         }
@@ -310,14 +364,14 @@ public class WaveManager : MonoBehaviour
 
     private void DisplayPath(List<WavePath> wavePaths)
     {
-        foreach(WavePath path in wavePaths)
+        foreach (WavePath path in wavePaths)
         {
             WavePath temp = new WavePath(path);
             Node current = null;
             Node previous = null;
-            while((current = temp.GetNextNode()) != null)
+            while ((current = temp.GetNextNode()) != null)
             {
-                if(previous == null)
+                if (previous == null)
                 {
                     previous = current;
                     continue;
@@ -344,13 +398,46 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Passed invalid nodes to create segment!");
             return;
         }
-        start.Occupied = Node.nodeStates.navigation;
-        end.Occupied = Node.nodeStates.navigation;
         drawArrow.PlaceArrow(start, end, arrowOffset);
-        arrowContainer.AddArrowToContainer(drawArrow);
+        if (arrowContainer.AddArrowToContainer(drawArrow) != null)
+        {
+            SetNodeOccupation(drawArrow, Node.nodeStates.navigation);
+        }
 
         currStart = null;
         currEnd = null;
+    }
+
+    private void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
+    {
+        bool vertical = arrow.Origin.Coordinate.x == arrow.Destination.Coordinate.x;
+        if (vertical == (arrow.Origin.Coordinate.y == arrow.Destination.Coordinate.y))
+        {
+            Debug.LogError("Error marking an arrow occupied! The Arrow could be invalid!");
+            return;
+        }
+        int start = vertical ? arrow.Origin.Coordinate.y : arrow.Origin.Coordinate.x;
+        int end = vertical ? arrow.Destination.Coordinate.y : arrow.Destination.Coordinate.x;
+        int constCoord = vertical ? arrow.Origin.Coordinate.x : arrow.Origin.Coordinate.y;
+        if (start > end)
+        {
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+
+
+        for (int i = start + 1; i <= end; i++)
+        {
+            if (vertical)
+            {
+                worldGrid.getAt(constCoord, i).Occupied = state;
+            }
+            else
+            {
+                worldGrid.getAt(i, constCoord).Occupied = state;
+            }
+        }
     }
 
     /// <summary>
@@ -366,12 +453,12 @@ public class WaveManager : MonoBehaviour
     private void UseLevel(List<SerializableWavePath> paths)
     {
         wavePathList = new List<WavePath>();
-        foreach(SerializableWavePath path in paths)
+        foreach (SerializableWavePath path in paths)
         {
             wavePathList.Add(new WavePath(path, worldGrid));
         }
     }
 
-    
+
 
 }
