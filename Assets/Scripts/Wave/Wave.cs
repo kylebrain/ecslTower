@@ -24,7 +24,7 @@ public class Wave : MonoBehaviour {
     /// </remarks>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKey(KeyCode.Return))
         {
             if(waveQueue.Count > 0)
             {

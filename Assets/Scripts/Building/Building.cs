@@ -232,18 +232,16 @@ public abstract class Building: MonoBehaviour {
             
             if(placed) {
                 if(mouseWithinBuilding) {
-                    radiusLine.enabled = true;
-                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+                    ShowUI(canvas);
                 } else {
-                    radiusLine.enabled = false;
-                    canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+                    HideUI(canvas);
                 }
                 
             } else {
                 GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
                 if(worldGridArea.Contains(gridMousePos)) {
                     if(placeOnMap(Location)) {
-                        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+                        ShowUI(canvas);
                     }
                 }
             }
@@ -259,6 +257,31 @@ public abstract class Building: MonoBehaviour {
 
 
     }
+
+    /* I just realized that these virtual functions are useless because Building is abstract
+     * We can change it later to use DerivedUI functions
+     */
+
+    /// <summary>
+    /// Shows the Sell option inherent to all buildings
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
+    protected virtual void HideUI(GameObject canvas)
+    {
+            radiusLine.enabled = false;
+            canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+    }
+
+    /// <summary>
+    /// Hides the Sell option inherent to all buildings
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
+    protected virtual void ShowUI(GameObject canvas)
+    {
+        radiusLine.enabled = true;
+        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+    }
+
     #endregion
 
     //------------PRIVATE--------------

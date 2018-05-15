@@ -6,6 +6,7 @@ TagManager:
   tags:
   - WorldGrid
   - Shop
+  - Agent
   layers:
   - Default
   - TransparentFX

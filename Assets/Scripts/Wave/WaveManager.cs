@@ -32,19 +32,27 @@ public class WaveManager : MonoBehaviour
     /// Temperary prefab to be expanded in to a list of possible Agents
     /// </summary>
     public Agent agentPrefab;
-    /// <summary>
-    /// Where the Agent must spawn and where the first Arrow must start
-    /// </summary>
-    //public GridArea startArea;
-    /// <summary>
-    /// Where the Agent will be terminated and where the last Arrow must end
-    /// </summary>
-    //public GridArea endArea;
 
+    /// <summary>
+    /// Number of AgentPaths make when Make is called
+    /// </summary>
+    public int makePerWave = 100;
+    /// <summary>
+    /// The Level that stores the current WavePaths in the inspector and the file
+    /// </summary>
     [HideInInspector]
     public Level thisLevel;
+    /// <summary>
+    /// Prefab that marks the Nodes that contain a startArea
+    /// </summary>
     public GameObject startAreaMarker;
+    /// <summary>
+    /// Prefab that marks the Nodes that contain an endArea
+    /// </summary>
     public GameObject endAreaMarker;
+    /// <summary>
+    /// Contains the Arrows and allows creation and deletion of the path of Arrows
+    /// </summary>
     public ArrowContainer arrowContainer;
 
 
@@ -79,10 +87,9 @@ public class WaveManager : MonoBehaviour
     /// The Arrow that is currently being drawn
     /// </summary>
     private Arrow drawArrow = null;
-    /// <summary>
-    /// The Stack of Arrows that visually make up the path to be converted to a WavePath when pushed
+    ///<summary>
+    /// List of WavePaths recieved by the ArrowContainer or the SerializedWavePaths to be used by the Agents
     /// </summary>
-
     private List<WavePath> wavePathList = new List<WavePath>();
 
     /*-----------private MonoBehavior functions-----------*/
@@ -151,12 +158,21 @@ public class WaveManager : MonoBehaviour
                 Clear();
             }
         }
+        //Press M to make a Wave that contains makePerWave number of AgentPaths
         if (Input.GetKeyDown(KeyCode.M))
         {
-            MakeAgentInWave(currentWave);
+            Debug.Log("Made AgentPaths!");
+            for (int i = 0; i < makePerWave; i++)
+            {
+                MakeAgentInWave(currentWave);
+            }
         }
     }
 
+    /// <summary>
+    /// Will mark every Area (start and end) contained in the passed ArrowContianer
+    /// </summary>
+    /// <param name="container">The values are based on this parameter</param>
     private void MarkAreasInContainer(ArrowContainer container)
     {
         Transform markerHolder = transform.Find("MarkerHolder").transform;
@@ -177,7 +193,12 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Marks the Area either Start or End based on parameters
+    /// </summary>
+    /// <param name="area">The GridArea to be marked</param>
+    /// <param name="start">If start is true, marked as a StartArea, if false, marked as an EndArea</param>
+    /// <param name="parent">Parent object that the Markers will be Instantiated under</param>
     private void MarkArea(GridArea area, bool start, Transform parent)
     {
 
@@ -192,6 +213,10 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Makes an AgentPath based on a random path and adds it to the Wave
+    /// </summary>
+    /// <param name="wave">AgentPath is added to this Wave</param>
     private void MakeAgentInWave(Wave wave)
     {
         if (wavePathList.Count > 0)
@@ -199,7 +224,6 @@ public class WaveManager : MonoBehaviour
             int pathIndex = Random.Range(0, wavePathList.Count);
             WavePath currentPath = wavePathList[pathIndex];
             wave.AddNewAgent(agentPrefab, currentPath);
-            Debug.Log("Made AgentPath!");
         }
         else
         {
@@ -207,6 +231,9 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Clears both the wavePathList and the file of the Level
+    /// </summary>
     private void Clear()
     {
         Debug.Log("Cleared!");
@@ -214,6 +241,9 @@ public class WaveManager : MonoBehaviour
         thisLevel.DeleteLevel();
     }
 
+    /// <summary>
+    /// Saves the current wavePathList to the Level which will write to file
+    /// </summary>
     private void Save()
     {
         if (wavePathList != null && wavePathList.Count > 0)
@@ -232,6 +262,9 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Loads the Level from file, can ultimately just read from the Level in the inspector
+    /// </summary>
     public void Load()
     {
         List<SerializableWavePath> tempList = thisLevel.LoadLevel();
@@ -297,6 +330,12 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Returns a Node that is perpendicular to the start Node
+    /// </summary>
+    /// <param name="target">The Node which the mouse is currently over</param>
+    /// <param name="origin">The origin of the Arrow which needs to be placed</param>
+    /// <returns></returns>
     private Node GetCardinalNode(Node target, Node origin)
     {
         int distanceY = Mathf.Abs(target.Coordinate.y - origin.Coordinate.y);
@@ -362,6 +401,10 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates the visual Arrow path
+    /// </summary>
+    /// <param name="wavePaths">Will create the path based on this value</param>
     private void DisplayPath(List<WavePath> wavePaths)
     {
         foreach (WavePath path in wavePaths)
@@ -408,6 +451,11 @@ public class WaveManager : MonoBehaviour
         currEnd = null;
     }
 
+    /// <summary>
+    /// Sets all Nodes between Arrow endpoint to a certain nodeState
+    /// </summary>
+    /// <param name="arrow">Arrow to be set</param>
+    /// <param name="state">State that the Node will be set to (navigational or emmpty)</param>
     private void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
     {
         bool vertical = arrow.Origin.Coordinate.x == arrow.Destination.Coordinate.x;
@@ -450,6 +498,10 @@ public class WaveManager : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Populates wavePathList based on a List of SerializableWavePaths
+    /// </summary>
+    /// <param name="paths">List to be converted</param>
     private void UseLevel(List<SerializableWavePath> paths)
     {
         wavePathList = new List<WavePath>();
