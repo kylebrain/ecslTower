@@ -42,7 +42,7 @@ public class WaveManager : MonoBehaviour
     /// <summary>
     /// The Level that stores the current WavePaths in the inspector and the file
     /// </summary>
-    [HideInInspector]
+    //[HideInInspector]
     public Level thisLevel;
     /// <summary>
     /// Prefab that marks the Nodes that contain a startArea
@@ -103,7 +103,7 @@ public class WaveManager : MonoBehaviour
 #if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
-            thisLevel.LoadLevel();
+            Load();
             return;
         }
 #endif
@@ -113,9 +113,12 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        MarkAreasInContainer(arrowContainer);
+        /*Loads the level based on inspector values, could use a clean-up*/
 
-        Load();
+        MarkAreasInContainer(arrowContainer);
+        UseLevel(thisLevel.wavePaths);
+        DisplayPath(wavePathList);
+
         /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
         waveList.Add(newWave);
