@@ -37,6 +37,11 @@ public struct AgentAttribute {
     /// </summary>
     public possibleSpeeds Speed;
 
+    /// <summary>
+    /// Checks equality of AgentAttribute objects
+    /// </summary>
+    /// <param name="obj">The other AgentAttribute object</param>
+    /// <returns>True if the Attributes are the same or either is a dontCare</returns>
     public override bool Equals(object obj)
     {
         if (obj.GetType() != this.GetType())

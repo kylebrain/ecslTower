@@ -4,13 +4,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the Dropdown menus of the Router to select what to filter
+/// </summary>
 public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
-
+    /// <summary>
+    /// The AgentAttribute that the Dropdowns currently represent
+    /// </summary>
     public AgentAttribute currentAttribute;
+    /// <summary>
+    /// The parent Router that the Dropdown is attached to
+    /// </summary>
     public RouterBuilding parentTower;
+    /// <summary>
+    /// If the mouse if over the Dropdowns
+    /// </summary>
+    /// <remarks>
+    /// Used to keep the menus open when clicked on
+    /// </remarks>
     public bool Over = false;
 
+    /// <summary>
+    /// Sets the RouterObject it's attached to and initializes the menu options
+    /// </summary>
     private void Start()
     {
         parentTower = transform.parent.parent.gameObject.GetComponent<RouterBuilding>();
@@ -27,6 +44,9 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
         PopulateDropdowns();
     }
 
+    /// <summary>
+    /// Populates the Dropdown lists based on the Enums of AgentAttribute
+    /// </summary>
     private void PopulateDropdowns()
     {
         List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleColors)));
@@ -52,7 +72,7 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
                 return;
             }
             currentDropdown.onValueChanged.AddListener(delegate {
-                UpdateFilter();
+                UpdateFilter(); //only called when the Dropdown value is changed
             });
             currentDropdown.ClearOptions();
             currentDropdown.AddOptions(enumList[i]);
@@ -66,16 +86,30 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
 
     }
 
+    /// <summary>
+    /// Basic workaround so that the menu does not close when clicked on, sets Over to true
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         Over = true;
     }
 
+    /// <summary>
+    /// Basic workaround so that the menu does not close when clicked on, sets Over to false
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
         Over = false;
     }
 
+    /// <summary>
+    /// Will set the parent Router's filter to match the one's in the Dropdown
+    /// </summary>
+    /// <remarks>
+    /// Triggered everytime something changes in the Dropdown
+    /// </remarks>
     public void UpdateFilter()
     {
         currentAttribute.Color = (AgentAttribute.possibleColors)transform.Find("Color").GetComponent<Dropdown>().value;

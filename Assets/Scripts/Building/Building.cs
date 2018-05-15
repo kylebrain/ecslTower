@@ -258,12 +258,24 @@ public abstract class Building: MonoBehaviour {
 
     }
 
+    /* I just realized that these virtual functions are useless because Building is abstract
+     * We can change it later to use DerivedUI functions
+     */
+
+    /// <summary>
+    /// Shows the Sell option inherent to all buildings
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
     protected virtual void HideUI(GameObject canvas)
     {
             radiusLine.enabled = false;
             canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
     }
 
+    /// <summary>
+    /// Hides the Sell option inherent to all buildings
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
     protected virtual void ShowUI(GameObject canvas)
     {
         radiusLine.enabled = true;

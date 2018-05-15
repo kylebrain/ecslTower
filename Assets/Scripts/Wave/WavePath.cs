@@ -39,6 +39,9 @@ public class WavePath {
         }
     }
 
+    /// <summary>
+    /// Returns a List of Nodes based on the Node Queue
+    /// </summary>
     private List<Node> NodeList
     {
         get
@@ -69,6 +72,11 @@ public class WavePath {
         startNode = queue.Peek();
     }
 
+    /// <summary>
+    /// Generates a WavePath objects based on a SerializableWavePath
+    /// </summary>
+    /// <param name="path">The SerializedWavePath to convert</param>
+    /// <param name="grid">The WorldGrid which will contain the WavePath</param>
     public WavePath(SerializableWavePath path, WorldGrid grid)
     {
         List<Node> tempNodeList = new List<Node>();
@@ -128,6 +136,11 @@ public class WavePath {
         return base.GetHashCode();
     }
 
+    /// <summary>
+    /// Check equality based on the order of Nodes
+    /// </summary>
+    /// <param name="obj">Other WavePath to check</param>
+    /// <returns>True if equal, false if not</returns>
     public override bool Equals(object obj)
     {
         if(obj.GetType() != this.GetType())

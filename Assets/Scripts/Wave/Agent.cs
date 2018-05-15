@@ -108,6 +108,10 @@ public abstract class Agent : MonoBehaviour
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Randomly generates an AgentAttribute for the Agent
+    /// </summary>
+    /// <returns>A random AgentAttribute</returns>
     private AgentAttribute GenerateAttribute()
     {
         AgentAttribute attributes;
@@ -116,15 +120,16 @@ public abstract class Agent : MonoBehaviour
         int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
 
         attributes.Color = (AgentAttribute.possibleColors)Random.Range(0, numberColors);
-        //Debug.Log(attributes.Color);
         attributes.Size = (AgentAttribute.possibleSizes)Random.Range(0, numberSizes);
-        //Debug.Log(attributes.Size);
         attributes.Speed = (AgentAttribute.possibleSpeeds)Random.Range(0, numberSpeed);
-        //Debug.Log(attributes.Speed);
 
         return attributes;
     }
 
+    /// <summary>
+    /// Sets all useable values of Agent based on the Enum values
+    /// </summary>
+    /// <param name="attributes">The desire attributes</param>
     public void InitializeAttributes(AgentAttribute attributes)
     {
         SetColor(attributes.Color);
@@ -132,6 +137,10 @@ public abstract class Agent : MonoBehaviour
         SetSpeed(attributes.Speed);
     }
 
+    /// <summary>
+    /// Sets the NavAgent speed based on speed Enum
+    /// </summary>
+    /// <param name="speed">Desired speed</param>
     public void SetSpeed(AgentAttribute.possibleSpeeds speed)
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -152,6 +161,10 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the Transform scale based on size Enum
+    /// </summary>
+    /// <param name="size">Desired size</param>
     public void SetSize(AgentAttribute.possibleSizes size)
     {
         Vector3 newScale = Vector3.one;
@@ -173,6 +186,10 @@ public abstract class Agent : MonoBehaviour
         transform.localScale = newScale;
     }
 
+    /// <summary>
+    /// Sets Render Material based on color Enum
+    /// </summary>
+    /// <param name="color">Desired Color</param>
     public void SetColor(AgentAttribute.possibleColors color)
     {
         Renderer rend = GetComponent<Renderer>();

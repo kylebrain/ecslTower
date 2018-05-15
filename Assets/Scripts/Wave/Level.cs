@@ -7,8 +7,17 @@ using UnityEngine;
 [System.Serializable]
 public class Level
 {
+    /// <summary>
+    /// Set in inspector, can run into overriding issues if two levels are named the same
+    /// </summary>
     public string levelName;
+    /// <summary>
+    /// List of SerializableWavePaths that represent each WavePath in a level
+    /// </summary>
     public List<SerializableWavePath> wavePaths = new List<SerializableWavePath>();
+    /// <summary>
+    /// Absolute name of the file based on the levelName
+    /// </summary>
     private string PathName
     {
         get
@@ -22,11 +31,17 @@ public class Level
     }
     private string pathName = "";
 
+    /// <summary>
+    /// Resets the Level, but does not clear file
+    /// </summary>
     public void ClearLevel()
     {
         wavePaths = new List<SerializableWavePath>();
     }
 
+    /// <summary>
+    /// Clears the SWavePaths and the file in which they were stored
+    /// </summary>
     public void DeleteLevel()
     {
         ClearLevel();
@@ -36,6 +51,10 @@ public class Level
         file.Close();
     }
 
+    /// <summary>
+    /// Sets the SWavePath List based on a passed WavePath List
+    /// </summary>
+    /// <param name="wavePathList">To be converted</param>
     public void SetLevel(List<WavePath> wavePathList)
     {
         ClearLevel();
@@ -46,6 +65,10 @@ public class Level
         }
     }
 
+    /// <summary>
+    /// Sets the SWavePath List based on another SWavePath List
+    /// </summary>
+    /// <param name="wavePathList">To be copied</param>
     public void SetLevel(List<SerializableWavePath> wavePathList)
     {
         ClearLevel();
@@ -56,6 +79,9 @@ public class Level
         }
     }
 
+    /// <summary>
+    /// Saves the Level to a file based on the levelName
+    /// </summary>
     public void SaveLevel()
     {
         if (wavePaths.Count > 0 && pathName != "")
@@ -67,6 +93,10 @@ public class Level
         }
     }
 
+    /// <summary>
+    /// Loads the Level from the file based on the levelName
+    /// </summary>
+    /// <returns></returns>
     public List<SerializableWavePath> LoadLevel()
     {
         PathName = levelName;
@@ -81,7 +111,7 @@ public class Level
         }
         else
         {
-            Debug.Log(string.Format("File doesn't exist at path: {0}{1}", Application.persistentDataPath, "/save_game.dat"));
+            Debug.LogError(string.Format("File doesn't exist at path: {0}{1}", Application.persistentDataPath, "/save_game.dat"));
             return null;
         }
     }

@@ -2,14 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Contains the visual representation of the paths
+/// </summary>
 [System.Serializable]
 public class ArrowContainer
 {
-
+    /// <summary>
+    /// Contains paths represented by Stacks of Arrows
+    /// </summary>
     public List<Stack<Arrow>> arrowStacks = new List<Stack<Arrow>>();
+    /// <summary>
+    /// The GridAreas that a path can start in, set in inspector
+    /// </summary>
     public List<GridArea> startAreas = new List<GridArea>();
+    /// <summary>
+    /// The GridAreas that a path can end in, set in inspector
+    /// </summary>
     public List<GridArea> endAreas = new List<GridArea>();
 
+    /// <summary>
+    /// Will remove the desired Arrows from the arrowStack
+    /// </summary>
+    /// <param name="selectedNode">All Arrows after this Node will be removed</param>
+    /// <returns>List of Arrows to be Destroyed, handled outside of the class</returns>
     public List<Arrow> RemoveArrows(Node selectedNode)
     {
         List<Arrow> ret = new List<Arrow>();
@@ -38,17 +54,31 @@ public class ArrowContainer
         return ret;
     }
 
+    /// <summary>
+    /// Removes an Arrow from the Stack and sets its endpoints to empty
+    /// </summary>
+    /// <param name="currentArrow">The Arrow to be removed</param>
+    /// <param name="arrowStack">The Stack that has the certain Arrow as its front</param>
     private void RemoveArrow(Arrow currentArrow, Stack<Arrow> arrowStack) //might need to be passed by ref
     {
+        if (currentArrow != arrowStack.Peek())
+        {
+            Debug.LogError("Invalid Arrow and Stack, Arrow must be on top of the Stack!");
+            return;
+        }
         currentArrow.Destination.Occupied = Node.nodeStates.empty;
         if (arrowStack.Count == 1)
         {
             currentArrow.Origin.Occupied = Node.nodeStates.empty;
         }
         arrowStack.Pop();
-        //currentArrow.KillArrrow();
     }
 
+    /// <summary>
+    /// Checks to see if an Arrow can originate from a Node
+    /// </summary>
+    /// <param name="selectedNode">The Node to be checked</param>
+    /// <returns>If the Node is the end of an existing Arrow Stack or is in a StartArea</returns>
     public bool IsVaildNode(Node selectedNode)
     {
         foreach (Stack<Arrow> arrowStack in arrowStacks)
@@ -70,6 +100,11 @@ public class ArrowContainer
         return false;
     }
 
+    /// <summary>
+    /// Adds an Arrow to the Stack based on where it should be added, creates a new Stack if originating in a StartArea
+    /// </summary>
+    /// <param name="arrow">Arrow to be added, should be checked the IsValidNode function</param>
+    /// <returns>If succeeds returns the passed Arrow, on fail returns null</returns>
     public Arrow AddArrowToContainer(Arrow arrow)
     {
         foreach (Stack<Arrow> arrowStack in arrowStacks)
@@ -95,6 +130,10 @@ public class ArrowContainer
         return null;
     }
 
+    /// <summary>
+    /// Converts the List of Stacks of Arrows to a List of WavePaths
+    /// </summary>
+    /// <returns>List of WavePaths to be used by the Agents and WaveManager</returns>
     public List<WavePath> ToWavePaths()
     {
         List<WavePath> wavePaths = new List<WavePath>();

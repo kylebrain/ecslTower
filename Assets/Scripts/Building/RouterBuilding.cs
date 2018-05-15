@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Basic unit of the CyberSecurity sim
+/// </summary>
 public class RouterBuilding : Building
 {
 
@@ -27,8 +30,15 @@ public class RouterBuilding : Building
     /// the filter.
     /// </summary>
     public float RoutingRate = 3;
+    public float processSpeed = 0.1f;
 
-    public Queue<Agent> deleteQueue = new Queue<Agent>();
+    /// <summary>
+    /// Queue of Agents to be processed, processed one at a time
+    /// </summary>
+    public Queue<Agent> processQueue = new Queue<Agent>();
+    /// <summary>
+    /// List of Agents that have been processed and will not be marked to process again 
+    /// </summary>
     private List<Agent> processedList = new List<Agent>();
 
 
@@ -39,6 +49,9 @@ public class RouterBuilding : Building
     /// </summary>
     private float timeBetweenFilters;
 
+    /// <summary>
+    /// Finds all Agents and checks if they are in range, adds to processQueue and slows to form clump around ROuter
+    /// </summary>
     private void InRadius()
     {
         GameObject[] agentArray = GameObject.FindGameObjectsWithTag("Agent");
@@ -52,10 +65,10 @@ public class RouterBuilding : Building
                     Debug.LogError("Cannot find Agent script of object tagged Agent!");
                     continue;
                 }
-                if (!processedList.Contains(delAgent) && !deleteQueue.Contains(delAgent))
+                if (!processedList.Contains(delAgent) && !processQueue.Contains(delAgent))
                 {
-                    delAgent.navAgent.speed = 0.1f; //change from a magic number (learn to spell btw)
-                    deleteQueue.Enqueue(delAgent);
+                    delAgent.navAgent.speed = processSpeed;
+                    processQueue.Enqueue(delAgent);
                 }
             }
         }
@@ -72,6 +85,11 @@ public class RouterBuilding : Building
 
     protected override void updateAction()
     {
+        if (!Placed)
+        {
+            return;
+        }
+
         InRadius();
 
         //Store the value of RoutingRate at the beggining of this frame
@@ -98,10 +116,18 @@ public class RouterBuilding : Building
         if (timeSinceLastFilter >= timeBetweenFilters)
         {
             timeSinceLastFilter = 0f;
+
+            /*
+             * Dequeues processQueue until valid Agent is found
+             * Checks to see if it triggers any filters
+             * Deletes if it does
+             * If not it resets the speed and marks it as process by adding to the processedList
+             */
+
             Agent delAgent = null;
-            while (deleteQueue.Count > 0 && delAgent == null)
+            while (processQueue.Count > 0 && delAgent == null)
             {
-                delAgent = deleteQueue.Dequeue();
+                delAgent = processQueue.Dequeue();
             }
             if(delAgent != null){
                 bool filtered = false;
@@ -120,7 +146,7 @@ public class RouterBuilding : Building
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                     processedList.Add(delAgent);
                 }
-                //processedList.RemoveAll(null);
+                //add a way to delete Agents from the List who have been destroyed by reaching destination
             }
 
 
@@ -141,6 +167,10 @@ public class RouterBuilding : Building
         }
     }
 
+    /// <summary>
+    /// Shows the RoutingOptions with the Sell option
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void HideUI(GameObject canvas)
     {
         RoutingOptions options = canvas.transform.Find("RoutingOptions").GetComponent<RoutingOptions>();
@@ -152,6 +182,10 @@ public class RouterBuilding : Building
         }
     }
 
+    /// <summary>
+    /// Hides the RoutingOptions with the Sell option
+    /// </summary>
+    /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void ShowUI(GameObject canvas)
     {
         radiusLine.enabled = true;
