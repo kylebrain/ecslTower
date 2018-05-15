@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEditor;
 
 /// <summary>
 /// Moving unit that follows a WavePath and perform an action
@@ -197,13 +196,13 @@ public abstract class Agent : MonoBehaviour
         switch (color)
         {
             case AgentAttribute.possibleColors.red:
-                selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Red.mat", typeof(Material));
+                selectedMaterial = Resources.Load<Material>("Agent/Red");
                 break;
             case AgentAttribute.possibleColors.green:
-                selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Green.mat", typeof(Material));
+                selectedMaterial = Resources.Load<Material>("Agent/Green");
                 break;
             case AgentAttribute.possibleColors.blue:
-                selectedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/Materials/Wave/Agent/Blue.mat", typeof(Material));
+                selectedMaterial = Resources.Load<Material>("Agent/Blue");
                 break;
             default:
                 Debug.LogError("Agent color not recognized!");

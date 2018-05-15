@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 /// <summary>
@@ -98,11 +100,13 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+#if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
             thisLevel.LoadLevel();
             return;
         }
+#endif
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
         {
@@ -124,10 +128,12 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
+#if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
             return;
         }
+#endif
 
         if (enablePathEditing)
         {
