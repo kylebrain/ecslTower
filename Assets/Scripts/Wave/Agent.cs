@@ -9,7 +9,6 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class Agent : MonoBehaviour
 {
-    //testing home pc
 
     /*-----------public variables-----------*/
     public AgentAttribute Attribute;
