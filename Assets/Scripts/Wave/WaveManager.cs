@@ -1,53 +1,306 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
+/// <summary>
+/// Manages the waves, allows for building of the WavePaths and Waves
+/// </summary>
+[ExecuteInEditMode]
 public class WaveManager : MonoBehaviour
 {
-
-    public WorldGrid worldGrid;
-    List<Wave> waveList = new List<Wave>();
-    private Wave currentWave;
-    private Node currStart = null;
-    private Node currEnd = null;
+    /*-----------public variables-----------*/
+    public bool enablePathEditing = false;
+    /// <summary>
+    /// Mandatory prefab so a Wave can be created and used
+    /// </summary>
     public Wave wavePrefab;
+    /// <summary>
+    /// Manatory prefab so an Arrow can be drawn and placed
+    /// </summary>
     public Arrow arrowPrefab;
+    /// <summary>
+    /// How much the arrow will overlay on the grid
+    /// </summary>
+    /// <remarks>
+    /// Default works fine
+    /// </remarks>
+    public float arrowOffset = 0.1f;
+    /// <summary>
+    /// Temperary prefab to be expanded in to a list of possible Agents
+    /// </summary>
+    public Agent agentPrefab;
+
+    /// <summary>
+    /// Number of AgentPaths make when Make is called
+    /// </summary>
+    public int makePerWave = 100;
+    /// <summary>
+    /// The Level that stores the current WavePaths in the inspector and the file
+    /// </summary>
+    //[HideInInspector]
+    public Level thisLevel;
+    /// <summary>
+    /// Prefab that marks the Nodes that contain a startArea
+    /// </summary>
+    public GameObject startAreaMarker;
+    /// <summary>
+    /// Prefab that marks the Nodes that contain an endArea
+    /// </summary>
+    public GameObject endAreaMarker;
+    /// <summary>
+    /// Contains the Arrows and allows creation and deletion of the path of Arrows
+    /// </summary>
+    public ArrowContainer arrowContainer;
+
+
+    /*-----------private variables-----------*/
+    /// <summary>
+    /// Reference to the WorldGrid object
+    /// </summary>
+    /// <remarks>
+    /// Necessary for raycasting to Nodes
+    /// </remarks>
+    private WorldGrid worldGrid;
+    /// <summary>
+    /// List of Waves to be pushed to the player
+    /// </summary>
+    /// <remarks>
+    /// Not implemented yet
+    /// </remarks>
+    private List<Wave> waveList = new List<Wave>();
+    /// <summary>
+    /// The Wave that the Manager is currently handling and editing
+    /// </summary>
+    private Wave currentWave;
+    /// <summary>
+    /// Used for Arrow drawing, where the base of the Arrow will lay
+    /// </summary>
+    private Node currStart = null;
+    /// <summary>
+    /// Used for Arrow drawing, where the tip of the Arrow will lay
+    /// </summary>
+    private Node currEnd = null;
+    /// <summary>
+    /// The Arrow that is currently being drawn
+    /// </summary>
     private Arrow drawArrow = null;
-    public float arrowOffset = 0.5f;
-    private WavePath newPath = new WavePath();
-    Stack<Arrow> arrowStack = new Stack<Arrow>();
-    //Stack<Node> nodeStack = new Stack<Node>();
-    //private Node lastNodeOfNodeQueue = null;
-    public GridArea startArea;
-    public GridArea endArea;
+    ///<summary>
+    /// List of WavePaths recieved by the ArrowContainer or the SerializedWavePaths to be used by the Agents
+    /// </summary>
+    private List<WavePath> wavePathList = new List<WavePath>();
 
-    //test
-
+    /*-----------private MonoBehavior functions-----------*/
+    /// <summary>
+    /// Assigns the WorldGrid reference and currently creates a test Wave
+    /// </summary>
     private void Start()
     {
+#if UNITY_EDITOR
+        if (!EditorApplication.isPlaying)
+        {
+            Load();
+            return;
+        }
+#endif
+        worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
+        if (worldGrid == null)
+        {
+            Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
+        }
+
+        /*Loads the level based on inspector values, could use a clean-up*/
+
+        MarkAreasInContainer(arrowContainer);
+        UseLevel(thisLevel.wavePaths);
+        DisplayPath(wavePathList);
+
+        /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
         waveList.Add(newWave);
         currentWave = waveList[0];
+        /*end of test area*/
     }
 
+    /// <summary>
+    /// Call the neccessary functions for operation
+    /// </summary>
     private void Update()
     {
-        DrawArrowIfValid();
-        SelectNodeOnClick();
-        RemoveArrowOnClick();
-        if (Input.GetKeyDown(KeyCode.Space))
+#if UNITY_EDITOR
+        if (!EditorApplication.isPlaying)
         {
-            if (PushPath())
+            return;
+        }
+#endif
+
+        if (enablePathEditing)
+        {
+            DrawArrowIfValid();
+            SelectNodeOnClick();
+            RemoveArrowOnClick();
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("Path pushed!");
+                if (PushPath())
+                {
+                    Debug.Log("Path pushed!");
+                }
+                else
+                {
+                    Debug.LogError("Invalid path!");
+                }
             }
-            else
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.LogError("Invalid path!");
+                Save();
+            }
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                Load();
+            }
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                Clear();
+            }
+        }
+        //Press M to make a Wave that contains makePerWave number of AgentPaths
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log("Made AgentPaths!");
+            for (int i = 0; i < makePerWave; i++)
+            {
+                MakeAgentInWave(currentWave);
             }
         }
     }
 
+    /// <summary>
+    /// Will mark every Area (start and end) contained in the passed ArrowContianer
+    /// </summary>
+    /// <param name="container">The values are based on this parameter</param>
+    private void MarkAreasInContainer(ArrowContainer container)
+    {
+        Transform markerHolder = transform.Find("MarkerHolder").transform;
+        if (markerHolder == null)
+        {
+            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
+            return;
+        }
+
+        foreach (GridArea start in arrowContainer.startAreas)
+        {
+            MarkArea(start, true, markerHolder);
+        }
+
+        foreach (GridArea end in arrowContainer.endAreas)
+        {
+            MarkArea(end, false, markerHolder);
+        }
+    }
+
+    /// <summary>
+    /// Marks the Area either Start or End based on parameters
+    /// </summary>
+    /// <param name="area">The GridArea to be marked</param>
+    /// <param name="start">If start is true, marked as a StartArea, if false, marked as an EndArea</param>
+    /// <param name="parent">Parent object that the Markers will be Instantiated under</param>
+    private void MarkArea(GridArea area, bool start, Transform parent)
+    {
+
+        GameObject marker = start ? startAreaMarker : endAreaMarker;
+        for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
+        {
+            for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
+            {
+                GameObject newMarker = Instantiate(marker, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
+                newMarker.transform.parent = parent;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Makes an AgentPath based on a random path and adds it to the Wave
+    /// </summary>
+    /// <param name="wave">AgentPath is added to this Wave</param>
+    private void MakeAgentInWave(Wave wave)
+    {
+        if (wavePathList.Count > 0)
+        {
+            int pathIndex = Random.Range(0, wavePathList.Count);
+            WavePath currentPath = wavePathList[pathIndex];
+            wave.AddNewAgent(agentPrefab, currentPath);
+        }
+        else
+        {
+            Debug.LogError("Wave list is empty!");
+        }
+    }
+
+    /// <summary>
+    /// Clears both the wavePathList and the file of the Level
+    /// </summary>
+    private void Clear()
+    {
+        Debug.Log("Cleared!");
+        wavePathList = new List<WavePath>();
+        thisLevel.DeleteLevel();
+    }
+
+    /// <summary>
+    /// Saves the current wavePathList to the Level which will write to file
+    /// </summary>
+    private void Save()
+    {
+        if (wavePathList != null && wavePathList.Count > 0)
+        {
+            thisLevel.SetLevel(wavePathList);
+            thisLevel.SaveLevel();
+
+            foreach (WavePath path in wavePathList)
+            {
+                Debug.Log("Saved: " + path);
+            }
+        }
+        else
+        {
+            Debug.LogError("Path list has nothing in it");
+        }
+    }
+
+    /// <summary>
+    /// Loads the Level from file, can ultimately just read from the Level in the inspector
+    /// </summary>
+    public void Load()
+    {
+        List<SerializableWavePath> tempList = thisLevel.LoadLevel();
+        if (tempList != null)
+        {
+            thisLevel.SetLevel(tempList);
+            if (worldGrid != null)
+            {
+                UseLevel(tempList);
+                foreach (WavePath path in wavePathList)
+                {
+                    Debug.Log("Loaded: " + path);
+                }
+                DisplayPath(wavePathList);
+            }
+        }
+        else
+        {
+            Debug.LogError("Loading failed!");
+        }
+    }
+
+
+    /*-----------private functions-----------*/
+    /// <summary>
+    /// On RightClick, the Arrow selected and every Arrow after it is removed
+    /// </summary>
     private void RemoveArrowOnClick()
     {
         if (Input.GetMouseButtonDown(1))
@@ -58,38 +311,22 @@ public class WaveManager : MonoBehaviour
             {
                 return;
             }
-
-            List<Arrow> tempArrowList = new List<Arrow>(arrowStack);
-
-            if (tempArrowList.FindIndex(a => a.Origin == NodePointedAt) >= 0) //if it is actually a selected node
+            List<Arrow> deleteArrows = arrowContainer.RemoveArrows(NodePointedAt);
+            if (deleteArrows.Count == 0)
             {
-                Arrow currentArrow;
-                while(arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != NodePointedAt)
-                {
-                    RemoveArrow(currentArrow);
-                }
-            } else if (tempArrowList.FindIndex(a => a.Destination == NodePointedAt) >= 0)
+                return;
+            }
+            foreach (Arrow arrow in deleteArrows)
             {
-                Arrow endArrow = arrowStack.Peek();
-                if(endArrow.Destination == NodePointedAt)
-                {
-                    RemoveArrow(endArrow);
-                }
+                SetNodeOccupation(arrow, Node.nodeStates.empty);
+                arrow.KillArrrow();
             }
         }
     }
 
-    private void RemoveArrow(Arrow currentArrow)
-    {
-        currentArrow.Destination.Occupied = Node.nodeStates.empty;
-        if (arrowStack.Count == 1)
-        {
-            currentArrow.Origin.Occupied = Node.nodeStates.empty;
-        }
-        arrowStack.Pop();
-        Destroy(currentArrow.gameObject);
-    }
-
+    /// <summary>
+    /// Will update the Arrow about to be placed to be drawn with the mouse
+    /// </summary>
     private void DrawArrowIfValid()
     {
         if (currStart != null && drawArrow != null && currEnd == null)
@@ -97,11 +334,35 @@ public class WaveManager : MonoBehaviour
             Node nodePointedAt = worldGrid.getRaycastNode();
             if (nodePointedAt != null)
             {
-                drawArrow.DrawArrow(currStart.transform.position, nodePointedAt.transform.position, arrowOffset);
+                drawArrow.DrawArrow(currStart.transform.position, GetCardinalNode(nodePointedAt, currStart).transform.position, arrowOffset);
             }
         }
     }
 
+    /// <summary>
+    /// Returns a Node that is perpendicular to the start Node
+    /// </summary>
+    /// <param name="target">The Node which the mouse is currently over</param>
+    /// <param name="origin">The origin of the Arrow which needs to be placed</param>
+    /// <returns></returns>
+    private Node GetCardinalNode(Node target, Node origin)
+    {
+        int distanceY = Mathf.Abs(target.Coordinate.y - origin.Coordinate.y);
+        int distanceX = Mathf.Abs(target.Coordinate.x - origin.Coordinate.x);
+
+        if (distanceX >= distanceY)
+        {
+            return worldGrid.getAt(target.Coordinate.x, origin.Coordinate.y);
+        }
+        else
+        {
+            return worldGrid.getAt(origin.Coordinate.x, target.Coordinate.y);
+        }
+    }
+
+    /// <summary>
+    /// Handles the Node selection on LeftClick to provide currStart and currEnd valid Nodes to be used by other functions
+    /// </summary>
     private void SelectNodeOnClick()
     {
         if (Input.GetMouseButtonDown(0))
@@ -114,7 +375,7 @@ public class WaveManager : MonoBehaviour
 
             if (currStart == null) //if there is no selected start node
             {
-                if (arrowStack.Count == 0 ? (startArea.Contains(currentNode.Coordinate)) : (arrowStack.Peek().Destination == currentNode))
+                if (arrowContainer.IsVaildNode(currentNode))
                 {
                     currStart = currentNode;
                     //Debug.Log("Start Point set to: " + currStart.name);
@@ -127,10 +388,10 @@ public class WaveManager : MonoBehaviour
                 }
             }
 
-            else //if start node has been select, select the end node
+            else //if start node has been selected, select the end node
             {
-                currEnd = currentNode;
-                if (currEnd == currStart || currEnd.Occupied != Node.nodeStates.empty) //end and start cannot be the same
+                currEnd = GetCardinalNode(currentNode, currStart);
+                if (currEnd == currStart || currEnd.Occupied == Node.nodeStates.navigation) //end and start cannot be the same
                 {
                     Debug.LogError("Node" + currentNode.Coordinate + " is occupied!");
                     currEnd = null;
@@ -149,56 +410,116 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates the visual Arrow path
+    /// </summary>
+    /// <param name="wavePaths">Will create the path based on this value</param>
+    private void DisplayPath(List<WavePath> wavePaths)
+    {
+        foreach (WavePath path in wavePaths)
+        {
+            WavePath temp = new WavePath(path);
+            Node current = null;
+            Node previous = null;
+            while ((current = temp.GetNextNode()) != null)
+            {
+                if (previous == null)
+                {
+                    previous = current;
+                    continue;
+                }
+
+                drawArrow = Instantiate(arrowPrefab, transform) as Arrow;
+                SetPathSegment(previous, current);
+                previous = current;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// When finished placing an Arrow, the Arrow will be placed and adhere to the Grid
+    /// </summary>
+    /// <param name="start">The Node in which the base of the Arrow is in</param>
+    /// <param name="end">The Node in which the tip of the Arrow is in</param>
     private void SetPathSegment(Node start, Node end)
     {
 
-        if(start == null || end == null)
+        if (start == null || end == null)
         {
             Debug.LogError("Passed invalid nodes to create segment!");
             return;
         }
-        start.Occupied = Node.nodeStates.navigation;
-        end.Occupied = Node.nodeStates.navigation;
         drawArrow.PlaceArrow(start, end, arrowOffset);
-        Arrow newArrow = drawArrow;
-        arrowStack.Push(newArrow);
+        if (arrowContainer.AddArrowToContainer(drawArrow) != null)
+        {
+            SetNodeOccupation(drawArrow, Node.nodeStates.navigation);
+        }
 
         currStart = null;
         currEnd = null;
     }
 
+    /// <summary>
+    /// Sets all Nodes between Arrow endpoint to a certain nodeState
+    /// </summary>
+    /// <param name="arrow">Arrow to be set</param>
+    /// <param name="state">State that the Node will be set to (navigational or emmpty)</param>
+    private void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
+    {
+        bool vertical = arrow.Origin.Coordinate.x == arrow.Destination.Coordinate.x;
+        if (vertical == (arrow.Origin.Coordinate.y == arrow.Destination.Coordinate.y))
+        {
+            Debug.LogError("Error marking an arrow occupied! The Arrow could be invalid!");
+            return;
+        }
+        int start = vertical ? arrow.Origin.Coordinate.y : arrow.Origin.Coordinate.x;
+        int end = vertical ? arrow.Destination.Coordinate.y : arrow.Destination.Coordinate.x;
+        int constCoord = vertical ? arrow.Origin.Coordinate.x : arrow.Origin.Coordinate.y;
+        if (start > end)
+        {
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+
+
+        for (int i = start + 1; i <= end; i++)
+        {
+            if (vertical)
+            {
+                worldGrid.getAt(constCoord, i).Occupied = state;
+            }
+            else
+            {
+                worldGrid.getAt(i, constCoord).Occupied = state;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Pushes the WavePath to the currentWave's Path list to be used in that object
+    /// </summary>
+    /// <returns>If the Path is valid, returns true, else false</returns>
     private bool PushPath()
     {
-        if (!endArea.Contains(arrowStack.Peek().Destination.Coordinate))
-        {
-            Debug.LogError("End arrow does not end in end area!");
-            return false;
-        }
-
-        Stack<Arrow> tempArrowStack = new Stack<Arrow>(arrowStack); //copy constructor of stack reverses order
-        List<Node> nodeList = new List<Node>();
-
-        Arrow startArrow = tempArrowStack.Pop();
-
-        if (!startArea.Contains(startArrow.Origin.Coordinate))
-        {
-            Debug.LogError("Start arrow does not begin in start area!");
-            return false;
-        }
-
-        nodeList.Add(startArrow.Origin);
-        nodeList.Add(startArrow.Destination);
-
-        while (tempArrowStack.Count > 0)
-        {
-            Arrow currentArrow = tempArrowStack.Pop();
-            nodeList.Add(currentArrow.Destination);
-        }
-
-
-        newPath.InitializePath(nodeList);
-        currentWave.pathList.Add(newPath);
-        Debug.Log(newPath);
+        wavePathList = arrowContainer.ToWavePaths();
         return true;
     }
+
+    /// <summary>
+    /// Populates wavePathList based on a List of SerializableWavePaths
+    /// </summary>
+    /// <param name="paths">List to be converted</param>
+    private void UseLevel(List<SerializableWavePath> paths)
+    {
+        wavePathList = new List<WavePath>();
+        foreach (SerializableWavePath path in paths)
+        {
+            wavePathList.Add(new WavePath(path, worldGrid));
+        }
+    }
+
+
+
 }

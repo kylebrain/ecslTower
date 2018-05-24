@@ -2,73 +2,165 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wrapper for a Queue of Nodes which allows Agents to follow a Path
+/// </summary>
+[System.Serializable]
 public class WavePath {
+
+
+    /*-----------public variables-----------*/
+    /// <summary>
+    /// Where the Path starts (get only)
+    /// </summary>
+    public Node StartNode
+    {
+        get
+        {
+            return startNode;
+        }
+    }
+    /// <summary>
+    /// Where the Path ends (get only)
+    /// </summary>
+    public Node EndNode
+    {
+        get
+        {
+            return endNode;
+        }
+    }
+
+    public Queue<Node> NodeQueue
+    {
+        get
+        {
+            return nodeQueue;
+        }
+    }
+
+    /// <summary>
+    /// Returns a List of Nodes based on the Node Queue
+    /// </summary>
+    private List<Node> NodeList
+    {
+        get
+        {
+            return new List<Node>(nodeQueue);
+        }
+    }
+
+    /*-----------private variables-----------*/
     private Node startNode;
     private Node endNode;
-    private List<Node> PathList = new List<Node>();
-    private int nodeIndex;
-
     /// <summary>
-    /// Creates a basic path given a starting Node and a final Node and sets these two values;
+    /// Holds the Path as a Queue
     /// </summary>
-    /// <param name="start">Where the path begins</param>
-    /// <param name="end">Where the path terminates</param>
-    public void InitializePath(Node start, Node end)
-    {
-        PathList.Clear();
-        startNode = start;
-        endNode = end;
-        PathList.Add(startNode);
-        PathList.Add(endNode);
-        nodeIndex = -1;
-    }
+    private Queue<Node> nodeQueue = new Queue<Node>();
 
-    public void InitializePath(List<Node> list)
+
+    /*-----------public functions-----------*/
+    /// <summary>
+    /// Creates the object based on a given Node Queue
+    /// </summary>
+    /// <param name="queue">Node Queue which should have at least a valid end and start point</param>
+    public WavePath(Queue<Node> queue)
     {
-        PathList.Clear();
-        PathList = list;
-        nodeIndex = -1;
+        nodeQueue = new Queue<Node>(queue);
+        endNode = queue.Peek();
+        nodeQueue = new Queue<Node>(nodeQueue);
+        startNode = queue.Peek();
     }
 
     /// <summary>
-    /// Adds a midpoint Node before the final Node but after all other Nodes
+    /// Generates a WavePath objects based on a SerializableWavePath
     /// </summary>
-    /// <param name="midpoint">The Node to be inserted</param>
-    /// <returns>The midpoint Node that was passed</returns>
-    public Node AddMidpoint(Node midpoint)
+    /// <param name="path">The SerializedWavePath to convert</param>
+    /// <param name="grid">The WorldGrid which will contain the WavePath</param>
+    public WavePath(SerializableWavePath path, WorldGrid grid)
     {
-        PathList.Insert(PathList.Count - 2, midpoint);
-        return midpoint;
+        List<Node> tempNodeList = new List<Node>();
+        foreach (Coordinate c in path.list)
+            tempNodeList.Add(grid.getAt(c.x, c.y));
+        nodeQueue = new Queue<Node>(tempNodeList);
     }
 
     /// <summary>
-    /// Will retrieve the next Node in the list and increment the current Node in
+    /// Allows for copy construction
     /// </summary>
-    /// <returns>Return the next Node but returns null if currently on the last Node or the startNode if called for the first time</returns>
+    /// <remarks>
+    /// Uses the parametrized constructor using the other Node Queue
+    /// </remarks>
+    /// <param name="other"></param>
+    public WavePath(WavePath other) : this(other.nodeQueue) {}
+
+    /// <summary>
+    /// Removes the next Node and returns it
+    /// </summary>
+    /// <returns>The next Node or null if the Queue is empty</returns>
     public Node GetNextNode()
-    { 
-        if(nodeIndex == PathList.Count - 1)
+    {
+        if(nodeQueue.Count > 0)
+        {
+            return nodeQueue.Dequeue();
+        } else
         {
             return null;
         }
-
-        nodeIndex++;
-        return PathList[nodeIndex];
+        
     }
 
+    /// <summary>
+    /// Allows for printing of entire Node Queue to be viewed
+    /// </summary>
+    /// <returns>String to be outputted</returns>
     public override string ToString()
     {
+        List<Node> NodeList = new List<Node>(nodeQueue);
         string ret = base.ToString() + " [";
-        foreach(Node n in PathList)
+        foreach(Node n in NodeList)
         {
-            ret += "(" + ((int)n.transform.position.x) + ", " + ((int)n.transform.position.z) + "),";
+            ret += "(" + n.Coordinate.x + ", " + n.Coordinate.y + "),";
         }
-        if (PathList.Count > 0)
+        if (NodeList.Count > 0)
         {
             ret = ret.Remove(ret.Length - 1, 1);
         }
         ret += "]";
         return ret;
+    }
+
+    //might cause problems if not changed to mirror the Equals function
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    /// <summary>
+    /// Check equality based on the order of Nodes
+    /// </summary>
+    /// <param name="obj">Other WavePath to check</param>
+    /// <returns>True if equal, false if not</returns>
+    public override bool Equals(object obj)
+    {
+        if(obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+        List<Node> otherNodeList = new List<Node>(((WavePath)obj).nodeQueue);
+        List<Node> thisNodeList = new List<Node>(nodeQueue);
+        if(thisNodeList.Count != otherNodeList.Count)
+        {
+            return false;
+        }
+        for(int i = 0; i < thisNodeList.Count; i++)
+        {
+            if(thisNodeList[i] != otherNodeList[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
