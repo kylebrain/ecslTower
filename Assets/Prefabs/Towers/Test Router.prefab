@@ -1733,7 +1733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c6e6ffbc48fca478dc76d078790dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 5
+  Radius: 1
   radiusColor: {r: 0.366, g: 1, b: 1, a: 1}
   radiusLineWidth: 0.1
   price: 10
@@ -1741,11 +1741,11 @@ MonoBehaviour:
   startingHealth: 15
   Location:
     bottomLeft: {x: 0, y: 0}
-    width: 3
-    height: 3
+    width: 1
+    height: 1
   blacklist: 1
-  RoutingRate: 3
-  processSpeed: 0.1
+  RoutingRate: 1
+  processSpeed: 0.01
 --- !u!114 &114370428720279398
 MonoBehaviour:
   m_ObjectHideFlags: 1
