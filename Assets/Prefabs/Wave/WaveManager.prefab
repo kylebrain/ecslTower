@@ -93,44 +93,43 @@ MonoBehaviour:
     levelName: level01
     wavePaths:
     - list:
-      - x: 12
+      - x: 1
         y: 9
-      - x: 20
+      - x: 19
         y: 9
-      - x: 20
-        y: 6
-      - x: 28
-        y: 6
     - list:
-      - x: 2
-        y: 3
-      - x: 14
-        y: 3
-      - x: 14
-        y: 0
-      - x: 27
-        y: 0
-      - x: 27
-        y: 4
+      - x: 1
+        y: 2
+      - x: 20
+        y: 2
+      - x: 20
+        y: 7
+    - list:
+      - x: 1
+        y: 1
+      - x: 1
+        y: 6
+      - x: 18
+        y: 6
     endAreas:
     - Sink: 0
       bottomLeft:
         x: 0
         y: 0
-      width: 4
-      height: 4
+      width: 3
+      height: 3
     - Sink: 0
       bottomLeft:
-        x: 7
-        y: 7
-      width: 6
-      height: 5
+        x: 0
+        y: 8
+      width: 3
+      height: 3
     - Sink: 1
       bottomLeft:
-        x: 26
-        y: 4
+        x: 18
+        y: 5
       width: 5
-      height: 5
+      height: 6
   startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
     type: 2}
   endAreaMarker: {fileID: 1792310069272856, guid: 8eb2c9a6e3c4e5b47a13f5b83e4bf7fa,

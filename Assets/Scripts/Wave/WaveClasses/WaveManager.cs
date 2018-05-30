@@ -247,6 +247,7 @@ public class WaveManager : MonoBehaviour
     {
         Debug.Log("Cleared!");
         wavePathList = new List<WavePath>();
+        DeleteArrowContainer(arrowContainer);
         thisLevel.DeleteLevel();
     }
 
@@ -281,7 +282,6 @@ public class WaveManager : MonoBehaviour
         List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
         if (tempWavePathList != null && tempEndAreaList != null)
         {
-
             thisLevel.SetLevel(tempLevel);
             if (worldGrid != null)
             {
@@ -303,6 +303,24 @@ public class WaveManager : MonoBehaviour
 
 
     /*-----------private functions-----------*/
+
+    private void DeleteArrowContainer(ArrowContainer arrowContainer)
+    {
+        foreach (Stack<Arrow> stacks in arrowContainer.arrowStacks)
+        {
+            foreach (Arrow arrow in stacks)
+            {
+                Destroy(arrow.gameObject);
+            }
+        }
+        arrowContainer.arrowStacks = new List<Stack<Arrow>>();
+        arrowContainer.startAreas = new List<GridArea>();
+        arrowContainer.endAreas = new List<GridArea>();
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("EndArea"))
+        {
+            Destroy(obj);
+        }
+    }
 
     private void SetArrowContainerAreas(List<SerializableEndArea> endAreas)
     {
@@ -537,6 +555,7 @@ public class WaveManager : MonoBehaviour
     /// <param name="paths">List to be converted</param>
     private void UseLevel(Level level)
     {
+        DeleteArrowContainer(arrowContainer);
         SetArrowContainerAreas(level.endAreas);
         wavePathList = new List<WavePath>();
         foreach (SerializableWavePath path in level.wavePaths)

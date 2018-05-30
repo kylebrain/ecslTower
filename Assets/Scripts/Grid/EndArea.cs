@@ -82,6 +82,8 @@ public class EndArea : MonoBehaviour
                 
                 if (currentEndArea.area.Contains(currentNode.Coordinate))
                 {
+                    waveManager.arrowContainer.startAreas.Remove(currentEndArea.area);
+                    waveManager.arrowContainer.endAreas.Remove(currentEndArea.area);
                     Destroy(currentEndArea.gameObject);
                 }
             }
