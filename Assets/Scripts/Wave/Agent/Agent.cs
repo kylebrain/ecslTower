@@ -174,13 +174,13 @@ public abstract class Agent : MonoBehaviour
         switch (size)
         {
             case AgentAttribute.possibleSizes.small:
-                newScale = new Vector3(0.5f, 1, 0.5f);
+                newScale = new Vector3(0.25f, 1, 0.5f);
                 break;
             case AgentAttribute.possibleSizes.medium:
-                newScale = new Vector3(1f, 1, 1f);
+                newScale = new Vector3(0.5f, 1, 1f);
                 break;
             case AgentAttribute.possibleSizes.large:
-                newScale = new Vector3(1.5f, 1, 1.5f);
+                newScale = new Vector3(0.75f, 1, 1.5f);
                 break;
             default:
                 Debug.LogError("Agent scale not recognized!");
