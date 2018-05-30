@@ -57,6 +57,8 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public ArrowContainer arrowContainer;
 
+    public EndArea endAreaPrefab;
+
 
     /*-----------private variables-----------*/
     /// <summary>
@@ -180,7 +182,7 @@ public class WaveManager : MonoBehaviour
     /// Will mark every Area (start and end) contained in the passed ArrowContianer
     /// </summary>
     /// <param name="container">The values are based on this parameter</param>
-    private void MarkAreasInContainer(ArrowContainer container)
+   /* private void MarkAreasInContainer(ArrowContainer container)
     {
         Transform markerHolder = transform.Find("MarkerHolder").transform;
         if (markerHolder == null)
@@ -198,7 +200,7 @@ public class WaveManager : MonoBehaviour
         {
             MarkArea(end, false, markerHolder);
         }
-    }
+    }*/
 
     /// <summary>
     /// Marks the Area either Start or End based on parameters
@@ -206,7 +208,7 @@ public class WaveManager : MonoBehaviour
     /// <param name="area">The GridArea to be marked</param>
     /// <param name="start">If start is true, marked as a StartArea, if false, marked as an EndArea</param>
     /// <param name="parent">Parent object that the Markers will be Instantiated under</param>
-    private void MarkArea(GridArea area, bool start, Transform parent)
+   /* private void MarkArea(GridArea area, bool start, Transform parent)
     {
 
         GameObject marker = start ? startAreaMarker : endAreaMarker;
@@ -218,7 +220,7 @@ public class WaveManager : MonoBehaviour
                 newMarker.transform.parent = parent;
             }
         }
-    }
+    }*/
 
     /// <summary>
     /// Makes an AgentPath based on a random path and adds it to the Wave
@@ -290,7 +292,7 @@ public class WaveManager : MonoBehaviour
                 }
             } else
             {
-                Debug.LogError("WorldGrid is null!");
+                //Debug.LogError("WorldGrid is null!");
             }
         }
         else
@@ -304,17 +306,21 @@ public class WaveManager : MonoBehaviour
 
     private void SetArrowContainerAreas(List<SerializableEndArea> endAreas)
     {
-        foreach(SerializableEndArea area in endAreas)
+        Transform markerHolder = transform.Find("MarkerHolder").transform;
+        if (markerHolder == null)
         {
-            if (area.Sink)
-            {
-                arrowContainer.endAreas.Add(new GridArea(area));
-            } else
-            {
-                arrowContainer.startAreas.Add(new GridArea(area));
-            }
+            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
+            return;
         }
-        MarkAreasInContainer(arrowContainer);
+        foreach (SerializableEndArea area in endAreas)
+        {
+            EndArea endArea = Instantiate(endAreaPrefab, markerHolder);
+            endArea.endSetting = area.Sink ? endOptions.sink : endOptions.source;
+            endArea.SetColor();
+            GridArea tempArea = new GridArea(area);
+            endArea.area = tempArea;
+            endArea.MarkArea(tempArea);
+        }
     }
 
     /// <summary>

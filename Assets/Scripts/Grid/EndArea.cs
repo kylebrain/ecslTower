@@ -19,7 +19,7 @@ public class EndArea : MonoBehaviour
     private WorldGrid worldGrid; //remove if a solution can be found
     private WaveManager waveManager; //remove if a solution can be found
 
-    private void Start()
+    private void Awake()
     {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
@@ -33,7 +33,19 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        //endSetting must be set first using some function
+        SetColor();
+
+    }
+
+    private void Update()
+    {
+        OnLeftMouseDown();
+        OnRightMouseDown();
+
+    }
+
+    public void SetColor()
+    {
         if (endSetting == endOptions.source)
         {
             colorPlaceholder = Resources.Load<GameObject>("EndArea/SourceCube");
@@ -48,14 +60,6 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Cannot find EndArea placeholder prefab in the Resources folder!");
             return;
         }
-
-    }
-
-    private void Update()
-    {
-        OnLeftMouseDown();
-        OnRightMouseDown();
-
     }
 
     private void OnRightMouseDown()
@@ -104,12 +108,12 @@ public class EndArea : MonoBehaviour
 
             if (origin != null && destination != null)
             {
-                PlaceEndArea();
+                PlaceEndArea(origin, destination);
             }
         }
     }
 
-    private void PlaceEndArea()
+    public void PlaceEndArea(Node origin, Node destination)
     {
         if (origin == null || destination == null)
         {
@@ -130,10 +134,10 @@ public class EndArea : MonoBehaviour
             return;
         }
         Debug.Log("Created area: " + area);
-        MarkArea();
+        MarkArea(area);
     }
 
-    private void MarkArea()
+    public void MarkArea(GridArea area)
     {
         if (area.height <= 0 || area.width <= 0)
         {
