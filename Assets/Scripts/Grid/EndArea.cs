@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum endOptions { source, sink };
-public class EndArea : MonoBehaviour {
+public class EndArea : MonoBehaviour
+{
+    //make sure only one endarea is being created at a time
 
     //press a button to select either a source or sink
     //click to start the origin point and drag to expand the area
@@ -15,6 +17,7 @@ public class EndArea : MonoBehaviour {
     private Node origin = null;
     private Node destination = null;
     private WorldGrid worldGrid; //remove if a solution can be found
+    private WaveManager waveManager; //remove if a solution can be found
 
     private void Start()
     {
@@ -24,16 +27,23 @@ public class EndArea : MonoBehaviour {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
+        waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
+        if (worldGrid == null)
+        {
+            Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
+        }
+
         //endSetting must be set first using some function
         if (endSetting == endOptions.source)
         {
             colorPlaceholder = Resources.Load<GameObject>("EndArea/SourceCube");
-        } else if (endSetting == endOptions.sink)
+        }
+        else if (endSetting == endOptions.sink)
         {
             colorPlaceholder = Resources.Load<GameObject>("EndArea/SinkCube");
         }
 
-        if(colorPlaceholder == null)
+        if (colorPlaceholder == null)
         {
             Debug.LogError("Cannot find EndArea placeholder prefab in the Resources folder!");
             return;
@@ -44,21 +54,50 @@ public class EndArea : MonoBehaviour {
     private void Update()
     {
         OnLeftMouseDown();
+        OnRightMouseDown();
+
+    }
+
+    private void OnRightMouseDown()
+    {
+        if (Input.GetMouseButtonDown(1) && !waveManager.enablePathEditing)
+        {
+            Node currentNode;
+            if ((currentNode = worldGrid.getRaycastNode()) == null)
+            {
+                return;
+            }
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("EndArea"))
+            {
+                EndArea currentEndArea = obj.GetComponent<EndArea>();
+                if(currentEndArea == null)
+                {
+                    Debug.LogError("EndArea tagged object does not have the script!");
+                    continue;
+                }
+                
+                if (currentEndArea.area.Contains(currentNode.Coordinate))
+                {
+                    Destroy(currentEndArea.gameObject);
+                }
+            }
+        }
     }
 
     private void OnLeftMouseDown()
     {
-        if(origin != null && destination != null)
+        if (origin != null && destination != null)
         {
             return; //area had been placed
         }
         if (Input.GetMouseButtonDown(0))
         {
-            if(origin == null)
+            if (origin == null)
             {
                 //set origin if it doesn't exist
                 origin = worldGrid.getRaycastNode();
-            } else
+            }
+            else
             {
                 destination = worldGrid.getRaycastNode();
             }
@@ -72,7 +111,6 @@ public class EndArea : MonoBehaviour {
 
     private void PlaceEndArea()
     {
-        //destination = worldGrid.getRaycastNode();
         if (origin == null || destination == null)
         {
             Debug.LogError("Must have valid start and end Nodes!");
@@ -86,20 +124,7 @@ public class EndArea : MonoBehaviour {
         area.width = topRight.x - bottomleft.x + 1;
         area.height = topRight.y - bottomleft.y + 1;
 
-
-        /*if(Vector3.SqrMagnitude(origin.transform.position) < Vector3.SqrMagnitude(destination.transform.position))
-        {
-            //if the origin is closer to the bottom left
-            area.bottomLeft = origin.Coordinate;
-            area.width = Mathf.Abs(destination.Coordinate.x - origin.Coordinate.x) + 1;
-            area.height = Mathf.Abs(destination.Coordinate.y - origin.Coordinate.y) + 1;
-        } else
-        {
-            area.bottomLeft = destination.Coordinate;
-            area.width = Mathf.Abs(origin.Coordinate.x - destination.Coordinate.x) + 1;
-            area.height = Mathf.Abs(origin.Coordinate.y - destination.Coordinate.y) + 1;
-        }*/
-        if(area.width <= 0 || area.height <= 0)
+        if (area.width <= 0 || area.height <= 0)
         {
             Debug.LogError("Invalid gridArea created!");
             return;
@@ -110,7 +135,7 @@ public class EndArea : MonoBehaviour {
 
     private void MarkArea()
     {
-        if(area.height == 0 || area.width == 0)
+        if (area.height <= 0 || area.width <= 0)
         {
             Debug.LogError("Must have a valid gridArea!");
             return;
@@ -123,9 +148,27 @@ public class EndArea : MonoBehaviour {
                 newMarker.transform.parent = transform;
             }
         }
+        AddToArrowContainer();
         //UpdateArea();
     }
 
+    private void AddToArrowContainer()
+    {
+        if (area.height <= 0 || area.width <= 0 || waveManager == null)
+        {
+            Debug.LogError("Must have a valid gridArea and a reference to the WaveManager!");
+            return;
+        }
+        if(endSetting == endOptions.source)
+        {
+            waveManager.arrowContainer.startAreas.Add(area);
+        } else if (endSetting == endOptions.sink)
+        {
+            waveManager.arrowContainer.endAreas.Add(area);
+        }
+    }
+
+    //use later to dynamically display the area, update each time the destination Node changes
     private void UpdateArea()
     {
         if (area.height == 0 || area.width == 0)
@@ -133,9 +176,10 @@ public class EndArea : MonoBehaviour {
             Debug.LogError("Must have a valid gridArea!");
             return;
         }
-        for(int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            if(area.Contains(new Vector2Int((int)transform.GetChild(i).position.x, (int)transform.GetChild(i).position.y))){
+            if (area.Contains(new Vector2Int((int)transform.GetChild(i).position.x, (int)transform.GetChild(i).position.y)))
+            {
                 continue;
             }
             Destroy(transform.GetChild(i).gameObject);

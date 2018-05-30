@@ -56,10 +56,6 @@ public class WaveManager : MonoBehaviour
     /// Contains the Arrows and allows creation and deletion of the path of Arrows
     /// </summary>
     public ArrowContainer arrowContainer;
-    /// <summary>
-    /// Contains the buttons that assist in level creation
-    /// </summary>
-    public GameObject menuObject;
 
 
     /*-----------private variables-----------*/
@@ -119,9 +115,7 @@ public class WaveManager : MonoBehaviour
 
         /*Loads the level based on inspector values, could use a clean-up*/
 
-        MarkAreasInContainer(arrowContainer);
-        UseLevel(thisLevel.wavePaths);
-        DisplayPath(wavePathList);
+        UseLevel(thisLevel);
 
         /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
@@ -144,10 +138,6 @@ public class WaveManager : MonoBehaviour
 
         if (enablePathEditing)
         {
-            if(menuObject.activeSelf == false)
-            {
-                menuObject.SetActive(true);
-            }
             DrawArrowIfValid();
             SelectNodeOnClick();
             RemoveArrowOnClick();
@@ -175,12 +165,6 @@ public class WaveManager : MonoBehaviour
                 Clear();
             }
         } else
-        {
-            if (menuObject.activeSelf == true)
-            {
-                menuObject.SetActive(false);
-            }
-        }
         //Press M to make a Wave that contains makePerWave number of AgentPaths
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -271,7 +255,7 @@ public class WaveManager : MonoBehaviour
     {
         if (wavePathList != null && wavePathList.Count > 0)
         {
-            thisLevel.SetLevel(wavePathList);
+            thisLevel.SetLevel(wavePathList, arrowContainer.startAreas, arrowContainer.endAreas);
             thisLevel.SaveLevel();
 
             foreach (WavePath path in wavePathList)
@@ -290,18 +274,23 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public void Load()
     {
-        List<SerializableWavePath> tempList = thisLevel.LoadLevel();
-        if (tempList != null)
+        Level tempLevel = thisLevel.LoadLevel();
+        List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
+        List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
+        if (tempWavePathList != null && tempEndAreaList != null)
         {
-            thisLevel.SetLevel(tempList);
+
+            thisLevel.SetLevel(tempLevel);
             if (worldGrid != null)
             {
-                UseLevel(tempList);
+                UseLevel(thisLevel);
                 foreach (WavePath path in wavePathList)
                 {
                     Debug.Log("Loaded: " + path);
                 }
-                DisplayPath(wavePathList);
+            } else
+            {
+                Debug.LogError("WorldGrid is null!");
             }
         }
         else
@@ -312,6 +301,22 @@ public class WaveManager : MonoBehaviour
 
 
     /*-----------private functions-----------*/
+
+    private void SetArrowContainerAreas(List<SerializableEndArea> endAreas)
+    {
+        foreach(SerializableEndArea area in endAreas)
+        {
+            if (area.Sink)
+            {
+                arrowContainer.endAreas.Add(new GridArea(area));
+            } else
+            {
+                arrowContainer.startAreas.Add(new GridArea(area));
+            }
+        }
+        MarkAreasInContainer(arrowContainer);
+    }
+
     /// <summary>
     /// On RightClick, the Arrow selected and every Arrow after it is removed
     /// </summary>
@@ -525,13 +530,15 @@ public class WaveManager : MonoBehaviour
     /// Populates wavePathList based on a List of SerializableWavePaths
     /// </summary>
     /// <param name="paths">List to be converted</param>
-    private void UseLevel(List<SerializableWavePath> paths)
+    private void UseLevel(Level level)
     {
+        SetArrowContainerAreas(level.endAreas);
         wavePathList = new List<WavePath>();
-        foreach (SerializableWavePath path in paths)
+        foreach (SerializableWavePath path in level.wavePaths)
         {
             wavePathList.Add(new WavePath(path, worldGrid));
         }
+        DisplayPath(wavePathList);
     }
 
 

@@ -15,6 +15,9 @@ public class Level
     /// List of SerializableWavePaths that represent each WavePath in a level
     /// </summary>
     public List<SerializableWavePath> wavePaths = new List<SerializableWavePath>();
+
+    public List<SerializableEndArea> endAreas = new List<SerializableEndArea>();
+
     /// <summary>
     /// Absolute name of the file based on the levelName
     /// </summary>
@@ -37,6 +40,7 @@ public class Level
     public void ClearLevel()
     {
         wavePaths = new List<SerializableWavePath>();
+        endAreas = new List<SerializableEndArea>();
     }
 
     /// <summary>
@@ -55,7 +59,7 @@ public class Level
     /// Sets the SWavePath List based on a passed WavePath List
     /// </summary>
     /// <param name="wavePathList">To be converted</param>
-    public void SetLevel(List<WavePath> wavePathList)
+    public void SetLevel(List<WavePath> wavePathList, List<GridArea> Sources, List<GridArea> Sinks)
     {
         ClearLevel();
         PathName = levelName;
@@ -63,19 +67,31 @@ public class Level
         {
             wavePaths.Add(new SerializableWavePath(path));
         }
+        foreach(GridArea gridArea in Sources)
+        {
+            endAreas.Add(new SerializableEndArea(gridArea, false));
+        }
+        foreach (GridArea gridArea in Sinks)
+        {
+            endAreas.Add(new SerializableEndArea(gridArea, true));
+        }
     }
 
     /// <summary>
     /// Sets the SWavePath List based on another SWavePath List
     /// </summary>
     /// <param name="wavePathList">To be copied</param>
-    public void SetLevel(List<SerializableWavePath> wavePathList)
+    public void SetLevel(Level level)
     {
         ClearLevel();
         PathName = levelName;
-        foreach (SerializableWavePath path in wavePathList)
+        foreach (SerializableWavePath path in level.wavePaths)
         {
             wavePaths.Add(path);
+        }
+        foreach (SerializableEndArea endArea in level.endAreas)
+        {
+            endAreas.Add(endArea);
         }
     }
 
@@ -97,7 +113,7 @@ public class Level
     /// Loads the Level from the file based on the levelName
     /// </summary>
     /// <returns></returns>
-    public List<SerializableWavePath> LoadLevel()
+    public Level LoadLevel()
     {
         PathName = levelName;
         if (File.Exists(Application.persistentDataPath + PathName))
@@ -107,7 +123,8 @@ public class Level
             Level loadLevel = (Level)bf.Deserialize(file);
             file.Close();
             wavePaths = loadLevel.wavePaths;
-            return wavePaths;
+            endAreas = loadLevel.endAreas;
+            return loadLevel;
         }
         else
         {
