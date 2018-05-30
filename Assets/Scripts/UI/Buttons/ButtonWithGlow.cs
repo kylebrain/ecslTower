@@ -12,7 +12,8 @@ public class ButtonWithGlow : MonoBehaviour
 
     private void Awake()
     {
-        button = GetComponent<Button>();
+        //button = GetComponent<Button>();
+        //add back to increase functionality
     }
 
     private void Start()

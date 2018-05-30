@@ -56,6 +56,10 @@ public class WaveManager : MonoBehaviour
     /// Contains the Arrows and allows creation and deletion of the path of Arrows
     /// </summary>
     public ArrowContainer arrowContainer;
+    /// <summary>
+    /// Contains the buttons that assist in level creation
+    /// </summary>
+    public GameObject menuObject;
 
 
     /*-----------private variables-----------*/
@@ -140,6 +144,10 @@ public class WaveManager : MonoBehaviour
 
         if (enablePathEditing)
         {
+            if(menuObject.activeSelf == false)
+            {
+                menuObject.SetActive(true);
+            }
             DrawArrowIfValid();
             SelectNodeOnClick();
             RemoveArrowOnClick();
@@ -165,6 +173,12 @@ public class WaveManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Y))
             {
                 Clear();
+            }
+        } else
+        {
+            if (menuObject.activeSelf == true)
+            {
+                menuObject.SetActive(false);
             }
         }
         //Press M to make a Wave that contains makePerWave number of AgentPaths

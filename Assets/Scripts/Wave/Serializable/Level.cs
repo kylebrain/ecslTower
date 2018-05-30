@@ -111,7 +111,7 @@ public class Level
         }
         else
         {
-            Debug.LogError(string.Format("File doesn't exist at path: {0}{1}", Application.persistentDataPath, "/save_game.dat"));
+            Debug.LogError(string.Format("File doesn't exist at path: {0}{1}", Application.persistentDataPath, PathName));
             Debug.LogError("Enable path editing and press 'R' to save a path if it is already loaded internally.");
             return null;
         }
