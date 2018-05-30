@@ -67,7 +67,7 @@ public class RouterBuilding : Building
                 }
                 if (!processedList.Contains(delAgent) && !processQueue.Contains(delAgent))
                 {
-                    delAgent.navAgent.speed = processSpeed;
+                    delAgent.Speed = processSpeed;
                     processQueue.Enqueue(delAgent);
                 }
             }

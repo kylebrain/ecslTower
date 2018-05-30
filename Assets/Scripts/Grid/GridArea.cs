@@ -13,6 +13,13 @@ public class GridArea : System.Object {
         height = h;
     }
 
+    public GridArea(SerializableEndArea serializableEndArea)
+    {
+        bottomLeft = new Vector2Int(serializableEndArea.bottomLeft.x, serializableEndArea.bottomLeft.y);
+        width = serializableEndArea.width;
+        height = serializableEndArea.height;
+    }
+
     public GridArea(){}
 
     public Vector2Int bottomLeft;

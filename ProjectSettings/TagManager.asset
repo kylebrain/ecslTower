@@ -7,6 +7,8 @@ TagManager:
   - WorldGrid
   - Shop
   - Agent
+  - EndArea
+  - WaveManager
   layers:
   - Default
   - TransparentFX

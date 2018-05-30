@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114394535267952798}
   m_Layer: 0
   m_Name: WaveManager
-  m_TagString: Untagged
+  m_TagString: WaveManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,44 +94,48 @@ MonoBehaviour:
     wavePaths:
     - list:
       - x: 1
-        y: 2
-      - x: 21
-        y: 2
-      - x: 21
-        y: 21
-    - list:
-      - x: 1
-        y: 11
-      - x: 1
-        y: 21
-      - x: 20
-        y: 21
+        y: 9
+      - x: 19
+        y: 9
     - list:
       - x: 1
         y: 2
+      - x: 20
+        y: 2
+      - x: 20
+        y: 7
+    - list:
       - x: 1
+        y: 1
+      - x: 1
+        y: 6
+      - x: 18
+        y: 6
+    endAreas:
+    - Sink: 0
+      bottomLeft:
+        x: 0
+        y: 0
+      width: 3
+      height: 3
+    - Sink: 0
+      bottomLeft:
+        x: 0
         y: 8
-      - x: 12
-        y: 8
-      - x: 12
-        y: 16
-      - x: 20
-        y: 16
-      - x: 20
-        y: 20
+      width: 3
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 18
+        y: 5
+      width: 5
+      height: 6
   startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
     type: 2}
   endAreaMarker: {fileID: 1792310069272856, guid: 8eb2c9a6e3c4e5b47a13f5b83e4bf7fa,
     type: 2}
   arrowContainer:
-    startAreas:
-    - bottomLeft: {x: 0, y: 0}
-      width: 3
-      height: 3
-    - bottomLeft: {x: 0, y: 10}
-      width: 3
-      height: 3
-    endAreas:
-    - bottomLeft: {x: 20, y: 20}
-      width: 3
-      height: 3
+    startAreas: []
+    endAreas: []
+  endAreaPrefab: {fileID: 114902956633370238, guid: 9a033836a8919c944beffad2624d57ff,
+    type: 2}
