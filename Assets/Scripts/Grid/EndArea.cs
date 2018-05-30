@@ -14,8 +14,8 @@ public class EndArea : MonoBehaviour
     public endOptions endSetting = endOptions.source;
     public GridArea area;
     private GameObject colorPlaceholder = null;
-    private Node origin = null;
-    private Node destination = null;
+    private Node Origin = null;
+    private Node Destination = null;
     private WorldGrid worldGrid; //remove if a solution can be found
     private WaveManager waveManager; //remove if a solution can be found
 
@@ -33,7 +33,7 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        SetColor();
+        //SetColor();
 
     }
 
@@ -90,31 +90,33 @@ public class EndArea : MonoBehaviour
 
     private void OnLeftMouseDown()
     {
-        if (origin != null && destination != null)
+        if (Origin != null && Destination != null)
         {
             return; //area had been placed
         }
         if (Input.GetMouseButtonDown(0))
         {
-            if (origin == null)
+            if (Origin == null)
             {
                 //set origin if it doesn't exist
-                origin = worldGrid.getRaycastNode();
+                Origin = worldGrid.getRaycastNode();
             }
             else
             {
-                destination = worldGrid.getRaycastNode();
+                Destination = worldGrid.getRaycastNode();
             }
 
-            if (origin != null && destination != null)
+            if (Origin != null && Destination != null)
             {
-                PlaceEndArea(origin, destination);
+                PlaceEndArea(Origin, Destination);
             }
         }
     }
 
     public void PlaceEndArea(Node origin, Node destination)
     {
+        Origin = origin;
+        Destination = destination;
         if (origin == null || destination == null)
         {
             Debug.LogError("Must have valid start and end Nodes!");
@@ -137,7 +139,7 @@ public class EndArea : MonoBehaviour
         MarkArea(area);
     }
 
-    public void MarkArea(GridArea area)
+    private void MarkArea(GridArea area)
     {
         if (area.height <= 0 || area.width <= 0)
         {

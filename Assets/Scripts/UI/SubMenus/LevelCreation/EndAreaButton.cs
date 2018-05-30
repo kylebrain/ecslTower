@@ -10,12 +10,8 @@ public class EndAreaButton : GameButton
 
     public override void PerformAction()
     {
-        SpawnEndArea(sink);
-    }
-
-    public void SpawnEndArea (bool sink)
-    {
         EndArea area = Instantiate(endAreaPrefab, markerHolder);
         area.endSetting = sink ? endOptions.sink : endOptions.source;
+        area.SetColor();
     }
 }

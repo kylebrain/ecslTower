@@ -318,8 +318,7 @@ public class WaveManager : MonoBehaviour
             endArea.endSetting = area.Sink ? endOptions.sink : endOptions.source;
             endArea.SetColor();
             GridArea tempArea = new GridArea(area);
-            endArea.area = tempArea;
-            endArea.MarkArea(tempArea);
+            endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
         }
     }
 
