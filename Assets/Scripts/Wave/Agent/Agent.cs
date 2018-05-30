@@ -1,24 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+//using UnityEngine.AI;
 
 /// <summary>
 /// Moving unit that follows a WavePath and perform an action
 /// </summary>
-[RequireComponent(typeof(NavMeshAgent))]
+//[RequireComponent(typeof(NavMeshAgent))]
 public abstract class Agent : MonoBehaviour
 {
 
     /*-----------public variables-----------*/
     public AgentAttribute Attribute;
 
+    public float destinationScaling;
+
 
     /*-----------private variables-----------*/
     /// <summary>
     /// The NavMeshAgent for moving the Agent
     /// </summary>
-    public NavMeshAgent navAgent;
+        //public NavMeshAgent navAgent;
     /// <summary>
     /// The WavePath the Agent will follow
     /// </summary>
@@ -34,11 +36,13 @@ public abstract class Agent : MonoBehaviour
         }
         set
         {
-            navAgent.SetDestination(value.transform.position);
+            //navAgent.SetDestination(value.transform.position);
             currentNode = value;
         }
     }
     private Node currentNode;
+
+    public float Speed;
 
 
     /*-----------private MonoBehavior functions-----------*/
@@ -54,7 +58,7 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if ((currentNode.transform.position - transform.position).sqrMagnitude < 1)
+        if ((currentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
             Node nextNode = wavePath.GetNextNode();
             if (nextNode != null)
@@ -68,6 +72,7 @@ public abstract class Agent : MonoBehaviour
             }
 
         }
+        transform.position += Vector3.Normalize(currentNode.transform.position - transform.position) * Speed * Time.deltaTime;
     }
 
 
@@ -81,7 +86,7 @@ public abstract class Agent : MonoBehaviour
     /// <param name="newWavePath">WavePath to be followed</param>
     public void BeginMovement(WavePath newWavePath)
     {
-        navAgent = GetComponent<NavMeshAgent>();
+        //navAgent = GetComponent<NavMeshAgent>();
         wavePath = newWavePath;
         Node startNode = wavePath.GetNextNode();
         CurrentNode = startNode;
@@ -142,17 +147,16 @@ public abstract class Agent : MonoBehaviour
     /// <param name="speed">Desired speed</param>
     public void SetSpeed(AgentAttribute.possibleSpeeds speed)
     {
-        navAgent = GetComponent<NavMeshAgent>();
         switch (speed)
         {
             case AgentAttribute.possibleSpeeds.slow:
-                navAgent.speed = 1.5f;
+                Speed = 1.5f;
                 break;
             case AgentAttribute.possibleSpeeds.normal:
-                navAgent.speed = 3.5f;
+                Speed = 3.5f;
                 break;
             case AgentAttribute.possibleSpeeds.fast:
-                navAgent.speed = 5.5f;
+                Speed = 5.5f;
                 break;
             default:
                 Debug.LogError("Agent speed not recognized!");
@@ -170,13 +174,13 @@ public abstract class Agent : MonoBehaviour
         switch (size)
         {
             case AgentAttribute.possibleSizes.small:
-                newScale = new Vector3(0.5f, 1, 0.5f);
+                newScale = new Vector3(0.25f, 1, 0.5f);
                 break;
             case AgentAttribute.possibleSizes.medium:
-                newScale = new Vector3(1f, 1, 1f);
+                newScale = new Vector3(0.5f, 1, 1f);
                 break;
             case AgentAttribute.possibleSizes.large:
-                newScale = new Vector3(1.5f, 1, 1.5f);
+                newScale = new Vector3(0.75f, 1, 1.5f);
                 break;
             default:
                 Debug.LogError("Agent scale not recognized!");

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ModernUIEditor : EditorWindow {
 
-	private static ModernUIEditor instance = null;
+	//private static ModernUIEditor instance = null;
 
 	[MenuItem("Tools/Modern UI Pack/Buttons/Basic")]
 	static void CreateBasicButton()

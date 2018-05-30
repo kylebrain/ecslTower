@@ -57,6 +57,8 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public ArrowContainer arrowContainer;
 
+    public EndArea endAreaPrefab;
+
 
     /*-----------private variables-----------*/
     /// <summary>
@@ -115,9 +117,7 @@ public class WaveManager : MonoBehaviour
 
         /*Loads the level based on inspector values, could use a clean-up*/
 
-        MarkAreasInContainer(arrowContainer);
-        UseLevel(thisLevel.wavePaths);
-        DisplayPath(wavePathList);
+        UseLevel(thisLevel);
 
         /*test area*/
         Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
@@ -166,7 +166,7 @@ public class WaveManager : MonoBehaviour
             {
                 Clear();
             }
-        }
+        } else
         //Press M to make a Wave that contains makePerWave number of AgentPaths
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -182,7 +182,7 @@ public class WaveManager : MonoBehaviour
     /// Will mark every Area (start and end) contained in the passed ArrowContianer
     /// </summary>
     /// <param name="container">The values are based on this parameter</param>
-    private void MarkAreasInContainer(ArrowContainer container)
+   /* private void MarkAreasInContainer(ArrowContainer container)
     {
         Transform markerHolder = transform.Find("MarkerHolder").transform;
         if (markerHolder == null)
@@ -200,7 +200,7 @@ public class WaveManager : MonoBehaviour
         {
             MarkArea(end, false, markerHolder);
         }
-    }
+    }*/
 
     /// <summary>
     /// Marks the Area either Start or End based on parameters
@@ -208,7 +208,7 @@ public class WaveManager : MonoBehaviour
     /// <param name="area">The GridArea to be marked</param>
     /// <param name="start">If start is true, marked as a StartArea, if false, marked as an EndArea</param>
     /// <param name="parent">Parent object that the Markers will be Instantiated under</param>
-    private void MarkArea(GridArea area, bool start, Transform parent)
+   /* private void MarkArea(GridArea area, bool start, Transform parent)
     {
 
         GameObject marker = start ? startAreaMarker : endAreaMarker;
@@ -220,7 +220,7 @@ public class WaveManager : MonoBehaviour
                 newMarker.transform.parent = parent;
             }
         }
-    }
+    }*/
 
     /// <summary>
     /// Makes an AgentPath based on a random path and adds it to the Wave
@@ -247,6 +247,7 @@ public class WaveManager : MonoBehaviour
     {
         Debug.Log("Cleared!");
         wavePathList = new List<WavePath>();
+        DeleteArrowContainer(arrowContainer);
         thisLevel.DeleteLevel();
     }
 
@@ -257,7 +258,7 @@ public class WaveManager : MonoBehaviour
     {
         if (wavePathList != null && wavePathList.Count > 0)
         {
-            thisLevel.SetLevel(wavePathList);
+            thisLevel.SetLevel(wavePathList, arrowContainer.startAreas, arrowContainer.endAreas);
             thisLevel.SaveLevel();
 
             foreach (WavePath path in wavePathList)
@@ -276,18 +277,22 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public void Load()
     {
-        List<SerializableWavePath> tempList = thisLevel.LoadLevel();
-        if (tempList != null)
+        Level tempLevel = thisLevel.LoadLevel();
+        List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
+        List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
+        if (tempWavePathList != null && tempEndAreaList != null)
         {
-            thisLevel.SetLevel(tempList);
+            thisLevel.SetLevel(tempLevel);
             if (worldGrid != null)
             {
-                UseLevel(tempList);
+                UseLevel(thisLevel);
                 foreach (WavePath path in wavePathList)
                 {
                     Debug.Log("Loaded: " + path);
                 }
-                DisplayPath(wavePathList);
+            } else
+            {
+                //Debug.LogError("WorldGrid is null!");
             }
         }
         else
@@ -298,6 +303,43 @@ public class WaveManager : MonoBehaviour
 
 
     /*-----------private functions-----------*/
+
+    private void DeleteArrowContainer(ArrowContainer arrowContainer)
+    {
+        foreach (Stack<Arrow> stacks in arrowContainer.arrowStacks)
+        {
+            foreach (Arrow arrow in stacks)
+            {
+                Destroy(arrow.gameObject);
+            }
+        }
+        arrowContainer.arrowStacks = new List<Stack<Arrow>>();
+        arrowContainer.startAreas = new List<GridArea>();
+        arrowContainer.endAreas = new List<GridArea>();
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("EndArea"))
+        {
+            Destroy(obj);
+        }
+    }
+
+    private void SetArrowContainerAreas(List<SerializableEndArea> endAreas)
+    {
+        Transform markerHolder = transform.Find("MarkerHolder").transform;
+        if (markerHolder == null)
+        {
+            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
+            return;
+        }
+        foreach (SerializableEndArea area in endAreas)
+        {
+            EndArea endArea = Instantiate(endAreaPrefab, markerHolder);
+            endArea.endSetting = area.Sink ? endOptions.sink : endOptions.source;
+            endArea.SetColor();
+            GridArea tempArea = new GridArea(area);
+            endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
+        }
+    }
+
     /// <summary>
     /// On RightClick, the Arrow selected and every Arrow after it is removed
     /// </summary>
@@ -511,13 +553,16 @@ public class WaveManager : MonoBehaviour
     /// Populates wavePathList based on a List of SerializableWavePaths
     /// </summary>
     /// <param name="paths">List to be converted</param>
-    private void UseLevel(List<SerializableWavePath> paths)
+    private void UseLevel(Level level)
     {
+        DeleteArrowContainer(arrowContainer);
+        SetArrowContainerAreas(level.endAreas);
         wavePathList = new List<WavePath>();
-        foreach (SerializableWavePath path in paths)
+        foreach (SerializableWavePath path in level.wavePaths)
         {
             wavePathList.Add(new WavePath(path, worldGrid));
         }
+        DisplayPath(wavePathList);
     }
 
 
