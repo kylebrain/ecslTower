@@ -148,14 +148,19 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Must have a valid gridArea!");
             return;
         }
-        for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
+        Vector3 pos = new Vector3(area.bottomLeft.x + (area.width - 1) / 2, 0f, area.bottomLeft.y + (area.height - 1) / 2);
+        Vector3 scale = new Vector3(area.width, transform.localScale.y, area.height);
+        GameObject newMarker = Instantiate(colorPlaceholder, pos, Quaternion.identity) as GameObject;
+        newMarker.transform.parent = transform;
+        newMarker.transform.localScale = scale;
+        /*for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
         {
             for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
             {
                 GameObject newMarker = Instantiate(colorPlaceholder, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
                 newMarker.transform.parent = transform;
             }
-        }
+        }*/
         AddToArrowContainer();
         //UpdateArea();
     }

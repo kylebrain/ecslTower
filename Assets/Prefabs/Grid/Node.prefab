@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1337458929953736}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.95, y: 0.95, z: 1}
+  m_LocalScale: {x: 0.97, y: 0.97, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -112,3 +112,4 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: a1f4bb3401119864fb0a897a8955c0fa, type: 2}
   hoverInvalidMaterial: {fileID: 2100000, guid: d3721c5424d403a49917d23a1e33c4aa,
     type: 2}
+  Occupied: 0

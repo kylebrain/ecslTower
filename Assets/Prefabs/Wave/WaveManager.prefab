@@ -85,7 +85,7 @@ MonoBehaviour:
     type: 2}
   arrowPrefab: {fileID: 114492045783636566, guid: 9a011c876ad29f443ad7726c636e35db,
     type: 2}
-  arrowOffset: 0.05
+  arrowOffset: 0.1
   agentPrefab: {fileID: 114339762276031930, guid: 9fead0b7917375a448514f81dbda83cd,
     type: 2}
   makePerWave: 100

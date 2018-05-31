@@ -24,7 +24,7 @@ public class WorldGrid: MonoBehaviour {
     }
 
     public Node getAt(int x, int y) {
-        if(x > width || y > height || x < 0 || y < 0) {
+        if(x >= width || y >= height || x < 0 || y < 0) {
             return null;
         }
         return m_grid[x, y];
@@ -54,7 +54,24 @@ public class WorldGrid: MonoBehaviour {
     private void LateUpdate() {
         Node hit = getRaycastNode();
         if(hit != null) {
+            //make all adjacent Nodes hovered
             hit.setHovered();
+            Node current;
+            if((current = getAt(hit.Coordinate.x + 1, hit.Coordinate.y)) != null) {
+                current.setHovered();
+            }
+            if ((current = getAt(hit.Coordinate.x, hit.Coordinate.y + 1)) != null)
+            {
+                current.setHovered();
+            }
+            if ((current = getAt(hit.Coordinate.x - 1, hit.Coordinate.y)) != null)
+            {
+                current.setHovered();
+            }
+            if ((current = getAt(hit.Coordinate.x, hit.Coordinate.y - 1)) != null)
+            {
+                current.setHovered();
+            }
         }
     }
 
