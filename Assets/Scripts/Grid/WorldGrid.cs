@@ -6,6 +6,7 @@ public class WorldGrid: MonoBehaviour {
     public int width = 1;
     public int height = 1;
     public Node nodePrefab;
+    public BaseGrid baseGrid;
 
     private Node[,] m_grid;
 
@@ -20,7 +21,7 @@ public class WorldGrid: MonoBehaviour {
                 m_grid[i, j].name = "Node (" + i + ", " + j + ")";
             }
         }
-        m_grid[5, 6].Occupied = Node.nodeStates.navigation;
+        baseGrid.Resize(this);
     }
 
     public Node getAt(int x, int y) {
