@@ -13,6 +13,8 @@ public abstract class Agent : MonoBehaviour
     /*-----------public variables-----------*/
     public AgentAttribute Attribute;
 
+    public int scoreMod = 5;
+
     public float destinationScaling;
 
 

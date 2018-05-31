@@ -94,41 +94,67 @@ MonoBehaviour:
     wavePaths:
     - list:
       - x: 1
-        y: 9
-      - x: 19
-        y: 9
-    - list:
-      - x: 1
         y: 2
-      - x: 20
-        y: 2
-      - x: 20
-        y: 7
-    - list:
       - x: 1
+        y: 15
+      - x: 10
+        y: 15
+    - list:
+      - x: 17
         y: 1
-      - x: 1
-        y: 6
-      - x: 18
-        y: 6
+      - x: 17
+        y: 15
+      - x: 12
+        y: 15
+    - list:
+      - x: 2
+        y: 2
+      - x: 7
+        y: 2
+      - x: 7
+        y: 9
+      - x: 28
+        y: 9
+    - list:
+      - x: 20
+        y: 2
+      - x: 30
+        y: 2
+      - x: 30
+        y: 10
+    - list:
+      - x: 19
+        y: 2
+      - x: 19
+        y: 19
+      - x: 30
+        y: 19
+      - x: 30
+        y: 12
     endAreas:
     - Sink: 0
       bottomLeft:
         x: 0
         y: 0
-      width: 3
-      height: 3
+      width: 4
+      height: 4
     - Sink: 0
       bottomLeft:
-        x: 0
-        y: 8
-      width: 3
+        x: 14
+        y: 0
+      width: 7
       height: 3
     - Sink: 1
       bottomLeft:
-        x: 18
-        y: 5
+        x: 8
+        y: 14
       width: 5
+      height: 4
+    - Sink: 1
+      bottomLeft:
+        x: 28
+        y: 9
+      width: 6
       height: 6
   startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
     type: 2}

@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Derived Agent class that is harmless or helpful to the player
-/// </summary>
-public class BenignAgent : Agent {
-
+public class MaliciousAgent : Agent {
 
     /*-----------public override function-----------*/
     /// <summary>
@@ -14,6 +10,6 @@ public class BenignAgent : Agent {
     /// </summary>
     public override void DestinationAction()
     {
-        Score.score += scoreMod;
+        Score.score -= scoreMod;
     }
 }
