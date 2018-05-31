@@ -74,5 +74,11 @@ public class Wave : MonoBehaviour {
         Agent newAgent = Instantiate(newAgentPath.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
         newAgent.InitializeAttributes(newAgentPath.agentAttribute);
         newAgent.BeginMovement(newPath);
+
+        if(waveQueue.Count <= 0)
+        {
+            Destroy(gameObject);
+        }
+
     }
 }

@@ -33,7 +33,9 @@ public class WaveController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            InitWave();
+            //create a wave
+            currentWave = Instantiate(wavePrefab, transform);
+            currentWave.CreateWaveWithList(InitWave()); //allow initialization then push the wave
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -44,16 +46,14 @@ public class WaveController : MonoBehaviour {
         }
     }
 
-    private void InitWave()
+    private List<AgentPath> InitWave()
     {
-        //create a wave
-        currentWave = Instantiate(wavePrefab, transform);
 
         //choose attributes to infect
         if (infectedCount > GetAttributeComboNumber())
         {
             Debug.LogError("Infected count is higher than possible combination! Make it less than or equal to: " + GetAttributeComboNumber());
-            return;
+            return null;
         }
         while (infectedAttributes.Count < infectedCount)
         {
@@ -71,11 +71,11 @@ public class WaveController : MonoBehaviour {
         totalBenign = (int)Mathf.Clamp(totalBenign, 0f, agentsPerWave);
         //generate a pure wave first
 
-        List<AgentPath> tempAgentPathList = new List<AgentPath>();
+        List<AgentPath> ret = new List<AgentPath>();
 
         for(int i = 0; i < totalBenign; i++)
         {
-            tempAgentPathList.Add(new AgentPath(benignAgent, GetRandomWavePath(), GenerateAttribute()));
+            ret.Add(new AgentPath(benignAgent, GetRandomWavePath(), GenerateAttribute()));
         }
         foreach (AgentAttribute attr in infectedAttributes)
         {
@@ -94,20 +94,20 @@ public class WaveController : MonoBehaviour {
             foreach (int index in agentIndices)
             {
                 AgentPath currentAgentPath = new AgentPath(maliciousAgent, GetRandomWavePath(), attr);
-                if (index > tempAgentPathList.Count - 1)
+                if (index > ret.Count - 1)
                 {
-                    tempAgentPathList.Add(currentAgentPath);
+                    ret.Add(currentAgentPath);
                 } else
                 {
-                    tempAgentPathList.Insert(index, currentAgentPath);
+                    ret.Insert(index, currentAgentPath);
                 }
             }
 
-            currentWave.CreateWaveWithList(tempAgentPathList);
+            
 
         }
 
-
+        return ret;
 
 
     }

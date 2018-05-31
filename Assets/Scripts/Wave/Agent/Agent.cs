@@ -33,6 +33,7 @@ public abstract class Agent : MonoBehaviour
     private Node CurrentNode;
 
     public float Speed = 0f;
+    bool terminated = false;
 
 
     /*-----------private MonoBehavior functions-----------*/
@@ -48,7 +49,7 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if ((CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
+        if (!terminated && (CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
             Node nextNode = wavePath.GetNextNode();
             if (nextNode != null)
@@ -97,8 +98,18 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     private void Terminate()
     {
+        terminated = true;
         //add animation
         DestinationAction();
+        Destroy(GetComponent<Renderer>()); //or explode or other effect here
+        StartCoroutine(playTerminationAudio());
+    }
+
+    IEnumerator playTerminationAudio()
+    {
+        AudioSource audio = GetComponent<AudioSource>();
+        audio.Play();
+        yield return new WaitForSeconds(audio.clip.length);
         Destroy(gameObject);
     }
 

@@ -50,12 +50,12 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
     private void PopulateDropdowns()
     {
         List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleColors)));
-        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)));
         List<string> sizeList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)));
+        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)));
         List<List<string>> enumList = new List<List<string>>();
         enumList.Add(colorList);
-        enumList.Add(sizeList);
         enumList.Add(speedList);
+        enumList.Add(sizeList);
 
         if (transform.childCount != enumList.Count + 1) //plus one for the background
         {
