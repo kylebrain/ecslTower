@@ -1744,8 +1744,8 @@ MonoBehaviour:
     width: 1
     height: 1
   blacklist: 1
-  RoutingRate: 1
-  processSpeed: 0.01
+  RoutingRate: 3
+  processSpeed: 0
 --- !u!114 &114370428720279398
 MonoBehaviour:
   m_ObjectHideFlags: 1
