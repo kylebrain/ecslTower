@@ -57,15 +57,15 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
         enumList.Add(sizeList);
         enumList.Add(speedList);
 
-        if (transform.childCount != enumList.Count)
+        if (transform.childCount != enumList.Count + 1) //plus one for the background
         {
             Debug.LogError("Number of dropdown menus do not mirror number of attributes! Remove or add more menus!");
             return;
         }
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < enumList.Count; i++)
         {
-            Dropdown currentDropdown = transform.GetChild(i).GetComponent<Dropdown>();
+            Dropdown currentDropdown = transform.GetChild(i + 1).GetComponent<Dropdown>(); //plus one for the background
             if (currentDropdown == null)
             {
                 Debug.LogError("Cannot find child of RoutingOptions!");

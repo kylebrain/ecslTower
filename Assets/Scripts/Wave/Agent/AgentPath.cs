@@ -15,14 +15,17 @@ public struct AgentPath {
     /// </summary>
     public WavePath agentPath;
 
+    public AgentAttribute agentAttribute;
+
     /// <summary>
     /// Parametrized constructor must be used to have a valid AgentPath
     /// </summary>
     /// <param name="agent">Sets Agent struct variable to this</param>
     /// <param name="path">Sets WavePath struct variable to this</param>
-    public AgentPath(Agent agent, WavePath path)
+    public AgentPath(Agent agent, WavePath path, AgentAttribute attribute)
     {
         agentPrefab = agent;
         agentPath = path;
+        agentAttribute = attribute;
     }
 }

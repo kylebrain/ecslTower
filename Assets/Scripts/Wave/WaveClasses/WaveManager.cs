@@ -13,12 +13,15 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class WaveManager : MonoBehaviour
 {
+
+    #region public variables
     /*-----------public variables-----------*/
+    public bool enableMapEditing = false;
+
+    public GameObject levelCreation;
+
+    [HideInInspector]
     public bool enablePathEditing = false;
-    /// <summary>
-    /// Mandatory prefab so a Wave can be created and used
-    /// </summary>
-    public Wave wavePrefab;
     /// <summary>
     /// Manatory prefab so an Arrow can be drawn and placed
     /// </summary>
@@ -30,11 +33,6 @@ public class WaveManager : MonoBehaviour
     /// Default works fine
     /// </remarks>
     public float arrowOffset = 0.1f;
-    /// <summary>
-    /// Temperary prefab to be expanded in to a list of possible Agents
-    /// </summary>
-    public Agent agentPrefab;
-
     /// <summary>
     /// Number of AgentPaths make when Make is called
     /// </summary>
@@ -59,7 +57,17 @@ public class WaveManager : MonoBehaviour
 
     public EndArea endAreaPrefab;
 
+    public List<WavePath> WavePathList
+    {
+        get
+        {
+            return new List<WavePath>(wavePathList);
+        }
+    }
 
+    #endregion
+
+    #region private variables
     /*-----------private variables-----------*/
     /// <summary>
     /// Reference to the WorldGrid object
@@ -68,18 +76,6 @@ public class WaveManager : MonoBehaviour
     /// Necessary for raycasting to Nodes
     /// </remarks>
     private WorldGrid worldGrid;
-    /// <summary>
-    /// List of Waves to be pushed to the player
-    /// </summary>
-    /// <remarks>
-    /// Not implemented yet
-    /// </remarks>
-    private List<Wave> waveList = new List<Wave>();
-    /// <summary>
-    /// The Wave that the Manager is currently handling and editing
-    /// </summary>
-    private Wave currentWave;
-    /// <summary>
     /// Used for Arrow drawing, where the base of the Arrow will lay
     /// </summary>
     private Node currStart = null;
@@ -95,6 +91,10 @@ public class WaveManager : MonoBehaviour
     /// List of WavePaths recieved by the ArrowContainer or the SerializedWavePaths to be used by the Agents
     /// </summary>
     private List<WavePath> wavePathList = new List<WavePath>();
+
+    #endregion
+
+    #region Start and Update
 
     /*-----------private MonoBehavior functions-----------*/
     /// <summary>
@@ -119,12 +119,6 @@ public class WaveManager : MonoBehaviour
         /*Loads the level based on inspector values, could use a clean-up*/
 
         UseLevel(thisLevel);
-
-        /*test area*/
-        Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
-        waveList.Add(newWave);
-        currentWave = waveList[0];
-        /*end of test area*/
     }
 
     /// <summary>
@@ -139,6 +133,22 @@ public class WaveManager : MonoBehaviour
             }
         #endif
 
+        if(!levelCreation.activeSelf && enableMapEditing)
+        {
+            levelCreation.SetActive(true);
+        }
+
+        if (!enableMapEditing)
+        {
+            if (levelCreation.activeSelf)
+            {
+                levelCreation.SetActive(false);
+            }
+            return;
+        }
+
+
+        
         if (enablePathEditing)
         {
             DrawArrowIfValid();
@@ -167,17 +177,10 @@ public class WaveManager : MonoBehaviour
             {
                 Clear();
             }
-        } else
-        //Press M to make a Wave that contains makePerWave number of AgentPaths
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("Made AgentPaths!");
-            for (int i = 0; i < makePerWave; i++)
-            {
-                MakeAgentInWave(currentWave);
-            }
         }
     }
+
+    #endregion
 
     #region Level
 
@@ -535,7 +538,8 @@ public class WaveManager : MonoBehaviour
     /// <param name="wave">AgentPath is added to this Wave</param>
     private void MakeAgentInWave(Wave wave)
     {
-        if (wavePathList.Count > 0)
+        Debug.LogWarning("Depricated");
+        /*if (wavePathList.Count > 0)
         {
             int pathIndex = Random.Range(0, wavePathList.Count);
             WavePath currentPath = wavePathList[pathIndex];
@@ -544,7 +548,7 @@ public class WaveManager : MonoBehaviour
         else
         {
             Debug.LogError("Wave list is empty!");
-        }
+        }*/
     }
     #endregion
 

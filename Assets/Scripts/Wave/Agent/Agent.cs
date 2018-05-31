@@ -15,7 +15,7 @@ public abstract class Agent : MonoBehaviour
 
     public int scoreMod = 5;
 
-    public float destinationScaling;
+    public float destinationScaling = 0.01f;
 
 
     /*-----------private variables-----------*/
@@ -30,28 +30,16 @@ public abstract class Agent : MonoBehaviour
     /// <summary>
     /// The Node that is currently the destination
     /// </summary>
-    private Node CurrentNode
-    {
-        get
-        {
-            return currentNode;
-        }
-        set
-        {
-            //navAgent.SetDestination(value.transform.position);
-            currentNode = value;
-        }
-    }
-    private Node currentNode;
+    private Node CurrentNode;
 
-    public float Speed;
+    public float Speed = 0f;
 
 
     /*-----------private MonoBehavior functions-----------*/
 
     private void Start()
     {
-        InitializeAttributes(Attribute = GenerateAttribute());
+        //InitializeAttributes(Attribute = GenerateAttribute());
         //Use function for the AI, but add an Attribute to AgentPath to allow for customization before pushing
     }
 
@@ -60,7 +48,7 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        if ((currentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
+        if ((CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
             Node nextNode = wavePath.GetNextNode();
             if (nextNode != null)
@@ -74,7 +62,7 @@ public abstract class Agent : MonoBehaviour
             }
 
         }
-        transform.position += Vector3.Normalize(currentNode.transform.position - transform.position) * Speed * Time.deltaTime;
+        transform.position += Vector3.Normalize(CurrentNode.transform.position - transform.position) * Speed * Time.deltaTime;
     }
 
 
@@ -115,29 +103,12 @@ public abstract class Agent : MonoBehaviour
     }
 
     /// <summary>
-    /// Randomly generates an AgentAttribute for the Agent
-    /// </summary>
-    /// <returns>A random AgentAttribute</returns>
-    private AgentAttribute GenerateAttribute()
-    {
-        AgentAttribute attributes;
-        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
-        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
-        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
-
-        attributes.Color = (AgentAttribute.possibleColors)Random.Range(0, numberColors);
-        attributes.Size = (AgentAttribute.possibleSizes)Random.Range(0, numberSizes);
-        attributes.Speed = (AgentAttribute.possibleSpeeds)Random.Range(0, numberSpeed);
-
-        return attributes;
-    }
-
-    /// <summary>
     /// Sets all useable values of Agent based on the Enum values
     /// </summary>
     /// <param name="attributes">The desire attributes</param>
     public void InitializeAttributes(AgentAttribute attributes)
     {
+        Attribute = attributes;
         SetColor(attributes.Color);
         SetSize(attributes.Size);
         SetSpeed(attributes.Speed);

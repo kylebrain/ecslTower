@@ -59,4 +59,9 @@ public struct AgentAttribute {
         return base.GetHashCode();
     }
 
+    public override string ToString()
+    {
+        return "Color: " + Color + ", Size: " + Size + ", Speed: " + Speed;
+    }
+
 }

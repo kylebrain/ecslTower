@@ -137,7 +137,6 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Invalid gridArea created!");
             return;
         }
-        Debug.Log("Created area: " + area);
         MarkArea(area);
     }
 
