@@ -90,6 +90,20 @@ public class RouterBuilding : Building
             return;
         }
 
+
+        //test area
+        if (selected)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+                {
+                    RoutingRate = i;
+                    break;
+                }
+            }
+        }
+
         InRadius();
 
         //Store the value of RoutingRate at the beggining of this frame
@@ -116,6 +130,7 @@ public class RouterBuilding : Building
         if (timeSinceLastFilter >= timeBetweenFilters)
         {
             timeSinceLastFilter = 0f;
+            timeBetweenFilters = 1f / RoutingRate;
 
             /*
              * Dequeues processQueue until valid Agent is found
@@ -129,7 +144,8 @@ public class RouterBuilding : Building
             {
                 delAgent = processQueue.Dequeue();
             }
-            if(delAgent != null){
+            if (delAgent != null)
+            {
                 bool filtered = false;
                 foreach (AgentAttribute attribute in filter)
                 {
@@ -171,25 +187,23 @@ public class RouterBuilding : Building
     /// Shows the RoutingOptions with the Sell option
     /// </summary>
     /// <param name="canvas">The canvas on which it is displayed</param>
-    protected override void HideUI(GameObject canvas)
+    protected override void derivedHide(GameObject canvas)
     {
         RoutingOptions options = canvas.transform.Find("RoutingOptions").GetComponent<RoutingOptions>();
-        if (!options.Over)
+        if (options.Over)
         {
-            radiusLine.enabled = false;
-            canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
-            canvas.transform.Find("RoutingOptions").gameObject.SetActive(false);
+            ShowUI(canvas);
+            return;
         }
+        canvas.transform.Find("RoutingOptions").gameObject.SetActive(false);
     }
 
     /// <summary>
     /// Hides the RoutingOptions with the Sell option
     /// </summary>
     /// <param name="canvas">The canvas on which it is displayed</param>
-    protected override void ShowUI(GameObject canvas)
+    protected override void derivedShow(GameObject canvas)
     {
-        radiusLine.enabled = true;
-        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         canvas.transform.Find("RoutingOptions").gameObject.SetActive(true);
     }
 

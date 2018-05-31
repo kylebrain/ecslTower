@@ -11,4 +11,14 @@ public class ResourceBuilding : Building {
     protected override void updateAction() {
 
     }
+
+    protected override void derivedHide(GameObject canvas)
+    {
+
+    }
+
+    protected override void derivedShow(GameObject canvas)
+    {
+
+    }
 }

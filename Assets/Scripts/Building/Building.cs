@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public abstract class Building: MonoBehaviour {
+public abstract class Building : MonoBehaviour
+{
 
     //----------VARIABLES--------------
 
@@ -19,7 +20,9 @@ public abstract class Building: MonoBehaviour {
 
     protected float health = 0f;
     protected bool placed = false;
-    public bool Placed {
+    protected bool selected = false;
+    public bool Placed
+    {
         get { return placed; }
         set { placed = value; }
     }
@@ -51,7 +54,8 @@ public abstract class Building: MonoBehaviour {
     /// Add to the tower's health
     /// </summary>
     /// <param name="toAdd">The amount of health to add (or subtract if negative)</param>
-    public void updateHealth(float toAdd) {
+    public void updateHealth(float toAdd)
+    {
         health += toAdd;
     }
 
@@ -59,7 +63,8 @@ public abstract class Building: MonoBehaviour {
     /// Checks to see if the requested location is available, and if so places the tower there
     /// </summary>
     /// <param name=""></param>
-    public bool placeOnMap(GridArea loc) {
+    public bool placeOnMap(GridArea loc)
+    {
         bool invalidLocation = false;
         bool hasNavigation = false;
 
@@ -70,23 +75,30 @@ public abstract class Building: MonoBehaviour {
         int endY = startY + loc.height - 1;
 
         //All nodes within loc must be empty or navigation, and at least 1 must be navigation
-        for(int i = startX; i <= endX; ++i) {
-            for(int j = startY; j <= endY; ++j) {
+        for (int i = startX; i <= endX; ++i)
+        {
+            for (int j = startY; j <= endY; ++j)
+            {
                 Node cur = worldGrid.getAt(i, j);
-                if(cur == null) {
+                if (cur == null)
+                {
                     return false;
                 }
 
-                if(cur.Occupied == Node.nodeStates.navigation) {
+                if (cur.Occupied == Node.nodeStates.navigation)
+                {
                     hasNavigation = true;
-                } else if(cur.Occupied != Node.nodeStates.empty) {
+                }
+                else if (cur.Occupied != Node.nodeStates.empty)
+                {
                     invalidLocation = true;
                 }
             }
         }
 
         //If an invalid location, or if none of the nodes were navigation nodes, exit
-        if(invalidLocation || !hasNavigation) {
+        if (invalidLocation || !hasNavigation)
+        {
             return false;
         }
 
@@ -100,7 +112,8 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Removes the tower from the map
     /// </summary>
-    public void removeFromMap() {
+    public void removeFromMap()
+    {
         worldGrid.setUnoccupied(Location, Node.nodeStates.building);
         placed = false;
         Destroy(transform.root.gameObject);
@@ -109,8 +122,10 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Shows the tower's radius as a cirlce on the map
     /// </summary>
-    public void showRadius() {
-        if(prevPos != transform.position) {
+    public void showRadius()
+    {
+        if (prevPos != transform.position)
+        {
             drawRadius();
         }
         prevPos = transform.position;
@@ -120,7 +135,8 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Hides the tower's radius
     /// </summary>
-    public void hideRadius() {
+    public void hideRadius()
+    {
         radiusLine.enabled = false;
     }
     #endregion
@@ -130,10 +146,12 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Recalculates the points in the LineRenderer's circle. Only called when the object's position changes.
     /// </summary>
-    protected void drawRadius() {
+    protected void drawRadius()
+    {
         float deltaTheta = (float)(2.0 * Mathf.PI) / numSegments;
         float theta = 0f;
-        for(int i = 0; i < numSegments; i++) {
+        for (int i = 0; i < numSegments; i++)
+        {
             float x = Radius * Mathf.Cos(theta);
             float z = Radius * Mathf.Sin(theta);
             Vector3 pos = new Vector3(x, 0.1f, z);
@@ -145,7 +163,8 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Initializes settings for the LineRenderer component which is used to display the radius.
     /// </summary>
-    protected void initLineRenderer() {
+    protected void initLineRenderer()
+    {
         radiusLine = gameObject.GetComponent<LineRenderer>();
         radiusLine.positionCount = numSegments;
         radiusLine.material.color = radiusColor;
@@ -165,20 +184,10 @@ public abstract class Building: MonoBehaviour {
     /// </summary>
     /// <param name="pos">The new transform. Note: the actual transform after the call might be slightly different
     /// because Location will round bottomLeft to integer values.</param>
-    protected void setCenterPosition(Vector3 pos) {
+    protected void setCenterPosition(Vector3 pos)
+    {
         int bottomLeftX = (int)(pos.x - 0.5f * (Location.width - 1));
-        if(bottomLeftX < 0) {
-            bottomLeftX = 0;
-        } else if(bottomLeftX > worldGrid.width - Location.width) {
-            bottomLeftX = worldGrid.width - Location.width;
-        }
-
         int bottomLeftY = (int)(pos.z - 0.5f * (Location.height - 1));
-        if(bottomLeftY < 0) {
-            bottomLeftY = 0;
-        } else if(bottomLeftY > worldGrid.height - Location.height) {
-            bottomLeftY = worldGrid.height - Location.height;
-        }
 
         Location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
         updatePosition();
@@ -187,7 +196,8 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Recalculates and moves the object's transform based on its Location attribute.
     /// </summary>
-    protected void updatePosition() {
+    protected void updatePosition()
+    {
         int startX = Location.bottomLeft.x;
         int endX = startX + Location.width - 1;
 
@@ -200,7 +210,8 @@ public abstract class Building: MonoBehaviour {
     /// <summary>
     /// Sets the object's transform to the mouse if the tower is not placed. Places the tower if the mouse button is released.
     /// </summary>
-    protected void handleMouse() {
+    protected void handleMouse()
+    {
         Vector3 screenMousPos = Input.mousePosition;
         screenMousPos.z = Camera.main.transform.position.y;
         Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
@@ -211,36 +222,50 @@ public abstract class Building: MonoBehaviour {
         GameObject canvas = transform.Find("Canvas").gameObject;
 
         //Handle mouse location
-        if(placed) {
-            if(Input.GetKeyDown(KeyCode.Escape)) {
+        if (placed)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 radiusLine.enabled = false;
                 canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
             }
-        } else {
+        }
+        else
+        {
             setCenterPosition(worldMousePos);
             radiusLine.enabled = true;
 
-            if(Input.GetKeyDown(KeyCode.Escape)) {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
                 Destroy(gameObject);
             }
         }
 
 
         //Handle left click
-        if(Input.GetMouseButtonUp(0)) {
+        if (Input.GetMouseButtonUp(0))
+        {
 
-            
-            if(placed) {
-                if(mouseWithinBuilding) {
+
+            if (placed)
+            {
+                if (mouseWithinBuilding)
+                {
                     ShowUI(canvas);
-                } else {
+                }
+                else
+                {
                     HideUI(canvas);
                 }
-                
-            } else {
+
+            }
+            else
+            {
                 GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
-                if(worldGridArea.Contains(gridMousePos)) {
-                    if(placeOnMap(Location)) {
+                if (worldGridArea.Contains(gridMousePos))
+                {
+                    if (placeOnMap(Location))
+                    {
                         ShowUI(canvas);
                     }
                 }
@@ -249,8 +274,9 @@ public abstract class Building: MonoBehaviour {
 
 
         //Handle right click
-        if(Input.GetMouseButtonUp(1)) {
-            
+        if (Input.GetMouseButtonUp(1))
+        {
+
         }
 
 
@@ -258,37 +284,40 @@ public abstract class Building: MonoBehaviour {
 
     }
 
-    /* I just realized that these virtual functions are useless because Building is abstract
-     * We can change it later to use DerivedUI functions
-     */
-
     /// <summary>
     /// Shows the Sell option inherent to all buildings
     /// </summary>
     /// <param name="canvas">The canvas on which it is displayed</param>
-    protected virtual void HideUI(GameObject canvas)
+    protected void HideUI(GameObject canvas)
     {
-            radiusLine.enabled = false;
-            canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+        radiusLine.enabled = false;
+        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+        selected = false;
+        derivedHide(canvas);
+
     }
 
     /// <summary>
     /// Hides the Sell option inherent to all buildings
     /// </summary>
     /// <param name="canvas">The canvas on which it is displayed</param>
-    protected virtual void ShowUI(GameObject canvas)
+    protected void ShowUI(GameObject canvas)
     {
         radiusLine.enabled = true;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
+        selected = true;
+        derivedShow(canvas);
     }
 
     #endregion
 
     //------------PRIVATE--------------
     #region PRIVATE
-    private void Start() {
+    private void Start()
+    {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
-        if(worldGrid == null) {
+        if (worldGrid == null)
+        {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
@@ -296,9 +325,11 @@ public abstract class Building: MonoBehaviour {
         derivedStart();
     }
 
-    private void Update() {
+    private void Update()
+    {
         handleMouse();
         updateAction();
+
     }
     #endregion
 
@@ -316,5 +347,7 @@ public abstract class Building: MonoBehaviour {
     protected abstract void updateAction();
     #endregion
 
+    protected abstract void derivedHide(GameObject canvas);
 
+    protected abstract void derivedShow(GameObject canvas);
 }
