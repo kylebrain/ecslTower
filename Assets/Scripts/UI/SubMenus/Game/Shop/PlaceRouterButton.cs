@@ -9,7 +9,7 @@ public class PlaceRouterButton : DisableButton {
 
     protected override void DerivedStart()
     {
-        GetText.text = "Router: $" + RouterPrefab.price;
+        GetText.text = "$" + RouterPrefab.price;
         UpdateButton();
     }
 
