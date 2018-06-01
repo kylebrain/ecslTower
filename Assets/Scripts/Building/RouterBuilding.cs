@@ -136,7 +136,7 @@ public class RouterBuilding : Building
              * Dequeues processQueue until valid Agent is found
              * Checks to see if it triggers any filters
              * Deletes if it does
-             * If not it resets the speed and marks it as process by adding to the processedList
+             * If not it resets the speed and marks it as processed by adding to the processedList
              */
 
             Agent delAgent = null;
@@ -151,7 +151,7 @@ public class RouterBuilding : Building
                 {
                     if (delAgent.Attribute.Equals(attribute))
                     {
-                        Debug.Log("Deleted!");
+                        //Debug.Log("Deleted: " + delAgent.Attribute);
                         Destroy(delAgent.gameObject);
                         filtered = true;
                         break;
@@ -159,6 +159,7 @@ public class RouterBuilding : Building
                 }
                 if (!filtered)
                 {
+                    //Debug.Log("Let in: " + delAgent.Attribute);
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                     processedList.Add(delAgent);
                 }
