@@ -1753,8 +1753,8 @@ MonoBehaviour:
   Radius: 2
   radiusColor: {r: 0.366, g: 1, b: 1, a: 1}
   radiusLineWidth: 0.1
-  price: 10
-  sellPrice: 8
+  price: 20
+  sellPrice: 10
   startingHealth: 15
   Location:
     bottomLeft: {x: 0, y: 0}

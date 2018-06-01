@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class GameButton: MonoBehaviour, IMenuItem {
     public bool MouseIsOver {
@@ -11,6 +12,31 @@ public abstract class GameButton: MonoBehaviour, IMenuItem {
 
         }
     }
+
+    public Text GetText
+    {
+        get
+        {
+            return GetComponentInChildren<Button>().GetComponentInChildren<Text>();
+        }
+    }
+
+    public Button GetButton
+    {
+        get
+        {
+            return GetComponentInChildren<Button>();
+        }
+    }
+
+    public ButtonGlow GetButtonGlow
+    {
+        get
+        {
+            return GetComponentInChildren<ButtonGlow>();
+        }
+    }
+
     private bool mouseIsOver = false;
 
     private void OnMouseEnter() {

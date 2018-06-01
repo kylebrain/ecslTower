@@ -73,7 +73,7 @@ public class WaveController : MonoBehaviour
         if (waveButton != null)
         {
             yield return new WaitForSeconds(timeBetweenWaves);
-            waveButton.SetGo(true);
+            waveButton.SetEnable(true);
         }
     }
 

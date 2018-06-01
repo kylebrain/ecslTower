@@ -12,8 +12,8 @@ public abstract class Building : MonoBehaviour
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
 
-    public float price;
-    public float sellPrice;
+    public int price;
+    public int sellPrice;
 
     public float startingHealth = 0f;
     public GridArea Location;
@@ -237,6 +237,7 @@ public abstract class Building : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                Score.score += price;
                 Destroy(gameObject);
             }
         }
