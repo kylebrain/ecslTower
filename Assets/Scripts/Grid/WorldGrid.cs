@@ -7,6 +7,7 @@ public class WorldGrid: MonoBehaviour {
     public int height = 1;
     public Node nodePrefab;
     public BaseGrid baseGrid;
+    //public BaseGrid tileBaseGrid;
 
     private Node[,] m_grid;
 
@@ -22,6 +23,7 @@ public class WorldGrid: MonoBehaviour {
             }
         }
         baseGrid.Resize(this);
+        //tileBaseGrid.Resize(this);
     }
 
     public Node getAt(int x, int y) {

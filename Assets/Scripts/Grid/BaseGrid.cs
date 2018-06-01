@@ -10,6 +10,14 @@ public class BaseGrid : MonoBehaviour {
     {
         transform.position = new Vector3(grid.transform.position.x + (grid.width - 1) / 2f, -gridOffset, grid.transform.position.z + (grid.height - 1) / 2f);
         transform.localScale = new Vector3(grid.width, grid.height, 1f);
+
+        BaseGrid tileGrid = transform.Find("TileBaseGrid").GetComponent<BaseGrid>();
+        //tileGrid.transform.position = new Vector3(grid.transform.position.x + (grid.width - 1) / 2f, -tileGrid.gridOffset, grid.transform.position.z + (grid.height - 1) / 2f);
+        //tileGrid.transform.localScale = new Vector3(grid.width, grid.height, 1f);
+
+        tileGrid.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(grid.width, grid.height));
+        tileGrid.transform.localPosition = new Vector3(tileGrid.transform.localPosition.x, tileGrid.transform.localPosition.y, -gridOffset);
+
     }
 
 }

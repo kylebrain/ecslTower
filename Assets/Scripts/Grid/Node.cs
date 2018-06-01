@@ -52,8 +52,8 @@ public class Node : MonoBehaviour {
     /// Sets the material back to what it was originally
     /// </summary>
     public void setUnhovered() {
-        if(rend.material != initialMaterial) {
-            rend.material = initialMaterial;
+        if(rend.enabled == true) {
+            rend.enabled = false;
         }
     }
 
@@ -62,8 +62,10 @@ public class Node : MonoBehaviour {
     /// </summary>
     public void setHovered() {
         if(Occupied == nodeStates.empty) {
+            rend.enabled = true;
             rend.material = hoverMaterial;
         } else {
+            rend.enabled = true;
             rend.material = hoverInvalidMaterial;
         }
     }
