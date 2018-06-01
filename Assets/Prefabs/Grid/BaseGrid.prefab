@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60413c12f16c8de469e4b360f90e9ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridOffset: 0.25
+  gridOffset: 0.15
 --- !u!114 &114345857691056326
 MonoBehaviour:
   m_ObjectHideFlags: 1
