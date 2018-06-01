@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaveController : MonoBehaviour {
+public class WaveController : MonoBehaviour
+{
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
-    Wave currentWave;
+    Wave currentWave = null;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
@@ -15,8 +16,10 @@ public class WaveController : MonoBehaviour {
     List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
     private int infectedCount = 2;
     public int agentsPerWave = 100;
+    public static int WaveCount = 0;
 
-	void Awake () {
+    void Awake()
+    {
         waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
         if (waveManager == null)
         {
@@ -33,17 +36,34 @@ public class WaveController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            //create a wave
-            currentWave = Instantiate(wavePrefab, transform);
-            currentWave.CreateWaveWithList(InitWave()); //allow initialization then push the wave
+            if (currentWave != null)
+            {
+                Debug.LogError("Playing Wave wait until it is over!");
+            }
+            else
+            {
+                //create a wave
+                currentWave = Instantiate(wavePrefab, transform);
+                currentWave.CreateWaveWithList(InitWave()); //allow initialization then push the wave
+                WaveCount++;
+            }
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            foreach(AgentAttribute attr in infectedAttributes)
+            int i = 0;
+            foreach (AgentAttribute attr in infectedAttributes)
             {
-                Debug.Log(attr);
+                Debug.Log("Attribute " + ++i + ": " + attr);
             }
         }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            AgentAttribute attr = GenerateAttribute();
+            Debug.Log("Original attr: " + attr);
+            AgentAttribute attr2 = MutateAttribute(attr);
+            Debug.Log("Mutated attr: " + attr2);
+        }
+
     }
 
     private List<AgentPath> InitWave()
@@ -55,14 +75,26 @@ public class WaveController : MonoBehaviour {
             Debug.LogError("Infected count is higher than possible combination! Make it less than or equal to: " + GetAttributeComboNumber());
             return null;
         }
-        while (infectedAttributes.Count < infectedCount)
+
+        if (infectedAttributes.Count >= infectedCount)
         {
-            AgentAttribute attribute;
-            do
+            for (int i = 0; i < infectedAttributes.Count; i++)
             {
-                attribute = GenerateAttribute();
-            } while (infectedAttributes.Contains(attribute));
-            infectedAttributes.Add(attribute);
+                infectedAttributes[i] = MutateAttribute(infectedAttributes[i]);
+            }
+        }
+        else
+        {
+
+            while (infectedAttributes.Count < infectedCount)
+            {
+                AgentAttribute attribute;
+                do
+                {
+                    attribute = GenerateAttribute();
+                } while (infectedAttributes.Contains(attribute));
+                infectedAttributes.Add(attribute);
+            }
         }
 
         //generate a wave with proportional number of malicious agents
@@ -73,7 +105,7 @@ public class WaveController : MonoBehaviour {
 
         List<AgentPath> ret = new List<AgentPath>();
 
-        for(int i = 0; i < totalBenign; i++)
+        for (int i = 0; i < totalBenign; i++)
         {
             ret.Add(new AgentPath(benignAgent, GetRandomWavePath(), GenerateAttribute()));
         }
@@ -97,19 +129,80 @@ public class WaveController : MonoBehaviour {
                 if (index > ret.Count - 1)
                 {
                     ret.Add(currentAgentPath);
-                } else
+                }
+                else
                 {
                     ret.Insert(index, currentAgentPath);
                 }
             }
 
-            
+
 
         }
 
         return ret;
 
 
+    }
+
+    //take previous infected attributes and mutate randomly 0-2 traits (shift up or down once)
+    private AgentAttribute MutateAttribute(AgentAttribute previousAttrribute)
+    {
+        AgentAttribute ret = previousAttrribute;
+        int traitMutateCount = Random.Range(0, 3);
+        for (int i = 0; i < traitMutateCount; i++)
+        {
+            int traitToMutate = Random.Range(0, 3);
+            int direction = Random.Range(0, 2) * 2 - 1; // generates either -1 or 1
+            switch (traitToMutate)
+            {
+                case 0:
+                    //color
+                    {
+                        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
+                        int newTrait = (int)previousAttrribute.Color + direction;
+                        ret.Color = (AgentAttribute.possibleColors)TraitIndexWithBounds(newTrait, numberColors);
+                        break;
+                    }
+                case 1:
+                    //size
+                    {
+                        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
+                        int newTrait = (int)previousAttrribute.Size + direction;
+                        ret.Size = (AgentAttribute.possibleSizes)TraitIndexWithBounds(newTrait, numberSizes);
+                        break;
+                    }
+                case 2:
+                    //speed
+                    {
+                        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
+                        int newTrait = (int)previousAttrribute.Speed + direction;
+                        ret.Speed = (AgentAttribute.possibleSpeeds)TraitIndexWithBounds(newTrait, numberSpeed);
+                        break;
+                    }
+                default:
+                    //??
+                    Debug.LogError("Out of range, perhap you changed the traitToMutate line?");
+                    break;
+            }
+        }
+        return ret;
+    }
+
+    private int TraitIndexWithBounds(int desired, int totalValid)
+    {
+        if (desired < 0)
+        {
+            return totalValid - 1;
+        }
+        else if (desired >= totalValid)
+        {
+            return 0;
+        }
+        else
+        {
+            return desired;
+        }
     }
 
     private WavePath GetRandomWavePath()
@@ -145,9 +238,9 @@ public class WaveController : MonoBehaviour {
         return ret;
     }
 
-    
-    
-    
+
+
+
 
     //next wave
     //take previous infected attributes and mutate randomly 0-2 traits (shift up or down once)
