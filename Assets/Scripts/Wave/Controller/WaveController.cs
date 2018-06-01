@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class WaveController : MonoBehaviour
 {
+    public int agentsPerWave = 100;
+    public int infectedCount = 2;
+    public int infectedWeight = 1;
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
-    Wave currentWave = null;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
     public Wave wavePrefab;
-    private WaveManager waveManager;
-    List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
-    private int infectedCount = 2;
-    public int agentsPerWave = 100;
+
     public static int WaveCount = 0;
+
+    private WaveManager waveManager;
+
+    Wave currentWave = null;
+    List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
 
     void Awake()
     {
@@ -44,8 +48,15 @@ public class WaveController : MonoBehaviour
             {
                 //create a wave
                 currentWave = Instantiate(wavePrefab, transform);
-                currentWave.CreateWaveWithList(InitWave()); //allow initialization then push the wave
-                WaveCount++;
+                List<AgentPath> newWave = InitWave();
+                if(newWave == null)
+                {
+                    Debug.LogError("Building Wave failed!");
+                } else
+                {
+                    currentWave.CreateWaveWithList(newWave); //allow initialization then push the wave
+                    WaveCount++;
+                }
             }
         }
         if (Input.GetKeyDown(KeyCode.K))
@@ -98,9 +109,23 @@ public class WaveController : MonoBehaviour
         }
 
         //generate a wave with proportional number of malicious agents
-        int infectedAgentCount = GetInfectedAgentCount();
+        if(infectedWeight < 1)
+        {
+            Debug.LogWarning("Infected Weight must be greater than 1!");
+            infectedWeight = 1;
+        }
+        int infectedAgentCount = infectedWeight * GetInfectedAgentCount();
         int totalBenign = agentsPerWave - (infectedAttributes.Count * infectedAgentCount);
-        totalBenign = (int)Mathf.Clamp(totalBenign, 0f, agentsPerWave);
+        if(infectedAgentCount < 0)
+        {
+            Debug.LogError("Infected Agent Count is negative, perhaps the Infected Weight is negative?");
+            return null;
+        }
+        if(totalBenign < 0)
+        {
+            Debug.LogError("Infected Weight is too high!");
+            return null;
+        }
         //generate a pure wave first
 
         List<AgentPath> ret = new List<AgentPath>();

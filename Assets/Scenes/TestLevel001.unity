@@ -255,13 +255,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3690fd6aa17099d479e31784f26d44f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentsPerWave: 100
+  infectedCount: 2
+  infectedWeight: 2
   benignAgent: {fileID: 114339762276031930, guid: 9fead0b7917375a448514f81dbda83cd,
     type: 2}
   maliciousAgent: {fileID: 114768018217097866, guid: 88d85dd2510ab0e479ca6e6e571d6f0c,
     type: 2}
   wavePrefab: {fileID: 114706130894599506, guid: 1a64016e51bf6b1488c39039fe9b2b2e,
     type: 2}
-  agentsPerWave: 100
 --- !u!4 &109196440
 Transform:
   m_ObjectHideFlags: 0
