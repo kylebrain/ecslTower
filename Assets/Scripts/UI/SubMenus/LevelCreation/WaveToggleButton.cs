@@ -7,19 +7,36 @@ using UnityEngine.UI;
 public class WaveToggleButton : GameButton
 {
     public WaveManager waveManager;
+
+    private Color enableColor;
+    private Color disableColor;
+
+    private VisualPrefs visualPrefs;
+
     private void Start()
     {
+        visualPrefs = GameObject.Find("VisualPrefs").GetComponent<VisualPrefs>();
+        if (visualPrefs == null)
+        {
+            Debug.LogError("Cannot find VisualPrefs, perhaps it was moved or renamed?");
+            return;
+        }
+        enableColor = visualPrefs.enableColor;
+        disableColor = visualPrefs.disableColor;
+
+        //if I need to make more toggle buttons I should make it a parent class of DisableButton
+
         UpdateButtonColor();
     }
     private void UpdateButtonColor()
     {
         if (waveManager.enablePathEditing)
         {
-            transform.Find("Button").GetComponent<Graphic>().color = Color.green;
+            transform.Find("Button").GetComponent<Graphic>().color = enableColor;
         }
         else
         {
-            transform.Find("Button").GetComponent<Graphic>().color = Color.red;
+            transform.Find("Button").GetComponent<Graphic>().color = disableColor;
         }
     }
     public override void PerformAction()

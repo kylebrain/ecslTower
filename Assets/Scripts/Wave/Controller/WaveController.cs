@@ -42,6 +42,10 @@ public class WaveController : MonoBehaviour
     {
         yield return new WaitUntil(() => waveManager.WavePathList.Count > 0);
         currentPreWave = InitWave();
+        if (currentPreWave == null)
+        {
+            Debug.LogError("Building Wave failed!");
+        }
     }
 
     public void PlayWave(NextWaveButton button)
@@ -50,22 +54,27 @@ public class WaveController : MonoBehaviour
         currentWave = Instantiate(wavePrefab, transform);
         if (currentPreWave == null)
         {
+            Debug.LogError("PreWave not found");
+            return;
+        }
+        //currentPreWave will be created in FirstWave or at the end of this function
+        currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
+        WaveCount++;
+
+        if (WaveCount == 1)
+        {
+            waveText.transform.parent.gameObject.SetActive(true);
+        }
+
+        waveText.text = "Wave: " + WaveCount;
+
+        Playing = true;
+        currentPreWave = InitWave();
+        if(currentPreWave == null)
+        {
             Debug.LogError("Building Wave failed!");
         }
-        else
-        {
-            currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
-            WaveCount++;
 
-            if (WaveCount == 1)
-            {
-                waveText.transform.parent.gameObject.SetActive(true);
-            }
-
-            waveText.text = "Wave: " + WaveCount;
-
-            Playing = true;
-        }
     }
 
     IEnumerator StopWave()
@@ -73,7 +82,7 @@ public class WaveController : MonoBehaviour
         if (waveButton != null)
         {
             yield return new WaitForSeconds(timeBetweenWaves);
-            waveButton.SetGo(true);
+            waveButton.SetEnable(true);
         }
     }
 
@@ -91,6 +100,7 @@ public class WaveController : MonoBehaviour
             foreach (AgentAttribute attr in infectedAttributes)
             {
                 Debug.Log("Attribute " + ++i + ": " + attr);
+                //these attributes are for the preWave, store them somewhere if you want to show the current Wave's attributes
             }
         }
         if (Input.GetKeyDown(KeyCode.I))
