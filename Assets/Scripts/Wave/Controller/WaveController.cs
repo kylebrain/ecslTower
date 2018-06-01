@@ -72,7 +72,7 @@ public class WaveController : MonoBehaviour
         //choose attributes to infect
         if (infectedCount > GetAttributeComboNumber())
         {
-            Debug.LogError("Infected count is higher than possible combination! Make it less than or equal to: " + GetAttributeComboNumber());
+            Debug.LogError("Infected count is higher than possible combination! Make it less than: " + GetAttributeComboNumber());
             return null;
         }
 
@@ -99,7 +99,7 @@ public class WaveController : MonoBehaviour
 
         //generate a wave with proportional number of malicious agents
         int infectedAgentCount = GetInfectedAgentCount();
-        int totalBenign = agentsPerWave - (infectedAttributes.Count * infectedCount);
+        int totalBenign = agentsPerWave - (infectedAttributes.Count * infectedAgentCount);
         totalBenign = (int)Mathf.Clamp(totalBenign, 0f, agentsPerWave);
         //generate a pure wave first
 
@@ -109,21 +109,28 @@ public class WaveController : MonoBehaviour
         {
             ret.Add(new AgentPath(benignAgent, GetRandomWavePath(), GenerateAttribute()));
         }
+        HashSet<int> totalAgentIndices = new HashSet<int>();
         foreach (AgentAttribute attr in infectedAttributes)
         {
-            HashSet<int> agentIndices = new HashSet<int>();
+            HashSet<int> thisAgentIndices = new HashSet<int>();
             //generate a proportional number of unique indices
             for (int i = 0; i < infectedAgentCount; i++)
             {
-                int index;
+                if (totalAgentIndices.Count >= agentsPerWave)
+                {
+                    Debug.LogError("Infected count is higher than possible combination! Make it less than: " + GetAttributeComboNumber());
+                    return null;
+                }
+                    int index;
                 do
                 {
                     index = Random.Range(0, agentsPerWave); //make sure to check if this index in larger than the list and then add it
-                } while (agentIndices.Contains(index));
-                agentIndices.Add(index);
+                } while (totalAgentIndices.Contains(index));
+                totalAgentIndices.Add(index);
+                thisAgentIndices.Add(index);
             }
             //insert malicious agents at those indices
-            foreach (int index in agentIndices)
+            foreach (int index in thisAgentIndices)
             {
                 AgentPath currentAgentPath = new AgentPath(maliciousAgent, GetRandomWavePath(), attr);
                 if (index > ret.Count - 1)
@@ -138,6 +145,12 @@ public class WaveController : MonoBehaviour
 
 
 
+        }
+
+        if(ret.Count != agentsPerWave)
+        {
+            Debug.LogError("Something went wrong, Wave is not the same count as desired!");
+            return null;
         }
 
         return ret;
