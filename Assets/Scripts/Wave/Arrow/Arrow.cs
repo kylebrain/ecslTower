@@ -59,7 +59,7 @@ public class Arrow : MonoBehaviour
 
         LineRenderer arrowhead = transform.Find("Arrowhead").GetComponent<LineRenderer>();
 
-        arrowhead.material.color = Color.grey;
+        arrowhead.material.color = Color.black;
 
         if (arrowhead == null)
         {
@@ -72,7 +72,7 @@ public class Arrow : MonoBehaviour
         }
         LineRenderer straight = GetComponent<LineRenderer>();
 
-        straight.material.color = Color.grey;
+        straight.material.color = Color.black;
 
         straight.SetPosition(0, start);
         straight.SetPosition(1, connectionPoint);

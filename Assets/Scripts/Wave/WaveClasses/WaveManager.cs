@@ -116,7 +116,7 @@ public class WaveManager : MonoBehaviour
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        /*Loads the level based on inspector values, could use a clean-up*/
+        /*Loads the level based on inspector values*/
 
         UseLevel(thisLevel);
     }

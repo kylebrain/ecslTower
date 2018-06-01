@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WaveController : MonoBehaviour
 {
     public int agentsPerWave = 100;
     public int infectedCount = 2;
     public int infectedWeight = 1;
+    public float timeBetweenWaves = 2f;
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
+    public Text waveText;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
@@ -19,46 +22,69 @@ public class WaveController : MonoBehaviour
 
     private WaveManager waveManager;
 
-    Wave currentWave = null;
-    List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
+    private List<AgentPath> currentPreWave = new List<AgentPath>();
+    private Wave currentWave = null;
+    private List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
+    [HideInInspector]
+    public bool Playing;
+    private NextWaveButton waveButton;
 
-    void Awake()
+    void Start()
     {
         waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
         if (waveManager == null)
         {
             Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
         }
+        StartCoroutine(FirstWave());
+    }
+    IEnumerator FirstWave()
+    {
+        yield return new WaitUntil(() => waveManager.WavePathList.Count > 0);
+        currentPreWave = InitWave();
     }
 
-    private void Start()
+    public void PlayWave(NextWaveButton button)
     {
-        //InitWave();
+        waveButton = button;
+        currentWave = Instantiate(wavePrefab, transform);
+        if (currentPreWave == null)
+        {
+            Debug.LogError("Building Wave failed!");
+        }
+        else
+        {
+            currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
+            WaveCount++;
+
+            if (WaveCount == 1)
+            {
+                waveText.transform.parent.gameObject.SetActive(true);
+            }
+
+            waveText.text = "Wave: " + WaveCount;
+
+            Playing = true;
+        }
+    }
+
+    IEnumerator StopWave()
+    {
+        if (waveButton != null)
+        {
+            yield return new WaitForSeconds(timeBetweenWaves);
+            waveButton.SetGo(true);
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (currentWave == null && Playing)
         {
-            if (currentWave != null)
-            {
-                Debug.LogError("Playing Wave wait until it is over!");
-            }
-            else
-            {
-                //create a wave
-                currentWave = Instantiate(wavePrefab, transform);
-                List<AgentPath> newWave = InitWave();
-                if(newWave == null)
-                {
-                    Debug.LogError("Building Wave failed!");
-                } else
-                {
-                    currentWave.CreateWaveWithList(newWave); //allow initialization then push the wave
-                    WaveCount++;
-                }
-            }
+            Playing = false;
+            StartCoroutine(StopWave());
         }
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             int i = 0;
@@ -109,19 +135,19 @@ public class WaveController : MonoBehaviour
         }
 
         //generate a wave with proportional number of malicious agents
-        if(infectedWeight < 1)
+        if (infectedWeight < 1)
         {
             Debug.LogWarning("Infected Weight must be greater than 1!");
             infectedWeight = 1;
         }
         int infectedAgentCount = infectedWeight * GetInfectedAgentCount();
         int totalBenign = agentsPerWave - (infectedAttributes.Count * infectedAgentCount);
-        if(infectedAgentCount < 0)
+        if (infectedAgentCount < 0)
         {
             Debug.LogError("Infected Agent Count is negative, perhaps the Infected Weight is negative?");
             return null;
         }
-        if(totalBenign < 0)
+        if (totalBenign < 0)
         {
             Debug.LogError("Infected Weight is too high!");
             return null;
@@ -146,7 +172,7 @@ public class WaveController : MonoBehaviour
                     Debug.LogError("Infected count is higher than possible combination! Make it less than: " + GetAttributeComboNumber());
                     return null;
                 }
-                    int index;
+                int index;
                 do
                 {
                     index = Random.Range(0, agentsPerWave); //make sure to check if this index in larger than the list and then add it
@@ -172,7 +198,7 @@ public class WaveController : MonoBehaviour
 
         }
 
-        if(ret.Count != agentsPerWave)
+        if (ret.Count != agentsPerWave)
         {
             Debug.LogError("Something went wrong, Wave is not the same count as desired!");
             return null;
