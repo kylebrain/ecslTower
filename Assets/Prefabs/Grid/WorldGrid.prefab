@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b887a5da6686cbc48a091a75bb12dc28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 40
+  width: 50
   height: 50
   nodePrefab: {fileID: 114010207640236938, guid: 48c38cd68319ae940a41a7a1cb7685c3,
     type: 2}
