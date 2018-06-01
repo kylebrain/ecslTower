@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3690fd6aa17099d479e31784f26d44f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentsPerWave: 25
+  agentsPerWave: 100
   infectedCount: 2
   infectedWeight: 2
   timeBetweenWaves: 5
