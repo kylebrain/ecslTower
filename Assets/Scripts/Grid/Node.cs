@@ -31,7 +31,7 @@ public class Node : MonoBehaviour {
     }
 
     private Renderer rend;
-    private Material initialMaterial;
+    //private Material initialMaterial;
     
 
     private void Start() {
@@ -40,7 +40,7 @@ public class Node : MonoBehaviour {
             Debug.LogError("Cannot find Node's renderer. Did you remove the component?");
         }
 
-        initialMaterial = rend.material;
+        //initialMaterial = rend.material;
     }
 
     private void Update() {
