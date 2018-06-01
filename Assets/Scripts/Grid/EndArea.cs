@@ -28,7 +28,7 @@ public class EndArea : MonoBehaviour
         }
 
         waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
-        if (worldGrid == null)
+        if (waveManager == null)
         {
             Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
         }
@@ -137,7 +137,6 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Invalid gridArea created!");
             return;
         }
-        Debug.Log("Created area: " + area);
         MarkArea(area);
     }
 

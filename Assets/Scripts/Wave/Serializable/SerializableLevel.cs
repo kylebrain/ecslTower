@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 
 [System.Serializable]
-public class Level
+public class SerializableLevel
 {
     /// <summary>
     /// Set in inspector, can run into overriding issues if two levels are named the same
@@ -51,7 +51,7 @@ public class Level
         ClearLevel();
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + PathName, FileMode.Open);
-        bf.Serialize(file, new Level());
+        bf.Serialize(file, new SerializableLevel());
         file.Close();
     }
 
@@ -81,7 +81,7 @@ public class Level
     /// Sets the SWavePath List based on another SWavePath List
     /// </summary>
     /// <param name="wavePathList">To be copied</param>
-    public void SetLevel(Level level)
+    public void SetLevel(SerializableLevel level)
     {
         ClearLevel();
         PathName = levelName;
@@ -113,14 +113,14 @@ public class Level
     /// Loads the Level from the file based on the levelName
     /// </summary>
     /// <returns></returns>
-    public Level LoadLevel()
+    public SerializableLevel LoadLevel()
     {
         PathName = levelName;
         if (File.Exists(Application.persistentDataPath + PathName))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + PathName, FileMode.Open);
-            Level loadLevel = (Level)bf.Deserialize(file);
+            SerializableLevel loadLevel = (SerializableLevel)bf.Deserialize(file);
             file.Close();
             wavePaths = loadLevel.wavePaths;
             endAreas = loadLevel.endAreas;

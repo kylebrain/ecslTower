@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 #if UNITY_EDITOR
-using UnityEditor;
+    using UnityEditor;
 #endif
 using UnityEngine;
 
@@ -13,12 +13,15 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class WaveManager : MonoBehaviour
 {
+
+    #region public variables
     /*-----------public variables-----------*/
+    public bool enableMapEditing = false;
+
+    public GameObject levelCreation;
+
+    [HideInInspector]
     public bool enablePathEditing = false;
-    /// <summary>
-    /// Mandatory prefab so a Wave can be created and used
-    /// </summary>
-    public Wave wavePrefab;
     /// <summary>
     /// Manatory prefab so an Arrow can be drawn and placed
     /// </summary>
@@ -31,11 +34,6 @@ public class WaveManager : MonoBehaviour
     /// </remarks>
     public float arrowOffset = 0.1f;
     /// <summary>
-    /// Temperary prefab to be expanded in to a list of possible Agents
-    /// </summary>
-    public Agent agentPrefab;
-
-    /// <summary>
     /// Number of AgentPaths make when Make is called
     /// </summary>
     public int makePerWave = 100;
@@ -43,7 +41,7 @@ public class WaveManager : MonoBehaviour
     /// The Level that stores the current WavePaths in the inspector and the file
     /// </summary>
     //[HideInInspector]
-    public Level thisLevel;
+    public SerializableLevel thisLevel;
     /// <summary>
     /// Prefab that marks the Nodes that contain a startArea
     /// </summary>
@@ -59,7 +57,17 @@ public class WaveManager : MonoBehaviour
 
     public EndArea endAreaPrefab;
 
+    public List<WavePath> WavePathList
+    {
+        get
+        {
+            return new List<WavePath>(wavePathList);
+        }
+    }
 
+    #endregion
+
+    #region private variables
     /*-----------private variables-----------*/
     /// <summary>
     /// Reference to the WorldGrid object
@@ -68,18 +76,6 @@ public class WaveManager : MonoBehaviour
     /// Necessary for raycasting to Nodes
     /// </remarks>
     private WorldGrid worldGrid;
-    /// <summary>
-    /// List of Waves to be pushed to the player
-    /// </summary>
-    /// <remarks>
-    /// Not implemented yet
-    /// </remarks>
-    private List<Wave> waveList = new List<Wave>();
-    /// <summary>
-    /// The Wave that the Manager is currently handling and editing
-    /// </summary>
-    private Wave currentWave;
-    /// <summary>
     /// Used for Arrow drawing, where the base of the Arrow will lay
     /// </summary>
     private Node currStart = null;
@@ -96,19 +92,24 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private List<WavePath> wavePathList = new List<WavePath>();
 
+    #endregion
+
+    #region Start and Update
+
     /*-----------private MonoBehavior functions-----------*/
     /// <summary>
     /// Assigns the WorldGrid reference and currently creates a test Wave
     /// </summary>
     private void Start()
     {
-#if UNITY_EDITOR
-        if (!EditorApplication.isPlaying)
-        {
-            Load();
-            return;
-        }
-#endif
+        #if UNITY_EDITOR
+            if (!EditorApplication.isPlaying)
+            {
+                Load();
+                return;
+            }
+        #endif
+
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
         {
@@ -118,12 +119,6 @@ public class WaveManager : MonoBehaviour
         /*Loads the level based on inspector values, could use a clean-up*/
 
         UseLevel(thisLevel);
-
-        /*test area*/
-        Wave newWave = Instantiate(wavePrefab, this.transform) as Wave;
-        waveList.Add(newWave);
-        currentWave = waveList[0];
-        /*end of test area*/
     }
 
     /// <summary>
@@ -131,13 +126,29 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-#if UNITY_EDITOR
-        if (!EditorApplication.isPlaying)
+        #if UNITY_EDITOR
+            if (!EditorApplication.isPlaying)
+            {
+                return;
+            }
+        #endif
+
+        if(!levelCreation.activeSelf && enableMapEditing)
         {
+            levelCreation.SetActive(true);
+        }
+
+        if (!enableMapEditing)
+        {
+            if (levelCreation.activeSelf)
+            {
+                levelCreation.SetActive(false);
+            }
             return;
         }
-#endif
 
+
+        
         if (enablePathEditing)
         {
             DrawArrowIfValid();
@@ -166,79 +177,12 @@ public class WaveManager : MonoBehaviour
             {
                 Clear();
             }
-        } else
-        //Press M to make a Wave that contains makePerWave number of AgentPaths
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log("Made AgentPaths!");
-            for (int i = 0; i < makePerWave; i++)
-            {
-                MakeAgentInWave(currentWave);
-            }
         }
     }
 
-    /// <summary>
-    /// Will mark every Area (start and end) contained in the passed ArrowContianer
-    /// </summary>
-    /// <param name="container">The values are based on this parameter</param>
-   /* private void MarkAreasInContainer(ArrowContainer container)
-    {
-        Transform markerHolder = transform.Find("MarkerHolder").transform;
-        if (markerHolder == null)
-        {
-            Debug.LogError("Cannot find marker holder! Perhaps it was moved or renamed?");
-            return;
-        }
+    #endregion
 
-        foreach (GridArea start in arrowContainer.startAreas)
-        {
-            MarkArea(start, true, markerHolder);
-        }
-
-        foreach (GridArea end in arrowContainer.endAreas)
-        {
-            MarkArea(end, false, markerHolder);
-        }
-    }*/
-
-    /// <summary>
-    /// Marks the Area either Start or End based on parameters
-    /// </summary>
-    /// <param name="area">The GridArea to be marked</param>
-    /// <param name="start">If start is true, marked as a StartArea, if false, marked as an EndArea</param>
-    /// <param name="parent">Parent object that the Markers will be Instantiated under</param>
-   /* private void MarkArea(GridArea area, bool start, Transform parent)
-    {
-
-        GameObject marker = start ? startAreaMarker : endAreaMarker;
-        for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
-        {
-            for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
-            {
-                GameObject newMarker = Instantiate(marker, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
-                newMarker.transform.parent = parent;
-            }
-        }
-    }*/
-
-    /// <summary>
-    /// Makes an AgentPath based on a random path and adds it to the Wave
-    /// </summary>
-    /// <param name="wave">AgentPath is added to this Wave</param>
-    private void MakeAgentInWave(Wave wave)
-    {
-        if (wavePathList.Count > 0)
-        {
-            int pathIndex = Random.Range(0, wavePathList.Count);
-            WavePath currentPath = wavePathList[pathIndex];
-            wave.AddNewAgent(agentPrefab, currentPath);
-        }
-        else
-        {
-            Debug.LogError("Wave list is empty!");
-        }
-    }
+    #region Level
 
     /// <summary>
     /// Clears both the wavePathList and the file of the Level
@@ -277,7 +221,7 @@ public class WaveManager : MonoBehaviour
     /// </summary>
     public void Load()
     {
-        Level tempLevel = thisLevel.LoadLevel();
+        SerializableLevel tempLevel = thisLevel.LoadLevel();
         List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
         List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
         if (tempWavePathList != null && tempEndAreaList != null)
@@ -290,7 +234,8 @@ public class WaveManager : MonoBehaviour
                 {
                     Debug.Log("Loaded: " + path);
                 }
-            } else
+            }
+            else
             {
                 //Debug.LogError("WorldGrid is null!");
             }
@@ -301,8 +246,26 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Populates wavePathList based on a List of SerializableWavePaths
+    /// </summary>
+    /// <param name="paths">List to be converted</param>
+    private void UseLevel(SerializableLevel level)
+    {
+        DeleteArrowContainer(arrowContainer);
+        SetArrowContainerAreas(level.endAreas);
+        wavePathList = new List<WavePath>();
+        foreach (SerializableWavePath path in level.wavePaths)
+        {
+            wavePathList.Add(new WavePath(path, worldGrid));
+        }
+        DisplayPath(wavePathList);
+    }
 
-    /*-----------private functions-----------*/
+
+    #endregion
+
+    #region arrowContainer
 
     private void DeleteArrowContainer(ArrowContainer arrowContainer)
     {
@@ -310,13 +273,14 @@ public class WaveManager : MonoBehaviour
         {
             foreach (Arrow arrow in stacks)
             {
+                SetNodeOccupation(arrow, Node.nodeStates.empty);
                 Destroy(arrow.gameObject);
             }
         }
         arrowContainer.arrowStacks = new List<Stack<Arrow>>();
         arrowContainer.startAreas = new List<GridArea>();
         arrowContainer.endAreas = new List<GridArea>();
-        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("EndArea"))
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("EndArea"))
         {
             Destroy(obj);
         }
@@ -339,6 +303,10 @@ public class WaveManager : MonoBehaviour
             endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
         }
     }
+
+    #endregion
+
+    #region Arrow
 
     /// <summary>
     /// On RightClick, the Arrow selected and every Arrow after it is removed
@@ -380,6 +348,11 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
+
+
+    #endregion
+
+    #region Node and Arrow Creation
 
     /// <summary>
     /// Returns a Node that is perpendicular to the start Node
@@ -453,33 +426,6 @@ public class WaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates the visual Arrow path
-    /// </summary>
-    /// <param name="wavePaths">Will create the path based on this value</param>
-    private void DisplayPath(List<WavePath> wavePaths)
-    {
-        foreach (WavePath path in wavePaths)
-        {
-            WavePath temp = new WavePath(path);
-            Node current = null;
-            Node previous = null;
-            while ((current = temp.GetNextNode()) != null)
-            {
-                if (previous == null)
-                {
-                    previous = current;
-                    continue;
-                }
-
-                drawArrow = Instantiate(arrowPrefab, transform) as Arrow;
-                SetPathSegment(previous, current);
-                previous = current;
-            }
-        }
-    }
-
-
-    /// <summary>
     /// When finished placing an Arrow, the Arrow will be placed and adhere to the Grid
     /// </summary>
     /// <param name="start">The Node in which the base of the Arrow is in</param>
@@ -543,28 +489,67 @@ public class WaveManager : MonoBehaviour
     /// Pushes the WavePath to the currentWave's Path list to be used in that object
     /// </summary>
     /// <returns>If the Path is valid, returns true, else false</returns>
+
+    #endregion
+
+    #region Path Creation
+
+    /// <summary>
+    /// Creates the visual Arrow path
+    /// </summary>
+    /// <param name="wavePaths">Will create the path based on this value</param>
+    private void DisplayPath(List<WavePath> wavePaths)
+    {
+        foreach (WavePath path in wavePaths)
+        {
+            WavePath temp = new WavePath(path);
+            Node current = null;
+            Node previous = null;
+            while ((current = temp.GetNextNode()) != null)
+            {
+                if (previous == null)
+                {
+                    previous = current;
+                    continue;
+                }
+
+                drawArrow = Instantiate(arrowPrefab, transform) as Arrow;
+                SetPathSegment(previous, current);
+                previous = current;
+            }
+        }
+    }
+
+
+
     private bool PushPath()
     {
         wavePathList = arrowContainer.ToWavePaths();
         return true;
     }
 
+    #endregion
+
+    #region Wave
+
     /// <summary>
-    /// Populates wavePathList based on a List of SerializableWavePaths
+    /// Makes an AgentPath based on a random path and adds it to the Wave
     /// </summary>
-    /// <param name="paths">List to be converted</param>
-    private void UseLevel(Level level)
+    /// <param name="wave">AgentPath is added to this Wave</param>
+    private void MakeAgentInWave(Wave wave)
     {
-        DeleteArrowContainer(arrowContainer);
-        SetArrowContainerAreas(level.endAreas);
-        wavePathList = new List<WavePath>();
-        foreach (SerializableWavePath path in level.wavePaths)
+        Debug.LogWarning("Depricated");
+        /*if (wavePathList.Count > 0)
         {
-            wavePathList.Add(new WavePath(path, worldGrid));
+            int pathIndex = Random.Range(0, wavePathList.Count);
+            WavePath currentPath = wavePathList[pathIndex];
+            wave.AddNewAgent(agentPrefab, currentPath);
         }
-        DisplayPath(wavePathList);
+        else
+        {
+            Debug.LogError("Wave list is empty!");
+        }*/
     }
-
-
+    #endregion
 
 }

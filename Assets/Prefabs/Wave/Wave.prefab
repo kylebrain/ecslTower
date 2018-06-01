@@ -51,4 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b047adcdefb3311448abfac3ea6070fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 114339762276031930, guid: 9fead0b7917375a448514f81dbda83cd, type: 2}
+  timeBetweenAgent: 1.5
