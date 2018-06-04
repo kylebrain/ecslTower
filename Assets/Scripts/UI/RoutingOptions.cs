@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the Dropdown menus of the Router to select what to filter
 /// </summary>
-public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
+public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
     /// The AgentAttribute that the Dropdowns currently represent
@@ -23,17 +23,19 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
     /// <remarks>
     /// Used to keep the menus open when clicked on
     /// </remarks>
-    public bool Over = false;
+    //public bool Over = false;
 
     public RingDisplay display;
+
+    public List<RolodexSelection> attributeSelections = new List<RolodexSelection>();
 
     /// <summary>
     /// Sets the RouterObject it's attached to and initializes the menu options
     /// </summary>
     private void Start()
     {
-        parentTower = transform.parent.parent.gameObject.GetComponent<RouterBuilding>();
-        display = transform.parent.Find("RingDisplay").GetComponent<RingDisplay>();
+        parentTower = transform.root.gameObject.GetComponent<RouterBuilding>();
+        display = transform.parent.GetComponent<RingDisplay>();
         if (parentTower == null)
         {
             Debug.LogError("Cannot find the Router Building object!");
@@ -45,6 +47,40 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
             return;
         }
         PopulateDropdowns();
+    }
+
+    private void OnEnable()
+    {
+        DefaultSelection();
+    }
+
+    private void DefaultSelection()
+    {
+        if (attributeSelections.Count <= 0)
+        {
+            return;
+        }
+        attributeSelections[0].selected = true;
+    }
+
+    public void NextSelection()
+    {
+        for (int i = 0; i < attributeSelections.Count; i++)
+        {
+            if(attributeSelections[i].selected)
+            {
+                attributeSelections[i].selected = false;
+                RolodexSelection select = attributeSelections[(i + 1) % attributeSelections.Count];
+                StartCoroutine(SetSelectedAfterFrame(select));
+                return;
+            }
+        }
+    }
+
+    IEnumerator SetSelectedAfterFrame(RolodexSelection selection)
+    {
+        yield return new WaitForEndOfFrame();
+        selection.selected = true;
     }
 
     /// <summary>
@@ -81,13 +117,18 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
             currentDropdown.AddOptions(enumList[i]);
             if(enumList[i].Count - 1 != 3)
             {
-                Debug.LogError("Enum list length is not as expected!");
+                Debug.LogWarning("Enum list length is not as expected!");
             }
-            currentDropdown.value = enumList[i].Count - 1;
+            RolodexSelection selection = currentDropdown.GetComponent<RolodexSelection>();
+            selection.ChangeValue(enumList[i].Count - 1);
+            attributeSelections.Add(selection);
         }
         UpdateFilter();
+        DefaultSelection();
 
     }
+
+    /*
 
     /// <summary>
     /// Basic workaround so that the menu does not close when clicked on, sets Over to true
@@ -106,6 +147,8 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
     {
         Over = false;
     }
+
+    */
 
     /// <summary>
     /// Will set the parent Router's filter to match the one's in the Dropdown

@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 114020604836858556}
   - component: {fileID: 114445287726997636}
   m_Layer: 0
-  m_Name: RotateDropdown
+  m_Name: RolodexSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,9 +97,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
-  text1: {fileID: 114469013130672302}
-  text2: {fileID: 114717724362284642}
-  text3: {fileID: 114668062384180904}
+  shiftSpeed: 5
+  fudge: 0.001
+  text1: {fileID: 114469363439872880}
+  text2: {fileID: 114563334251970004}
+  text3: {fileID: 114847787651276872}
 --- !u!114 &114445287726997636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -155,8 +157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8a6f3853ae1d54b84d06d0096c7a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  fudge: 0.001
 --- !u!114 &114470633947915068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -201,15 +201,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Red
+    - m_Text: Option A
       m_Image: {fileID: 0}
-    - m_Text: Green
+    - m_Text: Option B
       m_Image: {fileID: 0}
-    - m_Text: Blue
-      m_Image: {fileID: 0}
-    - m_Text: Yellow
-      m_Image: {fileID: 0}
-    - m_Text: Purple
+    - m_Text: Option C
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -227,8 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8a6f3853ae1d54b84d06d0096c7a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  fudge: 0.001
 --- !u!114 &114579182206304790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -333,8 +327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8a6f3853ae1d54b84d06d0096c7a65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  fudge: 0.001
 --- !u!222 &222160115932673616
 CanvasRenderer:
   m_ObjectHideFlags: 1
