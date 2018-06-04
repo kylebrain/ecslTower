@@ -22,7 +22,7 @@ public class WaveController : MonoBehaviour
 
     private WaveManager waveManager;
 
-    private List<AgentPath> currentPreWave = new List<AgentPath>();
+    private List<PreAgent> currentPreWave = new List<PreAgent>();
     private Wave currentWave = null;
     private List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
     [HideInInspector]
@@ -113,7 +113,7 @@ public class WaveController : MonoBehaviour
 
     }
 
-    private List<AgentPath> InitWave()
+    private List<PreAgent> InitWave()
     {
 
         //choose attributes to infect
@@ -164,11 +164,11 @@ public class WaveController : MonoBehaviour
         }
         //generate a pure wave first
 
-        List<AgentPath> ret = new List<AgentPath>();
+        List<PreAgent> ret = new List<PreAgent>();
 
         for (int i = 0; i < totalBenign; i++)
         {
-            ret.Add(new AgentPath(benignAgent, GetRandomWavePath(), GenerateAttribute()));
+            ret.Add(new PreAgent(benignAgent, GetRandomWavePath(), GenerateAttribute()));
         }
         HashSet<int> totalAgentIndices = new HashSet<int>();
         foreach (AgentAttribute attr in infectedAttributes)
@@ -193,7 +193,7 @@ public class WaveController : MonoBehaviour
             //insert malicious agents at those indices
             foreach (int index in thisAgentIndices)
             {
-                AgentPath currentAgentPath = new AgentPath(maliciousAgent, GetRandomWavePath(), attr);
+                PreAgent currentAgentPath = new PreAgent(maliciousAgent, GetRandomWavePath(), attr);
                 if (index > ret.Count - 1)
                 {
                     ret.Add(currentAgentPath);

@@ -14,7 +14,7 @@ public class Wave : MonoBehaviour {
     /// <summary>
     /// Contains the Wave of Agents to be spawned that follow their assigned Path
     /// </summary>
-    private Queue<AgentPath> waveQueue = new Queue<AgentPath>();
+    private Queue<PreAgent> waveQueue = new Queue<PreAgent>();
 
     public int WaveCount
     {
@@ -23,7 +23,6 @@ public class Wave : MonoBehaviour {
             return waveQueue.Count;
         }
     }
-
 
     /*-----------private MonoBehavoir function-----------*/
     /// <summary>
@@ -42,37 +41,22 @@ public class Wave : MonoBehaviour {
         timeSpent += Time.deltaTime;
     }
 
-
-    /*-----------public functions-----------*/
-    /// <summary>
-    /// Adds an AgentPath to the list
-    /// </summary>
-    /// <param name="agent">The Agent prefab to be added</param>
-    /// <param name="path">The WavePath this Agent will ultimately follow</param>
-    /// <returns></returns>
-    /*public AgentPath AddNewAgent(Agent agent, WavePath path)
+    public void CreateWaveWithList(List<PreAgent> preAgents)
     {
-        AgentPath newAgentPath = new AgentPath(agent, path);
-        waveQueue.Enqueue(newAgentPath);
-        return newAgentPath;
-    }*/
-
-    public void CreateWaveWithList(List<AgentPath> agentPaths)
-    {
-        waveQueue = new Queue<AgentPath>(agentPaths);
+        waveQueue = new Queue<PreAgent>(preAgents);
     }
 
     /// <summary>
     /// Spawn and start an Agent on its Path
     /// </summary>
-    /// <param name="newAgentPath">The AgentPath to be spawned</param>
-    public void Spawn(AgentPath newAgentPath)
+    /// <param name="newPreAgent">The PreAgent to be spawned</param>
+    public void Spawn(PreAgent newPreAgent)
     {
         //Debug.Log("Spawning!");
-        WavePath newPath = new WavePath(newAgentPath.agentPath);
+        WavePath newPath = new WavePath(newPreAgent.agentPath);
         Node startNode = newPath.GetNextNode();
-        Agent newAgent = Instantiate(newAgentPath.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
-        newAgent.InitializeAttributes(newAgentPath.agentAttribute);
+        Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
+        newAgent.InitializeAttributes(newPreAgent.agentAttribute);
         newAgent.BeginMovement(newPath);
 
         if(waveQueue.Count <= 0)

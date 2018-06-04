@@ -25,12 +25,15 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
     /// </remarks>
     public bool Over = false;
 
+    public RingDisplay display;
+
     /// <summary>
     /// Sets the RouterObject it's attached to and initializes the menu options
     /// </summary>
     private void Start()
     {
         parentTower = transform.parent.parent.gameObject.GetComponent<RouterBuilding>();
+        display = transform.parent.Find("RingDisplay").GetComponent<RingDisplay>();
         if (parentTower == null)
         {
             Debug.LogError("Cannot find the Router Building object!");
@@ -123,6 +126,8 @@ public class RoutingOptions : MonoBehaviour , IPointerEnterHandler, IPointerExit
             }
             parentTower.filter.Add(currentAttribute);
         }
+
+        display.UpdateDisplay(currentAttribute);
     }
 
 }

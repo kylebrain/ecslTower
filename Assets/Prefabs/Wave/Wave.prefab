@@ -51,4 +51,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b047adcdefb3311448abfac3ea6070fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenAgent: 1
+  timeBetweenAgent: 5

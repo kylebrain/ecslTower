@@ -197,6 +197,7 @@ public class RouterBuilding : Building
             return;
         }
         canvas.transform.Find("RoutingOptions").gameObject.SetActive(false);
+        canvas.transform.Find("RingDisplay").gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -206,6 +207,7 @@ public class RouterBuilding : Building
     protected override void derivedShow(GameObject canvas)
     {
         canvas.transform.Find("RoutingOptions").gameObject.SetActive(true);
+        canvas.transform.Find("RingDisplay").gameObject.SetActive(true);
     }
 
 
