@@ -7,11 +7,11 @@ using UnityEngine;
 /// Moving unit that follows a WavePath and perform an action
 /// </summary>
 //[RequireComponent(typeof(NavMeshAgent))]
-public abstract class Agent : MonoBehaviour
+public abstract class Agent : VisualAgent
 {
 
     /*-----------public variables-----------*/
-    public AgentAttribute Attribute;
+    
 
     public int scoreMod = 5;
 
@@ -31,8 +31,6 @@ public abstract class Agent : MonoBehaviour
     /// The Node that is currently the destination
     /// </summary>
     private Node CurrentNode;
-
-    public float Speed = 0f;
     bool terminated = false;
 
 
@@ -113,96 +111,9 @@ public abstract class Agent : MonoBehaviour
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Sets all useable values of Agent based on the Enum values
-    /// </summary>
-    /// <param name="attributes">The desire attributes</param>
-    public void InitializeAttributes(AgentAttribute attributes)
+    protected override void ApplySize(Vector3 size)
     {
-        Attribute = attributes;
-        SetColor(attributes.Color);
-        SetSize(attributes.Size);
-        SetSpeed(attributes.Speed);
+        transform.localScale = size;
     }
 
-    /// <summary>
-    /// Sets the NavAgent speed based on speed Enum
-    /// </summary>
-    /// <param name="speed">Desired speed</param>
-    public void SetSpeed(AgentAttribute.possibleSpeeds speed)
-    {
-        switch (speed)
-        {
-            case AgentAttribute.possibleSpeeds.slow:
-                Speed = 1.5f;
-                break;
-            case AgentAttribute.possibleSpeeds.normal:
-                Speed = 3.5f;
-                break;
-            case AgentAttribute.possibleSpeeds.fast:
-                Speed = 5.5f;
-                break;
-            default:
-                Debug.LogError("Agent speed not recognized!");
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Sets the Transform scale based on size Enum
-    /// </summary>
-    /// <param name="size">Desired size</param>
-    public void SetSize(AgentAttribute.possibleSizes size)
-    {
-        Vector3 newScale = Vector3.one;
-        switch (size)
-        {
-            case AgentAttribute.possibleSizes.small:
-                newScale = new Vector3(0.25f, 1, 0.5f);
-                break;
-            case AgentAttribute.possibleSizes.medium:
-                newScale = new Vector3(0.5f, 1, 1f);
-                break;
-            case AgentAttribute.possibleSizes.large:
-                newScale = new Vector3(0.75f, 1, 1.5f);
-                break;
-            default:
-                Debug.LogError("Agent scale not recognized!");
-                break;
-        }
-        transform.localScale = newScale;
-    }
-
-    /// <summary>
-    /// Sets Render Material based on color Enum
-    /// </summary>
-    /// <param name="color">Desired Color</param>
-    public void SetColor(AgentAttribute.possibleColors color)
-    {
-        Renderer rend = GetComponent<Renderer>();
-        Material selectedMaterial = null;
-        switch (color)
-        {
-            case AgentAttribute.possibleColors.red:
-                selectedMaterial = Resources.Load<Material>("Agent/Red");
-                break;
-            case AgentAttribute.possibleColors.green:
-                selectedMaterial = Resources.Load<Material>("Agent/Green");
-                break;
-            case AgentAttribute.possibleColors.blue:
-                selectedMaterial = Resources.Load<Material>("Agent/Blue");
-                break;
-            default:
-                Debug.LogError("Agent color not recognized!");
-                break;
-        }
-        if (selectedMaterial != null)
-        {
-            rend.material = selectedMaterial;
-        }
-        else
-        {
-            Debug.LogError("Could not find Agent material. Perhaps it was moved?");
-        }
-    }
 }

@@ -90,7 +90,7 @@ public class RouterBuilding : Building
             return;
         }
 
-
+        /*
         //test area
         if (selected)
         {
@@ -103,6 +103,8 @@ public class RouterBuilding : Building
                 }
             }
         }
+
+        */
 
         InRadius();
 
@@ -190,13 +192,13 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        RoutingOptions options = canvas.transform.Find("RoutingOptions").GetComponent<RoutingOptions>();
+        RingDisplay options = canvas.transform.Find("RingDisplay").GetComponent<RingDisplay>();
         if (options.Over)
         {
             ShowUI(canvas);
             return;
         }
-        canvas.transform.Find("RoutingOptions").gameObject.SetActive(false);
+        canvas.transform.Find("RingDisplay").gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -205,7 +207,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedShow(GameObject canvas)
     {
-        canvas.transform.Find("RoutingOptions").gameObject.SetActive(true);
+        canvas.transform.Find("RingDisplay").gameObject.SetActive(true);
     }
 
 
