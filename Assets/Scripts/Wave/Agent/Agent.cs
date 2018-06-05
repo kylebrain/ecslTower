@@ -106,8 +106,14 @@ public abstract class Agent : VisualAgent
     IEnumerator playTerminationAudio()
     {
         AudioSource audio = GetComponent<AudioSource>();
-        audio.Play();
-        yield return new WaitForSeconds(audio.clip.length);
+        if (audio.clip != null)
+        {
+            audio.Play();
+            yield return new WaitForSeconds(audio.clip.length);
+        } else
+        {
+            yield return null;
+        }
         Destroy(gameObject);
     }
 
