@@ -60,16 +60,16 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         {
             return;
         }
-        attributeSelections[0].selected = true;
+        attributeSelections[0].Selected = true;
     }
 
     public void NextSelection()
     {
         for (int i = 0; i < attributeSelections.Count; i++)
         {
-            if(attributeSelections[i].selected)
+            if(attributeSelections[i].Selected)
             {
-                attributeSelections[i].selected = false;
+                attributeSelections[i].Selected = false;
                 RolodexSelection select = attributeSelections[(i + 1) % attributeSelections.Count];
                 StartCoroutine(SetSelectedAfterFrame(select));
                 return;
@@ -80,7 +80,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     IEnumerator SetSelectedAfterFrame(RolodexSelection selection)
     {
         yield return new WaitForEndOfFrame();
-        selection.selected = true;
+        selection.Selected = true;
     }
 
     /// <summary>

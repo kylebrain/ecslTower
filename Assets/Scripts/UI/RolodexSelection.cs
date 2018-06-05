@@ -11,7 +11,31 @@ public class RolodexSelection : MonoBehaviour
 
     private Dropdown dropdown;
 
-    public bool selected;
+    public Color selectedColor;
+    public Color deselectedColor;
+
+    private VisualPrefs visualPrefs;
+
+    public bool Selected
+    {
+        get
+        {
+            return selected;
+        }
+        set
+        {
+            if (value)
+            {
+                GetComponent<Graphic>().color = selectedColor;
+            } else
+            {
+                GetComponent<Graphic>().color = deselectedColor;
+            }
+            selected = value;
+        }
+    }
+    private bool selected;
+
 
     public float shiftSpeed = 5f;
     public float fudge = 0.001f;
@@ -26,7 +50,18 @@ public class RolodexSelection : MonoBehaviour
 
     private void Awake()
     {
-        if(text1 == null || text2 == null || text3 == null)
+        visualPrefs = GameObject.Find("VisualPrefs").GetComponent<VisualPrefs>();
+        if (visualPrefs == null)
+        {
+            Debug.LogError("Cannot find VisualPrefs, perhaps it was moved or renamed?");
+            return;
+        }
+        selectedColor = visualPrefs.selectedColor;
+        deselectedColor = visualPrefs.deselectedColor;
+
+        Selected = selected; //initialize the color
+
+        if (text1 == null || text2 == null || text3 == null)
         {
             Debug.LogError("Rolodex selection box must have three text boxes with the RolodexText component");
             enabled = false;
@@ -42,7 +77,7 @@ public class RolodexSelection : MonoBehaviour
         textList.Add(text3);
         spacing = dropdown.GetComponent<RectTransform>().sizeDelta.x;
 
-        for(int i = 0; i < textList.Count; i++)
+        for (int i = 0; i < textList.Count; i++)
         {
             RectTransform rectTransform = textList[i].GetComponent<RectTransform>();
             rectTransform.sizeDelta = new Vector2(spacing, rectTransform.sizeDelta.y);
@@ -57,22 +92,37 @@ public class RolodexSelection : MonoBehaviour
 
     }
 
-
     private void Update()
     {
-        if (selected)
+        if (Selected)
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            for (int i = 1; i < dropdown.options.Count; i++)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha0 + i))
+                {
+                    ChangeValue(i - 1);
+                    transform.parent.GetComponent<RoutingOptions>().NextSelection();
+                    break;
+                }
+            }
+
+            if(Input.GetKeyDown(KeyCode.Tab))
+            {
+                ChangeValue(dropdown.options.Count - 1);
+                transform.parent.GetComponent<RoutingOptions>().NextSelection();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 ChangeDropdown(false);
             }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            else if (Input.GetKeyDown(KeyCode.E))
             {
                 ChangeDropdown(true);
-            } else if (Input.GetKeyDown(KeyCode.Tab))
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
             {
                 transform.parent.GetComponent<RoutingOptions>().NextSelection();
-                Debug.Log("Next selection!", this);
             }
         }
     }
@@ -80,12 +130,12 @@ public class RolodexSelection : MonoBehaviour
     public void ChangeValue(int destination)
     {
         int origin = dropdown.value;
-        if(origin == destination)
+        if (origin == destination)
         {
             return;
         }
         int count = dropdown.options.Count;
-        if(destination >= count || destination < 0)
+        if (destination >= count || destination < 0)
         {
             Debug.LogError("Destination must be set to valid option!");
             return;
@@ -96,17 +146,18 @@ public class RolodexSelection : MonoBehaviour
         bool right;
         int numberShifted;
         //takes the shortest path, if equal it chooses the direct path
-        if(Mathf.Abs(path1) <= Mathf.Abs(path2))
+        if (Mathf.Abs(path1) <= Mathf.Abs(path2))
         {
             right = path1 > 0;
             numberShifted = Mathf.Abs(path1);
-        } else
+        }
+        else
         {
             right = path2 > 0;
             numberShifted = Mathf.Abs(path2);
         }
 
-        for(int i = 0; i < numberShifted; i++)
+        for (int i = 0; i < numberShifted; i++)
         {
             ChangeDropdown(right);
         }
@@ -122,13 +173,14 @@ public class RolodexSelection : MonoBehaviour
         if (right)
         {
             direction = 1;
-        } else
+        }
+        else
         {
             direction = -1;
         }
         string nextText;
         int index = (dropdown.value + direction) % dropdown.options.Count;
-        if(index < 0)
+        if (index < 0)
         {
             index = dropdown.options.Count - 1;
         }

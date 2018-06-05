@@ -90,7 +90,7 @@ public class RouterBuilding : Building
             return;
         }
 
-
+        /*
         //test area
         if (selected)
         {
@@ -103,6 +103,8 @@ public class RouterBuilding : Building
                 }
             }
         }
+
+        */
 
         InRadius();
 

@@ -6,5 +6,6 @@ public class VisualPrefs : MonoBehaviour {
 
     public Color enableColor;
     public Color disableColor;
-
+    public Color selectedColor;
+    public Color deselectedColor;
 }
