@@ -16,7 +16,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// <summary>
     /// The parent Router that the Dropdown is attached to
     /// </summary>
-    public RouterBuilding parentTower;
+    private RouterBuilding parentTower;
     /// <summary>
     /// If the mouse if over the Dropdowns
     /// </summary>
@@ -25,7 +25,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </remarks>
     //public bool Over = false;
 
-    public RingDisplay display;
+    private RingDisplay display;
+
+    public RingDisplayAgent worldSpaceDisplayAgent;
 
     public List<RolodexSelection> attributeSelections = new List<RolodexSelection>();
 
@@ -47,6 +49,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             return;
         }
         PopulateDropdowns();
+
+        worldSpaceDisplayAgent.radius = parentTower.Radius;
+
     }
 
     private void OnEnable()
@@ -183,6 +188,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         }
 
         display.UpdateDisplay(currentAttribute);
+        worldSpaceDisplayAgent.InitializeAttributes(currentAttribute);
     }
 
 }
