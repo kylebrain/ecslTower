@@ -60,6 +60,10 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         {
             return;
         }
+        foreach (RolodexSelection selection in attributeSelections)
+        {
+            selection.Selected = false;
+        }
         attributeSelections[0].Selected = true;
     }
 

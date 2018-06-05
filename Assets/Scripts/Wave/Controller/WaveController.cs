@@ -29,6 +29,8 @@ public class WaveController : MonoBehaviour
     public bool Playing;
     private NextWaveButton waveButton;
 
+    private List<AgentAttribute> currentWaveAttributes = new List<AgentAttribute>();
+
     void Start()
     {
         waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
@@ -59,6 +61,7 @@ public class WaveController : MonoBehaviour
         }
         //currentPreWave will be created in FirstWave or at the end of this function
         currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
+        currentWaveAttributes = new List<AgentAttribute>(infectedAttributes);
         WaveCount++;
 
         if (WaveCount == 1)
@@ -97,7 +100,7 @@ public class WaveController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             int i = 0;
-            foreach (AgentAttribute attr in infectedAttributes)
+            foreach (AgentAttribute attr in currentWaveAttributes)
             {
                 Debug.Log("Attribute " + ++i + ": " + attr);
                 //these attributes are for the preWave, store them somewhere if you want to show the current Wave's attributes

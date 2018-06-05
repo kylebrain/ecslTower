@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class RingDisplayAgent : VisualAgent
 {
 
-    public Vector2 center;
+    private Vector2 center;
     public float startingRotation;
     public float radius;
     public float rotationMod = 0.5f;
@@ -42,6 +42,7 @@ public class RingDisplayAgent : VisualAgent
     private void Start()
     {
         Rotation = startingRotation;
+        center = transform.localPosition;
     }
 
     private void Update()
