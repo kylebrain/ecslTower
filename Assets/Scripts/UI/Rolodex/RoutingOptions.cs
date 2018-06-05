@@ -16,7 +16,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// <summary>
     /// The parent Router that the Dropdown is attached to
     /// </summary>
-    public RouterBuilding parentTower;
+    private RouterBuilding parentTower;
     /// <summary>
     /// If the mouse if over the Dropdowns
     /// </summary>
@@ -25,7 +25,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </remarks>
     //public bool Over = false;
 
-    public RingDisplay display;
+    private RingDisplay display;
+
+    public RingDisplayAgent worldSpaceDisplayAgent;
 
     public List<RolodexSelection> attributeSelections = new List<RolodexSelection>();
 
@@ -47,6 +49,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             return;
         }
         PopulateDropdowns();
+
+        worldSpaceDisplayAgent.radius = parentTower.Radius;
+
     }
 
     private void OnEnable()
@@ -92,9 +97,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </summary>
     private void PopulateDropdowns()
     {
-        List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleColors)));
-        List<string> sizeList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)));
-        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)));
+        List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)));
+        List<string> sizeList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)));
+        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)));
         List<List<string>> enumList = new List<List<string>>();
         enumList.Add(colorList);
         enumList.Add(sizeList);
@@ -106,9 +111,24 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             return;
         }
 
+        //this should account for the panel, but if it needs to be completely removed, there might be an off by one below
+
+        int panelInt = 1;
+
+        Transform panel = transform.Find("Panel");
+        if(panel == null)
+        {
+            Debug.LogError("Could not find Panel object, perhaps it was moved or renamed!");
+            panelInt = 0;
+        } else if(panel.GetSiblingIndex() != 0)
+        {
+            Debug.LogError("The Panel object is not where it should be! Place it as the first child!");
+            return;
+        }
+
         for (int i = 0; i < enumList.Count; i++)
         {
-            Dropdown currentDropdown = transform.GetChild(i + 1).GetComponent<Dropdown>(); //plus one for the background
+            Dropdown currentDropdown = transform.GetChild(i + panelInt).GetComponent<Dropdown>(); //plus one for the panel
             if (currentDropdown == null)
             {
                 Debug.LogError("Cannot find child of RoutingOptions!");
@@ -117,8 +137,23 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             currentDropdown.onValueChanged.AddListener(delegate {
                 UpdateFilter(); //only called when the Dropdown value is changed
             });
+
+            //capitalizes each enum
+            for(int j = 0; j < enumList[i].Count; j++)
+            {
+                string str = enumList[i][j];
+                enumList[i][j] = char.ToUpper(str[0]) + str.Substring(1);
+            }
+
             currentDropdown.ClearOptions();
             currentDropdown.AddOptions(enumList[i]);
+            if(currentDropdown.options[currentDropdown.options.Count-1].text == "DontCare")
+            {
+                currentDropdown.options[currentDropdown.options.Count - 1].text = "All";
+            } else
+            {
+                Debug.LogError("Last enum value should be 'DontCare.' Perhaps it was moved or renamed?");
+            }
             if(enumList[i].Count - 1 != 3)
             {
                 Debug.LogWarning("Enum list length is not as expected!");
@@ -132,28 +167,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
 
     }
 
-    /*
-
-    /// <summary>
-    /// Basic workaround so that the menu does not close when clicked on, sets Over to true
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Over = true;
-    }
-
-    /// <summary>
-    /// Basic workaround so that the menu does not close when clicked on, sets Over to false
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Over = false;
-    }
-
-    */
-
     /// <summary>
     /// Will set the parent Router's filter to match the one's in the Dropdown
     /// </summary>
@@ -162,9 +175,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </remarks>
     public void UpdateFilter()
     {
-        currentAttribute.Color = (AgentAttribute.possibleColors)transform.Find("Color").GetComponent<Dropdown>().value;
-        currentAttribute.Size = (AgentAttribute.possibleSizes)transform.Find("Size").GetComponent<Dropdown>().value;
-        currentAttribute.Speed = (AgentAttribute.possibleSpeeds)transform.Find("Speed").GetComponent<Dropdown>().value;
+        currentAttribute.Color = (AgentAttribute.PossibleColors)transform.Find("Color").GetComponent<Dropdown>().value;
+        currentAttribute.Size = (AgentAttribute.PossibleSizes)transform.Find("Size").GetComponent<Dropdown>().value;
+        currentAttribute.Speed = (AgentAttribute.PossibleSpeeds)transform.Find("Speed").GetComponent<Dropdown>().value;
         if (parentTower.filter != null)
         {
             if (parentTower.filter.Count > 0)
@@ -175,6 +188,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         }
 
         display.UpdateDisplay(currentAttribute);
+        worldSpaceDisplayAgent.InitializeAttributes(currentAttribute);
     }
 
 }

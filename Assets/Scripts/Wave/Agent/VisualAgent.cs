@@ -25,17 +25,17 @@ public abstract class VisualAgent : MonoBehaviour {
     /// Sets the NavAgent speed based on speed Enum
     /// </summary>
     /// <param name="speed">Desired speed</param>
-    public void SetSpeed(AgentAttribute.possibleSpeeds speed)
+    public void SetSpeed(AgentAttribute.PossibleSpeeds speed)
     {
         switch (speed)
         {
-            case AgentAttribute.possibleSpeeds.slow:
+            case AgentAttribute.PossibleSpeeds.slow:
                 Speed = 1.5f;
                 break;
-            case AgentAttribute.possibleSpeeds.normal:
+            case AgentAttribute.PossibleSpeeds.normal:
                 Speed = 3.5f;
                 break;
-            case AgentAttribute.possibleSpeeds.fast:
+            case AgentAttribute.PossibleSpeeds.fast:
                 Speed = 5.5f;
                 break;
             default:
@@ -48,18 +48,18 @@ public abstract class VisualAgent : MonoBehaviour {
     /// Sets the Transform scale based on size Enum
     /// </summary>
     /// <param name="size">Desired size</param>
-    public void SetSize(AgentAttribute.possibleSizes size)
+    public void SetSize(AgentAttribute.PossibleSizes size)
     {
         Vector3 newScale = Vector3.one;
         switch (size)
         {
-            case AgentAttribute.possibleSizes.small:
+            case AgentAttribute.PossibleSizes.small:
                 newScale = new Vector3(0.25f, 1, 0.5f);
                 break;
-            case AgentAttribute.possibleSizes.medium:
+            case AgentAttribute.PossibleSizes.medium:
                 newScale = new Vector3(0.5f, 1, 1f);
                 break;
-            case AgentAttribute.possibleSizes.large:
+            case AgentAttribute.PossibleSizes.large:
                 newScale = new Vector3(0.75f, 1, 1.5f);
                 break;
             default:
@@ -77,19 +77,19 @@ public abstract class VisualAgent : MonoBehaviour {
     /// Sets Render Material based on color Enum
     /// </summary>
     /// <param name="color">Desired Color</param>
-    public virtual void SetColor(AgentAttribute.possibleColors color)
+    public virtual void SetColor(AgentAttribute.PossibleColors color)
     {
         Renderer rend = GetComponent<Renderer>();
         Material selectedMaterial = null;
         switch (color)
         {
-            case AgentAttribute.possibleColors.red:
+            case AgentAttribute.PossibleColors.red:
                 selectedMaterial = Resources.Load<Material>("Agent/Red");
                 break;
-            case AgentAttribute.possibleColors.green:
+            case AgentAttribute.PossibleColors.green:
                 selectedMaterial = Resources.Load<Material>("Agent/Green");
                 break;
-            case AgentAttribute.possibleColors.blue:
+            case AgentAttribute.PossibleColors.blue:
                 selectedMaterial = Resources.Load<Material>("Agent/Blue");
                 break;
             default:

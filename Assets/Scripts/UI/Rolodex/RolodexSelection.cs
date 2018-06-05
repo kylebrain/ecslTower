@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Dropdown))]
 [RequireComponent(typeof(RectMask2D))]
@@ -11,10 +12,18 @@ public class RolodexSelection : MonoBehaviour
 
     private Dropdown dropdown;
 
-    public Color selectedColor;
-    public Color deselectedColor;
+    private Color selectedColor;
+    private Color deselectedColor;
+    public float shiftSpeed = 5f;
+    public float fudge = 0.001f;
+
+    public UnityEvent OnNext = new UnityEvent();
+    public UnityEvent OnPrevious = new UnityEvent();
+
+    private ControlPrefs controlPrefs;
 
     private VisualPrefs visualPrefs;
+    private Graphic image;
 
     public bool Selected
     {
@@ -26,19 +35,15 @@ public class RolodexSelection : MonoBehaviour
         {
             if (value)
             {
-                GetComponent<Graphic>().color = selectedColor;
+                image.color = selectedColor;
             } else
             {
-                GetComponent<Graphic>().color = deselectedColor;
+                image.color = deselectedColor;
             }
             selected = value;
         }
     }
     private bool selected;
-
-
-    public float shiftSpeed = 5f;
-    public float fudge = 0.001f;
 
     public RolodexText text1;
     public RolodexText text2;
@@ -50,6 +55,13 @@ public class RolodexSelection : MonoBehaviour
 
     private void Awake()
     {
+        controlPrefs = GameObject.FindGameObjectWithTag("ControlPrefs").GetComponent<ControlPrefs>();
+        if(controlPrefs == null)
+        {
+            Debug.LogError("Cannot find ControlPrefs, perhaps it was moved or the tag was not applied?");
+            return;
+        }
+
         visualPrefs = GameObject.Find("VisualPrefs").GetComponent<VisualPrefs>();
         if (visualPrefs == null)
         {
@@ -58,6 +70,8 @@ public class RolodexSelection : MonoBehaviour
         }
         selectedColor = visualPrefs.selectedColor;
         deselectedColor = visualPrefs.deselectedColor;
+
+        image = GetComponent<Graphic>();
 
         Selected = selected; //initialize the color
 
@@ -90,6 +104,11 @@ public class RolodexSelection : MonoBehaviour
         currentText.GetComponent<Text>().text = dropdown.options[0].text;
         dropdown.value = 0;
 
+        if (OnNext.GetPersistentEventCount() <= 0 && OnPrevious.GetPersistentEventCount() <= 0)
+        {
+            Debug.LogWarning("Rolodex does not have next or previous handling implemented!");
+        }
+
     }
 
     private void Update()
@@ -101,28 +120,28 @@ public class RolodexSelection : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 {
                     ChangeValue(i - 1);
-                    transform.parent.GetComponent<RoutingOptions>().NextSelection();
+                    OnNext.Invoke();
                     break;
                 }
             }
 
-            if(Input.GetKeyDown(KeyCode.Tab))
+            if(controlPrefs.GetKeyDown("rolodexResetKey"))
             {
                 ChangeValue(dropdown.options.Count - 1);
-                transform.parent.GetComponent<RoutingOptions>().NextSelection();
+                OnNext.Invoke();
             }
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (controlPrefs.GetKeyDown("rolodexLeftKey"))
             {
                 ChangeDropdown(false);
             }
-            else if (Input.GetKeyDown(KeyCode.E))
+            else if (controlPrefs.GetKeyDown("rolodexRightKey"))
             {
                 ChangeDropdown(true);
             }
-            else if (Input.GetKeyDown(KeyCode.Space))
+            else if (controlPrefs.GetKeyDown("rolodexNextKey"))
             {
-                transform.parent.GetComponent<RoutingOptions>().NextSelection();
+                OnNext.Invoke();
             }
         }
     }
@@ -167,7 +186,7 @@ public class RolodexSelection : MonoBehaviour
     //figure out which direction is being moved
     //place the other text in that direction and then move to the next
     //set the textDisplay to the new text value
-    private void ChangeDropdown(bool right)
+    public void ChangeDropdown(bool right)
     {
         int direction;
         if (right)
@@ -201,6 +220,11 @@ public class RolodexSelection : MonoBehaviour
 
         currentText = textList[1];
 
+    }
+
+    public void Hover(bool isHover)
+    {
+        image.color = (isHover || Selected) ? selectedColor : deselectedColor;
     }
 
 }

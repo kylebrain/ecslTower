@@ -186,6 +186,14 @@ public class RouterBuilding : Building
         }
     }
 
+    protected void SetChildActive(string [] elements, bool active, GameObject canvas)
+    {
+        foreach(string element in elements)
+        {
+            canvas.transform.Find(element).gameObject.SetActive(active);
+        }
+    }
+
     /// <summary>
     /// Shows the RoutingOptions with the Sell option
     /// </summary>
@@ -198,7 +206,7 @@ public class RouterBuilding : Building
             ShowUI(canvas);
             return;
         }
-        canvas.transform.Find("RingDisplay").gameObject.SetActive(false);
+        SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
     }
 
     /// <summary>
@@ -207,7 +215,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedShow(GameObject canvas)
     {
-        canvas.transform.Find("RingDisplay").gameObject.SetActive(true);
+        SetChildActive(new[] { "RingDisplay", "Tooltips" }, true, canvas);
     }
 
 
