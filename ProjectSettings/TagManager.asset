@@ -9,6 +9,7 @@ TagManager:
   - Agent
   - EndArea
   - WaveManager
+  - ControlPrefs
   layers:
   - Default
   - TransparentFX

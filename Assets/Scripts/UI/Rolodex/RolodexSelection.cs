@@ -20,10 +20,7 @@ public class RolodexSelection : MonoBehaviour
     public UnityEvent OnNext = new UnityEvent();
     public UnityEvent OnPrevious = new UnityEvent();
 
-    public KeyCode leftKey = KeyCode.Q;
-    public KeyCode rightKey = KeyCode.E;
-    public KeyCode resetKey = KeyCode.Tab;
-    public KeyCode nextKey = KeyCode.Space;
+    private ControlPrefs controlPrefs;
 
     private VisualPrefs visualPrefs;
     private Graphic image;
@@ -58,6 +55,12 @@ public class RolodexSelection : MonoBehaviour
 
     private void Awake()
     {
+        controlPrefs = GameObject.FindGameObjectWithTag("ControlPrefs").GetComponent<ControlPrefs>();
+        if(controlPrefs == null)
+        {
+            Debug.LogError("Cannot find ControlPrefs, perhaps it was moved or the tag was not applied?");
+            return;
+        }
 
         visualPrefs = GameObject.Find("VisualPrefs").GetComponent<VisualPrefs>();
         if (visualPrefs == null)
@@ -122,21 +125,21 @@ public class RolodexSelection : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyDown(resetKey))
+            if(controlPrefs.GetKeyDown("rolodexResetKey"))
             {
                 ChangeValue(dropdown.options.Count - 1);
                 OnNext.Invoke();
             }
 
-            if (Input.GetKeyDown(leftKey))
+            if (controlPrefs.GetKeyDown("rolodexLeftKey"))
             {
                 ChangeDropdown(false);
             }
-            else if (Input.GetKeyDown(rightKey))
+            else if (controlPrefs.GetKeyDown("rolodexRightKey"))
             {
                 ChangeDropdown(true);
             }
-            else if (Input.GetKeyDown(nextKey))
+            else if (controlPrefs.GetKeyDown("rolodexNextKey"))
             {
                 OnNext.Invoke();
             }
