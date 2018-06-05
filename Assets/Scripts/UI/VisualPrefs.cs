@@ -8,4 +8,7 @@ public class VisualPrefs : MonoBehaviour {
     public Color disableColor;
     public Color selectedColor;
     public Color deselectedColor;
+    public Color subSelectedColor;
+    public Color subDeselectedColor;
+    public Color subPressedColor;
 }

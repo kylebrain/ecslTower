@@ -26,6 +26,7 @@ public class RolodexSelection : MonoBehaviour
     public KeyCode nextKey = KeyCode.Space;
 
     private VisualPrefs visualPrefs;
+    private Graphic image;
 
     public bool Selected
     {
@@ -37,10 +38,10 @@ public class RolodexSelection : MonoBehaviour
         {
             if (value)
             {
-                GetComponent<Graphic>().color = selectedColor;
+                image.color = selectedColor;
             } else
             {
-                GetComponent<Graphic>().color = deselectedColor;
+                image.color = deselectedColor;
             }
             selected = value;
         }
@@ -66,6 +67,8 @@ public class RolodexSelection : MonoBehaviour
         }
         selectedColor = visualPrefs.selectedColor;
         deselectedColor = visualPrefs.deselectedColor;
+
+        image = GetComponent<Graphic>();
 
         Selected = selected; //initialize the color
 
@@ -214,6 +217,11 @@ public class RolodexSelection : MonoBehaviour
 
         currentText = textList[1];
 
+    }
+
+    public void Hover(bool isHover)
+    {
+        image.color = (isHover || Selected) ? selectedColor : deselectedColor;
     }
 
 }

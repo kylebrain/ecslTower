@@ -132,8 +132,23 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             currentDropdown.onValueChanged.AddListener(delegate {
                 UpdateFilter(); //only called when the Dropdown value is changed
             });
+
+            //capitalizes each enum
+            for(int j = 0; j < enumList[i].Count; j++)
+            {
+                string str = enumList[i][j];
+                enumList[i][j] = char.ToUpper(str[0]) + str.Substring(1);
+            }
+
             currentDropdown.ClearOptions();
             currentDropdown.AddOptions(enumList[i]);
+            if(currentDropdown.options[currentDropdown.options.Count-1].text == "DontCare")
+            {
+                currentDropdown.options[currentDropdown.options.Count - 1].text = "All";
+            } else
+            {
+                Debug.LogError("Last enum value should be 'DontCare.' Perhaps it was moved or renamed?");
+            }
             if(enumList[i].Count - 1 != 3)
             {
                 Debug.LogWarning("Enum list length is not as expected!");
