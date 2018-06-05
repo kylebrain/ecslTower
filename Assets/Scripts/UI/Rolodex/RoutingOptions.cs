@@ -97,9 +97,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </summary>
     private void PopulateDropdowns()
     {
-        List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleColors)));
-        List<string> sizeList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)));
-        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)));
+        List<string> colorList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)));
+        List<string> sizeList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)));
+        List<string> speedList = new List<string>(System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)));
         List<List<string>> enumList = new List<List<string>>();
         enumList.Add(colorList);
         enumList.Add(sizeList);
@@ -175,9 +175,9 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </remarks>
     public void UpdateFilter()
     {
-        currentAttribute.Color = (AgentAttribute.possibleColors)transform.Find("Color").GetComponent<Dropdown>().value;
-        currentAttribute.Size = (AgentAttribute.possibleSizes)transform.Find("Size").GetComponent<Dropdown>().value;
-        currentAttribute.Speed = (AgentAttribute.possibleSpeeds)transform.Find("Speed").GetComponent<Dropdown>().value;
+        currentAttribute.Color = (AgentAttribute.PossibleColors)transform.Find("Color").GetComponent<Dropdown>().value;
+        currentAttribute.Size = (AgentAttribute.PossibleSizes)transform.Find("Size").GetComponent<Dropdown>().value;
+        currentAttribute.Speed = (AgentAttribute.PossibleSpeeds)transform.Find("Speed").GetComponent<Dropdown>().value;
         if (parentTower.filter != null)
         {
             if (parentTower.filter.Count > 0)

@@ -236,25 +236,25 @@ public class WaveController : MonoBehaviour
                 case 0:
                     //color
                     {
-                        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
+                        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)).Length - 1;
                         int newTrait = (int)previousAttrribute.Color + direction;
-                        ret.Color = (AgentAttribute.possibleColors)TraitIndexWithBounds(newTrait, numberColors);
+                        ret.Color = (AgentAttribute.PossibleColors)TraitIndexWithBounds(newTrait, numberColors);
                         break;
                     }
                 case 1:
                     //size
                     {
-                        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
+                        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)).Length - 1;
                         int newTrait = (int)previousAttrribute.Size + direction;
-                        ret.Size = (AgentAttribute.possibleSizes)TraitIndexWithBounds(newTrait, numberSizes);
+                        ret.Size = (AgentAttribute.PossibleSizes)TraitIndexWithBounds(newTrait, numberSizes);
                         break;
                     }
                 case 2:
                     //speed
                     {
-                        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
+                        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)).Length - 1;
                         int newTrait = (int)previousAttrribute.Speed + direction;
-                        ret.Speed = (AgentAttribute.possibleSpeeds)TraitIndexWithBounds(newTrait, numberSpeed);
+                        ret.Speed = (AgentAttribute.PossibleSpeeds)TraitIndexWithBounds(newTrait, numberSpeed);
                         break;
                     }
                 default:
@@ -304,13 +304,13 @@ public class WaveController : MonoBehaviour
     public AgentAttribute GenerateAttribute()
     {
         AgentAttribute ret;
-        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
-        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
-        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
+        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)).Length - 1;
+        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)).Length - 1;
+        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)).Length - 1;
 
-        ret.Color = (AgentAttribute.possibleColors)Random.Range(0, numberColors);
-        ret.Size = (AgentAttribute.possibleSizes)Random.Range(0, numberSizes);
-        ret.Speed = (AgentAttribute.possibleSpeeds)Random.Range(0, numberSpeed);
+        ret.Color = (AgentAttribute.PossibleColors)Random.Range(0, numberColors);
+        ret.Size = (AgentAttribute.PossibleSizes)Random.Range(0, numberSizes);
+        ret.Speed = (AgentAttribute.PossibleSpeeds)Random.Range(0, numberSpeed);
 
         return ret;
     }
@@ -327,9 +327,9 @@ public class WaveController : MonoBehaviour
 
     public int GetAttributeComboNumber()
     {
-        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.possibleColors)).Length - 1;
-        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.possibleSizes)).Length - 1;
-        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.possibleSpeeds)).Length - 1;
+        int numberColors = System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)).Length - 1;
+        int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)).Length - 1;
+        int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)).Length - 1;
 
         return numberColors * numberSizes * numberSpeed;
     }

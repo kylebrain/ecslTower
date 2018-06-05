@@ -9,33 +9,33 @@ public struct AgentAttribute {
     /// <summary>
     /// the possible colors af an agent
     /// </summary>
-    public enum possibleColors { red, green, blue, dontCare };
+    public enum PossibleColors { red, green, blue, dontCare };
 
     /// <summary>
     /// The current active color
     /// </summary>
-    public possibleColors Color;
+    public PossibleColors Color;
 
 
     /// <summary>
     /// The possible sizes of an agent
     /// </summary>
-    public enum possibleSizes { small, medium, large, dontCare };
+    public enum PossibleSizes { small, medium, large, dontCare };
 
     /// <summary>
     /// The current active size
     /// </summary>
-    public possibleSizes Size;
+    public PossibleSizes Size;
 
     /// <summary>
     /// The possible speeds of an agent
     /// </summary>
-    public enum possibleSpeeds { slow, normal, fast, dontCare };
+    public enum PossibleSpeeds { slow, normal, fast, dontCare };
 
     /// <summary>
     /// The current active speed
     /// </summary>
-    public possibleSpeeds Speed;
+    public PossibleSpeeds Speed;
 
     /// <summary>
     /// Checks equality of AgentAttribute objects
@@ -49,9 +49,9 @@ public struct AgentAttribute {
             return false;
         }
         AgentAttribute other = (AgentAttribute)obj;
-        return (other.Color == Color || other.Color == possibleColors.dontCare || Color == possibleColors.dontCare)
-            && (other.Size == Size || other.Size == possibleSizes.dontCare || Size == possibleSizes.dontCare)
-            && (other.Speed == Speed || other.Speed == possibleSpeeds.dontCare || Speed == possibleSpeeds.dontCare);
+        return (other.Color == Color || other.Color == PossibleColors.dontCare || Color == PossibleColors.dontCare)
+            && (other.Size == Size || other.Size == PossibleSizes.dontCare || Size == PossibleSizes.dontCare)
+            && (other.Speed == Speed || other.Speed == PossibleSpeeds.dontCare || Speed == PossibleSpeeds.dontCare);
     }
 
     public override int GetHashCode()

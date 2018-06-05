@@ -59,18 +59,18 @@ public class RingDisplayAgent : VisualAgent
         GetComponent<RectTransform>().sizeDelta = size * sizeMod;
     }
 
-    public override void SetColor(AgentAttribute.possibleColors color)
+    public override void SetColor(AgentAttribute.PossibleColors color)
     {
         Graphic image = GetComponent<Graphic>();
         switch (color)
         {
-            case AgentAttribute.possibleColors.red:
+            case AgentAttribute.PossibleColors.red:
                 image.color = Color.red;
                 break;
-            case AgentAttribute.possibleColors.green:
+            case AgentAttribute.PossibleColors.green:
                 image.color = Color.green;
                 break;
-            case AgentAttribute.possibleColors.blue:
+            case AgentAttribute.PossibleColors.blue:
                 image.color = Color.blue;
                 break;
             default:
