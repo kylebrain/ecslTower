@@ -96,9 +96,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39060d232003440a2da62064ffe8ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected: 0
   shiftSpeed: 5
   fudge: 0.001
+  OnNext:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPrevious:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  leftKey: 113
+  rightKey: 101
+  resetKey: 9
+  nextKey: 32
   text1: {fileID: 114469363439872880}
   text2: {fileID: 114563334251970004}
   text3: {fileID: 114847787651276872}
@@ -169,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -393,7 +406,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1787263795703744}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:

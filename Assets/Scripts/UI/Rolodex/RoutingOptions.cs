@@ -106,9 +106,24 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             return;
         }
 
+        //this should account for the panel, but if it needs to be completely removed, there might be an off by one below
+
+        int panelInt = 1;
+
+        Transform panel = transform.Find("Panel");
+        if(panel == null)
+        {
+            Debug.LogError("Could not find Panel object, perhaps it was moved or renamed!");
+            panelInt = 0;
+        } else if(panel.GetSiblingIndex() != 0)
+        {
+            Debug.LogError("The Panel object is not where it should be! Place it as the first child!");
+            return;
+        }
+
         for (int i = 0; i < enumList.Count; i++)
         {
-            Dropdown currentDropdown = transform.GetChild(i + 1).GetComponent<Dropdown>(); //plus one for the background
+            Dropdown currentDropdown = transform.GetChild(i + panelInt).GetComponent<Dropdown>(); //plus one for the panel
             if (currentDropdown == null)
             {
                 Debug.LogError("Cannot find child of RoutingOptions!");
@@ -131,28 +146,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         DefaultSelection();
 
     }
-
-    /*
-
-    /// <summary>
-    /// Basic workaround so that the menu does not close when clicked on, sets Over to true
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Over = true;
-    }
-
-    /// <summary>
-    /// Basic workaround so that the menu does not close when clicked on, sets Over to false
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Over = false;
-    }
-
-    */
 
     /// <summary>
     /// Will set the parent Router's filter to match the one's in the Dropdown

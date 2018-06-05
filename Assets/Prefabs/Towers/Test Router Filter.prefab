@@ -890,10 +890,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39060d232003440a2da62064ffe8ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedColor: {r: 0, g: 0, b: 0, a: 0}
-  deselectedColor: {r: 0, g: 0, b: 0, a: 0}
   shiftSpeed: 5
   fudge: 0.001
+  OnNext:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114285179538449082}
+        m_MethodName: NextSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPrevious:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  leftKey: 113
+  rightKey: 101
+  resetKey: 9
+  nextKey: 32
   text1: {fileID: 114278857677316012}
   text2: {fileID: 114902123108899132}
   text3: {fileID: 114270320084053120}
@@ -1776,10 +1799,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39060d232003440a2da62064ffe8ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedColor: {r: 0, g: 0, b: 0, a: 0}
-  deselectedColor: {r: 0, g: 0, b: 0, a: 0}
   shiftSpeed: 5
   fudge: 0.001
+  OnNext:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114285179538449082}
+        m_MethodName: NextSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPrevious:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  leftKey: 113
+  rightKey: 101
+  resetKey: 9
+  nextKey: 32
   text1: {fileID: 114012223400098226}
   text2: {fileID: 114079620102069278}
   text3: {fileID: 114308011097616482}
@@ -1896,10 +1942,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf39060d232003440a2da62064ffe8ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedColor: {r: 0, g: 0, b: 0, a: 0}
-  deselectedColor: {r: 0, g: 0, b: 0, a: 0}
   shiftSpeed: 5
   fudge: 0.001
+  OnNext:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114285179538449082}
+        m_MethodName: NextSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPrevious:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  leftKey: 113
+  rightKey: 101
+  resetKey: 9
+  nextKey: 32
   text1: {fileID: 114002074777556208}
   text2: {fileID: 114342043317771800}
   text3: {fileID: 114977909483361140}
