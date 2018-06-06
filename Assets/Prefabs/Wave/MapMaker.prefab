@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4101425195576238}
   - component: {fileID: 114394535267952798}
   m_Layer: 0
-  m_Name: WaveManager
-  m_TagString: WaveManager
+  m_Name: MapMaker
+  m_TagString: MapMaker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,9 +92,4 @@ MonoBehaviour:
   levelCreation: {fileID: 0}
   enablePathEditing: 0
   makePerWave: 100
-  startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
-    type: 2}
-  endAreaMarker: {fileID: 1792310069272856, guid: 8eb2c9a6e3c4e5b47a13f5b83e4bf7fa,
-    type: 2}
-  mapToEdit: {fileID: 114512744496604384, guid: 81bb6c610913e024284001a68b7c15c8,
-    type: 2}
+  mapToEdit: {fileID: 0}

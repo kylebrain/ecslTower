@@ -12,6 +12,7 @@ TagManager:
   - ControlPrefs
   - Map
   - MapDisplay
+  - MapMaker
   layers:
   - Default
   - TransparentFX

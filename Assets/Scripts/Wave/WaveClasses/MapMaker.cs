@@ -9,8 +9,8 @@ using UnityEditor;
 /// <summary>
 /// Manages the waves, allows for building of the WavePaths and Waves
 /// </summary>
-//[ExecuteInEditMode]
-public class WaveManager : MapDisplay
+[ExecuteInEditMode]
+public class MapMaker : MapDisplay
 {
 
     #region public variables
@@ -26,15 +26,6 @@ public class WaveManager : MapDisplay
     /// Number of AgentPaths make when Make is called
     /// </summary>
     public int makePerWave = 100;
-    
-    /// <summary>
-    /// Prefab that marks the Nodes that contain a startArea
-    /// </summary>
-    public GameObject startAreaMarker;
-    /// <summary>
-    /// Prefab that marks the Nodes that contain an endArea
-    /// </summary>
-    public GameObject endAreaMarker;
 
     [HideInInspector]
     public Map mapToEdit;
@@ -56,14 +47,13 @@ public class WaveManager : MapDisplay
     /// </summary>
     private Arrow drawArrow = null;
 
-
-
     #endregion
 
     #region Start and Update
 
     protected override void DerivedStart()
     {
+        GetWorldGrid();
         mapToEdit = FindMap();
     }
 

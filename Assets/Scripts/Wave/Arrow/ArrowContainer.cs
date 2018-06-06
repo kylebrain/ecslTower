@@ -133,7 +133,7 @@ public class ArrowContainer
     /// <summary>
     /// Converts the List of Stacks of Arrows to a List of WavePaths
     /// </summary>
-    /// <returns>List of WavePaths to be used by the Agents and WaveManager</returns>
+    /// <returns>List of WavePaths to be used by the Agents and MapMaker</returns>
     public List<WavePath> ToWavePaths()
     {
         List<WavePath> wavePaths = new List<WavePath>();

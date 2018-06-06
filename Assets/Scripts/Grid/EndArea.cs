@@ -17,7 +17,7 @@ public class EndArea : MonoBehaviour
     private Node Origin = null;
     private Node Destination = null;
     private WorldGrid worldGrid; //remove if a solution can be found
-    private WaveManager waveManager; //remove if a solution can be found
+    private MapMaker waveManager; //remove if a solution can be found
 
     private void Awake()
     {
@@ -27,16 +27,16 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        GameObject managerObject = GameObject.FindWithTag("WaveManager");
+        GameObject managerObject = GameObject.FindWithTag("MapMaker");
         if(managerObject == null)
         {
             //EndArea is a display area, update when a DisplayArea is created
             return;
         }
-        waveManager = managerObject.GetComponent<WaveManager>();
+        waveManager = managerObject.GetComponent<MapMaker>();
         if (waveManager == null)
         {
-            Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
+            Debug.LogError("Could not find MapMaker object in the scene. Either the tag was changed or the object is missing.");
         }
 
         //SetColor();

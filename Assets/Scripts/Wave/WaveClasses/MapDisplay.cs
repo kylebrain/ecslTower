@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapDisplay : MonoBehaviour {
+public class MapDisplay : MonoBehaviour
+{
 
     #region public variables
 
@@ -63,18 +64,20 @@ public class MapDisplay : MonoBehaviour {
     {
         GetWorldGrid();
         Map currentMap = FindMap();
-        if(currentMap == null)
+        if (currentMap == null)
         {
             Debug.LogError("Could not find map!");
             return;
         }
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
+
+        DerivedStart();
     }
 
     protected virtual void DerivedStart() { }
 
-    private void GetWorldGrid()
+    protected void GetWorldGrid()
     {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
@@ -111,18 +114,6 @@ public class MapDisplay : MonoBehaviour {
         if (tempWavePathList != null && tempEndAreaList != null)
         {
             map.loadLevel.SetLevel(tempLevel);
-            if (worldGrid != null)
-            {
-                UseLevel(map.loadLevel);
-                foreach (WavePath path in wavePathList)
-                {
-                    Debug.Log("Loaded: " + path);
-                }
-            }
-            else
-            {
-                //Debug.LogError("WorldGrid is null!");
-            }
         }
         else
         {
@@ -136,13 +127,13 @@ public class MapDisplay : MonoBehaviour {
     /// <param name="paths">List to be converted</param>
     protected void UseLevel(SerializableLevel level)
     {
-        //DeleteArrowContainer(arrowContainer);
         SetArrowContainerAreas(level.endAreas);
         wavePathList = new List<WavePath>();
         foreach (SerializableWavePath path in level.wavePaths)
         {
             wavePathList.Add(new WavePath(path, worldGrid));
         }
+
         DisplayPath(wavePathList);
     }
 
