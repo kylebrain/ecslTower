@@ -109,6 +109,10 @@ public class MapDisplay : MonoBehaviour
     public void Load(Map map)
     {
         SerializableLevel tempLevel = map.loadLevel.LoadLevel();
+        if(tempLevel == null)
+        {
+            return;
+        }
         List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
         List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
         if (tempWavePathList != null && tempEndAreaList != null)

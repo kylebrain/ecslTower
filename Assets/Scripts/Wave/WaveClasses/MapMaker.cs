@@ -47,6 +47,8 @@ public class MapMaker : MapDisplay
     /// </summary>
     private Arrow drawArrow = null;
 
+    private bool ranOnEdit = false;
+
     #endregion
 
     #region Start and Update
@@ -62,12 +64,18 @@ public class MapMaker : MapDisplay
     /// </summary>
     private void Update()
     {
-        if (Application.isEditor && !Application.isPlaying)
+        if (Application.isEditor && !Application.isPlaying && !ranOnEdit)
         {
+            ranOnEdit = true;
             DerivedStart();
             if(mapToEdit == null)
             {
                 Debug.LogError("Couldn't find map!");
+                return;
+            }
+            if(mapToEdit.loadLevel.levelName == "DEFAULT_LEVEL")
+            {
+                return;
             }
             Load(mapToEdit);
             return;
