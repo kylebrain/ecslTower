@@ -20,7 +20,7 @@ public class WaveController : MonoBehaviour
 
     public static int WaveCount = 0;
 
-    private WaveManager waveManager;
+    MapDisplay mapDisplay;
 
     private List<PreAgent> currentPreWave = new List<PreAgent>();
     private Wave currentWave = null;
@@ -33,16 +33,16 @@ public class WaveController : MonoBehaviour
 
     void Start()
     {
-        waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
-        if (waveManager == null)
+        mapDisplay = GameObject.FindWithTag("MapDisplay").GetComponent<MapDisplay>();
+        if (mapDisplay == null)
         {
-            Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
+            Debug.LogError("Could not find MapDisplay object in the scene. Either the tag was changed or the object is missing.");
         }
         StartCoroutine(FirstWave());
     }
     IEnumerator FirstWave()
     {
-        yield return new WaitUntil(() => waveManager.WavePathList.Count > 0);
+        yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0);
         currentPreWave = InitWave();
         if (currentPreWave == null)
         {
@@ -284,7 +284,7 @@ public class WaveController : MonoBehaviour
 
     private WavePath GetRandomWavePath()
     {
-        return waveManager.WavePathList[Random.Range(0, waveManager.WavePathList.Count)];
+        return mapDisplay.WavePathList[Random.Range(0, mapDisplay.WavePathList.Count)];
     }
 
     //get probability of spawned float (1 / number of comboes)

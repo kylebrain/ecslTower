@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class WaveToggleButton : GameButton
 {
-    public WaveManager waveManager;
+    private MapMaker waveManager;
 
     private Color enableColor;
     private Color disableColor;
@@ -19,6 +19,12 @@ public class WaveToggleButton : GameButton
         if (visualPrefs == null)
         {
             Debug.LogError("Cannot find VisualPrefs, perhaps it was moved or renamed?");
+            return;
+        }
+        waveManager = GameObject.FindGameObjectWithTag("MapMaker").GetComponent<MapMaker>();
+        if(waveManager == null)
+        {
+            Debug.LogError("Cannot find MapMaker, perhaps it was moved or retagged?");
             return;
         }
         enableColor = visualPrefs.enableColor;

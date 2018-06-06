@@ -9,32 +9,16 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1645163123498214}
+  m_RootGameObject: {fileID: 1717577476639566}
   m_IsPrefabParent: 1
---- !u!1 &1645163123498214
+--- !u!1 &1206146371755042
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4101425195576238}
-  - component: {fileID: 114394535267952798}
-  m_Layer: 0
-  m_Name: WaveManager
-  m_TagString: WaveManager
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1902714310418292
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4157855784352164}
+  - component: {fileID: 4516906992870042}
   m_Layer: 0
   m_Name: MarkerHolder
   m_TagString: Untagged
@@ -42,91 +26,65 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4101425195576238
+--- !u!1 &1717577476639566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4028382688792800}
+  - component: {fileID: 114233227354782006}
+  m_Layer: 0
+  m_Name: MapDisplay
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4028382688792800
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1645163123498214}
+  m_GameObject: {fileID: 1717577476639566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4157855784352164}
+  - {fileID: 4516906992870042}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4157855784352164
+--- !u!4 &4516906992870042
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1902714310418292}
+  m_GameObject: {fileID: 1206146371755042}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4101425195576238}
+  m_Father: {fileID: 4028382688792800}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114394535267952798
+--- !u!114 &114233227354782006
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1645163123498214}
+  m_GameObject: {fileID: 1717577476639566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa6f017b0c0868e428a60a73249baee5, type: 3}
+  m_Script: {fileID: 11500000, guid: d7340dd231c748643be0d5e19018b438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableMapEditing: 0
-  levelCreation: {fileID: 0}
-  enablePathEditing: 0
+  arrowOffset: 0.1
   arrowPrefab: {fileID: 114492045783636566, guid: 9a011c876ad29f443ad7726c636e35db,
     type: 2}
-  arrowOffset: 0.1
-  makePerWave: 100
-  thisLevel:
-    levelName: level01
-    wavePaths:
-    - list:
-      - x: 2
-        y: 13
-      - x: 27
-        y: 13
-    - list:
-      - x: 2
-        y: 3
-      - x: 27
-        y: 3
-      - x: 27
-        y: 11
-    endAreas:
-    - Sink: 0
-      bottomLeft:
-        x: 0
-        y: 0
-      width: 5
-      height: 5
-    - Sink: 0
-      bottomLeft:
-        x: 0
-        y: 12
-      width: 5
-      height: 3
-    - Sink: 1
-      bottomLeft:
-        x: 24
-        y: 10
-      width: 7
-      height: 5
-  startAreaMarker: {fileID: 1820094867589784, guid: 6911bd671d8d0ae479938a222688562e,
-    type: 2}
-  endAreaMarker: {fileID: 1792310069272856, guid: 8eb2c9a6e3c4e5b47a13f5b83e4bf7fa,
+  endAreaPrefab: {fileID: 114902956633370238, guid: 9a033836a8919c944beffad2624d57ff,
     type: 2}
   arrowContainer:
     startAreas: []
     endAreas: []
-  endAreaPrefab: {fileID: 114902956633370238, guid: 9a033836a8919c944beffad2624d57ff,
-    type: 2}
