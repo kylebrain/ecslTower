@@ -55,7 +55,6 @@ public class MapMaker : MapDisplay
 
     protected override void DerivedStart()
     {
-        GetWorldGrid();
         mapToEdit = FindMap();
     }
 
@@ -66,9 +65,9 @@ public class MapMaker : MapDisplay
     {
         if (Application.isEditor && !Application.isPlaying && !ranOnEdit)
         {
-            ranOnEdit = true;
             DerivedStart();
-            if(mapToEdit == null)
+            ranOnEdit = true;
+            if (mapToEdit == null)
             {
                 Debug.LogError("Couldn't find map!");
                 return;

@@ -75,18 +75,6 @@ MonoBehaviour:
         y: 1
       - x: 23
         y: 9
-    - list:
-      - x: 34
-        y: 7
-      - x: 24
-        y: 7
-    - list:
-      - x: 35
-        y: 9
-      - x: 35
-        y: 16
-      - x: 20
-        y: 16
     endAreas:
     - Sink: 0
       bottomLeft:
@@ -100,12 +88,6 @@ MonoBehaviour:
         y: 0
       width: 6
       height: 4
-    - Sink: 0
-      bottomLeft:
-        x: 33
-        y: 5
-      width: 4
-      height: 6
     - Sink: 1
       bottomLeft:
         x: 6
