@@ -9,8 +9,7 @@ public class MapDisplay : MonoBehaviour {
     /// <summary>
     /// The Level that stores the current WavePaths in the inspector and the file
     /// </summary>
-    //[HideInInspector]
-    public SerializableLevel thisLevel;
+    private SerializableLevel currentLevel;
 
     /// <summary>
     /// How much the arrow will overlay on the grid
@@ -63,10 +62,19 @@ public class MapDisplay : MonoBehaviour {
     private void Start()
     {
         GetWorldGrid();
-        UseLevel(thisLevel);
+        Map currentMap = FindMap();
+        if(currentMap == null)
+        {
+            Debug.LogError("Could not find map!");
+            return;
+        }
+        currentLevel = currentMap.loadLevel;
+        UseLevel(currentLevel);
     }
 
-    protected void GetWorldGrid()
+    protected virtual void DerivedStart() { }
+
+    private void GetWorldGrid()
     {
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
@@ -75,20 +83,37 @@ public class MapDisplay : MonoBehaviour {
         }
     }
 
+    protected Map FindMap()
+    {
+        GameObject mapObject = GameObject.FindGameObjectWithTag("Map");
+        if (mapObject == null)
+        {
+            Debug.LogError("Cannot find an object with the Map tag!");
+            return null;
+        }
+        Map map = mapObject.GetComponent<Map>();
+        if (map == null)
+        {
+            Debug.LogError("Object tagged Map does not have a Map script attached!");
+            return null;
+        }
+        return map;
+    }
+
     /// <summary>
     /// Loads the Level from file, can ultimately just read from the Level in the inspector
     /// </summary>
-    public void Load()
+    public void Load(Map map)
     {
-        SerializableLevel tempLevel = thisLevel.LoadLevel();
+        SerializableLevel tempLevel = map.loadLevel.LoadLevel();
         List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
         List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
         if (tempWavePathList != null && tempEndAreaList != null)
         {
-            thisLevel.SetLevel(tempLevel);
+            map.loadLevel.SetLevel(tempLevel);
             if (worldGrid != null)
             {
-                UseLevel(thisLevel);
+                UseLevel(map.loadLevel);
                 foreach (WavePath path in wavePathList)
                 {
                     Debug.Log("Loaded: " + path);
@@ -136,7 +161,13 @@ public class MapDisplay : MonoBehaviour {
             endArea.SetColor();
             GridArea tempArea = new GridArea(area);
             endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
+            HandleEndArea(endArea);
         }
+    }
+
+    protected virtual void HandleEndArea(EndArea endArea, SerializableEndArea area = null)
+    {
+        endArea.enabled = false;
     }
 
     /// <summary>

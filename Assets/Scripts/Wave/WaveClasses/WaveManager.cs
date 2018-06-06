@@ -36,6 +36,9 @@ public class WaveManager : MapDisplay
     /// </summary>
     public GameObject endAreaMarker;
 
+    [HideInInspector]
+    public Map mapToEdit;
+
     #endregion
 
     #region private variables
@@ -59,6 +62,11 @@ public class WaveManager : MapDisplay
 
     #region Start and Update
 
+    protected override void DerivedStart()
+    {
+        mapToEdit = FindMap();
+    }
+
     /// <summary>
     /// Call the neccessary functions for operation
     /// </summary>
@@ -66,7 +74,12 @@ public class WaveManager : MapDisplay
     {
         if (Application.isEditor && !Application.isPlaying)
         {
-            Load();
+            DerivedStart();
+            if(mapToEdit == null)
+            {
+                Debug.LogError("Couldn't find map!");
+            }
+            Load(mapToEdit);
             return;
         }
 
@@ -105,15 +118,15 @@ public class WaveManager : MapDisplay
             }
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Save();
+                Save(mapToEdit);
             }
             if (Input.GetKeyDown(KeyCode.T))
             {
-                Load();
+                Load(mapToEdit);
             }
             if (Input.GetKeyDown(KeyCode.Y))
             {
-                Clear();
+                Clear(mapToEdit);
             }
         }
     }
@@ -125,23 +138,23 @@ public class WaveManager : MapDisplay
     /// <summary>
     /// Clears both the wavePathList and the file of the Level
     /// </summary>
-    private void Clear()
+    private void Clear(Map map)
     {
         Debug.Log("Cleared!");
         wavePathList = new List<WavePath>();
         DeleteArrowContainer(arrowContainer);
-        thisLevel.DeleteLevel();
+        map.loadLevel.DeleteLevel();
     }
 
     /// <summary>
     /// Saves the current wavePathList to the Level which will write to file
     /// </summary>
-    private void Save()
+    private void Save(Map map)
     {
         if (wavePathList != null && wavePathList.Count > 0)
         {
-            thisLevel.SetLevel(wavePathList, arrowContainer.startAreas, arrowContainer.endAreas);
-            thisLevel.SaveLevel();
+            map.loadLevel.SetLevel(wavePathList, arrowContainer.startAreas, arrowContainer.endAreas);
+            map.loadLevel.SaveLevel();
 
             foreach (WavePath path in wavePathList)
             {
@@ -175,6 +188,11 @@ public class WaveManager : MapDisplay
         {
             Destroy(obj);
         }
+    }
+
+    protected override void HandleEndArea(EndArea endArea, SerializableEndArea area)
+    {
+        
     }
 
     #endregion

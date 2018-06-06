@@ -10,6 +10,8 @@ TagManager:
   - EndArea
   - WaveManager
   - ControlPrefs
+  - Map
+  - MapDisplay
   layers:
   - Default
   - TransparentFX

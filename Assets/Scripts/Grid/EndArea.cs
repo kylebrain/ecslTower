@@ -27,7 +27,13 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
 
-        waveManager = GameObject.FindWithTag("WaveManager").GetComponent<WaveManager>();
+        GameObject managerObject = GameObject.FindWithTag("WaveManager");
+        if(managerObject == null)
+        {
+            //EndArea is a display area, update when a DisplayArea is created
+            return;
+        }
+        waveManager = managerObject.GetComponent<WaveManager>();
         if (waveManager == null)
         {
             Debug.LogError("Could not find WaveManager object in the scene. Either the tag was changed or the object is missing.");
@@ -152,23 +158,17 @@ public class EndArea : MonoBehaviour
         GameObject newMarker = Instantiate(colorPlaceholder, pos, Quaternion.identity) as GameObject;
         newMarker.transform.parent = transform;
         newMarker.transform.localScale = scale;
-        /*for (int i = area.bottomLeft.x; i < area.bottomLeft.x + area.width; i++)
+        if (waveManager != null)
         {
-            for (int j = area.bottomLeft.y; j < area.bottomLeft.y + area.height; j++)
-            {
-                GameObject newMarker = Instantiate(colorPlaceholder, worldGrid.getAt(i, j).transform.position, Quaternion.identity) as GameObject;
-                newMarker.transform.parent = transform;
-            }
-        }*/
-        AddToArrowContainer();
-        //UpdateArea();
+            AddToArrowContainer();
+        }
     }
 
     private void AddToArrowContainer()
     {
-        if (area.height <= 0 || area.width <= 0 || waveManager == null)
+        if (area.height <= 0 || area.width <= 0)
         {
-            Debug.LogError("Must have a valid gridArea and a reference to the WaveManager!");
+            Debug.LogError("Must have a valid gridArea!");
             return;
         }
         if(endSetting == endOptions.source)
