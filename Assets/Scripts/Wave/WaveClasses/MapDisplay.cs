@@ -189,10 +189,8 @@ public class MapDisplay : MonoBehaviour {
             toSet = Instantiate(arrowPrefab, transform) as Arrow;
         }
         toSet.PlaceArrow(start, end, arrowOffset);
-        if (arrowContainer.AddArrowToContainer(toSet) != null)
-        {
-            SetNodeOccupation(toSet, Node.nodeStates.navigation);
-        }
+        arrowContainer.AddArrowToContainer(toSet);
+        SetNodeOccupation(toSet, Node.nodeStates.navigation);
 
         return true;
     }
@@ -252,7 +250,7 @@ public class MapDisplay : MonoBehaviour {
         }
 
 
-        for (int i = start + 1; i <= end; i++)
+        for (int i = start; i <= end; i++)
         {
             if (vertical)
             {
