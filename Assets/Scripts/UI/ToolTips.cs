@@ -49,7 +49,7 @@ public class ToolTips : MonoBehaviour {
 
     private void SetText()
     {
-        textPrompt.text = "[" + controlPrefs["toggleTooltips"] + "] for tooltips";
+        textPrompt.text = "[Shift + " + controlPrefs["toggleTooltips"] + "] for tooltips";
         textTips.text = string.Format(
                         "Basic navigation:\n" +
                         "[{0}] to move selection left\n" +
@@ -58,7 +58,7 @@ public class ToolTips : MonoBehaviour {
                         "Advanced navigation (will skip automatically):\n" +
                         "[1-3 Number keys] to choose a trait directly\n" +
                         "[{3}] to reset selection to All\n\n" +
-                        "[{4}] to close tooltips",
+                        "[Shift + {4}] to close tooltips",
                         controlPrefs["rolodexLeftKey"],
                         controlPrefs["rolodexRightKey"],
                         controlPrefs["rolodexNextKey"],
