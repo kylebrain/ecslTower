@@ -55,6 +55,7 @@ MonoBehaviour:
   spawnRate: 2
   waveCount: 3
   spawnPerWave: 100
+  decoyProbability: 0
   loadLevel:
     levelName: easy_level001
     wavePaths:

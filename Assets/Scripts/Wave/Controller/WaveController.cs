@@ -10,6 +10,7 @@ public class WaveController : MonoBehaviour
     public int infectedCount = 2;
     public int infectedWeight = 1;
     public float timeBetweenWaves = 2f;
+    private int decoyProbability = 3;
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
@@ -45,12 +46,18 @@ public class WaveController : MonoBehaviour
     IEnumerator FirstWave()
     {
         yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0); //map should be loaded by this point
-        agentsPerWave = LevelLookup.spawnPerWave;
+        LookupValues();
         currentPreWave = InitWave();
         if (currentPreWave == null)
         {
             Debug.LogError("Building Wave failed!");
         }
+    }
+
+    private void LookupValues()
+    {
+        agentsPerWave = LevelLookup.spawnPerWave;
+        decoyProbability = LevelLookup.decoyProbability;
     }
 
     public void PlayWave(NextWaveButton button)
@@ -179,7 +186,9 @@ public class WaveController : MonoBehaviour
 
         for (int i = 0; i < totalBenign; i++)
         {
-            ret.Add(new PreAgent(benignAgent, GetRandomWavePath(), GenerateAttribute()));
+            //probility to become a decoy is decoyRate%
+            Agent prefab = GetDecoy(benignAgent);
+            ret.Add(new PreAgent(prefab, GetRandomWavePath(), GenerateAttribute()));
         }
         HashSet<int> totalAgentIndices = new HashSet<int>();
         foreach (AgentAttribute attr in infectedAttributes)
@@ -204,7 +213,8 @@ public class WaveController : MonoBehaviour
             //insert malicious agents at those indices
             foreach (int index in thisAgentIndices)
             {
-                PreAgent currentAgentPath = new PreAgent(maliciousAgent, GetRandomWavePath(), attr);
+                Agent prefab = GetDecoy(maliciousAgent);
+                PreAgent currentAgentPath = new PreAgent(prefab, GetRandomWavePath(), attr);
                 if (index > ret.Count - 1)
                 {
                     ret.Add(currentAgentPath);
@@ -228,6 +238,28 @@ public class WaveController : MonoBehaviour
         return ret;
 
 
+    }
+
+    private Agent GetDecoy(Agent normalAgentPrefab)
+    {
+        if(normalAgentPrefab.GetType() != benignAgent.GetType() && normalAgentPrefab.GetType() != maliciousAgent.GetType())
+        {
+            Debug.LogError("Prefab must be either benign or malicious!");
+            return null;
+        }
+        Agent prefab = normalAgentPrefab;
+        if (Random.Range(1, 101) <= decoyProbability)
+        {
+
+            if(normalAgentPrefab.GetType() == benignAgent.GetType())
+            {
+                prefab = maliciousAgent;
+            } else
+            {
+                prefab = benignAgent;
+            }
+        }
+        return prefab;
     }
 
     //take previous infected attributes and mutate randomly 0-2 traits (shift up or down once)
