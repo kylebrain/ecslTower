@@ -16,7 +16,7 @@ public class Wave : MonoBehaviour {
     /// </summary>
     private Queue<PreAgent> waveQueue = new Queue<PreAgent>();
 
-    public int WaveCount
+    public int AgentsRemaining
     {
         get
         {
@@ -44,6 +44,12 @@ public class Wave : MonoBehaviour {
             Spawn(waveQueue.Dequeue());
         }
         timeSpent += Time.deltaTime;
+
+        if(transform.childCount == 0 && AgentsRemaining == 0)
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     public void CreateWaveWithList(List<PreAgent> preAgents)
@@ -60,13 +66,8 @@ public class Wave : MonoBehaviour {
         WavePath newPath = new WavePath(newPreAgent.agentPath);
         Node startNode = newPath.GetNextNode();
         Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
+        newAgent.transform.parent = transform;
         newAgent.InitializeAttributes(newPreAgent.agentAttribute);
         newAgent.BeginMovement(newPath);
-
-        if(waveQueue.Count <= 0)
-        {
-            Destroy(gameObject);
-        }
-
     }
 }
