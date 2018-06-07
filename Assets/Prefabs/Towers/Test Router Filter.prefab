@@ -2861,7 +2861,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '[F1] for tooltips'
+  m_Text: '[Shift + F1] for tooltips'
 --- !u!114 &114704282483279752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4151,7 +4151,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 85}
-  m_SizeDelta: {x: -240, y: -170}
+  m_SizeDelta: {x: -220, y: -170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224818011143521348
 RectTransform:
