@@ -153,7 +153,7 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Must have a valid gridArea!");
             return;
         }
-        Vector3 pos = new Vector3(area.bottomLeft.x + (area.width - 1) / 2, 0f, area.bottomLeft.y + (area.height - 1) / 2);
+        Vector3 pos = new Vector3(area.bottomLeft.x + (area.width - 1) / 2f, 0f, area.bottomLeft.y + (area.height - 1) / 2f);
         Vector3 scale = new Vector3(area.width, transform.localScale.y, area.height);
         GameObject newMarker = Instantiate(colorPlaceholder, pos, Quaternion.identity) as GameObject;
         newMarker.transform.parent = transform;

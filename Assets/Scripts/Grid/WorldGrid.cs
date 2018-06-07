@@ -6,13 +6,11 @@ public class WorldGrid: MonoBehaviour {
     public int width = 1;
     public int height = 1;
     public Node nodePrefab;
-    public BaseGrid baseGrid;
-    //public BaseGrid tileBaseGrid;
+    //public BaseGrid baseGrid;
 
     private Node[,] m_grid;
 
-
-    private void Awake() {
+    /*private void Awake() {
         m_grid = new Node[width, height];
 
         for(int i = 0; i < width; ++i) {
@@ -23,7 +21,24 @@ public class WorldGrid: MonoBehaviour {
             }
         }
         baseGrid.Resize(this);
-        //tileBaseGrid.Resize(this);
+    }*/
+
+    public void InitGrid(int passedWidth, int passedHeight, BaseGrid baseGrid)
+    {
+        width = passedWidth;
+        height = passedHeight;
+        m_grid = new Node[width, height];
+
+        for (int i = 0; i < width; ++i)
+        {
+            for (int j = 0; j < height; ++j)
+            {
+                m_grid[i, j] = Instantiate(nodePrefab, transform);
+                m_grid[i, j].transform.position = new Vector3(i, 0, j);
+                m_grid[i, j].name = "Node (" + i + ", " + j + ")";
+            }
+        }
+        baseGrid.Resize(this);
     }
 
     public Node getAt(int x, int y) {

@@ -53,8 +53,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNumber: 0
   spawnRate: 1
-  waveNumber: 3
+  waveCount: 3
+  spawnPerWave: 100
+  decoyProbability: 3
   loadLevel:
     levelName: DEFAULT_LEVEL
     wavePaths: []
     endAreas: []
+  gridPrefab: {fileID: 114235863425421560, guid: aeb25b814490e6a49ba78c4807e19620,
+    type: 2}
