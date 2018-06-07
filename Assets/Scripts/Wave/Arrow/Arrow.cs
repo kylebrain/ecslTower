@@ -55,6 +55,7 @@ public class Arrow : MonoBehaviour
         transform.position = midpoint;
         transform.eulerAngles = new Vector3(0f, angle, 90f);
         transform.localScale = new Vector3(width, length, width);
+        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(width, length));
     }
 
     /// <summary>
