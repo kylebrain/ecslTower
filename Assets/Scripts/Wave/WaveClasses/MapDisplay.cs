@@ -10,10 +10,7 @@ public class MapDisplay : MonoBehaviour
 
     #region public variables
 
-    /// <summary>
-    /// The Level that stores the current WavePaths in the inspector and the file
-    /// </summary>
-    private SerializableLevel currentLevel;
+    public Map currentMap;
 
     /// <summary>
     /// How much the arrow will overlay on the grid
@@ -30,6 +27,11 @@ public class MapDisplay : MonoBehaviour
             return new List<WavePath>(wavePathList);
         }
     }
+
+    /// <summary>
+    /// The Level that stores the current WavePaths in the inspector and the file
+    /// </summary>
+    private SerializableLevel currentLevel;
 
     /// <summary>
     /// Manatory prefab so an Arrow can be drawn and placed
@@ -71,7 +73,7 @@ public class MapDisplay : MonoBehaviour
         }
 
         GetWorldGrid();
-        Map currentMap = FindMap();
+        currentMap = FindMap();
         if (currentMap == null)
         {
             if (LevelLookup.levelName == "DEFAULT_VALUE") {
@@ -91,7 +93,10 @@ public class MapDisplay : MonoBehaviour
 
             }
         }
-        
+
+        LevelLookup.spawnRate = currentMap.spawnRate;
+        LevelLookup.waveCount = currentMap.waveCount;
+        LevelLookup.spawnPerWave = currentMap.spawnPerWave;
 
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
@@ -126,6 +131,8 @@ public class MapDisplay : MonoBehaviour
         }
         return map;
     }
+
+    //move to MapMaker?
 
     /// <summary>
     /// Loads the Level from file, can ultimately just read from the Level in the inspector

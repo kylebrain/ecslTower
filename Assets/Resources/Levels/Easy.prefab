@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelNumber: 1
+  spawnRate: 2
+  waveCount: 3
+  spawnPerWave: 100
   loadLevel:
     levelName: easy_level001
     wavePaths:

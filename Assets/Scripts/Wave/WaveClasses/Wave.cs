@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Wave : MonoBehaviour {
 
-    public float timeBetweenAgent = 0.5f;
+    public float timeBetweenAgent = LevelLookup.spawnRate;
     private float timeSpent = 0f;
 
     /*-----------private variable-----------*/
@@ -22,6 +22,11 @@ public class Wave : MonoBehaviour {
         {
             return waveQueue.Count;
         }
+    }
+
+    private void Awake()
+    {
+        timeBetweenAgent = LevelLookup.spawnRate;
     }
 
     /*-----------private MonoBehavoir function-----------*/
@@ -52,7 +57,6 @@ public class Wave : MonoBehaviour {
     /// <param name="newPreAgent">The PreAgent to be spawned</param>
     public void Spawn(PreAgent newPreAgent)
     {
-        //Debug.Log("Spawning!");
         WavePath newPath = new WavePath(newPreAgent.agentPath);
         Node startNode = newPath.GetNextNode();
         Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;

@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelNumber: 3
+  spawnRate: 0.5
+  waveCount: 3
+  spawnPerWave: 100
   loadLevel:
     levelName: hard_level001
     wavePaths:
