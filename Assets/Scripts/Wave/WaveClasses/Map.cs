@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour {
 
-    //[HideInInspector]
+    public int levelNumber = 0;
     public SerializableLevel loadLevel;
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelSelectionScript : MonoBehaviour {
@@ -13,6 +14,7 @@ public class LevelSelectionScript : MonoBehaviour {
     {
         levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
         Map[] mapArray = Resources.LoadAll<Map>("Levels");
+        mapArray = mapArray.OrderBy(map => map.levelNumber).ToArray();
         int levelCount = mapArray.Length;
         float midPoint = (levelCount - 1) / 2f;
         for(int i = 0; i < levelCount; i++)
