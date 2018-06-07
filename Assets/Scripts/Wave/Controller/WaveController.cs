@@ -13,11 +13,14 @@ public class WaveController : MonoBehaviour
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
-    public WaveInfo waveInfo;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
     public Wave wavePrefab;
+
+    //for UI
+    public WaveInfo waveInfo;
+    public GameObject endScreen;
 
     public static int WaveCount = 0;
     public static float SecondsLeft;
@@ -36,10 +39,13 @@ public class WaveController : MonoBehaviour
     [HideInInspector]
     public bool Playing;
 
+    bool gameOver = false;
+
     private List<AgentAttribute> currentWaveAttributes = new List<AgentAttribute>();
 
     void Start()
     {
+        WaveCount = 0;
         mapDisplay = GameObject.FindWithTag("MapDisplay").GetComponent<MapDisplay>();
         if (mapDisplay == null)
         {
@@ -116,19 +122,21 @@ public class WaveController : MonoBehaviour
             yield return null;
         } else
         {
-            PlayWave();
             yield return new WaitForSeconds(timeBetweenWaves);
+            PlayWave();
         }
     }
 
     private void EndGame()
     {
-        Debug.Log("End game with score of " + Score.score);
+        gameOver = true;
+        endScreen.SetActive(true);
+        endScreen.transform.Find("Score").GetComponent<Text>().text = "Score: " + Score.score;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) || (gameOver && Input.anyKeyDown)) //change Backspace to be in ControlPrefs or remove entirely
         {
             SceneManager.LoadScene("LevelSelect");
         }
