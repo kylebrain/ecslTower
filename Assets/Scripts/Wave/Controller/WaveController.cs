@@ -9,32 +9,43 @@ public class WaveController : MonoBehaviour
 
     public int infectedCount = 2;
     public int infectedWeight = 1;
-    public float timeBetweenWaves = 2f;
+    public float timeBetweenWaves = 5f;
 
     public BenignAgent benignAgent;
     public MaliciousAgent maliciousAgent;
-    public Text waveText;
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
     /// </summary>
     public Wave wavePrefab;
 
+    //for UI
+    public WaveInfo waveInfo;
+    public GameObject endScreen;
+
     public static int WaveCount = 0;
+    public static float SecondsLeft;
+    public static int AgentsRemaining;
 
     MapDisplay mapDisplay;
 
-    private int agentsPerWave;
+    //LevelLookup values
+    private int decoyProbability = LevelLookup.decoyProbability;
+    private int agentsPerWave = LevelLookup.spawnPerWave;
+    private int maxWaveCount = LevelLookup.waveCount;
+
     private List<PreAgent> currentPreWave = new List<PreAgent>();
     private Wave currentWave = null;
     private List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
     [HideInInspector]
     public bool Playing;
-    private NextWaveButton waveButton;
+
+    bool gameOver = false;
 
     private List<AgentAttribute> currentWaveAttributes = new List<AgentAttribute>();
 
     void Start()
     {
+        WaveCount = 0;
         mapDisplay = GameObject.FindWithTag("MapDisplay").GetComponent<MapDisplay>();
         if (mapDisplay == null)
         {
@@ -45,7 +56,7 @@ public class WaveController : MonoBehaviour
     IEnumerator FirstWave()
     {
         yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0); //map should be loaded by this point
-        agentsPerWave = LevelLookup.spawnPerWave;
+        LookupValues();
         currentPreWave = InitWave();
         if (currentPreWave == null)
         {
@@ -53,9 +64,15 @@ public class WaveController : MonoBehaviour
         }
     }
 
-    public void PlayWave(NextWaveButton button)
+    private void LookupValues()
     {
-        waveButton = button;
+        agentsPerWave = LevelLookup.spawnPerWave;
+        decoyProbability = LevelLookup.decoyProbability;
+        maxWaveCount = LevelLookup.waveCount;
+    }
+
+    public void PlayWave()
+    {
         currentWave = Instantiate(wavePrefab, transform);
         if (currentPreWave == null)
         {
@@ -65,14 +82,13 @@ public class WaveController : MonoBehaviour
         //currentPreWave will be created in FirstWave or at the end of this function
         currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
         currentWaveAttributes = new List<AgentAttribute>(infectedAttributes);
-        WaveCount++;
+
+        InitStaticsForWave();
 
         if (WaveCount == 1)
         {
-            waveText.transform.parent.gameObject.SetActive(true);
+            waveInfo.Show();
         }
-
-        waveText.text = "Wave: " + WaveCount;
 
         Playing = true;
         currentPreWave = InitWave();
@@ -83,18 +99,44 @@ public class WaveController : MonoBehaviour
 
     }
 
+    private void InitStaticsForWave()
+    {
+        AgentsRemaining = currentWave.AgentsRemaining;
+        WaveCount++;
+        waveInfo.SetCountDownText(true);
+        SecondsLeft = LevelLookup.spawnPerWave * LevelLookup.spawnRate;
+    }
+
+    private void InitStaticsForWait()
+    {
+        waveInfo.SetCountDownText(false);
+        SecondsLeft = timeBetweenWaves;
+    }
+
     IEnumerator StopWave()
     {
-        if (waveButton != null)
+        InitStaticsForWait();
+        if (WaveCount == maxWaveCount)
+        {
+            EndGame();
+            yield return null;
+        } else
         {
             yield return new WaitForSeconds(timeBetweenWaves);
-            waveButton.SetEnable(true);
+            PlayWave();
         }
+    }
+
+    private void EndGame()
+    {
+        gameOver = true;
+        endScreen.SetActive(true);
+        endScreen.transform.Find("Score").GetComponent<Text>().text = "Score: " + Score.score;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) || (gameOver && Input.anyKeyDown)) //change Backspace to be in ControlPrefs or remove entirely
         {
             SceneManager.LoadScene("LevelSelect");
         }
@@ -104,6 +146,8 @@ public class WaveController : MonoBehaviour
             Playing = false;
             StartCoroutine(StopWave());
         }
+
+        UpdateStatics();
 
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -122,6 +166,32 @@ public class WaveController : MonoBehaviour
             Debug.Log("Mutated attr: " + attr2);
         }
 
+    }
+
+    private void UpdateStatics()
+    {
+        if (currentWave != null)
+        {
+            AgentsRemaining = currentWave.AgentsRemaining;
+            if (AgentsRemaining == 0) //making sure that the seconds and the remaining stay the same
+            {
+                AgentsRemaining = 1; //I know its kinda cheesy
+            }
+        }
+
+        if (SecondsLeft > 0f)
+        {
+            SecondsLeft -= Time.deltaTime;
+            if (SecondsLeft < 0f)
+            {
+                SecondsLeft = 0f;
+            }
+        }
+
+        if (SecondsLeft == 0f && AgentsRemaining == 1)
+        {
+            AgentsRemaining = 0;
+        }
     }
 
     private List<PreAgent> InitWave()
@@ -179,7 +249,9 @@ public class WaveController : MonoBehaviour
 
         for (int i = 0; i < totalBenign; i++)
         {
-            ret.Add(new PreAgent(benignAgent, GetRandomWavePath(), GenerateAttribute()));
+            //probility to become a decoy is decoyRate%
+            Agent prefab = GetDecoy(benignAgent);
+            ret.Add(new PreAgent(prefab, GetRandomWavePath(), GenerateAttribute()));
         }
         HashSet<int> totalAgentIndices = new HashSet<int>();
         foreach (AgentAttribute attr in infectedAttributes)
@@ -204,7 +276,8 @@ public class WaveController : MonoBehaviour
             //insert malicious agents at those indices
             foreach (int index in thisAgentIndices)
             {
-                PreAgent currentAgentPath = new PreAgent(maliciousAgent, GetRandomWavePath(), attr);
+                Agent prefab = GetDecoy(maliciousAgent);
+                PreAgent currentAgentPath = new PreAgent(prefab, GetRandomWavePath(), attr);
                 if (index > ret.Count - 1)
                 {
                     ret.Add(currentAgentPath);
@@ -228,6 +301,29 @@ public class WaveController : MonoBehaviour
         return ret;
 
 
+    }
+
+    private Agent GetDecoy(Agent normalAgentPrefab)
+    {
+        if (normalAgentPrefab.GetType() != benignAgent.GetType() && normalAgentPrefab.GetType() != maliciousAgent.GetType())
+        {
+            Debug.LogError("Prefab must be either benign or malicious!");
+            return null;
+        }
+        Agent prefab = normalAgentPrefab;
+        if (Random.Range(1, 101) <= decoyProbability)
+        {
+
+            if (normalAgentPrefab.GetType() == benignAgent.GetType())
+            {
+                prefab = maliciousAgent;
+            }
+            else
+            {
+                prefab = benignAgent;
+            }
+        }
+        return prefab;
     }
 
     //take previous infected attributes and mutate randomly 0-2 traits (shift up or down once)

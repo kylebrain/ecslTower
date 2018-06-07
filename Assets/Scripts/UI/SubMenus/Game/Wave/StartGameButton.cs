@@ -4,16 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class NextWaveButton : DisableButton
+public class StartGameButton : GameButton
 {
 
     public WaveController waveController;
 
     public override void PerformAction()
     {
-        if(!waveController.Playing){
-            waveController.PlayWave(this);
-            SetEnable(false);
-        }
+        waveController.PlayWave();
+        gameObject.SetActive(false);
     }
 }

@@ -94,9 +94,7 @@ public class MapDisplay : MonoBehaviour
             }
         }
 
-        LevelLookup.spawnRate = currentMap.spawnRate;
-        LevelLookup.waveCount = currentMap.waveCount;
-        LevelLookup.spawnPerWave = currentMap.spawnPerWave;
+        currentMap.SetLookup();
 
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
