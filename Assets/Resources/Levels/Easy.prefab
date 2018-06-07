@@ -61,18 +61,20 @@ MonoBehaviour:
     wavePaths:
     - list:
       - x: 1
-        y: 1
-      - x: 1
         y: 7
-      - x: 15
+      - x: 12
         y: 7
+      - x: 12
+        y: 4
+      - x: 20
+        y: 4
     - list:
-      - x: 7
+      - x: 1
         y: 1
-      - x: 15
+      - x: 21
         y: 1
-      - x: 15
-        y: 5
+      - x: 21
+        y: 4
     endAreas:
     - Sink: 0
       bottomLeft:
@@ -82,13 +84,13 @@ MonoBehaviour:
       height: 3
     - Sink: 0
       bottomLeft:
-        x: 6
-        y: 0
+        x: 0
+        y: 6
       width: 3
       height: 3
     - Sink: 1
       bottomLeft:
-        x: 14
-        y: 5
+        x: 20
+        y: 4
       width: 3
       height: 3
