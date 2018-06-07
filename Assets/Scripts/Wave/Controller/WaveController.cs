@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class WaveController : MonoBehaviour
 {
-    public int agentsPerWave = 100;
+
     public int infectedCount = 2;
     public int infectedWeight = 1;
     public float timeBetweenWaves = 2f;
@@ -22,6 +22,7 @@ public class WaveController : MonoBehaviour
 
     MapDisplay mapDisplay;
 
+    private int agentsPerWave;
     private List<PreAgent> currentPreWave = new List<PreAgent>();
     private Wave currentWave = null;
     private List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
@@ -42,7 +43,8 @@ public class WaveController : MonoBehaviour
     }
     IEnumerator FirstWave()
     {
-        yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0);
+        yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0); //map should be loaded by this point
+        agentsPerWave = LevelLookup.spawnPerWave;
         currentPreWave = InitWave();
         if (currentPreWave == null)
         {
@@ -73,7 +75,7 @@ public class WaveController : MonoBehaviour
 
         Playing = true;
         currentPreWave = InitWave();
-        if(currentPreWave == null)
+        if (currentPreWave == null)
         {
             Debug.LogError("Building Wave failed!");
         }

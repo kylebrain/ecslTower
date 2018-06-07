@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1651085077954984}
+  m_IsPrefabParent: 1
+--- !u!1 &1651085077954984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4039687497525276}
+  - component: {fileID: 114722287159027294}
+  m_Layer: 0
+  m_Name: Hard
+  m_TagString: Map
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4039687497525276
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1651085077954984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114722287159027294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1651085077954984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelNumber: 3
+  spawnRate: 0.5
+  waveCount: 3
+  spawnPerWave: 100
+  loadLevel:
+    levelName: hard_level001
+    wavePaths:
+    - list:
+      - x: 27
+        y: 23
+      - x: 27
+        y: 13
+      - x: 22
+        y: 13
+    - list:
+      - x: 25
+        y: 7
+      - x: 9
+        y: 7
+    - list:
+      - x: 1
+        y: 1
+      - x: 8
+        y: 1
+      - x: 8
+        y: 7
+    - list:
+      - x: 44
+        y: 13
+      - x: 44
+        y: 5
+      - x: 41
+        y: 5
+    - list:
+      - x: 27
+        y: 7
+      - x: 33
+        y: 7
+      - x: 33
+        y: 4
+      - x: 39
+        y: 4
+    - list:
+      - x: 43
+        y: 14
+      - x: 43
+        y: 32
+      - x: 41
+        y: 32
+    - list:
+      - x: 27
+        y: 27
+      - x: 15
+        y: 27
+    - list:
+      - x: 12
+        y: 17
+      - x: 40
+        y: 17
+      - x: 40
+        y: 31
+    endAreas:
+    - Sink: 0
+      bottomLeft:
+        x: 25
+        y: 6
+      width: 4
+      height: 3
+    - Sink: 0
+      bottomLeft:
+        x: 10
+        y: 16
+      width: 4
+      height: 3
+    - Sink: 0
+      bottomLeft:
+        x: 42
+        y: 12
+      width: 4
+      height: 4
+    - Sink: 0
+      bottomLeft:
+        x: 25
+        y: 23
+      width: 7
+      height: 5
+    - Sink: 0
+      bottomLeft:
+        x: 0
+        y: 0
+      width: 3
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 39
+        y: 31
+      width: 4
+      height: 4
+    - Sink: 1
+      bottomLeft:
+        x: 20
+        y: 12
+      width: 4
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 7
+        y: 7
+      width: 4
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 14
+        y: 27
+      width: 3
+      height: 4
+    - Sink: 1
+      bottomLeft:
+        x: 39
+        y: 4
+      width: 4
+      height: 3

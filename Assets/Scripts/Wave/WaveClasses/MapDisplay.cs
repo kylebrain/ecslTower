@@ -10,10 +10,7 @@ public class MapDisplay : MonoBehaviour
 
     #region public variables
 
-    /// <summary>
-    /// The Level that stores the current WavePaths in the inspector and the file
-    /// </summary>
-    private SerializableLevel currentLevel;
+    public Map currentMap;
 
     /// <summary>
     /// How much the arrow will overlay on the grid
@@ -30,6 +27,11 @@ public class MapDisplay : MonoBehaviour
             return new List<WavePath>(wavePathList);
         }
     }
+
+    /// <summary>
+    /// The Level that stores the current WavePaths in the inspector and the file
+    /// </summary>
+    private SerializableLevel currentLevel;
 
     /// <summary>
     /// Manatory prefab so an Arrow can be drawn and placed
@@ -71,12 +73,31 @@ public class MapDisplay : MonoBehaviour
         }
 
         GetWorldGrid();
-        Map currentMap = FindMap();
+        currentMap = FindMap();
         if (currentMap == null)
         {
-            Debug.LogError("Could not find map!");
-            return;
+            if (LevelLookup.levelName == "DEFAULT_VALUE") {
+                Debug.LogError("Could not find map!");
+                return;
+            } else
+            {
+                currentMap = Resources.Load<Map>("Levels/" + LevelLookup.levelName);
+                if (currentMap == null)
+                {
+                    Debug.LogError("LevelLookup does not have a valid level name!");
+                    return;
+                } else
+                {
+                    currentMap = Instantiate(currentMap);
+                }
+
+            }
         }
+
+        LevelLookup.spawnRate = currentMap.spawnRate;
+        LevelLookup.waveCount = currentMap.waveCount;
+        LevelLookup.spawnPerWave = currentMap.spawnPerWave;
+
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
 
@@ -99,17 +120,19 @@ public class MapDisplay : MonoBehaviour
         GameObject mapObject = GameObject.FindGameObjectWithTag("Map");
         if (mapObject == null)
         {
-            Debug.LogError("Cannot find an object with the Map tag!");
+            //Debug.LogError("Cannot find an object with the Map tag!");
             return null;
         }
         Map map = mapObject.GetComponent<Map>();
         if (map == null)
         {
-            Debug.LogError("Object tagged Map does not have a Map script attached!");
+            //m_Debug.LogError("Object tagged Map does not have a Map script attached!");
             return null;
         }
         return map;
     }
+
+    //move to MapMaker?
 
     /// <summary>
     /// Loads the Level from file, can ultimately just read from the Level in the inspector

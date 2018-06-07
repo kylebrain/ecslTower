@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1177618014225230}
+  m_RootGameObject: {fileID: 1739239183155510}
   m_IsPrefabParent: 1
---- !u!1 &1177618014225230
+--- !u!1 &1739239183155510
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4156090725639438}
-  - component: {fileID: 114470782226888944}
+  - component: {fileID: 4685853771142324}
+  - component: {fileID: 114914617995587358}
   m_Layer: 0
-  m_Name: Map
+  m_Name: Easy
   m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4156090725639438
+--- !u!4 &4685853771142324
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1177618014225230}
+  m_GameObject: {fileID: 1739239183155510}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,21 +40,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114470782226888944
+--- !u!114 &114914617995587358
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1177618014225230}
+  m_GameObject: {fileID: 1739239183155510}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelNumber: 0
-  spawnRate: 1
-  waveNumber: 3
+  levelNumber: 1
+  spawnRate: 2
+  waveCount: 3
+  spawnPerWave: 100
   loadLevel:
-    levelName: DEFAULT_LEVEL
-    wavePaths: []
-    endAreas: []
+    levelName: easy_level001
+    wavePaths:
+    - list:
+      - x: 1
+        y: 1
+      - x: 1
+        y: 7
+      - x: 15
+        y: 7
+    - list:
+      - x: 7
+        y: 1
+      - x: 15
+        y: 1
+      - x: 15
+        y: 5
+    endAreas:
+    - Sink: 0
+      bottomLeft:
+        x: 0
+        y: 0
+      width: 3
+      height: 3
+    - Sink: 0
+      bottomLeft:
+        x: 6
+        y: 0
+      width: 3
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 14
+        y: 5
+      width: 3
+      height: 3
