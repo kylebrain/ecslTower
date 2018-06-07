@@ -60,5 +60,5 @@ MonoBehaviour:
     levelName: DEFAULT_LEVEL
     wavePaths: []
     endAreas: []
-  gridPrefab: {fileID: 114235863425421560, guid: aeb25b814490e6a49ba78c4807e19620,
+  gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
     type: 2}
