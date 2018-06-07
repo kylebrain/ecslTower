@@ -74,9 +74,25 @@ public class MapDisplay : MonoBehaviour
         Map currentMap = FindMap();
         if (currentMap == null)
         {
-            Debug.LogError("Could not find map!");
-            return;
+            if (LevelLookup.levelName == "DEFAULT_VALUE") {
+                Debug.LogError("Could not find map!");
+                return;
+            } else
+            {
+                currentMap = Resources.Load<Map>("Levels/" + LevelLookup.levelName);
+                if (currentMap == null)
+                {
+                    Debug.LogError("LevelLookup does not have a valid level name!");
+                    return;
+                } else
+                {
+                    currentMap = Instantiate(currentMap);
+                }
+
+            }
         }
+        
+
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
 
@@ -99,13 +115,13 @@ public class MapDisplay : MonoBehaviour
         GameObject mapObject = GameObject.FindGameObjectWithTag("Map");
         if (mapObject == null)
         {
-            Debug.LogError("Cannot find an object with the Map tag!");
+            //Debug.LogError("Cannot find an object with the Map tag!");
             return null;
         }
         Map map = mapObject.GetComponent<Map>();
         if (map == null)
         {
-            Debug.LogError("Object tagged Map does not have a Map script attached!");
+            //m_Debug.LogError("Object tagged Map does not have a Map script attached!");
             return null;
         }
         return map;
