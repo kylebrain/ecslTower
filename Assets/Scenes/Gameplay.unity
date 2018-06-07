@@ -341,10 +341,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 1717577476639566, guid: 6e2d94c5d6325714db998333cef22258, type: 2}
-      propertyPath: m_TagString
-      value: MapDisplay
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6e2d94c5d6325714db998333cef22258, type: 2}
   m_IsPrefabParent: 0
@@ -1178,6 +1174,7 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: 114349242120346656, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &651168735 stripped
@@ -2027,6 +2024,7 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: 114349242120346656, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1188405220
@@ -2205,7 +2203,8 @@ Prefab:
       propertyPath: m_Text
       value: Shop
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114349242120346656, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &1286137248 stripped
