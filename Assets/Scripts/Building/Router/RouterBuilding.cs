@@ -32,6 +32,10 @@ public class RouterBuilding : Building
     public float RoutingRate = 3;
     public float processSpeed = 0.1f;
 
+    public float throwAngle = 45f;
+    public float throwMagnitude = 10f;
+    public float throwRange = 120f;
+
     /// <summary>
     /// Queue of Agents to be processed, processed one at a time
     /// </summary>
@@ -160,7 +164,7 @@ public class RouterBuilding : Building
                     {
                         //Debug.Log("Deleted: " + delAgent.Attribute);
                         denied.Play();
-                        Destroy(delAgent.gameObject);
+                        ThrowDeniedAgent(delAgent);
                         filtered = true;
                         break;
                     }
@@ -170,8 +174,8 @@ public class RouterBuilding : Building
                     //Debug.Log("Let in: " + delAgent.Attribute);
                     allowed.Play();
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
-                    processedList.Add(delAgent);
                 }
+                processedList.Add(delAgent);
                 //add a way to delete Agents from the List who have been destroyed by reaching destination
             }
 
@@ -191,6 +195,21 @@ public class RouterBuilding : Building
              *       filtering out agents
              */
         }
+    }
+
+    private void ThrowDeniedAgent(Agent agent)
+    {
+        float theta = throwAngle * Mathf.Deg2Rad;
+        float yComponent = throwMagnitude * Mathf.Sin(theta);
+        float horizontalMagnitude = throwMagnitude * Mathf.Cos(theta);
+        Vector3 xzComponent = -horizontalMagnitude * Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
+        Vector3 velocity = new Vector3(xzComponent.x, yComponent, xzComponent.z);
+
+
+
+        velocity = Quaternion.Euler(0f, Random.Range(-throwRange / 2f, throwRange / 2f), 0f) * velocity;
+        Debug.Log(velocity);
+        agent.Throw(velocity);
     }
 
     protected void SetChildActive(string [] elements, bool active, GameObject canvas)
