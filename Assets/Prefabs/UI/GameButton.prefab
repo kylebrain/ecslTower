@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224069988873371012}
   - component: {fileID: 114194003767101828}
-  - component: {fileID: 114349242120346656}
   m_Layer: 5
   m_Name: GameButton
   m_TagString: Untagged
@@ -93,18 +92,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374abb33be1283043885c8359f14ccb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114349242120346656
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1182438572716764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172147b482e0d094db8562f9acbf9b79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waveController: {fileID: 0}
 --- !u!114 &114389593707763174
 MonoBehaviour:
   m_ObjectHideFlags: 1
