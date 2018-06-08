@@ -80,8 +80,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6f017b0c0868e428a60a73249baee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentMap: {fileID: 0}
   arrowOffset: 0.1
-  arrowPrefab: {fileID: 114492045783636566, guid: 9a011c876ad29f443ad7726c636e35db,
+  arrowPrefab: {fileID: 114733784817293204, guid: 0ff56d49ce68c294381549661f0a45db,
     type: 2}
   endAreaPrefab: {fileID: 114902956633370238, guid: 9a033836a8919c944beffad2624d57ff,
     type: 2}

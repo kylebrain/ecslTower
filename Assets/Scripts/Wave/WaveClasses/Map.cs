@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Prefab for a Map which can be loaded
+/// </summary>
+/// <seealso cref="LevelLookup"/>
 public class Map : MonoBehaviour {
 
     public int levelNumber = 0;
@@ -10,6 +14,9 @@ public class Map : MonoBehaviour {
     public int spawnPerWave = 100;
     public int decoyProbability = 3;
     public SerializableLevel loadLevel;
+    public BaseGrid gridPrefab;
+
+    //any values or changed must be change in LevelLookup
 
     public void SetLookup()
     {
@@ -17,6 +24,12 @@ public class Map : MonoBehaviour {
         LevelLookup.waveCount = waveCount;
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
+    }
+
+    public void BuildWorldGrid(WorldGrid grid)
+    {
+        BaseGrid newBaseGrid = Instantiate(gridPrefab);
+        grid.InitGrid((int)newBaseGrid.transform.localScale.x, (int)newBaseGrid.transform.localScale.y, newBaseGrid);
     }
 
 }

@@ -174,3 +174,5 @@ MonoBehaviour:
         y: 4
       width: 4
       height: 3
+  gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
+    type: 2}

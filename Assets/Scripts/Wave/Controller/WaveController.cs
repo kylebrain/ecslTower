@@ -55,7 +55,7 @@ public class WaveController : MonoBehaviour
     }
     IEnumerator FirstWave()
     {
-        yield return new WaitUntil(() => mapDisplay.WavePathList.Count > 0); //map should be loaded by this point
+        yield return new WaitUntil(() => MapDisplay.mapLoaded); //map should be loaded by this point
         LookupValues();
         currentPreWave = InitWave();
         if (currentPreWave == null)

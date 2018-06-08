@@ -5,18 +5,12 @@ using UnityEngine;
 /// <summary>
 /// Visual and structure representation of the WavePath creation
 /// </summary>
-[RequireComponent(typeof(LineRenderer))]
 public class Arrow : MonoBehaviour
 {
 
     /*-----------public variables-----------*/
-    /// <summary>
-    /// What percentage the Arrow head is of the arrow
-    /// </summary>
-    /// <remarks>
-    /// Default works fine
-    /// </remarks>
-    public float headLength = 10f;
+    private float baseRadius = 0.1f;
+    private float widthScale = 0.01f;
     /// <summary>
     /// The Node the base of the Arrow is attached (get only)
     /// </summary>
@@ -53,29 +47,15 @@ public class Arrow : MonoBehaviour
     /// <param name="overlay">How much in the Y direction the arrow is above the passed values</param>
     public void DrawArrow(Vector3 start, Vector3 end, float overlay)
     {
-        start += new Vector3(0, overlay, 0);
-        end += new Vector3(0, overlay, 0);
-        Vector3 connectionPoint = Vector3.Lerp(start, end, (100f - headLength) / 100f);
+        Vector3 midpoint = Vector3.Lerp(start, end, 0.5f) + (Vector3.up * overlay) + 0.5f * baseRadius * Vector3.Normalize(end - start);
+        float angle = Mathf.Atan2(end.z - start.z, end.x - start.x) * Mathf.Rad2Deg;
+        float length = Vector3.Magnitude(start - end) / 2f;
+        float width = baseRadius + widthScale * length;
 
-        LineRenderer arrowhead = transform.Find("Arrowhead").GetComponent<LineRenderer>();
-
-        arrowhead.material.color = Color.black;
-
-        if (arrowhead == null)
-        {
-            Debug.LogError("Cannot find child arrowhead,\nPerhaps it was moved?");
-        }
-        else
-        {
-            arrowhead.SetPosition(0, connectionPoint);
-            arrowhead.SetPosition(1, end);
-        }
-        LineRenderer straight = GetComponent<LineRenderer>();
-
-        straight.material.color = Color.black;
-
-        straight.SetPosition(0, start);
-        straight.SetPosition(1, connectionPoint);
+        transform.position = midpoint;
+        transform.eulerAngles = new Vector3(0f, angle, 90f);
+        transform.localScale = new Vector3(width, length, width);
+        GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(width, length));
     }
 
     /// <summary>

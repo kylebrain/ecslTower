@@ -9,6 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerExitHandler
 {
+
+    public float radiusIncrease = 0.5f;
     /// <summary>
     /// The AgentAttribute that the Dropdowns currently represent
     /// </summary>
@@ -50,7 +52,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         }
         PopulateDropdowns();
 
-        worldSpaceDisplayAgent.radius = parentTower.Radius;
+        worldSpaceDisplayAgent.radius = parentTower.Radius + radiusIncrease;
 
     }
 

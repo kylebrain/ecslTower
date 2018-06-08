@@ -1760,6 +1760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4852d367fcb4246bb9cef1873fd31c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  radiusIncrease: 0.5
   worldSpaceDisplayAgent: {fileID: 114811331704545306}
   attributeSelections: []
 --- !u!114 &114294508986284926
@@ -1948,7 +1949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c6e6ffbc48fca478dc76d078790dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Radius: 2
+  Radius: 1
   radiusColor: {r: 0.366, g: 1, b: 1, a: 1}
   radiusLineWidth: 0.1
   price: 200

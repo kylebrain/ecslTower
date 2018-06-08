@@ -29,11 +29,6 @@ public class MapDisplay : MonoBehaviour
     }
 
     /// <summary>
-    /// The Level that stores the current WavePaths in the inspector and the file
-    /// </summary>
-    private SerializableLevel currentLevel;
-
-    /// <summary>
     /// Manatory prefab so an Arrow can be drawn and placed
     /// </summary>
     public Arrow arrowPrefab;
@@ -44,6 +39,8 @@ public class MapDisplay : MonoBehaviour
     /// Contains the Arrows and allows creation and deletion of the path of Arrows
     /// </summary>
     public ArrowContainer arrowContainer;
+
+    public static bool mapLoaded = false;
 
     #endregion
 
@@ -62,6 +59,11 @@ public class MapDisplay : MonoBehaviour
     /// List of WavePaths recieved by the ArrowContainer or the SerializedWavePaths to be used by the Agents
     /// </summary>
     protected List<WavePath> wavePathList = new List<WavePath>();
+
+    /// <summary>
+    /// The Level that stores the current WavePaths in the inspector and the file
+    /// </summary>
+    private SerializableLevel currentLevel;
 
     #endregion
 
@@ -94,10 +96,14 @@ public class MapDisplay : MonoBehaviour
             }
         }
 
+        currentMap.BuildWorldGrid(worldGrid);
+
         currentMap.SetLookup();
 
         currentLevel = currentMap.loadLevel;
         UseLevel(currentLevel);
+
+        mapLoaded = true;
 
         DerivedStart();
     }
