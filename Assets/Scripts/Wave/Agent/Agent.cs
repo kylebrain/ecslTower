@@ -117,15 +117,23 @@ public abstract class Agent : VisualAgent
     private void Terminate()
     {
         terminated = true;
+        AudioSource audio;
+
         //add animation
-        DestinationAction();
+        if (Health.health > 0 && !RepairButton.Rebuilding)
+        {
+            DestinationAction();
+            audio = GetComponents<AudioSource>()[0];
+        } else
+        {
+            audio = GetComponents<AudioSource>()[1];
+        }
         Destroy(GetComponent<Renderer>()); //or explode or other effect here
-        StartCoroutine(playTerminationAudio());
+        StartCoroutine(playTerminationAudio(audio));
     }
 
-    IEnumerator playTerminationAudio()
+    IEnumerator playTerminationAudio(AudioSource audio)
     {
-        AudioSource audio = GetComponent<AudioSource>();
         if (audio.clip != null)
         {
             audio.Play();
