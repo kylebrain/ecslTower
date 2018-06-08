@@ -208,7 +208,6 @@ public class RouterBuilding : Building
 
 
         velocity = Quaternion.Euler(0f, Random.Range(-throwRange / 2f, throwRange / 2f), 0f) * velocity;
-        Debug.Log(velocity);
         agent.Throw(velocity);
     }
 
