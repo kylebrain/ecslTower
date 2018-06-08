@@ -41,6 +41,8 @@ public class RouterBuilding : Building
     /// </summary>
     private List<Agent> processedList = new List<Agent>();
 
+    private AudioSource allowed;
+    private AudioSource denied;
 
     private float timeSinceLastFilter;
 
@@ -76,6 +78,9 @@ public class RouterBuilding : Building
 
     protected override void derivedStart()
     {
+        AudioSource[] audios = GetComponents<AudioSource>();
+        allowed = audios[0];
+        denied = audios[1];
         timeSinceLastFilter = 0f;
         timeBetweenFilters = 1f / RoutingRate;
     }
@@ -154,6 +159,7 @@ public class RouterBuilding : Building
                     if (delAgent.Attribute.Equals(attribute))
                     {
                         //Debug.Log("Deleted: " + delAgent.Attribute);
+                        denied.Play();
                         Destroy(delAgent.gameObject);
                         filtered = true;
                         break;
@@ -162,6 +168,7 @@ public class RouterBuilding : Building
                 if (!filtered)
                 {
                     //Debug.Log("Let in: " + delAgent.Attribute);
+                    allowed.Play();
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                     processedList.Add(delAgent);
                 }
