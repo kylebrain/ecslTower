@@ -2124,6 +2124,9 @@ MonoBehaviour:
   blacklist: 1
   RoutingRate: 3
   processSpeed: 0
+  throwAngle: 45
+  throwMagnitude: 10
+  throwRange: 120
 --- !u!114 &114459142645187400
 MonoBehaviour:
   m_ObjectHideFlags: 1
