@@ -20,7 +20,7 @@ public class WaveController : MonoBehaviour
 
     //for UI
     public WaveInfo waveInfo;
-    public GameObject endScreen;
+    public EndScreen endScreen;
 
     public static int WaveCount = 0;
     public static float SecondsLeft;
@@ -38,8 +38,6 @@ public class WaveController : MonoBehaviour
     private List<AgentAttribute> infectedAttributes = new List<AgentAttribute>();
     [HideInInspector]
     public bool Playing;
-
-    bool gameOver = false;
 
     private List<AgentAttribute> currentWaveAttributes = new List<AgentAttribute>();
 
@@ -129,14 +127,12 @@ public class WaveController : MonoBehaviour
 
     private void EndGame()
     {
-        gameOver = true;
-        endScreen.SetActive(true);
-        endScreen.transform.Find("Score").GetComponent<Text>().text = "Score: " + Score.score;
+        endScreen.EndGame(true, Score.score);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace) || (gameOver && Input.anyKeyDown)) //change Backspace to be in ControlPrefs or remove entirely
+        if (Input.GetKeyDown(KeyCode.Backspace)) //change Backspace to be in ControlPrefs or remove entirely
         {
             SceneManager.LoadScene("LevelSelect");
         }

@@ -42,7 +42,7 @@ public class MoneyStack : MonoBehaviour
         GameObject coin = Instantiate(coinPrefab, transform.parent);
         transform.position += Vector3.up * moveUpBy;
         coin.transform.SetParent(transform);
-        coin.transform.SetSiblingIndex(0);
+        coin.transform.SetAsFirstSibling();
     }
 
     private void DeleteCoin()

@@ -21,7 +21,7 @@ public abstract class DisableButton : GameButton {
 
     private VisualPrefs visualPrefs;
 
-    public void Start()
+    private void Start()
     {
         visualPrefs = GameObject.Find("VisualPrefs").GetComponent<VisualPrefs>();
         if(visualPrefs == null)

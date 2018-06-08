@@ -10,6 +10,6 @@ public class MaliciousAgent : Agent {
     /// </summary>
     public override void DestinationAction()
     {
-        Score.score -= scoreMod;
+        Health.health -= scoreMod;
     }
 }
