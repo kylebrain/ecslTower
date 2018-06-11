@@ -113,13 +113,13 @@ public class WaveController : MonoBehaviour
 
     IEnumerator StopWave()
     {
-        InitStaticsForWait();
         if (WaveCount == maxWaveCount)
         {
             EndGame();
             yield return null;
         } else
         {
+            InitStaticsForWait();
             yield return new WaitForSeconds(timeBetweenWaves);
             PlayWave();
         }
