@@ -114,7 +114,7 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     public void removeFromMap()
     {
-        worldGrid.setUnoccupied(Location, Node.nodeStates.building);
+        worldGrid.setOccupied(Location, Node.nodeStates.navigation); //assumes that you can only place on navigational Nodes
         placed = false;
         Destroy(transform.root.gameObject);
     }
@@ -212,27 +212,44 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     protected void handleMouse()
     {
-        Vector3 screenMousPos = Input.mousePosition;
-        screenMousPos.z = Camera.main.transform.position.y;
-        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
-
-        Vector2Int gridMousePos = new Vector2Int((int)Mathf.Round(worldMousePos.x), (int)Mathf.Round(worldMousePos.z));
-        bool mouseWithinBuilding = Location.Contains(gridMousePos);
 
         GameObject canvas = transform.Find("Canvas").gameObject;
-
-        //Handle mouse location
         if (placed)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                radiusLine.enabled = false;
-                canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
+                HideUI(canvas);
             }
         }
-        else
+
+        //new solution
+        Node selectedNode = worldGrid.getRaycastNode();
+        if(selectedNode == null)
         {
-            setCenterPosition(worldMousePos);
+            return;
+        }
+
+        Vector2Int selectedNodePos = selectedNode.Coordinate;
+        Vector3 desiredPos = new Vector3(selectedNodePos.x, 0f, selectedNodePos.y);
+        bool mouseWithinBuilding = Location.Contains(selectedNodePos);
+
+        //if we find the raycast too performance intensive use the old solution below
+        //just delete the current variables and replace the ones that error with the old ones
+
+        /*Vector3 screenMousPos = Input.mousePosition;
+        screenMousPos.z = Camera.main.transform.position.y;
+        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
+
+        Vector2Int gridMousePos = new Vector2Int((int)Mathf.Round(worldMousePos.x), (int)Mathf.Round(worldMousePos.z));
+        bool mouseWithinBuilding = Location.Contains(gridMousePos);*/
+
+
+        //Handle mouse location
+        if (!placed)
+        {
+            
+            setCenterPosition(desiredPos);
+            //setCenterPosition(worldMousePos);
             radiusLine.enabled = true;
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -263,7 +280,7 @@ public abstract class Building : MonoBehaviour
             else
             {
                 GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
-                if (worldGridArea.Contains(gridMousePos))
+                if (worldGridArea.Contains(selectedNodePos))
                 {
                     if (placeOnMap(Location))
                     {

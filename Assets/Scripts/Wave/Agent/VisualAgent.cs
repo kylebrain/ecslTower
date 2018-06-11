@@ -76,33 +76,28 @@ public abstract class VisualAgent : MonoBehaviour {
     /// <summary>
     /// Sets Render Material based on color Enum
     /// </summary>
+    /// <remarks>
+    /// Should be overwritten by RingDisplayAgent with modifies the Graphic instead of the material
+    /// </remarks>
+    /// <seealso cref="RingDisplayAgent"/>
     /// <param name="color">Desired Color</param>
     public virtual void SetColor(AgentAttribute.PossibleColors color)
     {
         Renderer rend = GetComponent<Renderer>();
-        Material selectedMaterial = null;
         switch (color)
         {
             case AgentAttribute.PossibleColors.red:
-                selectedMaterial = Resources.Load<Material>("Agent/Red");
+                rend.material.SetColor("_Color", Color.red);
                 break;
             case AgentAttribute.PossibleColors.green:
-                selectedMaterial = Resources.Load<Material>("Agent/Green");
+                rend.material.SetColor("_Color", Color.green);
                 break;
             case AgentAttribute.PossibleColors.blue:
-                selectedMaterial = Resources.Load<Material>("Agent/Blue");
+                rend.material.SetColor("_Color", Color.blue);
                 break;
             default:
-                Debug.LogError("Agent color not recognized!");
+                rend.material.SetColor("_Color", Color.white);
                 break;
-        }
-        if (selectedMaterial != null)
-        {
-            rend.material = selectedMaterial;
-        }
-        else
-        {
-            Debug.LogError("Could not find Agent material. Perhaps it was moved?");
         }
     }
 }
