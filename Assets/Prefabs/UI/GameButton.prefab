@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224069988873371012}
   - component: {fileID: 114194003767101828}
+  - component: {fileID: 114618256906627138}
   m_Layer: 5
   m_Name: GameButton
   m_TagString: Untagged
@@ -155,6 +156,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093e5fd575c69143b2b497707105443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114618256906627138
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1182438572716764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b930459890eda1046b3cb1274dde5c24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopContainer: {fileID: 0}
 --- !u!114 &114764616707633554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -295,7 +308,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Start Game
+  m_Text: Router Shop
 --- !u!114 &114934276870995966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -356,11 +369,11 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.0000038146973, y: -35}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0.005012512, y: 0.010002136}
   m_SizeDelta: {x: 180, y: 70}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!224 &224185940145198214
 RectTransform:
   m_ObjectHideFlags: 1
@@ -374,10 +387,10 @@ RectTransform:
   m_Father: {fileID: 224731868785343058}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 118, y: 40}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 20}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224346903035074776
 RectTransform:
