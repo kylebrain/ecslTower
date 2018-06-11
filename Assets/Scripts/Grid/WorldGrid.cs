@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldGrid: MonoBehaviour {
+public class WorldGrid : MonoBehaviour
+{
     public int width = 1;
     public int height = 1;
     public Node nodePrefab;
@@ -41,8 +42,10 @@ public class WorldGrid: MonoBehaviour {
         baseGrid.Resize(this);
     }
 
-    public Node getAt(int x, int y) {
-        if(x >= width || y >= height || x < 0 || y < 0) {
+    public Node getAt(int x, int y)
+    {
+        if (x >= width || y >= height || x < 0 || y < 0)
+        {
             return null;
         }
         return m_grid[x, y];
@@ -53,29 +56,37 @@ public class WorldGrid: MonoBehaviour {
     /// Returns the node it hit, or null if no collision occured.
     /// </summary>
     /// <returns>The hit node if valid, otherwise null</returns>
-    public Node getRaycastNode() {
+    public Node getRaycastNode()
+    {
         Ray ray;
         RaycastHit hit;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out hit)) {
+        if (!Physics.Raycast(ray, out hit))
+        {
             return null;
         }
 
         Node ret = hit.transform.gameObject.GetComponent<Node>();
-        if(ret != null) {
+        if (ret != null)
+        {
             return ret;
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
 
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
         Node hit = getRaycastNode();
-        if(hit != null) {
+        if (hit != null)
+        {
             //make all adjacent Nodes hovered
             hit.setHovered();
             Node current;
-            if((current = getAt(hit.Coordinate.x + 1, hit.Coordinate.y)) != null) {
+            if ((current = getAt(hit.Coordinate.x + 1, hit.Coordinate.y)) != null)
+            {
                 current.setHovered();
             }
             if ((current = getAt(hit.Coordinate.x, hit.Coordinate.y + 1)) != null)
@@ -97,7 +108,8 @@ public class WorldGrid: MonoBehaviour {
     /// Sets the location's Nodes to occupied
     /// </summary>
     /// <param name="loc">The location to set occupied</param>
-    public void setOccupied(GridArea loc, Node.nodeStates state) {
+    public void setOccupied(GridArea loc, Node.nodeStates state)
+    {
 
         int startX = loc.bottomLeft.x;
         int endX = startX + loc.width - 1;
@@ -105,11 +117,11 @@ public class WorldGrid: MonoBehaviour {
         int startY = loc.bottomLeft.y;
         int endY = startY + loc.height - 1;
 
-        for(int i = startX; i <= endX; ++i) {
-            for(int j = startY; j <= endY; ++j) {
-                if(m_grid[i, j].Occupied == Node.nodeStates.empty) {
-                    m_grid[i, j].Occupied = state;
-                }
+        for (int i = startX; i <= endX; ++i)
+        {
+            for (int j = startY; j <= endY; ++j)
+            {
+                m_grid[i, j].Occupied = state;
             }
         }
     }
@@ -118,7 +130,8 @@ public class WorldGrid: MonoBehaviour {
     /// Sets the location's Nodes to unoccupied
     /// </summary>
     /// <param name="loc">The location to set unoccupied</param>
-    public void setUnoccupied(GridArea loc, Node.nodeStates state) {
+    public void setUnoccupied(GridArea loc, Node.nodeStates state)
+    {
 
         int startX = loc.bottomLeft.x;
         int endX = startX + loc.width - 1;
@@ -126,9 +139,12 @@ public class WorldGrid: MonoBehaviour {
         int startY = loc.bottomLeft.y;
         int endY = startY + loc.height - 1;
 
-        for(int i = startX; i <= endX; ++i) {
-            for(int j = startY; j <= endY; ++j) {
-                if(m_grid[i, j].Occupied == state) {
+        for (int i = startX; i <= endX; ++i)
+        {
+            for (int j = startY; j <= endY; ++j)
+            {
+                if (m_grid[i, j].Occupied == state)
+                {
                     m_grid[i, j].Occupied = Node.nodeStates.empty;
                 }
             }
