@@ -4,8 +4,12 @@ using UnityEngine;
 
 [System.Serializable]
 public class Node : MonoBehaviour {
-    public Material hoverMaterial;
-    public Material hoverInvalidMaterial;
+
+    //change to visual pref if really necessary
+    public Color emptyColor;
+    public Color navColor;
+    public Color buildingColor;
+    public Color invalidColor;
 
     /// <summary>
     /// The possible values the occupied field can take
@@ -61,12 +65,22 @@ public class Node : MonoBehaviour {
     /// Sets the material to hoverMaterial (hoverInvalidMaterial if the node is occupied).
     /// </summary>
     public void setHovered() {
-        if(Occupied == nodeStates.empty) {
-            rend.enabled = true;
-            rend.material = hoverMaterial;
-        } else {
-            rend.enabled = true;
-            rend.material = hoverInvalidMaterial;
+        rend.enabled = true;
+
+        switch (Occupied)
+        {
+            case nodeStates.empty:
+                rend.material.SetColor("_Color", emptyColor);
+                break;
+            case nodeStates.navigation:
+                rend.material.SetColor("_Color", navColor);
+                break;
+            case nodeStates.building:
+                rend.material.SetColor("_Color", buildingColor);
+                break;
+            default:
+                rend.material.SetColor("_Color", invalidColor);
+                break;
         }
     }
 
