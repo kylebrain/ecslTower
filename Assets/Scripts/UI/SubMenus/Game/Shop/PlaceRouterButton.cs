@@ -36,7 +36,7 @@ public class PlaceRouterButton : DisableButton {
     }
 
     public override void PerformAction() {
-        if (Score.score >= RouterPrefab.price)
+        if (Score.score >= RouterPrefab.price &&  !Building.currentlyPlacing)
         {
             Score.score -= RouterPrefab.price;
             //play a buying sound

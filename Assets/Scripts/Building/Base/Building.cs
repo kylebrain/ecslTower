@@ -12,6 +12,8 @@ public abstract class Building : MonoBehaviour
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
 
+    public static bool currentlyPlacing = false;
+
     public int price;
     public int sellPrice;
 
@@ -105,6 +107,7 @@ public abstract class Building : MonoBehaviour
         Location = loc;
         updatePosition();
         worldGrid.setOccupied(loc, Node.nodeStates.building);
+        currentlyPlacing = false;
         placed = true;
         return true;
     }
@@ -247,7 +250,7 @@ public abstract class Building : MonoBehaviour
         //Handle mouse location
         if (!placed)
         {
-            
+            currentlyPlacing = true;
             setCenterPosition(desiredPos);
             //setCenterPosition(worldMousePos);
             radiusLine.enabled = true;
@@ -255,6 +258,7 @@ public abstract class Building : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Score.score += price;
+                currentlyPlacing = false;
                 Destroy(gameObject);
             }
         }
@@ -267,7 +271,7 @@ public abstract class Building : MonoBehaviour
 
             if (placed)
             {
-                if (mouseWithinBuilding)
+                if (mouseWithinBuilding && !currentlyPlacing)
                 {
                     ShowUI(canvas);
                 }
