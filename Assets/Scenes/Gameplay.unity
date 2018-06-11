@@ -1548,48 +1548,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 706943629}
---- !u!1001 &734827386
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4685853771142324, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 827d0494076d5634da5420722ec021c8, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &744068504
 GameObject:
   m_ObjectHideFlags: 0
@@ -3408,6 +3366,11 @@ Prefab:
         type: 2}
       propertyPath: EdgeScrollTolerance
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 20662885606363680, guid: 9ba45f6d55f77e9489b0e40c64e26d29,
+        type: 2}
+      propertyPath: near clip plane
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9ba45f6d55f77e9489b0e40c64e26d29, type: 2}
