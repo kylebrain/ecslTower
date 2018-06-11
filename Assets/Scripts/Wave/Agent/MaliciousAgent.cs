@@ -12,4 +12,13 @@ public class MaliciousAgent : Agent {
     {
         Health.health -= scoreMod;
     }
+
+    private void Start()
+    {
+        if (LevelLookup.markMalicious)
+        {
+            GetComponent<Renderer>().material = Resources.Load<Material>("Agent/MarkAgent");
+            SetColor(Attribute.Color);
+        }
+    }
 }

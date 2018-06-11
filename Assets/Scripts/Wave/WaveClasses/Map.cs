@@ -13,7 +13,7 @@ public class Map : MonoBehaviour {
     public int waveCount = 3;
     public int spawnPerWave = 100;
     public int decoyProbability = 3;
-    private bool markMalicious = true;
+    public bool markMalicious = false;
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
 
@@ -25,6 +25,7 @@ public class Map : MonoBehaviour {
         LevelLookup.waveCount = waveCount;
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
+        LevelLookup.markMalicious = markMalicious;
     }
 
     public void BuildWorldGrid(WorldGrid grid)

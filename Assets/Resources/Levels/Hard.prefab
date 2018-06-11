@@ -56,6 +56,7 @@ MonoBehaviour:
   waveCount: 3
   spawnPerWave: 100
   decoyProbability: 5
+  markMalicious: 0
   loadLevel:
     levelName: hard_level001
     wavePaths:
