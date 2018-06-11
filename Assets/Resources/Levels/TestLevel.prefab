@@ -59,7 +59,32 @@ MonoBehaviour:
   markMalicious: 0
   loadLevel:
     levelName: test_level001
-    wavePaths: []
-    endAreas: []
+    wavePaths:
+    - list:
+      - x: 1
+        y: 1
+      - x: 22
+        y: 1
+      - x: 22
+        y: 7
+      - x: 6
+        y: 7
+      - x: 6
+        y: 15
+      - x: 22
+        y: 15
+    endAreas:
+    - Sink: 0
+      bottomLeft:
+        x: 0
+        y: 0
+      width: 3
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 22
+        y: 13
+      width: 3
+      height: 4
   gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
     type: 2}

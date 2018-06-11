@@ -21,7 +21,7 @@ public class MapMaker : MapDisplay
 
     [HideInInspector]
     public bool enablePathEditing = false;
-    
+
     /// <summary>
     /// Number of AgentPaths make when Make is called
     /// </summary>
@@ -72,7 +72,7 @@ public class MapMaker : MapDisplay
                 Debug.LogError("Couldn't find map!");
                 return;
             }
-            if(mapToEdit.loadLevel.levelName == "DEFAULT_LEVEL")
+            if (mapToEdit.loadLevel.levelName == "DEFAULT_LEVEL")
             {
                 return;
             }
@@ -80,8 +80,7 @@ public class MapMaker : MapDisplay
             return;
         }
 
-
-            if (!levelCreation.activeSelf && enableMapEditing)
+        if (!levelCreation.activeSelf && enableMapEditing)
         {
             levelCreation.SetActive(true);
         }
@@ -95,36 +94,11 @@ public class MapMaker : MapDisplay
             return;
         }
 
-
-        
         if (enablePathEditing)
         {
             DrawArrowIfValid();
             SelectNodeOnClick();
             RemoveArrowOnClick();
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (PushPath())
-                {
-                    Debug.Log("Path pushed!");
-                }
-                else
-                {
-                    Debug.LogError("Invalid path!");
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Save(mapToEdit);
-            }
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                Load(mapToEdit);
-            }
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                Clear(mapToEdit);
-            }
         }
     }
 
@@ -132,12 +106,21 @@ public class MapMaker : MapDisplay
 
     #region Level
 
+    public void ClearMap()
+    {
+        Clear(mapToEdit);
+    }
+
+    public void SaveMap()
+    {
+        Save(mapToEdit);
+    }
+
     /// <summary>
     /// Clears both the wavePathList and the file of the Level
     /// </summary>
     private void Clear(Map map)
     {
-        Debug.Log("Cleared!");
         wavePathList = new List<WavePath>();
         DeleteArrowContainer(arrowContainer);
         map.loadLevel.DeleteLevel();
@@ -148,19 +131,37 @@ public class MapMaker : MapDisplay
     /// </summary>
     private void Save(Map map)
     {
+        wavePathList = arrowContainer.ToWavePaths();
         if (wavePathList != null && wavePathList.Count > 0)
         {
             map.loadLevel.SetLevel(wavePathList, arrowContainer.startAreas, arrowContainer.endAreas);
             map.loadLevel.SaveLevel();
-
-            foreach (WavePath path in wavePathList)
-            {
-                Debug.Log("Saved: " + path);
-            }
         }
         else
         {
             Debug.LogError("Path list has nothing in it");
+        }
+    }
+
+    /// <summary>
+    /// Loads the Level from file, can ultimately just read from the Level in the inspector
+    /// </summary>
+    private void Load(Map map)
+    {
+        SerializableLevel tempLevel = map.loadLevel.LoadLevel();
+        if (tempLevel == null)
+        {
+            return;
+        }
+        List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
+        List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
+        if (tempWavePathList != null && tempEndAreaList != null)
+        {
+            map.loadLevel.SetLevel(tempLevel);
+        }
+        else
+        {
+            Debug.LogError("Loading failed!");
         }
     }
 
@@ -189,7 +190,7 @@ public class MapMaker : MapDisplay
 
     protected override void HandleEndArea(EndArea endArea, SerializableEndArea area)
     {
-        
+
     }
 
     #endregion
@@ -307,7 +308,7 @@ public class MapMaker : MapDisplay
 
             if (currStart != null && currEnd != null) //if both the start and end exist, set the path segment
             {
-                if(SetPathSegment(currStart, currEnd, drawArrow))
+                if (SetPathSegment(currStart, currEnd, drawArrow))
                 {
                     currStart = currEnd = null;
                     drawArrow = null;
@@ -315,16 +316,6 @@ public class MapMaker : MapDisplay
             }
 
         }
-    }
-
-    #endregion
-
-    #region Path Creation
-
-    private bool PushPath()
-    {
-        wavePathList = arrowContainer.ToWavePaths();
-        return true;
     }
 
     #endregion

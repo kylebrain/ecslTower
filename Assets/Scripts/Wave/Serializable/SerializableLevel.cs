@@ -48,11 +48,11 @@ public class SerializableLevel
     /// </summary>
     public void DeleteLevel()
     {
+        PathName = levelName;
         ClearLevel();
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + PathName, FileMode.Open);
-        bf.Serialize(file, new SerializableLevel());
-        file.Close();
+        File.Delete(Application.persistentDataPath + PathName);
+
+        Debug.Log("Reset the level and deleted the level file!\nPress Apply on the Map prefab to confirm changes when out of play mode.");
     }
 
     /// <summary>
@@ -106,6 +106,7 @@ public class SerializableLevel
             FileStream file = File.Create(Application.persistentDataPath + PathName);
             bf.Serialize(file, this);
             file.Close();
+            Debug.Log("Successfully saved the level!\nPress Apply on the Map prefab to confirm changes when out of play mode.");
         }
     }
 
@@ -124,12 +125,14 @@ public class SerializableLevel
             file.Close();
             wavePaths = loadLevel.wavePaths;
             endAreas = loadLevel.endAreas;
+            Debug.Log("Loaded level from file!");
             return loadLevel;
         }
         else
         {
+            ClearLevel();
             Debug.LogError(string.Format("File doesn't exist at path: {0}{1}", Application.persistentDataPath, PathName));
-            Debug.LogError("Enable path editing and press 'R' to save a path if it is already loaded internally.");
+            Debug.LogError("Press the Save button with a valid level.");
             return null;
         }
     }

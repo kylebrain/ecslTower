@@ -136,30 +136,6 @@ public class MapDisplay : MonoBehaviour
         return map;
     }
 
-    //move to MapMaker?
-
-    /// <summary>
-    /// Loads the Level from file, can ultimately just read from the Level in the inspector
-    /// </summary>
-    public void Load(Map map)
-    {
-        SerializableLevel tempLevel = map.loadLevel.LoadLevel();
-        if(tempLevel == null)
-        {
-            return;
-        }
-        List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
-        List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
-        if (tempWavePathList != null && tempEndAreaList != null)
-        {
-            map.loadLevel.SetLevel(tempLevel);
-        }
-        else
-        {
-            Debug.LogError("Loading failed!");
-        }
-    }
-
     /// <summary>
     /// Populates wavePathList based on a List of SerializableWavePaths
     /// </summary>
