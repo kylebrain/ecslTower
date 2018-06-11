@@ -230,6 +230,10 @@ public abstract class Building : MonoBehaviour
         Node selectedNode = worldGrid.getRaycastNode();
         if(selectedNode == null)
         {
+            if (placed && Input.GetMouseButtonDown(0))
+            {
+                HideUI(canvas); //mouseWithinBuidling must be false because there is no valid Node
+            }
             return;
         }
 
