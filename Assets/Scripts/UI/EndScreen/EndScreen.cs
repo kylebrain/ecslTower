@@ -48,6 +48,7 @@ public class EndScreen : MonoBehaviour {
     {
         previousAudioVolume = AudioListener.volume;
         AudioListener.volume = 0; //or find another way to turn off the game sfx maybe with an audio mixer?
+        transform.parent.GetComponent<Canvas>().sortingOrder = 1; //this should overlay over the router UI
         screen.SetActive(true);
     }
 
