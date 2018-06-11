@@ -13,9 +13,7 @@ public static class LevelLookup {
     public static int waveCount = 3;
     public static int spawnPerWave = 100;
     public static int decoyProbability = 3;
-
-    //public static int gridWidth = 50;
-    //public static int gridHeight = 50;
+    public static bool markMalicious = false;
 
     //statics added here must be reflected in Map
 

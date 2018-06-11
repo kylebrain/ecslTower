@@ -13,6 +13,7 @@ public class Map : MonoBehaviour {
     public int waveCount = 3;
     public int spawnPerWave = 100;
     public int decoyProbability = 3;
+    private bool markMalicious = true;
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
 
