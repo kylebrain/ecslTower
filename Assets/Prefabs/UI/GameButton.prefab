@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224069988873371012}
   - component: {fileID: 114194003767101828}
-  - component: {fileID: 114618256906627138}
   m_Layer: 5
   m_Name: GameButton
   m_TagString: Untagged
@@ -75,6 +74,8 @@ GameObject:
   - component: {fileID: 114823316364908042}
   - component: {fileID: 114389593707763174}
   - component: {fileID: 114764616707633554}
+  - component: {fileID: 61393944677438756}
+  - component: {fileID: 61377521914971694}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -82,6 +83,56 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!61 &61377521914971694
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898963065688096}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.41098022}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 158.823, y: 52.784363}
+  m_EdgeRadius: 0
+--- !u!61 &61393944677438756
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898963065688096}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.41098022}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 158.823, y: 52.784363}
+  m_EdgeRadius: 0
 --- !u!114 &114194003767101828
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -117,7 +168,7 @@ MonoBehaviour:
     m_PressedColor: {r: 0.6901961, g: 0.6901961, b: 0.6901961, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.15
+    m_FadeDuration: 0
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -156,18 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093e5fd575c69143b2b497707105443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114618256906627138
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1182438572716764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b930459890eda1046b3cb1274dde5c24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopContainer: {fileID: 0}
 --- !u!114 &114764616707633554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -308,7 +347,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Router Shop
+  m_Text: Game Button
 --- !u!114 &114934276870995966
 MonoBehaviour:
   m_ObjectHideFlags: 1
