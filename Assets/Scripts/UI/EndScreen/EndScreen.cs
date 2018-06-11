@@ -8,7 +8,7 @@ public class EndScreen : MonoBehaviour {
 
     private float previousAudioVolume;
     private AudioSource winAudio;
-    private AudioSource loseAudio;
+    private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
     private GameObject screen;
 
     private void Start()
