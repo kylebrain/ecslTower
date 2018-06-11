@@ -50,6 +50,7 @@ public abstract class Building : MonoBehaviour
     private int numSegments = 100;
 
 
+
     //------------PUBLIC---------------
     #region PUBLIC
     /// <summary>
@@ -251,9 +252,13 @@ public abstract class Building : MonoBehaviour
         if (!placed)
         {
             currentlyPlacing = true;
-            setCenterPosition(desiredPos);
-            //setCenterPosition(worldMousePos);
             radiusLine.enabled = true;
+
+            if (selectedNode.Occupied != Node.nodeStates.building) //does not move the Router to an Occupied Node
+            {
+                setCenterPosition(desiredPos);
+            }
+            //setCenterPosition(worldMousePos);
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
