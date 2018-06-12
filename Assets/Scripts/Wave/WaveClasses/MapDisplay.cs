@@ -166,7 +166,7 @@ public class MapDisplay : MonoBehaviour
             endArea.endSetting = area.Sink ? endOptions.sink : endOptions.source;
             endArea.SetColor();
             GridArea tempArea = new GridArea(area);
-            endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
+            endArea.Place(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
             HandleEndArea(endArea);
         }
     }
@@ -199,7 +199,7 @@ public class MapDisplay : MonoBehaviour
         Arrow addedArrow = arrowContainer.AddArrowToContainer(toSet);
         if (addedArrow == null)
         {
-            Destroy(toSet.gameObject);
+            Destroy(toSet.gameObject); //if you want players to be able to highlight paths remove this
             //Debug.Log("Arrow could not be place or was a duplicate!");
             //return false?
         } else

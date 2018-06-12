@@ -68,6 +68,15 @@ MonoBehaviour:
       - x: 30
         y: 12
     - list:
+      - x: 12
+        y: 8
+      - x: 12
+        y: 3
+      - x: 19
+        y: 3
+      - x: 19
+        y: 16
+    - list:
       - x: 1
         y: 1
       - x: 14
@@ -270,6 +279,12 @@ MonoBehaviour:
         y: 0
       width: 3
       height: 4
+    - Sink: 0
+      bottomLeft:
+        x: 10
+        y: 6
+      width: 4
+      height: 10
     - Sink: 1
       bottomLeft:
         x: 28

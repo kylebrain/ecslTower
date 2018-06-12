@@ -18,6 +18,7 @@ public class EndArea : MonoBehaviour
     private Node Destination = null;
     private WorldGrid worldGrid; //remove if a solution can be found
     private MapMaker waveManager; //remove if a solution can be found
+    private GameObject marker = null;
 
     private void Awake()
     {
@@ -47,6 +48,7 @@ public class EndArea : MonoBehaviour
     {
         OnLeftMouseDown();
         OnRightMouseDown();
+        RenderArea();
 
     }
 
@@ -70,6 +72,14 @@ public class EndArea : MonoBehaviour
 
     private void OnRightMouseDown()
     {
+        if (Input.GetMouseButton(1))
+        {
+            if(Origin == null || Destination == null)
+            {
+                Destroy(gameObject);
+            }
+        }
+
         if (Input.GetMouseButtonDown(1) && !waveManager.enablePathEditing)
         {
             Node currentNode;
@@ -98,11 +108,13 @@ public class EndArea : MonoBehaviour
 
     private void OnLeftMouseDown()
     {
+        /*
         if (Origin != null && Destination != null)
         {
             return; //area had been placed
         }
-        if (Input.GetMouseButtonDown(0))
+        */
+        if (Input.GetMouseButtonDown(0) && (Origin == null || Destination == null))
         {
             if (Origin == null)
             {
@@ -116,15 +128,43 @@ public class EndArea : MonoBehaviour
 
             if (Origin != null && Destination != null)
             {
-                PlaceEndArea(Origin, Destination);
+                Place(Origin, Destination);
             }
         }
     }
 
-    public void PlaceEndArea(Node origin, Node destination)
+    private void RenderArea()
+    {
+        Node hoveredNode = worldGrid.getRaycastNode();
+        if(hoveredNode == null)
+        {
+            return;
+        }
+        if(Origin == null)
+        {
+            CreateGridArea(hoveredNode, hoveredNode);
+        } else if(Destination == null)
+        {
+            CreateGridArea(Origin, hoveredNode);
+        }
+
+    }
+
+    public void Place(Node origin, Node destination)
     {
         Origin = origin;
         Destination = destination;
+        CreateGridArea(Origin, Destination);
+        if (waveManager != null)
+        {
+            AddToArrowContainer(waveManager);
+        }
+    }
+
+    public void CreateGridArea(Node origin, Node destination)
+    {
+        //Origin = origin;
+        //Destination = destination;
         if (origin == null || destination == null)
         {
             Debug.LogError("Must have valid start and end Nodes!");
@@ -143,10 +183,10 @@ public class EndArea : MonoBehaviour
             Debug.LogError("Invalid gridArea created!");
             return;
         }
-        MarkArea(area);
+        MarkGridArea(area);
     }
 
-    private void MarkArea(GridArea area)
+    private void MarkGridArea(GridArea area)
     {
         if (area.height <= 0 || area.width <= 0)
         {
@@ -155,13 +195,18 @@ public class EndArea : MonoBehaviour
         }
         Vector3 pos = new Vector3(area.bottomLeft.x + (area.width - 1) / 2f, 0f, area.bottomLeft.y + (area.height - 1) / 2f);
         Vector3 scale = new Vector3(area.width, transform.localScale.y, area.height);
-        GameObject newMarker = Instantiate(colorPlaceholder, pos, Quaternion.identity) as GameObject;
-        newMarker.transform.parent = transform;
-        newMarker.transform.localScale = scale;
+        if (marker == null)
+        {
+            marker = Instantiate(colorPlaceholder, transform) as GameObject;
+        }
+        marker.transform.localScale = scale;
+        marker.transform.position = pos;
+
+        /* Add to a Place funtion
         if (waveManager != null)
         {
             AddToArrowContainer(waveManager);
-        }
+        } */
     }
 
     public void AddToArrowContainer(MapDisplay mapDisplay)
@@ -177,25 +222,6 @@ public class EndArea : MonoBehaviour
         } else if (endSetting == endOptions.sink)
         {
             mapDisplay.arrowContainer.endAreas.Add(area);
-        }
-    }
-
-    //use later to dynamically display the area, update each time the destination Node changes
-    private void UpdateArea()
-    {
-        if (area.height == 0 || area.width == 0)
-        {
-            Debug.LogError("Must have a valid gridArea!");
-            return;
-        }
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            if (area.Contains(new Vector2Int((int)transform.GetChild(i).position.x, (int)transform.GetChild(i).position.y)))
-            {
-                continue;
-            }
-            Destroy(transform.GetChild(i).gameObject);
-            i--;
         }
     }
 }
