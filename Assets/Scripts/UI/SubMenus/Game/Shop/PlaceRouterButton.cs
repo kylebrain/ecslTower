@@ -41,7 +41,7 @@ public class PlaceRouterButton : DisableButton {
             Score.score -= RouterPrefab.price;
             //play a buying sound
             Building newBuilding = Instantiate(RouterPrefab);
-            newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
+            //newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
             newBuilding.name = "Test Router " + count;
             count++;
         }

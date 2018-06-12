@@ -218,21 +218,44 @@ public abstract class Building : MonoBehaviour
     {
 
         GameObject canvas = transform.Find("Canvas").gameObject;
-        if (placed)
+
+        #region Node unrequired
+        if (!placed)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            currentlyPlacing = true;
+            radiusLine.enabled = true;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (placed)
             {
                 HideUI(canvas);
             }
+            else
+            {
+                Score.score += price;
+                currentlyPlacing = false;
+                Destroy(gameObject);
+            }
         }
 
-        //new solution
+        #endregion
+
         Node selectedNode = worldGrid.getRaycastNode();
-        if(selectedNode == null)
+        if (selectedNode == null)
         {
             if (placed && Input.GetMouseButtonDown(0))
             {
                 HideUI(canvas); //mouseWithinBuidling must be false because there is no valid Node
+            }
+            if (!placed) //draws the router over no-grid area, might need to be fixed to act like Nodes, because currently the rounding is off
+            {
+                Vector3 screenMousPos = Input.mousePosition;
+                screenMousPos.z = Camera.main.transform.position.y;
+                Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(screenMousPos);
+
+                setCenterPosition(worldMousePos);
             }
             return;
         }
@@ -253,32 +276,12 @@ public abstract class Building : MonoBehaviour
 
 
         //Handle mouse location
-        if (!placed)
+
+        #region Node required
+
+        if (placed)
         {
-            currentlyPlacing = true;
-            radiusLine.enabled = true;
-
-            if (selectedNode.Occupied != Node.nodeStates.building) //does not move the Router to an Occupied Node
-            {
-                setCenterPosition(desiredPos);
-            }
-            //setCenterPosition(worldMousePos);
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Score.score += price;
-                currentlyPlacing = false;
-                Destroy(gameObject);
-            }
-        }
-
-
-        //Handle left click
-        if (Input.GetMouseButtonUp(0))
-        {
-
-
-            if (placed)
+            if (Input.GetMouseButtonUp(0))
             {
                 if (mouseWithinBuilding && !currentlyPlacing)
                 {
@@ -288,31 +291,21 @@ public abstract class Building : MonoBehaviour
                 {
                     HideUI(canvas);
                 }
-
-            }
-            else
-            {
-                GridArea worldGridArea = new GridArea(new Vector2Int(0, 0), worldGrid.width, worldGrid.height);
-                if (worldGridArea.Contains(selectedNodePos))
-                {
-                    if (placeOnMap(Location))
-                    {
-                        ShowUI(canvas);
-                    }
-                }
             }
         }
-
-
-        //Handle right click
-        if (Input.GetMouseButtonUp(1))
+        else
         {
-
+            if (selectedNode.Occupied != Node.nodeStates.building) //does not move the Router to an Occupied Node
+            {
+                setCenterPosition(desiredPos);
+            }
+            if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
+            {
+                ShowUI(canvas);
+            }
         }
 
-
-
-
+        #endregion
     }
 
     /// <summary>
@@ -321,6 +314,10 @@ public abstract class Building : MonoBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void HideUI(GameObject canvas)
     {
+        if (CanvasHover.Over)
+        {
+            return;
+        }
         radiusLine.enabled = false;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;

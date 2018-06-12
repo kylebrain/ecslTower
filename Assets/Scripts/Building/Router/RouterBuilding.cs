@@ -211,6 +211,15 @@ public class RouterBuilding : Building
         agent.Throw(velocity);
     }
 
+    private void OnDestroy()
+    {
+        foreach(Agent delAgent in processQueue)
+        {
+            delAgent.SetSpeed(delAgent.Attribute.Speed);
+            processedList.Add(delAgent);
+        }
+    }
+
     protected void SetChildActive(string [] elements, bool active, GameObject canvas)
     {
         foreach(string element in elements)
@@ -225,12 +234,6 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        RingDisplay options = canvas.transform.Find("RingDisplay").GetComponent<RingDisplay>();
-        if (options.Over)
-        {
-            ShowUI(canvas);
-            return;
-        }
         SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
     }
 
