@@ -242,6 +242,7 @@ public class ArrowContainer
     /// <returns>List of WavePaths to be used by the Agents and MapMaker</returns>
     public List<WavePath> ToWavePaths()
     {
+        int failedCount = 0;
         List<WavePath> wavePaths = new List<WavePath>();
         List<Stack<Arrow>> segmentedStacks = new List<Stack<Arrow>>();
         List<Queue<Node>> baseQueues = new List<Queue<Node>>(); 
@@ -260,13 +261,13 @@ public class ArrowContainer
             {
                 if (endArea.Contains(arrowStack.Peek().Destination.Coordinate))
                 {
-                    //Debug.LogError("End arrow does not end in end area!");
                     Valid = true;
                     break;
                 }
             }
             if (!Valid)
             {
+                failedCount++;
                 continue; //this Stack does not end in an endArea
             }
 
@@ -358,6 +359,12 @@ public class ArrowContainer
             WavePath newPath = new WavePath(currentNodeQueue);
             wavePaths.Add(newPath);
         }
+
+        if(failedCount > 0)
+        {
+            Debug.LogWarning("You had " + failedCount + " path" + (failedCount == 1 ? "" : "s") +" fail!\nMake sure every path ends in a sink!");
+        }
+
 
         if (wavePaths.Count > 0)
         {

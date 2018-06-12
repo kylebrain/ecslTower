@@ -106,7 +106,7 @@ public class SerializableLevel
             FileStream file = File.Create(Application.persistentDataPath + PathName);
             bf.Serialize(file, this);
             file.Close();
-            Debug.Log("Successfully saved the level!\nPress Apply on the Map prefab to confirm changes when out of play mode.");
+            Debug.Log("Saved the level!\nPress Apply on the Map prefab to confirm changes when out of play mode.");
         }
     }
 

@@ -291,7 +291,7 @@ public class MapMaker : MapDisplay
                 }
                 else
                 {
-                    Debug.LogError("Node" + currentNode.Coordinate + " cannot be placed here!");
+                    Debug.LogWarning("Node" + currentNode.Coordinate + " cannot be placed here!", currentNode);
                 }
             }
 
