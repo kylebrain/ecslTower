@@ -35,13 +35,42 @@ public class ArrowContainer
             if (tempArrowList.FindIndex(a => a.Origin == selectedNode) >= 0) //if it is actually a selected node
             {
                 Arrow currentArrow;
-                while (arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != selectedNode)
+                while (arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != selectedNode) //removes every after it
                 {
+
+                    //below tries to remove segments
+
+                    /*
+                    foreach(Stack<Arrow> segmentCheckStack in arrowStacks)
+                    {
+                        if(segmentCheckStack == arrowStack)
+                        {
+                            Debug.Log("These are equal to each other");
+                            continue;
+                        }
+                        Node target = segmentCheckStack.Peek().Origin;
+
+                        if (target != null && IsBetween(currentArrow, target))
+                        {
+                            while(segmentCheckStack.Count > 0)
+                            {
+                                Arrow currentSegmentStackArrow = segmentCheckStack.Peek();
+                                ret.Add(currentSegmentStackArrow);
+                                RemoveArrow(currentSegmentStackArrow, segmentCheckStack);
+                            }
+                            arrowStacks.Remove(segmentCheckStack);
+                        }
+                    }
+                    */
+
+
+
+
                     ret.Add(currentArrow);
                     RemoveArrow(currentArrow, arrowStack);
                 }
             }
-            else if (tempArrowList.FindIndex(a => a.Destination == selectedNode) >= 0)
+            else if (tempArrowList.FindIndex(a => a.Destination == selectedNode) >= 0) //will remove the first arrow in a stack if its destination is clicked
             {
                 Arrow endArrow = arrowStack.Peek();
                 if (endArrow.Destination == selectedNode)
@@ -97,6 +126,11 @@ public class ArrowContainer
             }
         }
 
+        if(FindIntersectingArrow(selectedNode) != null)
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -107,7 +141,7 @@ public class ArrowContainer
     /// <returns>If succeeds returns the passed Arrow, on fail returns null</returns>
     public Arrow AddArrowToContainer(Arrow arrow)
     {
-        foreach (Stack<Arrow> arrowStack in arrowStacks)
+        foreach (Stack<Arrow> arrowStack in arrowStacks) //if it is at the end of an arrow
         {
             if (arrowStack.Count > 0 && arrowStack.Peek().Destination == arrow.Origin)
             {
@@ -115,7 +149,7 @@ public class ArrowContainer
                 return arrow;
             }
         }
-        foreach (GridArea startArea in startAreas)
+        foreach (GridArea startArea in startAreas) //if it originates in the start area
         {
             if (startArea.Contains(arrow.Origin.Coordinate))
             {
@@ -125,9 +159,68 @@ public class ArrowContainer
                 return arrow;
             }
         }
-
+        if(FindIntersectingArrow(arrow.Origin) != null) //if it is a branch of another arrow
+        {
+            Stack<Arrow> newStack = new Stack<Arrow>();
+            arrowStacks.Add(newStack);
+            newStack.Push(arrow);
+            Debug.Log("Added as a segment!");
+            return arrow;
+        }
 
         return null;
+    }
+
+    public Arrow FindIntersectingArrow(Node target)
+    {
+        foreach(Stack<Arrow> arrowStack in arrowStacks)
+        {
+            List<Arrow> tempList = new List<Arrow>(arrowStack);
+            tempList.Reverse();
+            foreach(Arrow arrow in tempList)
+            {
+                if(IsBetween(arrow.Origin, arrow.Destination, target))
+                {
+                    return arrow;
+                }
+            }
+        }
+        //Debug.Log("Could not find an intersecting arrow!");
+        return null;
+    }
+
+    private bool IsBetween(Arrow arrow, Node target)
+    {
+        return IsBetween(arrow.Origin, arrow.Destination, target);
+    }
+
+    private bool IsBetween(Node origin, Node destination, Node target)
+    {
+        float distBetween = (destination.Coordinate - origin.Coordinate).magnitude;
+        float distSegmented = (destination.Coordinate - target.Coordinate).magnitude + (target.Coordinate - origin.Coordinate).magnitude;
+        return distBetween == distSegmented;
+
+        /*
+        if(origin.Coordinate.x != destination.Coordinate.x && origin.Coordinate.y != destination.Coordinate.y)
+        {
+            Debug.LogError("Origin and destination must be cardinal to each other");
+            return false;
+        }
+        if(target.Coordinate.x == origin.Coordinate.x && target.Coordinate.x == destination.Coordinate.x) //target it between vertically
+        {
+            //is the y between the two?
+            return (origin.Coordinate.y <= target.Coordinate.y && target.Coordinate.y <= destination.Coordinate.y)
+                || (origin.Coordinate.y >= target.Coordinate.y && target.Coordinate.y >= destination.Coordinate.y);
+        } else if(target.Coordinate.y == origin.Coordinate.y && target.Coordinate.y == destination.Coordinate.y) //target is between horizontally
+        {
+            //is the x between the two?
+            return (origin.Coordinate.x <= target.Coordinate.x && target.Coordinate.x <= destination.Coordinate.x)
+                || (origin.Coordinate.x >= target.Coordinate.x && target.Coordinate.x >= destination.Coordinate.x);
+        }
+        else
+        {
+            return false;
+        }*/
     }
 
     /// <summary>
@@ -145,6 +238,7 @@ public class ArrowContainer
                 continue;
             }
 
+            //checking each endArea to see if it ends there
             bool Valid = false;
             foreach (GridArea endArea in endAreas)
             {
@@ -157,7 +251,7 @@ public class ArrowContainer
             }
             if (!Valid)
             {
-                continue;
+                continue; //this Stack does not end in an endArea
             }
 
             Stack<Arrow> tempArrowStack = new Stack<Arrow>(arrowStack); //copy constructor of stack reverses order
@@ -165,19 +259,20 @@ public class ArrowContainer
 
             Arrow startArrow = tempArrowStack.Pop();
 
+            //checking each startArea to see if it begins there
             Valid = false;
             foreach (GridArea startArea in startAreas)
             {
                 if (startArea.Contains(startArrow.Origin.Coordinate))
                 {
-                    //Debug.LogError("Start arrow does not begin in start area!");
                     Valid = true;
                     break;
                 }
             }
             if (!Valid)
             {
-                continue;
+                continue; //this start does not end in an endArea
+                //does it start in an intermediate Node?
             }
 
             nodeQueue.Enqueue(startArrow.Origin);

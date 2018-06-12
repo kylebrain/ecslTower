@@ -63,6 +63,7 @@ public class MapMaker : MapDisplay
     /// </summary>
     private void Update()
     {
+        
         if (Application.isEditor && !Application.isPlaying && !ranOnEdit)
         {
             DerivedStart();
@@ -79,6 +80,8 @@ public class MapMaker : MapDisplay
             Load(mapToEdit);
             return;
         }
+
+        //above should be run in inspector, place everything below it
 
         if (!levelCreation.activeSelf && enableMapEditing)
         {
