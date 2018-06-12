@@ -162,6 +162,17 @@ public class ArrowContainer
     {
         foreach (Stack<Arrow> arrowStack in arrowStacks) //if it is at the end of an arrow
         {
+            Stack<Arrow> arrowStackFlipped = new Stack<Arrow>(arrowStack);
+            foreach(Arrow currentArrow in arrowStackFlipped)
+            {
+                if(IsBetween(arrow, currentArrow))
+                {
+                    //Debug.Log(arrow + " is between: " + currentArrow);
+                    return null;
+                }
+            }
+
+
             if (arrowStack.Count > 0 && arrowStack.Peek().Destination == arrow.Origin)
             {
                 arrowStack.Push(arrow);
@@ -206,6 +217,11 @@ public class ArrowContainer
         }
         //Debug.Log("Could not find an intersecting arrow!");
         return null;
+    }
+
+    private bool IsBetween(Arrow adding, Arrow exisiting)
+    {
+        return IsBetween(exisiting, adding.Origin) && IsBetween(exisiting, adding.Destination);
     }
 
     private bool IsBetween(Arrow arrow, Node target)
@@ -286,25 +302,7 @@ public class ArrowContainer
             }
 
             baseQueues.Add(nodeQueue);
-
-            //once baseQueues is full and segmentedStacks is empty we'll add
-            //WavePath newPath = new WavePath(nodeQueue);
-            //wavePaths.Add(newPath);
         }
-
-
-        //test area
-        /*
-        Node target = GetOriginNodeFromStack(segmentedStacks[0]);
-        foreach(Queue<Node> checkNodeQueue in baseQueues)
-        {
-            Node previous;
-            if((previous = GetIntersectionNode(checkNodeQueue, target)) != null)
-            {
-                Queue<Node> newBaseQueue = GetNodeQueueFromSegmentAndBaseQueue(checkNodeQueue, segmentedStacks[0], previous);
-                Debug.Log(newBaseQueue);
-            }
-        }*/
 
         //for every segment for every baseQueue
         List<Queue<Node>> demilitarizedList = new List<Queue<Node>>();

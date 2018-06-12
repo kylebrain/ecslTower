@@ -173,6 +173,7 @@ public class MapDisplay : MonoBehaviour
 
     protected virtual void HandleEndArea(EndArea endArea, SerializableEndArea area = null)
     {
+        endArea.AddToArrowContainer(this);
         endArea.enabled = false;
     }
 
@@ -195,8 +196,16 @@ public class MapDisplay : MonoBehaviour
             toSet = Instantiate(arrowPrefab, transform) as Arrow;
         }
         toSet.PlaceArrow(start, end, arrowOffset);
-        arrowContainer.AddArrowToContainer(toSet);
-        SetNodeOccupation(toSet, Node.nodeStates.navigation);
+        Arrow addedArrow = arrowContainer.AddArrowToContainer(toSet);
+        if (addedArrow == null)
+        {
+            Destroy(toSet.gameObject);
+            //Debug.Log("Arrow could not be place or was a duplicate!");
+            //return false?
+        } else
+        {
+            SetNodeOccupation(addedArrow, Node.nodeStates.navigation);
+        }
 
         return true;
     }

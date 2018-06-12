@@ -160,11 +160,11 @@ public class EndArea : MonoBehaviour
         newMarker.transform.localScale = scale;
         if (waveManager != null)
         {
-            AddToArrowContainer();
+            AddToArrowContainer(waveManager);
         }
     }
 
-    private void AddToArrowContainer()
+    public void AddToArrowContainer(MapDisplay mapDisplay)
     {
         if (area.height <= 0 || area.width <= 0)
         {
@@ -173,10 +173,10 @@ public class EndArea : MonoBehaviour
         }
         if(endSetting == endOptions.source)
         {
-            waveManager.arrowContainer.startAreas.Add(area);
+            mapDisplay.arrowContainer.startAreas.Add(area);
         } else if (endSetting == endOptions.sink)
         {
-            waveManager.arrowContainer.endAreas.Add(area);
+            mapDisplay.arrowContainer.endAreas.Add(area);
         }
     }
 
