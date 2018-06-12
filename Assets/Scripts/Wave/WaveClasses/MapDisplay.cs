@@ -136,30 +136,6 @@ public class MapDisplay : MonoBehaviour
         return map;
     }
 
-    //move to MapMaker?
-
-    /// <summary>
-    /// Loads the Level from file, can ultimately just read from the Level in the inspector
-    /// </summary>
-    public void Load(Map map)
-    {
-        SerializableLevel tempLevel = map.loadLevel.LoadLevel();
-        if(tempLevel == null)
-        {
-            return;
-        }
-        List<SerializableWavePath> tempWavePathList = tempLevel.wavePaths;
-        List<SerializableEndArea> tempEndAreaList = tempLevel.endAreas;
-        if (tempWavePathList != null && tempEndAreaList != null)
-        {
-            map.loadLevel.SetLevel(tempLevel);
-        }
-        else
-        {
-            Debug.LogError("Loading failed!");
-        }
-    }
-
     /// <summary>
     /// Populates wavePathList based on a List of SerializableWavePaths
     /// </summary>
@@ -190,13 +166,14 @@ public class MapDisplay : MonoBehaviour
             endArea.endSetting = area.Sink ? endOptions.sink : endOptions.source;
             endArea.SetColor();
             GridArea tempArea = new GridArea(area);
-            endArea.PlaceEndArea(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
+            endArea.Place(worldGrid.getAt(tempArea.bottomLeft.x, tempArea.bottomLeft.y), worldGrid.getAt(tempArea.bottomLeft.x + tempArea.width - 1, tempArea.bottomLeft.y + tempArea.height - 1));
             HandleEndArea(endArea);
         }
     }
 
     protected virtual void HandleEndArea(EndArea endArea, SerializableEndArea area = null)
     {
+        endArea.AddToArrowContainer(this);
         endArea.enabled = false;
     }
 
@@ -219,8 +196,16 @@ public class MapDisplay : MonoBehaviour
             toSet = Instantiate(arrowPrefab, transform) as Arrow;
         }
         toSet.PlaceArrow(start, end, arrowOffset);
-        arrowContainer.AddArrowToContainer(toSet);
-        SetNodeOccupation(toSet, Node.nodeStates.navigation);
+        Arrow addedArrow = arrowContainer.AddArrowToContainer(toSet);
+        if (addedArrow == null)
+        {
+            Destroy(toSet.gameObject); //if you want players to be able to highlight paths remove this
+            //Debug.Log("Arrow could not be place or was a duplicate!");
+            //return false?
+        } else
+        {
+            SetNodeOccupation(addedArrow, Node.nodeStates.navigation);
+        }
 
         return true;
     }
