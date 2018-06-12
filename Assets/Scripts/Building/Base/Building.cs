@@ -321,6 +321,10 @@ public abstract class Building : MonoBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void HideUI(GameObject canvas)
     {
+        if (CanvasHover.Over)
+        {
+            return;
+        }
         radiusLine.enabled = false;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;

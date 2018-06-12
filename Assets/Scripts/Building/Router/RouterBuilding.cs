@@ -234,12 +234,6 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        RingDisplay options = canvas.transform.Find("RingDisplay").GetComponent<RingDisplay>();
-        if (options.Over)
-        {
-            ShowUI(canvas);
-            return;
-        }
         SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
     }
 
