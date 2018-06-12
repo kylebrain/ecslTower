@@ -37,35 +37,6 @@ public class ArrowContainer
                 Arrow currentArrow;
                 while (arrowStack.Count > 0 && (currentArrow = arrowStack.Peek()).Destination != selectedNode) //removes every after it
                 {
-
-                    //below tries to remove segments
-
-                    /*
-                    foreach(Stack<Arrow> segmentCheckStack in arrowStacks)
-                    {
-                        if(segmentCheckStack == arrowStack)
-                        {
-                            Debug.Log("These are equal to each other");
-                            continue;
-                        }
-                        Node target = segmentCheckStack.Peek().Origin;
-
-                        if (target != null && IsBetween(currentArrow, target))
-                        {
-                            while(segmentCheckStack.Count > 0)
-                            {
-                                Arrow currentSegmentStackArrow = segmentCheckStack.Peek();
-                                ret.Add(currentSegmentStackArrow);
-                                RemoveArrow(currentSegmentStackArrow, segmentCheckStack);
-                            }
-                            arrowStacks.Remove(segmentCheckStack);
-                        }
-                    }
-                    */
-
-
-
-
                     ret.Add(currentArrow);
                     RemoveArrow(currentArrow, arrowStack);
                 }
@@ -80,7 +51,51 @@ public class ArrowContainer
                 }
             }
         }
+
+        //removing segments
+
+        //checks every arrow on main path to see if they contain a segment
+        //segmentList is a list of all arrows that are segmented off the main path
+        List<Arrow> segmentList = RemoveSegments(ret);
+        ret.AddRange(segmentList);
+        
+        while(segmentList.Count > 0) //repeat until no segments are found
+        {
+            //then check every segmented arrow to see if they have segments
+            segmentList = RemoveSegments(segmentList);
+            ret.AddRange(segmentList);
+        }
+
         return ret;
+    }
+
+    private List<Arrow> RemoveSegments(List<Arrow> checkArrows)
+    {
+        List<Arrow> segmentRet = new List<Arrow>();
+        foreach (Arrow checkArrow in checkArrows) //checks each arrow of the passed list
+        {
+            foreach (Stack<Arrow> segmentCheckStack in arrowStacks) //checks every stack
+            {
+                if (segmentCheckStack.Contains(checkArrow) || segmentCheckStack.Count <= 0)
+                {
+                    continue;
+                }
+
+                List<Arrow> segmentCheckList = new List<Arrow>(segmentCheckStack);
+                Node target = segmentCheckList[segmentCheckList.Count - 1].Origin; //is the origin of the root arrow
+
+                if (target != null && IsBetween(checkArrow, target)) //between the arrow we are checking?
+                {
+                    while (segmentCheckStack.Count > 0)
+                    {
+                        Arrow currentSegmentStackArrow = segmentCheckStack.Peek();
+                        segmentRet.Add(currentSegmentStackArrow);
+                        RemoveArrow(currentSegmentStackArrow, segmentCheckStack);
+                    }
+                }
+            }
+        }
+        return segmentRet;
     }
 
     /// <summary>
@@ -126,7 +141,7 @@ public class ArrowContainer
             }
         }
 
-        if(FindIntersectingArrow(selectedNode) != null)
+        if (FindIntersectingArrow(selectedNode) != null)
         {
             return true;
         }
@@ -159,7 +174,7 @@ public class ArrowContainer
                 return arrow;
             }
         }
-        if(FindIntersectingArrow(arrow.Origin) != null) //if it is a branch of another arrow
+        if (FindIntersectingArrow(arrow.Origin) != null) //if it is a branch of another arrow
         {
             Stack<Arrow> newStack = new Stack<Arrow>();
             arrowStacks.Add(newStack);
@@ -173,13 +188,13 @@ public class ArrowContainer
 
     public Arrow FindIntersectingArrow(Node target)
     {
-        foreach(Stack<Arrow> arrowStack in arrowStacks)
+        foreach (Stack<Arrow> arrowStack in arrowStacks)
         {
             List<Arrow> tempList = new List<Arrow>(arrowStack);
             tempList.Reverse();
-            foreach(Arrow arrow in tempList)
+            foreach (Arrow arrow in tempList)
             {
-                if(IsBetween(arrow.Origin, arrow.Destination, target))
+                if (IsBetween(arrow.Origin, arrow.Destination, target))
                 {
                     return arrow;
                 }
@@ -199,28 +214,6 @@ public class ArrowContainer
         float distBetween = (destination.Coordinate - origin.Coordinate).magnitude;
         float distSegmented = (destination.Coordinate - target.Coordinate).magnitude + (target.Coordinate - origin.Coordinate).magnitude;
         return distBetween == distSegmented;
-
-        /*
-        if(origin.Coordinate.x != destination.Coordinate.x && origin.Coordinate.y != destination.Coordinate.y)
-        {
-            Debug.LogError("Origin and destination must be cardinal to each other");
-            return false;
-        }
-        if(target.Coordinate.x == origin.Coordinate.x && target.Coordinate.x == destination.Coordinate.x) //target it between vertically
-        {
-            //is the y between the two?
-            return (origin.Coordinate.y <= target.Coordinate.y && target.Coordinate.y <= destination.Coordinate.y)
-                || (origin.Coordinate.y >= target.Coordinate.y && target.Coordinate.y >= destination.Coordinate.y);
-        } else if(target.Coordinate.y == origin.Coordinate.y && target.Coordinate.y == destination.Coordinate.y) //target is between horizontally
-        {
-            //is the x between the two?
-            return (origin.Coordinate.x <= target.Coordinate.x && target.Coordinate.x <= destination.Coordinate.x)
-                || (origin.Coordinate.x >= target.Coordinate.x && target.Coordinate.x >= destination.Coordinate.x);
-        }
-        else
-        {
-            return false;
-        }*/
     }
 
     /// <summary>
