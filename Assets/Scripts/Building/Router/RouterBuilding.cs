@@ -211,6 +211,15 @@ public class RouterBuilding : Building
         agent.Throw(velocity);
     }
 
+    private void OnDestroy()
+    {
+        foreach(Agent delAgent in processQueue)
+        {
+            delAgent.SetSpeed(delAgent.Attribute.Speed);
+            processedList.Add(delAgent);
+        }
+    }
+
     protected void SetChildActive(string [] elements, bool active, GameObject canvas)
     {
         foreach(string element in elements)
