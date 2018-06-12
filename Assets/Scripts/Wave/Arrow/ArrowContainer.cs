@@ -81,8 +81,12 @@ public class ArrowContainer
                     continue;
                 }
 
+                /*
                 List<Arrow> segmentCheckList = new List<Arrow>(segmentCheckStack);
                 Node target = segmentCheckList[segmentCheckList.Count - 1].Origin; //is the origin of the root arrow
+                */
+
+                Node target = GetOriginNodeFromStack(segmentCheckStack); //change to above if function doesn't work
 
                 if (target != null && IsBetween(checkArrow, target)) //between the arrow we are checking?
                 {
@@ -179,7 +183,7 @@ public class ArrowContainer
             Stack<Arrow> newStack = new Stack<Arrow>();
             arrowStacks.Add(newStack);
             newStack.Push(arrow);
-            Debug.Log("Added as a segment!");
+            //Debug.Log("Added as a segment!");
             return arrow;
         }
 
@@ -223,6 +227,9 @@ public class ArrowContainer
     public List<WavePath> ToWavePaths()
     {
         List<WavePath> wavePaths = new List<WavePath>();
+        List<Stack<Arrow>> segmentedStacks = new List<Stack<Arrow>>();
+        List<Queue<Node>> baseQueues = new List<Queue<Node>>(); 
+
         foreach (Stack<Arrow> arrowStack in arrowStacks)
         {
             if (arrowStack.Count == 0)
@@ -264,6 +271,7 @@ public class ArrowContainer
             }
             if (!Valid)
             {
+                segmentedStacks.Add(arrowStack);
                 continue; //this start does not end in an endArea
                 //does it start in an intermediate Node?
             }
@@ -277,9 +285,82 @@ public class ArrowContainer
                 nodeQueue.Enqueue(currentArrow.Destination);
             }
 
-            WavePath newPath = new WavePath(nodeQueue);
+            baseQueues.Add(nodeQueue);
+
+            //once baseQueues is full and segmentedStacks is empty we'll add
+            //WavePath newPath = new WavePath(nodeQueue);
+            //wavePaths.Add(newPath);
+        }
+
+
+        //test area
+        /*
+        Node target = GetOriginNodeFromStack(segmentedStacks[0]);
+        foreach(Queue<Node> checkNodeQueue in baseQueues)
+        {
+            Node previous;
+            if((previous = GetIntersectionNode(checkNodeQueue, target)) != null)
+            {
+                Queue<Node> newBaseQueue = GetNodeQueueFromSegmentAndBaseQueue(checkNodeQueue, segmentedStacks[0], previous);
+                Debug.Log(newBaseQueue);
+            }
+        }*/
+
+        //for every segment for every baseQueue
+        List<Queue<Node>> demilitarizedList = new List<Queue<Node>>();
+
+        for(int i = 0; i < segmentedStacks.Count; i++)
+        {
+            Stack<Arrow> currentArrowStack = segmentedStacks[i];
+            foreach (Queue<Node> checkNodeQueue in baseQueues)
+            {
+                Node previous;
+                if ((previous = GetIntersectionNode(checkNodeQueue, GetOriginNodeFromStack(currentArrowStack))) != null)
+                {
+                    Queue<Node> newBaseQueue = GetNodeQueueFromSegmentAndBaseQueue(checkNodeQueue, currentArrowStack, previous);
+                    demilitarizedList.Add(newBaseQueue);
+                    segmentedStacks.Remove(currentArrowStack);
+                    i--;
+                }
+            }
+        }
+
+        //for every segment for every demiliterized queue
+        List<Queue<Node>> bufferList = new List<Queue<Node>>(); //buffer so demiliterized isn't changed during the loop
+        while (segmentedStacks.Count > 0)
+        {
+            for (int i = 0; i < segmentedStacks.Count; i++)
+            {
+                Stack<Arrow> currentArrowStack = segmentedStacks[i];
+                foreach (Queue<Node> checkNodeQueue in demilitarizedList)
+                {
+                    Node previous;
+                    if ((previous = GetIntersectionNode(checkNodeQueue, GetOriginNodeFromStack(currentArrowStack))) != null)
+                    {
+                        Queue<Node> newBaseQueue = GetNodeQueueFromSegmentAndBaseQueue(checkNodeQueue, currentArrowStack, previous);
+                        bufferList.Add(newBaseQueue);
+                        segmentedStacks.Remove(currentArrowStack);
+                        i--;
+                    }
+                }
+            }
+
+            baseQueues.AddRange(demilitarizedList);
+            demilitarizedList = new List<Queue<Node>>(bufferList);
+
+        }
+
+        if(demilitarizedList.Count > 0)
+        {
+            baseQueues.AddRange(demilitarizedList);
+        }
+
+        foreach(Queue<Node> currentNodeQueue in baseQueues)
+        {
+            WavePath newPath = new WavePath(currentNodeQueue);
             wavePaths.Add(newPath);
         }
+
         if (wavePaths.Count > 0)
         {
             return wavePaths;
@@ -289,4 +370,61 @@ public class ArrowContainer
             return null;
         }
     }
+
+    private Queue<Node> GetNodeQueueFromSegmentAndBaseQueue(Queue<Node> baseQueue, Stack<Arrow> arrowStack, Node transitionNode)
+    {
+        if (baseQueue.Count <= 0 || arrowStack.Count <= 0 || transitionNode == null)
+        {
+            Debug.LogError("Please pass valid arguments");
+            return null;
+        }
+        List<Node> tempList = new List<Node>();
+        Queue<Node> baseQueueCopy = new Queue<Node>(baseQueue);
+        Node currentNode;
+        do
+        {
+            currentNode = baseQueueCopy.Dequeue();
+            tempList.Add(currentNode);
+        } while (currentNode != transitionNode);
+
+        Stack<Arrow> arrowStackFlipped = new Stack<Arrow>(arrowStack); //stack copy flips
+        Arrow currentArrow = null;
+        while(arrowStackFlipped.Count > 0)
+        {
+            currentArrow = arrowStackFlipped.Pop();
+            tempList.Add(currentArrow.Origin);
+        }
+        tempList.Add(currentArrow.Destination);
+        return new Queue<Node>(tempList);
+    }
+
+    private Node GetOriginNodeFromStack(Stack<Arrow> passedArrowStack)
+    {
+        List<Arrow> listArrow = new List<Arrow>(passedArrowStack);
+        Node ret = listArrow[listArrow.Count - 1].Origin;
+        return ret;
+    }
+
+    private Node GetIntersectionNode(Queue<Node> nodeQueue, Node segmentOrigin)
+    {
+        if(nodeQueue.Count <= 0)
+        {
+            Debug.LogError("Pass a valid Node Queue!");
+            return null;
+        }
+        Queue<Node> nodeQueueCopy = new Queue<Node>(nodeQueue);
+        Node origin = nodeQueueCopy.Dequeue();
+        Node destination;
+        while(nodeQueueCopy.Count > 0)
+        {
+            destination = nodeQueueCopy.Dequeue();
+            if(IsBetween(origin, destination, segmentOrigin))
+            {
+                return origin;
+            }
+            origin = destination;
+        }
+        return null;
+    }
+
 }
