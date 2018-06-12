@@ -118,7 +118,10 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     public void removeFromMap()
     {
-        worldGrid.setOccupied(Location, Node.nodeStates.navigation); //assumes that you can only place on navigational Nodes
+        if(placed)
+        {
+            worldGrid.setOccupied(Location, Node.nodeStates.navigation);
+        }
         placed = false;
         Destroy(transform.root.gameObject);
     }
