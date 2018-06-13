@@ -65,19 +65,10 @@ MonoBehaviour:
         y: 4
       - x: 4
         y: 11
-      - x: 21
+      - x: 19
         y: 11
-      - x: 21
+      - x: 19
         y: 15
-    - list:
-      - x: 19
-        y: 4
-      - x: 19
-        y: 6
-      - x: 7
-        y: 6
-      - x: 7
-        y: 13
     - list:
       - x: 20
         y: 4
@@ -85,9 +76,9 @@ MonoBehaviour:
         y: 4
       - x: 34
         y: 10
-      - x: 19
+      - x: 21
         y: 10
-      - x: 19
+      - x: 21
         y: 15
     - list:
       - x: 33
@@ -98,6 +89,15 @@ MonoBehaviour:
         y: 16
       - x: 21
         y: 16
+    - list:
+      - x: 4
+        y: 4
+      - x: 4
+        y: 11
+      - x: 7
+        y: 11
+      - x: 7
+        y: 13
     endAreas:
     - Sink: 0
       bottomLeft:
