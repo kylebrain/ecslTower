@@ -32,6 +32,14 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    public Vector2 Vector
+    {
+        get
+        {
+            return destination.Coordinate - origin.Coordinate;
+        }
+    }
+
 
     /*-----------private variables-----------*/
     private Node origin;
@@ -76,11 +84,18 @@ public class Arrow : MonoBehaviour
         return Origin.IsBetween(arrow) && Destination.IsBetween(arrow);
     }
 
-    //returns a x by 1 grid area that represents the arrow
-
-    public Vector2Int GetCardinality()
+    //return the direction of the vector, value time 90 degrees is the rotation in the coordinate plan
+    //-1 is not cardinal
+    public Vector2 GetCardinality()
     {
-        return new Vector2Int(0,0);
+        Vector2 ret = Vector.normalized;
+        if(ret.x == 0 || ret.y == 0)
+        {
+            return ret;
+        } else
+        {
+            return Vector2.zero;
+        }
     }
 
     /// <summary>

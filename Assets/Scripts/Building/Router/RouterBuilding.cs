@@ -36,6 +36,8 @@ public class RouterBuilding : Building
     public float throwMagnitude = 10f;
     public float throwRange = 120f;
 
+    public RingDisplayAgent childDisplayAgent;
+
     /// <summary>
     /// Queue of Agents to be processed, processed one at a time
     /// </summary>
@@ -89,9 +91,50 @@ public class RouterBuilding : Building
         timeBetweenFilters = 1f / RoutingRate;
     }
 
-    protected override void UpdateRotation()
+    protected override void UpdateRotation(Node node)
     {
-        
+        if(node.Occupied != Node.nodeStates.navigation)
+        {
+            //router cannot be placed or rotated here
+            //set to default value?
+                //have to also handle what to do if no node is found
+                //possibly with a null check but calling from building would need to be changed
+            return;
+        }
+        List<Arrow> intersectingArrows = new List<Arrow>();
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Arrow"))
+        {
+            Arrow arrow = obj.GetComponent<Arrow>();
+            if (node.IsBetween(arrow))
+            {
+                intersectingArrows.Add(arrow);
+            }
+        }
+        SetRotation(intersectingArrows);
+    }
+
+    private void SetRotation(List<Arrow> arrowList)
+    {
+        if(arrowList.Count == 0)
+        {
+            return;
+        }
+        Vector3 pointVector;
+        if(arrowList.Count == 1)
+        {
+            pointVector = arrowList[0].GetCardinality();
+        } else
+        {
+            pointVector = arrowList[1].GetCardinality() - arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
+        }
+        transform.localRotation = Quaternion.LookRotation(new Vector3(pointVector.x, 0f, pointVector.y));
+        if(childDisplayAgent != null)
+        {
+            childDisplayAgent.startingRotation = transform.eulerAngles.y;
+        } else
+        {
+            Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
+        }
     }
 
     protected override void updateAction()

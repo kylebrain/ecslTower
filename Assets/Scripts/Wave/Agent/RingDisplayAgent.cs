@@ -47,7 +47,7 @@ public class RingDisplayAgent : VisualAgent
     {
         if (Speed <= 0)
         {
-            Rotation = 0f;
+            Rotation = startingRotation;
         }
         transform.localPosition = new Vector3(center.x + radius * Mathf.Cos(Rotation * Mathf.Deg2Rad), center.y + radius * Mathf.Sin(Rotation * Mathf.Deg2Rad));
         transform.localEulerAngles = new Vector3(0f, 0f, Rotation);

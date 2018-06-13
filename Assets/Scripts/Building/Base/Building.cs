@@ -199,10 +199,7 @@ public abstract class Building : MonoBehaviour
 
         Location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
         updatePosition();
-        UpdateRotation();
     }
-
-    protected virtual void UpdateRotation() { }
 
     /// <summary>
     /// Recalculates and moves the object's transform based on its Location attribute.
@@ -305,6 +302,7 @@ public abstract class Building : MonoBehaviour
             if (selectedNode.Occupied != Node.nodeStates.building) //does not move the Router to an Occupied Node
             {
                 setCenterPosition(desiredPos);
+                UpdateRotation(selectedNode);
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {
@@ -314,6 +312,8 @@ public abstract class Building : MonoBehaviour
 
         #endregion
     }
+
+    protected virtual void UpdateRotation(Node node) { }
 
     /// <summary>
     /// Shows the Sell option inherent to all buildings
