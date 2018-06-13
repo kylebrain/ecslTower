@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cameraController: MonoBehaviour {
+public class cameraController : MonoBehaviour
+{
     //Public
     /// <summary>
     /// Moving the cursor this close to the edge of the screenview will scroll the screen.
     /// </summary>
     [Range(0.0f, 0.5f)]
     public float EdgeScrollTolerance;
+
+    private float pitchMod = 5f;
 
     //Private
     private Camera cam;
@@ -28,22 +31,29 @@ public class cameraController: MonoBehaviour {
     private float moveSpeed;
     private float zoomSpeed;
 
+    private float initPitch;
+
+
     private WorldGrid worldGrid;
 
 
-    private void Start() {
+    private void Start()
+    {
         cam = GetComponent<Camera>();
         cam.fieldOfView = 60;
         targetY = transform.position.y;
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
-        if(worldGrid == null) {
+        if (worldGrid == null)
+        {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
+        initPitch = transform.localEulerAngles.x;
         initBounds();
     }
 
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         //Desired movement vector
         Vector3 movement = Vector3.Normalize(new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")));
         movement += new Vector3(0f, -Input.GetAxisRaw("Mouse ScrollWheel"), 0f);
@@ -57,37 +67,57 @@ public class cameraController: MonoBehaviour {
         deltaX = movement.x;
         deltaZ = movement.z;
 
-        if(mouseInGameView) {
-            if(EdgeScrollTolerance != 0f){
+        if (mouseInGameView)
+        {
+            if (EdgeScrollTolerance != 0f)
+            {
                 //-------Left, right----------------
-                if(mouse.x <= EdgeScrollTolerance) {
+                if (mouse.x <= EdgeScrollTolerance)
+                {
                     deltaX -= moveSpeed;
                 }
-                if((1 - mouse.x) <= EdgeScrollTolerance) {
+                if ((1 - mouse.x) <= EdgeScrollTolerance)
+                {
                     deltaX += moveSpeed;
                 }
 
                 //---------Forward, backward----------
-                if(mouse.y <= EdgeScrollTolerance) {
+                if (mouse.y <= EdgeScrollTolerance)
+                {
                     deltaZ -= moveSpeed;
                 }
-                if((1 - mouse.y) <= EdgeScrollTolerance) {
+                if ((1 - mouse.y) <= EdgeScrollTolerance)
+                {
                     deltaZ += moveSpeed;
                 }
             }
 
             //------Zoom in, out----------------
-            if(movement.y != 0) {
+            if (movement.y != 0)
+            {
                 targetY = Mathf.Clamp(transform.position.y + movement.y, minZoom, maxZoom);
             }
         }
 
+        if (Input.GetKey(KeyCode.F))
+        {
+            float cameraPitch = transform.localEulerAngles.x;
+            float cameraIncrease = cameraPitch - Input.GetAxisRaw("Mouse Y") * pitchMod;
+            cameraIncrease = Mathf.Clamp(cameraIncrease, 0, 90);
+            transform.localEulerAngles = new Vector3(cameraIncrease, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            transform.localEulerAngles = new Vector3(initPitch, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        }
 
 
 
     }
 
-    private void LateUpdate() {
+    private void LateUpdate()
+    {
         //Edges of the screen
         Vector3 bottomLeft = cam.ScreenToWorldPoint(new Vector3(0, 0, transform.position.y));
         Vector3 topRight = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, cam.pixelHeight, transform.position.y));
@@ -97,13 +127,14 @@ public class cameraController: MonoBehaviour {
         float bottomEdge = bottomLeft.z;
         float topEdge = topRight.z;
 
-        //Keep the edges of the creen within the specified area
+        //Keep the edges of the screen within the specified area
         deltaX = softBound(leftEdge, rightEdge, leftBound, rightBound, deltaX);
         deltaZ = softBound(bottomEdge, topEdge, bottomBound, topBound, deltaZ);
 
         //------------Set transform-----------
         Vector3 newPos = Vector3.ClampMagnitude(new Vector3(deltaX, 0f, deltaZ), moveSpeed) * Time.deltaTime;
-        if(Input.GetKey(KeyCode.LeftShift)) {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
             newPos.Scale(new Vector3(2f, 1f, 2f));
         }
         transform.position += newPos;
@@ -119,25 +150,32 @@ public class cameraController: MonoBehaviour {
      * it corrects it by adjusting deltaMovement to
      * move back within target range.
      */
-    private float softBound(float minEdge, float maxEdge, float minBound, float maxBound, float deltaMovement) {
+    private float softBound(float minEdge, float maxEdge, float minBound, float maxBound, float deltaMovement)
+    {
 
         //Both are past their limits, so compromise
-        if(minEdge < minBound && maxEdge > maxBound) {
+        if (minEdge < minBound && maxEdge > maxBound)
+        {
             deltaMovement = minBound - minEdge + maxBound - maxEdge;
 
             //Above the limit on the max side, and not already trying to correct it with deltaMovement
-        } else if((maxEdge > maxBound) && (deltaMovement > maxBound - maxEdge)) {
+        }
+        else if ((maxEdge > maxBound) && (deltaMovement > maxBound - maxEdge))
+        {
             deltaMovement = maxBound - maxEdge;
 
             //Below the limit on the min side, and not already trying to correct it with deltaMovement
-        } else if((minEdge < minBound) && (deltaMovement < minBound - minEdge)) {
+        }
+        else if ((minEdge < minBound) && (deltaMovement < minBound - minEdge))
+        {
             deltaMovement = minBound - minEdge;
         }
 
         return deltaMovement;
     }
 
-    private void initBounds() {
+    private void initBounds()
+    {
         /*
         private float leftBound;
         private float rightBound;
@@ -164,7 +202,7 @@ public class cameraController: MonoBehaviour {
         maxZoom = sqrt3Over2 * (1.5f * worldGrid.width);
         minZoom = sqrt3Over2 * 7;
 
-        
+
         zoomSpeed = Mathf.Sqrt(worldGrid.width * worldGrid.height);
         moveSpeed = 5f + Mathf.Sqrt(zoomSpeed);
     }
