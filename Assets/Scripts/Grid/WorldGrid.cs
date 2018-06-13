@@ -60,8 +60,9 @@ public class WorldGrid : MonoBehaviour
     {
         Ray ray;
         RaycastHit hit;
+        int layerMask = 1 << 8; //only casts to the 8th Node layer
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out hit))
+        if (!Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             return null;
         }

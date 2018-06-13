@@ -15,6 +15,7 @@ TagManager:
   - MapMaker
   - Coin
   - Arrow
+  - Pole
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Node
   - 
   - 
   - 
