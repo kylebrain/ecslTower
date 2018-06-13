@@ -42,7 +42,7 @@ public class WavePath {
     /// <summary>
     /// Returns a List of Nodes based on the Node Queue
     /// </summary>
-    private List<Node> NodeList
+    public List<Node> NodeList
     {
         get
         {

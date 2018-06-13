@@ -37,7 +37,7 @@ public abstract class Building : MonoBehaviour
     /// <summary>
     /// Holds the array of nodes that make the play area
     /// </summary>
-    private WorldGrid worldGrid;
+    protected WorldGrid worldGrid;
 
     /// <summary>
     /// LineRenderer component of the gameobject
@@ -110,6 +110,7 @@ public abstract class Building : MonoBehaviour
         worldGrid.setOccupied(loc, Node.nodeStates.building);
         currentlyPlacing = false;
         placed = true;
+
         return true;
     }
 
@@ -198,7 +199,10 @@ public abstract class Building : MonoBehaviour
 
         Location.bottomLeft = new Vector2Int(bottomLeftX, bottomLeftY);
         updatePosition();
+        UpdateRotation();
     }
+
+    protected virtual void UpdateRotation() { }
 
     /// <summary>
     /// Recalculates and moves the object's transform based on its Location attribute.

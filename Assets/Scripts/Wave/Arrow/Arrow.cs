@@ -71,6 +71,13 @@ public class Arrow : MonoBehaviour
         destination = end;
     }
 
+    //returns a x by 1 grid area that represents the arrow
+
+    public Vector2Int GetCardinality()
+    {
+        return new Vector2Int(0,0);
+    }
+
     /// <summary>
     /// Prints the origin and destination Nodes when outputing the Arrow object
     /// </summary>

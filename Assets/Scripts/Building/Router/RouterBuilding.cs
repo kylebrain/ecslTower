@@ -89,8 +89,10 @@ public class RouterBuilding : Building
         timeBetweenFilters = 1f / RoutingRate;
     }
 
-
-
+    protected override void UpdateRotation()
+    {
+        
+    }
 
     protected override void updateAction()
     {
