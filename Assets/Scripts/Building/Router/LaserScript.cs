@@ -5,7 +5,7 @@ using UnityEngine;
 public class LaserScript : MonoBehaviour {
 
     private VolumetricLines.VolumetricLineBehavior laser;
-    private float buffer = 0.3f;
+    private float buffer = 0.0f;
 
     private void Start()
     {
@@ -18,18 +18,21 @@ public class LaserScript : MonoBehaviour {
         laser.StartPos = transform.localPosition + Vector3.left * buffer;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Ray ray = new Ray(transform.position, Vector3.left);
+        Ray ray = new Ray(transform.position, transform.parent.TransformDirection(Vector3.left));
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit))
         {
-            //Debug.Log(hit.transform.name);
             if(hit.transform.tag == "Pole")
             {
-                //Debug.Log("Hit!");
                 laser.EndPos = hit.transform.localPosition;
             }
+            if(hit.transform.tag == "Agent")
+            {
+                laser.EndPos = transform.parent.InverseTransformPoint(hit.transform.position);
+            }
+            laser.EndPos = new Vector3(laser.EndPos.x, laser.StartPos.y, laser.StartPos.z);
         }
     }
 }

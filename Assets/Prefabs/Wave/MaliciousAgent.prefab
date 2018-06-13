@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114768018217097866}
   - component: {fileID: 82665493076276894}
   - component: {fileID: 82882876289934386}
+  - component: {fileID: 64931267447895110}
   m_Layer: 0
   m_Name: MaliciousAgent
   m_TagString: Agent
@@ -84,6 +85,20 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1421161203796108}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!64 &64931267447895110
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1421161203796108}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!82 &82665493076276894
 AudioSource:
