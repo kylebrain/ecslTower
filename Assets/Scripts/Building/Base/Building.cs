@@ -285,6 +285,13 @@ public abstract class Building : MonoBehaviour
 
         if (placed)
         {
+            if (mouseWithinBuilding)
+            {
+                HighlightBuidling(true);
+            } else if(!selected)
+            {
+                HighlightBuidling(false);
+            }
             if (Input.GetMouseButtonUp(0))
             {
                 if (mouseWithinBuilding && !currentlyPlacing)
@@ -315,6 +322,8 @@ public abstract class Building : MonoBehaviour
 
     protected virtual void UpdateRotation(Node node) { }
 
+    protected virtual void HighlightBuidling(bool highlight) { }
+
     /// <summary>
     /// Shows the Sell option inherent to all buildings
     /// </summary>
@@ -325,6 +334,7 @@ public abstract class Building : MonoBehaviour
         {
             return;
         }
+        HighlightBuidling(false);
         radiusLine.enabled = false;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;
@@ -338,6 +348,7 @@ public abstract class Building : MonoBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void ShowUI(GameObject canvas)
     {
+        HighlightBuidling(true);
         radiusLine.enabled = true;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         selected = true;

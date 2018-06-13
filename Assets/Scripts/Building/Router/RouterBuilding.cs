@@ -36,8 +36,12 @@ public class RouterBuilding : Building
     public float throwMagnitude = 10f;
     public float throwRange = 120f;
 
+    public float highlightLightSaberValue = 0.7f;
+    public Color highlighEmissionColor;
+
     public RingDisplayAgent childDisplayAgent;
     public VolumetricLines.VolumetricLineBehavior laser;
+    public List<GameObject> Poles = new List<GameObject>();
 
     /// <summary>
     /// Queue of Agents to be processed, processed one at a time
@@ -57,6 +61,8 @@ public class RouterBuilding : Building
     /// The calculated required time before another agent can be filtered
     /// </summary>
     private float timeBetweenFilters;
+
+    private float initLightSaberValue;
 
     /// <summary>
     /// Finds all Agents and checks if they are in range, adds to processQueue and slows to form clump around ROuter
@@ -90,6 +96,8 @@ public class RouterBuilding : Building
         denied = audios[1];
         timeSinceLastFilter = 0f;
         timeBetweenFilters = 1f / RoutingRate;
+
+        initLightSaberValue = laser.LightSaberFactor;
     }
 
     protected override void UpdateRotation(Node node)
@@ -135,6 +143,27 @@ public class RouterBuilding : Building
         } else
         {
             Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
+        }
+    }
+
+    protected override void HighlightBuidling(bool highlight)
+    {
+        if (highlight)
+        {
+            foreach(GameObject obj in Poles)
+            {
+                Renderer rend = obj.GetComponent<Renderer>();
+                rend.material.SetColor("_EmissionColor", highlighEmissionColor); //replace with variable when done
+            }
+            laser.LightSaberFactor = highlightLightSaberValue;
+        } else
+        {
+            foreach (GameObject obj in Poles)
+            {
+                Renderer rend = obj.GetComponent<Renderer>();
+                rend.material.SetColor("_EmissionColor", Color.black); //default value
+            }
+            laser.LightSaberFactor = initLightSaberValue;
         }
     }
 

@@ -1277,6 +1277,9 @@ MonoBehaviour:
   throwRange: 120
   childDisplayAgent: {fileID: 114784577423136672}
   laser: {fileID: 114835427097623760}
+  Poles:
+  - {fileID: 1311329606056492}
+  - {fileID: 1865992862665950}
 --- !u!114 &114143505945499204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2223,6 +2226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca7bf023ab606341b6016e8e9c4e6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bufferEnd: 0.1
 --- !u!114 &114469238783059954
 MonoBehaviour:
   m_ObjectHideFlags: 1
