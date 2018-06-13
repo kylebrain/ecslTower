@@ -9,8 +9,8 @@ public class Arrow : MonoBehaviour
 {
 
     /*-----------public variables-----------*/
-    private float baseRadius = 0.1f;
-    private float widthScale = 0.01f;
+    public float baseRadius = 0.3f;
+    public float widthScale = 0.01f;
     /// <summary>
     /// The Node the base of the Arrow is attached (get only)
     /// </summary>
