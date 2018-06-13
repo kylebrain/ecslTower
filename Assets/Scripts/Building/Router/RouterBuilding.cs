@@ -37,6 +37,7 @@ public class RouterBuilding : Building
     public float throwRange = 120f;
 
     public RingDisplayAgent childDisplayAgent;
+    public VolumetricLines.VolumetricLineBehavior laser;
 
     /// <summary>
     /// Queue of Agents to be processed, processed one at a time
@@ -125,7 +126,7 @@ public class RouterBuilding : Building
             pointVector = arrowList[0].GetCardinality();
         } else
         {
-            pointVector = arrowList[1].GetCardinality() - arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
+            pointVector = arrowList[1].GetCardinality() + arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
         }
         transform.localRotation = Quaternion.LookRotation(new Vector3(pointVector.x, 0f, pointVector.y));
         if(childDisplayAgent != null)
@@ -210,6 +211,7 @@ public class RouterBuilding : Building
                         //Debug.Log("Deleted: " + delAgent.Attribute);
                         denied.Play();
                         ThrowDeniedAgent(delAgent);
+                        laser.LineColor = Color.red;
                         filtered = true;
                         break;
                     }
@@ -218,6 +220,7 @@ public class RouterBuilding : Building
                 {
                     //Debug.Log("Let in: " + delAgent.Attribute);
                     allowed.Play();
+                    laser.LineColor = Color.green;
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                 }
                 processedList.Add(delAgent);

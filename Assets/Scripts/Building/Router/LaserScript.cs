@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class LaserScript : MonoBehaviour {
 
+    public float bufferEnd = 0.15f; //how far from the contact point the laser stays
+
     private VolumetricLines.VolumetricLineBehavior laser;
-    private float buffer = 0.0f;
+    private float bufferStart = 0.25f;
+    
 
     private void Start()
     {
@@ -15,7 +18,7 @@ public class LaserScript : MonoBehaviour {
             Debug.LogError("Could not find laser child!");
             return;
         }
-        laser.StartPos = transform.localPosition + Vector3.left * buffer;
+        laser.StartPos = transform.localPosition + Vector3.left * bufferStart;
     }
 
     private void FixedUpdate()
@@ -30,7 +33,7 @@ public class LaserScript : MonoBehaviour {
             }
             if(hit.transform.tag == "Agent")
             {
-                laser.EndPos = transform.parent.InverseTransformPoint(hit.transform.position);
+                laser.EndPos = transform.parent.InverseTransformPoint(hit.point + transform.parent.TransformDirection(Vector3.right) * bufferEnd);
             }
             laser.EndPos = new Vector3(laser.EndPos.x, laser.StartPos.y, laser.StartPos.z);
         }
