@@ -1275,6 +1275,8 @@ MonoBehaviour:
   throwAngle: 45
   throwMagnitude: 10
   throwRange: 120
+  highlightLightSaberValue: 0.7
+  highlighEmissionColor: {r: 0.20588237, g: 0.20588237, b: 0.20588237, a: 1}
   childDisplayAgent: {fileID: 114784577423136672}
   laser: {fileID: 114835427097623760}
   Poles:

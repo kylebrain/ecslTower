@@ -17,8 +17,7 @@ public class MaliciousAgent : Agent {
     {
         if (LevelLookup.markMalicious)
         {
-            GetComponent<Renderer>().material = Resources.Load<Material>("Agent/MarkAgent");
-            SetColor(Attribute.Color);
+            transform.Find("MaliciousMarker").gameObject.SetActive(true);
         }
     }
 }
