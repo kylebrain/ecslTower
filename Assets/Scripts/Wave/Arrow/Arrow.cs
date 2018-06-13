@@ -71,6 +71,11 @@ public class Arrow : MonoBehaviour
         destination = end;
     }
 
+    public bool IsBetween(Arrow arrow)
+    {
+        return Origin.IsBetween(arrow) && Destination.IsBetween(arrow);
+    }
+
     //returns a x by 1 grid area that represents the arrow
 
     public Vector2Int GetCardinality()
