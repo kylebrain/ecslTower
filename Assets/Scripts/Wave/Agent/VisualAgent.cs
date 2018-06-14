@@ -53,26 +53,29 @@ public abstract class VisualAgent : MonoBehaviour {
     /// <param name="size">Desired size</param>
     public void SetSize(AgentAttribute.PossibleSizes size)
     {
-        Vector3 newScale = Vector3.one;
         switch (size)
         {
             case AgentAttribute.PossibleSizes.small:
-                newScale = new Vector3(0.25f, 1, 0.5f);
+                ApplySize(0.5f);
+                //newScale = new Vector3(0.25f, 1, 0.5f);
                 break;
             case AgentAttribute.PossibleSizes.medium:
-                newScale = new Vector3(0.5f, 1, 1f);
+                ApplySize(1);
+                //newScale = new Vector3(0.5f, 1, 1f);
                 break;
             case AgentAttribute.PossibleSizes.large:
-                newScale = new Vector3(0.75f, 1, 1.5f);
+                ApplySize(1.5f);
+                //newScale = new Vector3(0.75f, 1, 1.5f);
                 break;
             default:
-                newScale = Vector3.one;
+                ApplySize(-1f);
+                //newScale = Vector3.one;
                 break;
         }
-        ApplySize(newScale);
+        
     }
 
-    protected abstract void ApplySize(Vector3 size);
+    protected abstract void ApplySize(float size);
 
     //change also in RingDisplayAgent and Agent
 

@@ -157,7 +157,7 @@ public abstract class Agent : VisualAgent
         model = Instantiate(model, transform);
     }
 
-    protected override void ApplySize(Vector3 size)
+    protected override void ApplySize(float size)
     {
         model.SetSize(size);
     }

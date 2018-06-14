@@ -15,7 +15,8 @@ public static class LevelLookup {
     public static int decoyProbability = 3;
     public static bool markMalicious = false;
     public static string arrowColor = "#000";
-    public static string agentModel = "DefaultAgentModel";
+    public static readonly string defaultAgentModel = "DefaultAgentModel";
+    public static string agentModel = defaultAgentModel;
 
     //statics added here must be reflected in Map
 

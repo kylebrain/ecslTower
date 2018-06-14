@@ -173,3 +173,5 @@ MonoBehaviour:
   gridPrefab: {fileID: 114508448744789710, guid: c9660b37ed229494e8d93ee27702e79d,
     type: 2}
   arrowColor: {r: 0, g: 0, b: 0, a: 1}
+  agentModel: {fileID: 114129911881356896, guid: 4ebe8fb75064aca4d901fa736e7b0ecb,
+    type: 2}

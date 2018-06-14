@@ -5,5 +5,5 @@ using UnityEngine;
 public abstract class AgentModel : MonoBehaviour {
 
     public abstract void SetColor(Color color);
-    public abstract void SetSize(Vector3 size); //change to float later
+    public abstract void SetSize(float size);
 }

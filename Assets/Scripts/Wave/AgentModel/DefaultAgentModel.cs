@@ -10,8 +10,14 @@ public class DefaultAgentModel : AgentModel {
         rend.material.SetColor("_Color", color);
     }
 
-    public override void SetSize(Vector3 size)
+    public override void SetSize(float size)
     {
-        transform.localScale = size;
+        if (size > 0)
+        {
+            transform.localScale = new Vector3(size / 2f, 1f, size);
+        } else
+        {
+            transform.localScale = Vector3.one;
+        }
     }
 }

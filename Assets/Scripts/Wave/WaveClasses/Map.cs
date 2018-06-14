@@ -19,7 +19,6 @@ public class Map : MonoBehaviour {
     public BaseGrid gridPrefab;
     public Color arrowColor = Color.black;
     public AgentModel agentModel;
-    private string defaultAgentModelString = "DefaultAgentModel";
 
     //any values or changed must be change in LevelLookup
 
@@ -35,7 +34,7 @@ public class Map : MonoBehaviour {
             LevelLookup.agentModel = agentModel.name;
         } else
         {
-            LevelLookup.agentModel = "DefaultAgentModel";
+            LevelLookup.agentModel = LevelLookup.defaultAgentModel;
         }
     }
 
