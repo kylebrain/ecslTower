@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: dc5faa8f7af6e46e98e6e2bd0c47f23a
+labels:
+- Street
+- Road
+- Intersection
+- City
+- Town
+- Tile
+- Traffic
+- Block
+- Light
+- Navmesh
+- Ped
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

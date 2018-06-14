@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: ca49e2d4427d24cc4864a605154e6358
+labels:
+- Road
+- City
+- Street
+- Tile
+- Block
+- Modular
+- Sidewalk
+- Snap
+- NavMesh
+- Light
+- Town
+- Lantern
+- Traffic
+- Cone
+- Barrier
+- Pillar
+- Pole
+- Sign
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
