@@ -51,9 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hidden: 0
   levelNumber: 3
   spawnRate: 0.5
-  waveCount: 3
+  waveCount: 5
   spawnPerWave: 100
   decoyProbability: 5
   markMalicious: 0
