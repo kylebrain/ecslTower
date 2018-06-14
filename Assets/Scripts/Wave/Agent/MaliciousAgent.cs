@@ -20,4 +20,9 @@ public class MaliciousAgent : Agent {
             transform.Find("MaliciousMarker").gameObject.SetActive(true);
         }
     }
+
+    protected override void DerivedTerminated()
+    {
+        transform.Find("MaliciousMarker").gameObject.SetActive(false); //should already be false for non-marked
+    }
 }

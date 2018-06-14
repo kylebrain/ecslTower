@@ -15,11 +15,14 @@ public abstract class VisualAgent : MonoBehaviour {
     /// <param name="attributes">The desire attributes</param>
     public void InitializeAttributes(AgentAttribute attributes)
     {
+        CreateAgentModel();
         Attribute = attributes;
         SetColor(attributes.Color);
         SetSize(attributes.Size);
         SetSpeed(attributes.Speed);
     }
+
+    protected virtual void CreateAgentModel() { }
 
     /// <summary>
     /// Sets the NavAgent speed based on speed Enum
@@ -71,7 +74,7 @@ public abstract class VisualAgent : MonoBehaviour {
 
     protected abstract void ApplySize(Vector3 size);
 
-    //change also in RingDisplayAgent
+    //change also in RingDisplayAgent and Agent
 
     /// <summary>
     /// Sets Render Material based on color Enum
@@ -81,23 +84,5 @@ public abstract class VisualAgent : MonoBehaviour {
     /// </remarks>
     /// <seealso cref="RingDisplayAgent"/>
     /// <param name="color">Desired Color</param>
-    public virtual void SetColor(AgentAttribute.PossibleColors color)
-    {
-        Renderer rend = GetComponent<Renderer>();
-        switch (color)
-        {
-            case AgentAttribute.PossibleColors.red:
-                rend.material.SetColor("_Color", Color.red);
-                break;
-            case AgentAttribute.PossibleColors.green:
-                rend.material.SetColor("_Color", Color.green);
-                break;
-            case AgentAttribute.PossibleColors.blue:
-                rend.material.SetColor("_Color", Color.blue);
-                break;
-            default:
-                rend.material.SetColor("_Color", Color.white);
-                break;
-        }
-    }
+    public abstract void SetColor(AgentAttribute.PossibleColors color);
 }

@@ -18,6 +18,8 @@ public class Map : MonoBehaviour {
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
     public Color arrowColor = Color.black;
+    public AgentModel agentModel;
+    private string defaultAgentModelString = "DefaultAgentModel";
 
     //any values or changed must be change in LevelLookup
 
@@ -28,6 +30,13 @@ public class Map : MonoBehaviour {
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
         LevelLookup.markMalicious = markMalicious;
+        if(agentModel != null)
+        {
+            LevelLookup.agentModel = agentModel.name;
+        } else
+        {
+            LevelLookup.agentModel = "DefaultAgentModel";
+        }
     }
 
     public void BuildWorldGrid(WorldGrid grid)
