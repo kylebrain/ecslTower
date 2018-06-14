@@ -61,119 +61,154 @@ MonoBehaviour:
     levelName: hard_level001
     wavePaths:
     - list:
+      - x: 11
+        y: 7
+      - x: 11
+        y: 12
+      - x: 19
+        y: 12
+      - x: 19
+        y: 19
+      - x: 14
+        y: 19
+    - list:
+      - x: 21
+        y: 8
+      - x: 21
+        y: 29
+    - list:
+      - x: 28
+        y: 16
+      - x: 36
+        y: 16
+      - x: 36
+        y: 12
+      - x: 38
+        y: 12
+    - list:
       - x: 27
-        y: 23
+        y: 16
       - x: 27
-        y: 13
-      - x: 22
-        y: 13
+        y: 32
+      - x: 36
+        y: 32
+      - x: 36
+        y: 34
     - list:
-      - x: 25
-        y: 7
-      - x: 9
-        y: 7
-    - list:
-      - x: 1
-        y: 1
-      - x: 8
-        y: 1
-      - x: 8
-        y: 7
-    - list:
-      - x: 44
-        y: 13
-      - x: 44
-        y: 5
-      - x: 41
-        y: 5
-    - list:
-      - x: 27
-        y: 7
       - x: 33
-        y: 7
+        y: 25
       - x: 33
-        y: 4
+        y: 8
       - x: 39
-        y: 4
+        y: 8
+      - x: 39
+        y: 11
     - list:
-      - x: 43
-        y: 14
-      - x: 43
-        y: 32
-      - x: 41
-        y: 32
+      - x: 39
+        y: 25
+      - x: 39
+        y: 23
+      - x: 24
+        y: 23
+      - x: 24
+        y: 29
+    - list:
+      - x: 11
+        y: 7
+      - x: 11
+        y: 12
+      - x: 19
+        y: 12
+      - x: 19
+        y: 19
+      - x: 19
+        y: 25
+      - x: 11
+        y: 25
+      - x: 11
+        y: 38
+    - list:
+      - x: 21
+        y: 8
+      - x: 21
+        y: 21
+      - x: 39
+        y: 21
+      - x: 39
+        y: 13
     - list:
       - x: 27
-        y: 27
-      - x: 15
-        y: 27
-    - list:
-      - x: 12
-        y: 17
-      - x: 40
-        y: 17
-      - x: 40
-        y: 31
+        y: 16
+      - x: 27
+        y: 32
+      - x: 30
+        y: 32
+      - x: 30
+        y: 35
+      - x: 8
+        y: 35
+      - x: 8
+        y: 38
     endAreas:
     - Sink: 0
       bottomLeft:
-        x: 25
+        x: 6
         y: 6
-      width: 4
-      height: 3
+      width: 6
+      height: 2
     - Sink: 0
       bottomLeft:
-        x: 10
-        y: 16
-      width: 4
-      height: 3
+        x: 19
+        y: 3
+      width: 3
+      height: 6
     - Sink: 0
       bottomLeft:
-        x: 42
+        x: 24
         y: 12
-      width: 4
-      height: 4
-    - Sink: 0
-      bottomLeft:
-        x: 25
-        y: 23
-      width: 7
+      width: 5
       height: 5
     - Sink: 0
       bottomLeft:
-        x: 0
-        y: 0
-      width: 3
-      height: 3
-    - Sink: 1
+        x: 33
+        y: 25
+      width: 4
+      height: 2
+    - Sink: 0
       bottomLeft:
         x: 39
-        y: 31
+        y: 25
       width: 4
-      height: 4
-    - Sink: 1
-      bottomLeft:
-        x: 20
-        y: 12
-      width: 4
-      height: 3
-    - Sink: 1
-      bottomLeft:
-        x: 7
-        y: 7
-      width: 4
-      height: 3
+      height: 2
     - Sink: 1
       bottomLeft:
         x: 14
-        y: 27
-      width: 3
-      height: 4
+        y: 17
+      width: 1
+      height: 5
     - Sink: 1
       bottomLeft:
-        x: 39
-        y: 4
+        x: 8
+        y: 38
+      width: 5
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 35
+        y: 34
       width: 4
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 20
+        y: 29
+      width: 6
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 38
+        y: 11
+      width: 2
       height: 3
-  gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
+  gridPrefab: {fileID: 114303123984761816, guid: 11ed0e4406c19194588fbe9b7e6168ae,
     type: 2}
