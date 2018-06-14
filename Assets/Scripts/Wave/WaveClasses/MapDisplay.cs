@@ -142,6 +142,8 @@ public class MapDisplay : MonoBehaviour
     /// <param name="paths">List to be converted</param>
     protected void UseLevel(SerializableLevel level)
     {
+        //get the arrow color
+        LevelLookup.arrowColor = "#" + ColorUtility.ToHtmlStringRGB(currentMap.arrowColor);
         SetArrowContainerAreas(level.endAreas);
         wavePathList = new List<WavePath>();
         foreach (SerializableWavePath path in level.wavePaths)

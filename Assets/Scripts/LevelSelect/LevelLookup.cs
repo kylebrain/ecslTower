@@ -14,6 +14,7 @@ public static class LevelLookup {
     public static int spawnPerWave = 100;
     public static int decoyProbability = 3;
     public static bool markMalicious = false;
+    public static string arrowColor = "#000";
 
     //statics added here must be reflected in Map
 

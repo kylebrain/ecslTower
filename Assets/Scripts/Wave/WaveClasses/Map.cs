@@ -17,6 +17,7 @@ public class Map : MonoBehaviour {
     public bool markMalicious = false;
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
+    public Color arrowColor = Color.black;
 
     //any values or changed must be change in LevelLookup
 

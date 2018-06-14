@@ -45,6 +45,14 @@ public class Arrow : MonoBehaviour
     private Node origin;
     private Node destination;
 
+    private void Start()
+    {
+        Color color;
+        if(ColorUtility.TryParseHtmlString(LevelLookup.arrowColor, out color)){
+            GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
+        }
+    }
+
 
     /*-----------public functions-----------*/
     /// <summary>

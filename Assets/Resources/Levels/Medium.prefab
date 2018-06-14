@@ -172,3 +172,4 @@ MonoBehaviour:
       height: 1
   gridPrefab: {fileID: 114947779080853920, guid: 593f9eea6c7d3594681f403d4932d4b1,
     type: 2}
+  arrowColor: {r: 0.19852942, g: 0.12733267, b: 0, a: 1}
