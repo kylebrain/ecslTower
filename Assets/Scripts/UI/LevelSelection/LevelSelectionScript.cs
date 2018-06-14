@@ -9,17 +9,48 @@ public class LevelSelectionScript : MonoBehaviour {
     public float levelSpacing = 20f;
 
     private float levelPanelWidth;
+    private bool showingHidden = false;
 
     private void Awake()
     {
-        levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
-        Map[] mapArray = Resources.LoadAll<Map>("Levels");
-        mapArray = mapArray.OrderBy(map => map.levelNumber).ToArray();
-        int levelCount = mapArray.Length;
-        float midPoint = (levelCount - 1) / 2f;
-        for(int i = 0; i < levelCount; i++)
+        if(transform.childCount > 0)
         {
-            Map currentMap = mapArray[i];
+            Debug.LogError("Level Selection should not start with any child objects!");
+        }
+        DisplayLevels(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            DisplayLevels(showingHidden = !showingHidden);
+        }
+    }
+
+    private void DisplayLevels(bool showHidden)
+    {
+        foreach(Transform child in transform) //change this if the error was triggered
+        {
+            if(child.GetComponent<LevelPanel>() != null)
+            {
+                Destroy(child.gameObject);
+            }  
+        }
+        levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
+        List<Map> mapList = Resources.LoadAll<Map>("Levels").ToList();
+        mapList = mapList.OrderBy(map => map.levelNumber).ToList();
+
+        if(!showHidden)
+        {
+            mapList.RemoveAll(m => m.hidden);
+        }
+
+        int levelCount = mapList.Count;
+        float midPoint = (levelCount - 1) / 2f;
+        for (int i = 0; i < levelCount; i++)
+        {
+            Map currentMap = mapList[i];
             LevelPanel currentPanel = Instantiate(levelPanelPrefab, transform);
             currentPanel.LevelName = currentMap.name;
             currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);

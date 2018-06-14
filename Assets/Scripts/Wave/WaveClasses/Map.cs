@@ -8,6 +8,7 @@ using UnityEngine;
 /// <seealso cref="LevelLookup"/>
 public class Map : MonoBehaviour {
 
+    public bool hidden = false;
     public int levelNumber = 0;
     public float spawnRate = 1f;
     public int waveCount = 3;
