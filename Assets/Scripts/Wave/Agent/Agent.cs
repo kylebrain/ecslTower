@@ -188,7 +188,7 @@ public abstract class Agent : VisualAgent
         terminated = true;
         thrown = true;
         transform.parent = null; //to make sure the game doesn't wait for the Agent to reach the barrier
-        Destroy(model.GetComponent<Collider>());
+        model.GetComponent<Collider>().enabled = false;
         Rigidbody rigid = gameObject.AddComponent<Rigidbody>();
         rigid.velocity = velocity;
     }

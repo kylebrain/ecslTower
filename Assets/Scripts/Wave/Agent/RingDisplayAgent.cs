@@ -62,9 +62,9 @@ public class RingDisplayAgent : VisualAgent
             proportions = Vector2.one;
         } else
         {
-            proportions = new Vector2(0.5f, 1);
+            proportions = new Vector2(0.5f, 1) * size;
         }
-        GetComponent<RectTransform>().sizeDelta = proportions * size * sizeMod;
+        GetComponent<RectTransform>().sizeDelta = proportions * sizeMod;
     }
 
     public override void SetColor(AgentAttribute.PossibleColors color)

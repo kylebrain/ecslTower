@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoneyAgentModel : AgentModel {
+public class BallotAgentModel : AgentModel {
 
     public override void SetColor(Color color)
     {

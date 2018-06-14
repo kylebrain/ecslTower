@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 33095627043104556}
   - component: {fileID: 23679787376332800}
   - component: {fileID: 114067351701099612}
-  - component: {fileID: 64269313638506000}
+  - component: {fileID: 136236634382887586}
   m_Layer: 0
   m_Name: EnergyAgentModel
   m_TagString: Untagged
@@ -113,20 +113,6 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1206498910978972}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &64269313638506000
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1206498910978972}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114067351701099612
 MonoBehaviour:
@@ -238,7 +224,7 @@ MonoBehaviour:
     m_TypeName: DigitalRuby.ThunderAndLightning.LightningCustomTransformDelegate,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   MeshFilter: {fileID: 33095627043104556}
-  MeshCollider: {fileID: 64269313638506000}
+  MeshCollider: {fileID: 0}
   MeshOffsetRange:
     Minimum: 0.05
     Maximum: 0.1
@@ -251,3 +237,16 @@ MonoBehaviour:
   MaximumPathDistance: 2
   Spline: 1
   DistancePerSegmentHint: 0.15
+--- !u!136 &136236634382887586
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1206498910978972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5000001
+  m_Height: 2.0000005
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
