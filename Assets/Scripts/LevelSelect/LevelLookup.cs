@@ -18,7 +18,6 @@ public static class LevelLookup {
     public static string arrowColor = "#000";
     public static readonly string defaultAgentModel = "DefaultAgentModel";
     public static string agentModel = defaultAgentModel;
-    public static List<int> unlocked = new List<int>();
 
     //statics added here must be reflected in Map
 

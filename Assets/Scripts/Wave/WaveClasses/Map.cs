@@ -51,7 +51,7 @@ public class Map : MonoBehaviour {
         {
             return true;
         }
-        if (LevelLookup.unlocked.Contains(levelNumber))
+        if (LevelUnlocking.IsUnlocked(levelNumber))
         {
             return true;
         } else

@@ -11,7 +11,7 @@ public class LevelSelectionScript : MonoBehaviour {
     private float levelPanelWidth;
     private bool showingHidden = false;
 
-    private void Awake()
+    private void Start()
     {
         if(transform.childCount > 0)
         {
@@ -25,6 +25,11 @@ public class LevelSelectionScript : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.H))
         {
             DisplayLevels(showingHidden = !showingHidden);
+        }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            LevelUnlocking.ResetUnlocked();
+            DisplayLevels(false);
         }
     }
 
