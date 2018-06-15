@@ -228,6 +228,7 @@ public abstract class Building : MonoBehaviour
         {
             currentlyPlacing = true;
             radiusLine.enabled = true;
+            HighlightBuidling(false); //change to a non-placeable color/highlight
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -310,6 +311,10 @@ public abstract class Building : MonoBehaviour
             {
                 setCenterPosition(desiredPos);
                 UpdateRotation(selectedNode);
+            } 
+            if(selectedNode.Occupied == Node.nodeStates.navigation)
+            {
+                HighlightBuidling(true); //ultimately change to change a placeable color/highlight
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {

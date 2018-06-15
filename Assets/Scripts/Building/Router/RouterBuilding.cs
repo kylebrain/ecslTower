@@ -279,7 +279,15 @@ public class RouterBuilding : Building
         float theta = throwAngle * Mathf.Deg2Rad;
         float yComponent = throwMagnitude * Mathf.Sin(theta);
         float horizontalMagnitude = throwMagnitude * Mathf.Cos(theta);
-        Vector3 xzComponent = -horizontalMagnitude * Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
+        Vector3 directionalVector;
+        if(agent.CurrentNode.transform.position == transform.position)
+        {
+            directionalVector = Vector3.Normalize(transform.position - agent.transform.position);
+        } else
+        {
+            directionalVector = Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
+        }
+        Vector3 xzComponent = -horizontalMagnitude * directionalVector;
         Vector3 velocity = new Vector3(xzComponent.x, yComponent, xzComponent.z);
 
 
