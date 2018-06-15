@@ -22,6 +22,8 @@ public class cameraController : MonoBehaviour
     public float transitionalPitchFudge = 0.001f;
     private float targetPitch;
 
+    private ControlPrefs controlPrefs;
+
     //if the passed directional float is 0, move towards reseting the pitch to normal
     //if it is in some direction, move in that direction
     private float TransitionalPitch
@@ -94,6 +96,12 @@ public class cameraController : MonoBehaviour
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
         initBounds();
+        controlPrefs = GameObject.FindGameObjectWithTag("ControlPrefs").GetComponent<ControlPrefs>();
+        if (controlPrefs == null)
+        {
+            Debug.LogError("Cannot find ControlPrefs, perhaps it was moved or the tag was not applied?");
+            return;
+        }
         if (topDown)
         {
             ResetTopDownCameraPitch();
@@ -157,7 +165,7 @@ public class cameraController : MonoBehaviour
 
             float cameraIncrease;
             float cameraPitch = transform.localEulerAngles.x;
-            if (Input.GetKey(KeyCode.F))
+            if (Input.GetKey(controlPrefs["adjustCameraAngle"]))
             {
                 cameraIncrease = cameraPitch - Input.GetAxisRaw("Mouse Y") * pitchMod;
                 cameraIncrease = Mathf.Clamp(cameraIncrease, 0, 90);
@@ -178,7 +186,7 @@ public class cameraController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (controlPrefs.GetKeyDown("toggleCameraMode"))
         {
             if (topDown)
             {

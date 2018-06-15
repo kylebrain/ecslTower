@@ -311,7 +311,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
+        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, false, canvas);
     }
 
     /// <summary>
@@ -320,7 +320,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedShow(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, true, canvas);
+        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, true, canvas);
     }
 
 
