@@ -98,6 +98,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EdgeScrollTolerance: 0.01
+  topDown: 1
+  angledPitch: 60
+  angleRange: 5
+  pitchMod: 5
+  anglePitchResetRate: 0.5
+  anglePitchSetRate: 0.05
+  transitionalPitchFudge: 0.001
 --- !u!124 &124033383259968696
 Behaviour:
   m_ObjectHideFlags: 1

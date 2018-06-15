@@ -11,7 +11,55 @@ public class cameraController : MonoBehaviour
     [Range(0.0f, 0.5f)]
     public float EdgeScrollTolerance;
 
-    private float pitchMod = 5f;
+    [Header("Pitch Settings")]
+    public bool topDown = true;
+    [Range(0.0f, 90.0f)]
+    public float angledPitch = 60;
+    public float angleRange = 10f;
+    public float pitchMod = 5f;
+    public float anglePitchResetRate = 0.5f;
+    public float anglePitchSetRate = 0.05f;
+    public float transitionalPitchFudge = 0.001f;
+    private float targetPitch;
+
+    //if the passed directional float is 0, move towards reseting the pitch to normal
+    //if it is in some direction, move in that direction
+    private float TransitionalPitch
+    {
+        get
+        {
+            return transitionalPitch;
+        }
+        set
+        {
+            if (value == 0)
+            {
+                if (transitionalPitch > 0 )
+                {
+                    transitionalPitch -= anglePitchResetRate;
+                    if(transitionalPitch < 0)
+                    {
+                        transitionalPitch = 0;
+                    }
+                } else
+                {
+                    transitionalPitch += anglePitchResetRate;
+                    if (transitionalPitch > 0)
+                    {
+                        transitionalPitch = 0;
+                    }
+                }
+            } else
+            {
+                transitionalPitch += value * anglePitchSetRate;
+                if(Mathf.Abs(transitionalPitch) > angleRange)
+                {
+                    transitionalPitch = angleRange * Mathf.Sign(transitionalPitch);
+                }
+            }
+        }
+    }
+    private float transitionalPitch;
 
     //Private
     private Camera cam;
@@ -31,8 +79,6 @@ public class cameraController : MonoBehaviour
     private float moveSpeed;
     private float zoomSpeed;
 
-    private float initPitch;
-
 
     private WorldGrid worldGrid;
 
@@ -47,8 +93,14 @@ public class cameraController : MonoBehaviour
         {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
-        initPitch = transform.localEulerAngles.x;
         initBounds();
+        if (topDown)
+        {
+            ResetTopDownCameraPitch();
+        } else
+        {
+            ResetAngleCameraPitch();
+        }
     }
 
 
@@ -99,21 +151,64 @@ public class cameraController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.F))
-        {
+        TransitionalPitch = deltaZ;
+
+        if (!topDown) {
+
+            float cameraIncrease;
             float cameraPitch = transform.localEulerAngles.x;
-            float cameraIncrease = cameraPitch - Input.GetAxisRaw("Mouse Y") * pitchMod;
-            cameraIncrease = Mathf.Clamp(cameraIncrease, 0, 90);
+            if (Input.GetKey(KeyCode.F))
+            {
+                cameraIncrease = cameraPitch - Input.GetAxisRaw("Mouse Y") * pitchMod;
+                cameraIncrease = Mathf.Clamp(cameraIncrease, 0, 90);
+                targetPitch = cameraIncrease;
+            }
+            else
+            {
+                cameraIncrease = targetPitch - TransitionalPitch;
+                cameraIncrease = Mathf.Clamp(cameraIncrease, 0, 90);
+            }
+            
             transform.localEulerAngles = new Vector3(cameraIncrease, transform.localEulerAngles.y, transform.localEulerAngles.z);
         }
 
+        
+
+    }
+
+    private void Update()
+    {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            transform.localEulerAngles = new Vector3(initPitch, transform.localEulerAngles.y, transform.localEulerAngles.z);
+            if (topDown)
+            {
+                topDown = false;
+                ResetAngleCameraPitch();
+                Debug.Log("Angled camera mode");
+            }
+            else if (Mathf.Abs(transform.localEulerAngles.x - angledPitch) <= angleRange)
+            {
+                topDown = true;
+                ResetTopDownCameraPitch();
+                Debug.Log("Top down camera mode");
+            }
+            else
+            {
+                ResetAngleCameraPitch();
+                Debug.Log("Reset position");
+            }
         }
+    }
 
+    private void ResetAngleCameraPitch()
+    {
+        transform.localEulerAngles = new Vector3(angledPitch, transform.localEulerAngles.y, transform.localEulerAngles.z);
+        targetPitch = angledPitch;
+    }
 
-
+    private void ResetTopDownCameraPitch()
+    {
+        transform.localEulerAngles = Vector3.right * 90; //perpendicular to plane
     }
 
     private void LateUpdate()
