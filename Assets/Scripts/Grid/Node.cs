@@ -51,7 +51,18 @@ public class Node : MonoBehaviour {
         setUnhovered();
     }
 
-    
+    public bool IsBetween(Arrow arrow)
+    {
+        return IsBetween(arrow.Origin, arrow.Destination);
+    }
+
+    public bool IsBetween(Node origin, Node destination)
+    {
+        float distBetween = (destination.Coordinate - origin.Coordinate).magnitude;
+        float distSegmented = (destination.Coordinate - Coordinate).magnitude + (Coordinate - origin.Coordinate).magnitude;
+        return distBetween == distSegmented;
+    }
+
     /// <summary>
     /// Sets the material back to what it was originally
     /// </summary>

@@ -9,8 +9,8 @@ public class Arrow : MonoBehaviour
 {
 
     /*-----------public variables-----------*/
-    private float baseRadius = 0.1f;
-    private float widthScale = 0.01f;
+    public float baseRadius = 0.3f;
+    public float widthScale = 0.01f;
     /// <summary>
     /// The Node the base of the Arrow is attached (get only)
     /// </summary>
@@ -32,10 +32,26 @@ public class Arrow : MonoBehaviour
         }
     }
 
+    public Vector2 Vector
+    {
+        get
+        {
+            return destination.Coordinate - origin.Coordinate;
+        }
+    }
+
 
     /*-----------private variables-----------*/
     private Node origin;
     private Node destination;
+
+    private void Start()
+    {
+        Color color;
+        if(ColorUtility.TryParseHtmlString(LevelLookup.arrowColor, out color)){
+            GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
+        }
+    }
 
 
     /*-----------public functions-----------*/
@@ -69,6 +85,25 @@ public class Arrow : MonoBehaviour
         DrawArrow(start.transform.position, end.transform.position, overlay);
         origin = start;
         destination = end;
+    }
+
+    public bool IsBetween(Arrow arrow)
+    {
+        return Origin.IsBetween(arrow) && Destination.IsBetween(arrow);
+    }
+
+    //return the direction of the vector, value time 90 degrees is the rotation in the coordinate plan
+    //-1 is not cardinal
+    public Vector2 GetCardinality()
+    {
+        Vector2 ret = Vector.normalized;
+        if(ret.x == 0 || ret.y == 0)
+        {
+            return ret;
+        } else
+        {
+            return Vector2.zero;
+        }
     }
 
     /// <summary>

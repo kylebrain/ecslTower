@@ -12,6 +12,11 @@ public class ControlPrefs : MonoBehaviour {
         {"toggleTooltips", KeyCode.F1},
         #endregion
 
+        #region Camera
+        {"toggleCameraMode", KeyCode.R},
+        {"adjustCameraAngle", KeyCode.F },
+        #endregion
+
         #region RolodexSelection
         {"rolodexLeftKey", KeyCode.Q},
         {"rolodexRightKey", KeyCode.E},

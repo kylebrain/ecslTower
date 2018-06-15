@@ -1,0 +1,116 @@
+fileFormatVersion: 2
+guid: e54ff4a7937604e8a851b7980468fbb6
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Barrier01
+    100002: //RootNode
+    100004: Lantern01
+    100006: Pillar01
+    100008: Pole01
+    100010: Pole02
+    100012: PoleOverRoad01
+    100014: Sign_Med-H
+    100016: Sign_Square
+    100018: TrafficLight01
+    100020: TrafficLight02
+    400000: Barrier01
+    400002: //RootNode
+    400004: Lantern01
+    400006: Pillar01
+    400008: Pole01
+    400010: Pole02
+    400012: PoleOverRoad01
+    400014: Sign_Med-H
+    400016: Sign_Square
+    400018: TrafficLight01
+    400020: TrafficLight02
+    2300000: Barrier01
+    2300002: Lantern01
+    2300004: Pillar01
+    2300006: Pole01
+    2300008: Pole02
+    2300010: PoleOverRoad01
+    2300012: Sign_Med-H
+    2300014: Sign_Square
+    2300016: TrafficLight01
+    2300018: TrafficLight02
+    3300000: Barrier01
+    3300002: Lantern01
+    3300004: Pillar01
+    3300006: Pole01
+    3300008: Pole02
+    3300010: PoleOverRoad01
+    3300012: Sign_Med-H
+    3300014: Sign_Square
+    3300016: TrafficLight01
+    3300018: TrafficLight02
+    4300000: TrafficLight02
+    4300002: Sign_Med-H
+    4300004: Sign_Square
+    4300006: Pole02
+    4300008: Pole01
+    4300010: TrafficLight01
+    4300012: PoleOverRoad01
+    4300014: Lantern01
+    4300016: Pillar01
+    4300018: Barrier01
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

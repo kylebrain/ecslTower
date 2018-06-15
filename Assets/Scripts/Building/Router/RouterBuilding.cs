@@ -36,6 +36,13 @@ public class RouterBuilding : Building
     public float throwMagnitude = 10f;
     public float throwRange = 120f;
 
+    public float highlightLightSaberValue = 0.7f;
+    public Color highlighEmissionColor;
+
+    public RingDisplayAgent childDisplayAgent;
+    public VolumetricLines.VolumetricLineBehavior laser;
+    public List<GameObject> Poles = new List<GameObject>();
+
     /// <summary>
     /// Queue of Agents to be processed, processed one at a time
     /// </summary>
@@ -54,6 +61,8 @@ public class RouterBuilding : Building
     /// The calculated required time before another agent can be filtered
     /// </summary>
     private float timeBetweenFilters;
+
+    private float initLightSaberValue;
 
     /// <summary>
     /// Finds all Agents and checks if they are in range, adds to processQueue and slows to form clump around ROuter
@@ -87,10 +96,76 @@ public class RouterBuilding : Building
         denied = audios[1];
         timeSinceLastFilter = 0f;
         timeBetweenFilters = 1f / RoutingRate;
+
+        initLightSaberValue = laser.LightSaberFactor;
     }
 
+    protected override void UpdateRotation(Node node)
+    {
+        if(node.Occupied != Node.nodeStates.navigation)
+        {
+            //router cannot be placed or rotated here
+            //set to default value?
+                //have to also handle what to do if no node is found
+                //possibly with a null check but calling from building would need to be changed
+            return;
+        }
+        List<Arrow> intersectingArrows = new List<Arrow>();
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Arrow"))
+        {
+            Arrow arrow = obj.GetComponent<Arrow>();
+            if (node.IsBetween(arrow))
+            {
+                intersectingArrows.Add(arrow);
+            }
+        }
+        SetRotation(intersectingArrows);
+    }
 
+    private void SetRotation(List<Arrow> arrowList)
+    {
+        if(arrowList.Count == 0)
+        {
+            return;
+        }
+        Vector3 pointVector;
+        if(arrowList.Count == 1)
+        {
+            pointVector = arrowList[0].GetCardinality();
+        } else
+        {
+            pointVector = arrowList[1].GetCardinality() + arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
+        }
+        transform.localRotation = Quaternion.LookRotation(new Vector3(pointVector.x, 0f, pointVector.y));
+        if(childDisplayAgent != null)
+        {
+            childDisplayAgent.startingRotation = transform.eulerAngles.y;
+        } else
+        {
+            Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
+        }
+    }
 
+    protected override void HighlightBuidling(bool highlight)
+    {
+        if (highlight)
+        {
+            foreach(GameObject obj in Poles)
+            {
+                Renderer rend = obj.GetComponent<Renderer>();
+                rend.material.SetColor("_EmissionColor", highlighEmissionColor); //replace with variable when done
+            }
+            laser.LightSaberFactor = highlightLightSaberValue;
+        } else
+        {
+            foreach (GameObject obj in Poles)
+            {
+                Renderer rend = obj.GetComponent<Renderer>();
+                rend.material.SetColor("_EmissionColor", Color.black); //default value
+            }
+            laser.LightSaberFactor = initLightSaberValue;
+        }
+    }
 
     protected override void updateAction()
     {
@@ -165,6 +240,7 @@ public class RouterBuilding : Building
                         //Debug.Log("Deleted: " + delAgent.Attribute);
                         denied.Play();
                         ThrowDeniedAgent(delAgent);
+                        laser.LineColor = Color.red;
                         filtered = true;
                         break;
                     }
@@ -173,6 +249,7 @@ public class RouterBuilding : Building
                 {
                     //Debug.Log("Let in: " + delAgent.Attribute);
                     allowed.Play();
+                    laser.LineColor = Color.green;
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                 }
                 processedList.Add(delAgent);
@@ -202,7 +279,15 @@ public class RouterBuilding : Building
         float theta = throwAngle * Mathf.Deg2Rad;
         float yComponent = throwMagnitude * Mathf.Sin(theta);
         float horizontalMagnitude = throwMagnitude * Mathf.Cos(theta);
-        Vector3 xzComponent = -horizontalMagnitude * Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
+        Vector3 directionalVector;
+        if(agent.CurrentNode.transform.position == transform.position)
+        {
+            directionalVector = Vector3.Normalize(transform.position - agent.transform.position);
+        } else
+        {
+            directionalVector = Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
+        }
+        Vector3 xzComponent = -horizontalMagnitude * directionalVector;
         Vector3 velocity = new Vector3(xzComponent.x, yComponent, xzComponent.z);
 
 
@@ -234,7 +319,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
+        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, false, canvas);
     }
 
     /// <summary>
@@ -243,7 +328,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedShow(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, true, canvas);
+        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, true, canvas);
     }
 
 

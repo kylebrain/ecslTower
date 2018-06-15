@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hidden: 0
   levelNumber: 2
   spawnRate: 1
   waveCount: 3
@@ -61,73 +62,116 @@ MonoBehaviour:
     levelName: medium_level001
     wavePaths:
     - list:
-      - x: 4
-        y: 4
-      - x: 4
-        y: 11
-      - x: 21
-        y: 11
-      - x: 21
+      - x: 13
+        y: 9
+      - x: 20
+        y: 9
+      - x: 20
         y: 15
     - list:
-      - x: 19
-        y: 4
-      - x: 19
-        y: 6
-      - x: 7
-        y: 6
-      - x: 7
+      - x: 8
         y: 13
+      - x: 19
+        y: 13
+      - x: 19
+        y: 15
     - list:
       - x: 20
         y: 4
-      - x: 34
+      - x: 23
         y: 4
-      - x: 34
-        y: 10
-      - x: 19
-        y: 10
-      - x: 19
-        y: 15
+      - x: 23
+        y: 1
+      - x: 30
+        y: 1
+      - x: 30
+        y: 7
     - list:
+      - x: 8
+        y: 13
+      - x: 10
+        y: 13
+      - x: 10
+        y: 4
+      - x: 5
+        y: 4
+    - list:
+      - x: 20
+        y: 4
+      - x: 23
+        y: 4
+      - x: 23
+        y: 1
+      - x: 30
+        y: 1
+      - x: 30
+        y: 3
+      - x: 33
+        y: 3
       - x: 33
         y: 12
-      - x: 25
+      - x: 35
         y: 12
-      - x: 25
-        y: 16
-      - x: 21
-        y: 16
+      - x: 35
+        y: 14
+    - list:
+      - x: 8
+        y: 13
+      - x: 15
+        y: 13
+      - x: 15
+        y: 18
+      - x: 26
+        y: 18
+      - x: 26
+        y: 15
+      - x: 34
+        y: 15
     endAreas:
     - Sink: 0
-      bottomLeft:
-        x: 2
-        y: 4
-      width: 3
-      height: 1
-    - Sink: 0
-      bottomLeft:
-        x: 19
-        y: 4
-      width: 2
-      height: 1
-    - Sink: 0
-      bottomLeft:
-        x: 33
-        y: 12
-      width: 3
-      height: 3
-    - Sink: 1
-      bottomLeft:
-        x: 19
-        y: 15
-      width: 3
-      height: 3
-    - Sink: 1
       bottomLeft:
         x: 7
         y: 13
       width: 2
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 19
+        y: 4
+      width: 2
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 12
+        y: 9
+      width: 2
+      height: 1
+    - Sink: 1
+      bottomLeft:
+        x: 34
+        y: 14
+      width: 3
       height: 2
-  gridPrefab: {fileID: 114947779080853920, guid: 593f9eea6c7d3594681f403d4932d4b1,
+    - Sink: 1
+      bottomLeft:
+        x: 30
+        y: 7
+      width: 2
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 19
+        y: 15
+      width: 2
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 4
+        y: 4
+      width: 2
+      height: 1
+  gridPrefab: {fileID: 114508448744789710, guid: c9660b37ed229494e8d93ee27702e79d,
+    type: 2}
+  arrowColor: {r: 0, g: 0, b: 0, a: 1}
+  agentModel: {fileID: 114129911881356896, guid: 4ebe8fb75064aca4d901fa736e7b0ecb,
     type: 2}

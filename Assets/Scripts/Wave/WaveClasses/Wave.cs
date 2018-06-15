@@ -67,7 +67,7 @@ public class Wave : MonoBehaviour {
         Node startNode = newPath.GetNextNode();
         Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
         newAgent.transform.parent = transform;
-        newAgent.InitializeAttributes(newPreAgent.agentAttribute);
         newAgent.BeginMovement(newPath);
+        newAgent.InitializeAttributes(newPreAgent.agentAttribute);
     }
 }

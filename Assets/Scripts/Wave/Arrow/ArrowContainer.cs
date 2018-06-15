@@ -88,7 +88,7 @@ public class ArrowContainer
 
                 Node target = GetOriginNodeFromStack(segmentCheckStack); //change to above if function doesn't work
 
-                if (target != null && IsBetween(checkArrow, target)) //between the arrow we are checking?
+                if (target != null && target.IsBetween(checkArrow)) //between the arrow we are checking?
                 {
                     while (segmentCheckStack.Count > 0)
                     {
@@ -165,7 +165,7 @@ public class ArrowContainer
             Stack<Arrow> arrowStackFlipped = new Stack<Arrow>(arrowStack);
             foreach(Arrow currentArrow in arrowStackFlipped)
             {
-                if(IsBetween(arrow, currentArrow))
+                if(arrow.IsBetween(currentArrow))
                 {
                     //Debug.Log(arrow + " is between: " + currentArrow);
                     return null;
@@ -209,7 +209,7 @@ public class ArrowContainer
             tempList.Reverse();
             foreach (Arrow arrow in tempList)
             {
-                if (IsBetween(arrow.Origin, arrow.Destination, target))
+                if (target.IsBetween(arrow))
                 {
                     return arrow;
                 }
@@ -217,23 +217,6 @@ public class ArrowContainer
         }
         //Debug.Log("Could not find an intersecting arrow!");
         return null;
-    }
-
-    private bool IsBetween(Arrow adding, Arrow exisiting)
-    {
-        return IsBetween(exisiting, adding.Origin) && IsBetween(exisiting, adding.Destination);
-    }
-
-    private bool IsBetween(Arrow arrow, Node target)
-    {
-        return IsBetween(arrow.Origin, arrow.Destination, target);
-    }
-
-    private bool IsBetween(Node origin, Node destination, Node target)
-    {
-        float distBetween = (destination.Coordinate - origin.Coordinate).magnitude;
-        float distSegmented = (destination.Coordinate - target.Coordinate).magnitude + (target.Coordinate - origin.Coordinate).magnitude;
-        return distBetween == distSegmented;
     }
 
     /// <summary>
@@ -423,7 +406,7 @@ public class ArrowContainer
         while(nodeQueueCopy.Count > 0)
         {
             destination = nodeQueueCopy.Dequeue();
-            if(IsBetween(origin, destination, segmentOrigin))
+            if(segmentOrigin.IsBetween(origin, destination))
             {
                 return origin;
             }

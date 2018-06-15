@@ -45,7 +45,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             Debug.LogError("Cannot find the Router Building object!");
             return;
         }
-        if (!parentTower.name.Contains("Test Router"))
+        if (!parentTower.name.Contains("Router"))
         {
             Debug.LogError("Parent object is not named as expected!");
             return;

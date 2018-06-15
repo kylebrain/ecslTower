@@ -51,14 +51,22 @@ public class ToolTips : MonoBehaviour {
     {
         textPrompt.text = "[Shift + " + controlPrefs["toggleTooltips"] + "] for tooltips";
         textTips.text = string.Format(
+                        "Camera:\n" +
+                        "WASD or Arrow Keys for movement\n" +
+                        "Scroll wheel to zoom in/out\n" +
+                        "[{0}] to change camera mode/reset angle." +
+                        "\n[{1}] to adjust camera angle in angled mode.\n" +
+                        "\nRouter:\n" +
                         "Basic navigation:\n" +
-                        "[{0}] to move selection left\n" +
-                        "[{1}] to move selection right\n" +
-                        "[{2}] to skip to next trait\n\n" +
+                        "[{2}] to move selection left\n" +
+                        "[{3}] to move selection right\n" +
+                        "[{4}] to skip to next trait\n\n" +
                         "Advanced navigation (will skip automatically):\n" +
                         "[1-3 Number keys] to choose a trait directly\n" +
-                        "[{3}] to reset selection to All\n\n" +
-                        "[Shift + {4}] to close tooltips",
+                        "[{5}] to reset selection to All\n\n" +
+                        "[Shift + {6}] or click to close tooltips",
+                        controlPrefs["toggleCameraMode"],
+                        controlPrefs["adjustCameraAngle"],
                         controlPrefs["rolodexLeftKey"],
                         controlPrefs["rolodexRightKey"],
                         controlPrefs["rolodexNextKey"],

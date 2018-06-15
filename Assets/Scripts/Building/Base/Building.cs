@@ -37,7 +37,7 @@ public abstract class Building : MonoBehaviour
     /// <summary>
     /// Holds the array of nodes that make the play area
     /// </summary>
-    private WorldGrid worldGrid;
+    protected WorldGrid worldGrid;
 
     /// <summary>
     /// LineRenderer component of the gameobject
@@ -110,6 +110,7 @@ public abstract class Building : MonoBehaviour
         worldGrid.setOccupied(loc, Node.nodeStates.building);
         currentlyPlacing = false;
         placed = true;
+
         return true;
     }
 
@@ -227,6 +228,7 @@ public abstract class Building : MonoBehaviour
         {
             currentlyPlacing = true;
             radiusLine.enabled = true;
+            HighlightBuidling(false); //change to a non-placeable color/highlight
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -284,6 +286,13 @@ public abstract class Building : MonoBehaviour
 
         if (placed)
         {
+            if (mouseWithinBuilding)
+            {
+                HighlightBuidling(true);
+            } else if(!selected)
+            {
+                HighlightBuidling(false);
+            }
             if (Input.GetMouseButtonUp(0))
             {
                 if (mouseWithinBuilding && !currentlyPlacing)
@@ -301,6 +310,11 @@ public abstract class Building : MonoBehaviour
             if (selectedNode.Occupied != Node.nodeStates.building) //does not move the Router to an Occupied Node
             {
                 setCenterPosition(desiredPos);
+                UpdateRotation(selectedNode);
+            } 
+            if(selectedNode.Occupied == Node.nodeStates.navigation)
+            {
+                HighlightBuidling(true); //ultimately change to change a placeable color/highlight
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {
@@ -310,6 +324,10 @@ public abstract class Building : MonoBehaviour
 
         #endregion
     }
+
+    protected virtual void UpdateRotation(Node node) { }
+
+    protected virtual void HighlightBuidling(bool highlight) { }
 
     /// <summary>
     /// Shows the Sell option inherent to all buildings
@@ -321,6 +339,7 @@ public abstract class Building : MonoBehaviour
         {
             return;
         }
+        HighlightBuidling(false);
         radiusLine.enabled = false;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;
@@ -334,6 +353,7 @@ public abstract class Building : MonoBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void ShowUI(GameObject canvas)
     {
+        HighlightBuidling(true);
         radiusLine.enabled = true;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         selected = true;

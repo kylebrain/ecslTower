@@ -8,6 +8,8 @@ using UnityEngine;
 /// <seealso cref="LevelLookup"/>
 public class Map : MonoBehaviour {
 
+    public bool hidden = false;
+    public bool locked = true;
     public int levelNumber = 0;
     public float spawnRate = 1f;
     public int waveCount = 3;
@@ -16,6 +18,8 @@ public class Map : MonoBehaviour {
     public bool markMalicious = false;
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
+    public Color arrowColor = Color.black;
+    public AgentModel agentModel;
 
     //any values or changed must be change in LevelLookup
 
@@ -26,12 +30,34 @@ public class Map : MonoBehaviour {
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
         LevelLookup.markMalicious = markMalicious;
+        if(agentModel != null)
+        {
+            LevelLookup.agentModel = agentModel.name;
+        } else
+        {
+            LevelLookup.agentModel = LevelLookup.defaultAgentModel;
+        }
     }
 
     public void BuildWorldGrid(WorldGrid grid)
     {
         BaseGrid newBaseGrid = Instantiate(gridPrefab);
         grid.InitGrid((int)newBaseGrid.transform.localScale.x, (int)newBaseGrid.transform.localScale.y, newBaseGrid);
+    }
+
+    public bool GetUnlocked()
+    {
+        if (!locked)
+        {
+            return true;
+        }
+        if (LevelUnlocking.IsUnlocked(levelNumber))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
 }

@@ -39,6 +39,8 @@ public abstract class Agent : VisualAgent
     bool terminated = false;
     bool thrown = false;
 
+    private AgentModel model;
+
 
     /*-----------private MonoBehavior functions-----------*/
 
@@ -129,8 +131,12 @@ public abstract class Agent : VisualAgent
             audio = GetComponents<AudioSource>()[1];
         }
         Destroy(GetComponent<Renderer>()); //or explode or other effect here
+        model.gameObject.SetActive(false);
+        DerivedTerminated();
         StartCoroutine(playTerminationAudio(audio));
     }
+
+    protected virtual void DerivedTerminated() { }
 
     IEnumerator playTerminationAudio(AudioSource audio)
     {
@@ -145,9 +151,36 @@ public abstract class Agent : VisualAgent
         Destroy(gameObject);
     }
 
-    protected override void ApplySize(Vector3 size)
+    protected override void CreateAgentModel()
     {
-        transform.localScale = size;
+        model = Resources.Load<AgentModel>("AgentModel/" + LevelLookup.agentModel);
+        model = Instantiate(model, transform);
+    }
+
+    protected override void ApplySize(float size)
+    {
+        model.SetSize(size);
+    }
+
+    public override void SetColor(AgentAttribute.PossibleColors color)
+    {
+        Color setColor;
+        switch (color)
+        {
+            case AgentAttribute.PossibleColors.red:
+                setColor = Color.red;
+                break;
+            case AgentAttribute.PossibleColors.green:
+                setColor = Color.green;
+                break;
+            case AgentAttribute.PossibleColors.blue:
+                setColor = Color.blue;
+                break;
+            default:
+                setColor = Color.white;
+                break;
+        }
+        model.SetColor(setColor);
     }
 
     public void Throw(Vector3 velocity)
@@ -155,6 +188,7 @@ public abstract class Agent : VisualAgent
         terminated = true;
         thrown = true;
         transform.parent = null; //to make sure the game doesn't wait for the Agent to reach the barrier
+        model.GetComponent<Collider>().enabled = false;
         Rigidbody rigid = gameObject.AddComponent<Rigidbody>();
         rigid.velocity = velocity;
     }

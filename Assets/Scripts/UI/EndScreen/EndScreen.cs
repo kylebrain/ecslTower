@@ -26,6 +26,7 @@ public class EndScreen : MonoBehaviour {
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
             winAudio.Play();
+            LevelUnlocking.AddToUnlocked(LevelLookup.levelNumber + 1);
             StartCoroutine(DisplayEnd(winAudio.clip.length)); //plays the sound then waits to show screen
         } else
         {

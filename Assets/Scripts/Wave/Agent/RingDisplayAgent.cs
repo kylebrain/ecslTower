@@ -47,16 +47,24 @@ public class RingDisplayAgent : VisualAgent
     {
         if (Speed <= 0)
         {
-            Rotation = 0f;
+            Rotation = startingRotation;
         }
         transform.localPosition = new Vector3(center.x + radius * Mathf.Cos(Rotation * Mathf.Deg2Rad), center.y + radius * Mathf.Sin(Rotation * Mathf.Deg2Rad));
         transform.localEulerAngles = new Vector3(0f, 0f, Rotation);
         Rotation += Speed * rotationMod * Time.deltaTime;
     }
 
-    protected override void ApplySize(Vector3 size)
+    protected override void ApplySize(float size)
     {
-        GetComponent<RectTransform>().sizeDelta = size * sizeMod;
+        Vector2 proportions;
+        if(size < 0)
+        {
+            proportions = Vector2.one;
+        } else
+        {
+            proportions = new Vector2(0.5f, 1) * size;
+        }
+        GetComponent<RectTransform>().sizeDelta = proportions * sizeMod;
     }
 
     public override void SetColor(AgentAttribute.PossibleColors color)
