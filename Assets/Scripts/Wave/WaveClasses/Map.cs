@@ -9,6 +9,7 @@ using UnityEngine;
 public class Map : MonoBehaviour {
 
     public bool hidden = false;
+    public bool locked = true;
     public int levelNumber = 0;
     public float spawnRate = 1f;
     public int waveCount = 3;
@@ -42,6 +43,21 @@ public class Map : MonoBehaviour {
     {
         BaseGrid newBaseGrid = Instantiate(gridPrefab);
         grid.InitGrid((int)newBaseGrid.transform.localScale.x, (int)newBaseGrid.transform.localScale.y, newBaseGrid);
+    }
+
+    public bool GetUnlocked()
+    {
+        if (!locked)
+        {
+            return true;
+        }
+        if (LevelLookup.unlocked.Contains(levelNumber))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
 }

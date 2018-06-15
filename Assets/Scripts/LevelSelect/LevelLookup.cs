@@ -8,6 +8,7 @@ using UnityEngine;
 /// <seealso cref="Map"/>
 public static class LevelLookup {
 
+    public static int levelNumber = 0;
     public static string levelName = "DEFAULT_VALUE";
     public static float spawnRate = 1f;
     public static int waveCount = 3;
@@ -17,6 +18,7 @@ public static class LevelLookup {
     public static string arrowColor = "#000";
     public static readonly string defaultAgentModel = "DefaultAgentModel";
     public static string agentModel = defaultAgentModel;
+    public static List<int> unlocked = new List<int>();
 
     //statics added here must be reflected in Map
 

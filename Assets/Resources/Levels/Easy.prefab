@@ -52,10 +52,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hidden: 0
+  locked: 0
   levelNumber: 1
   spawnRate: 2
   waveCount: 2
-  spawnPerWave: 100
+  spawnPerWave: 10
   decoyProbability: 0
   markMalicious: 1
   loadLevel:
