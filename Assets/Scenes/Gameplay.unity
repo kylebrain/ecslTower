@@ -2830,7 +2830,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1182438572716764, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
       propertyPath: m_Name
-      value: Next Wave
+      value: Start Game
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: waveController
@@ -2839,7 +2839,7 @@ Prefab:
     - target: {fileID: 114904902883286032, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
       propertyPath: m_Text
-      value: Start Wave
+      value: Start Game
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
