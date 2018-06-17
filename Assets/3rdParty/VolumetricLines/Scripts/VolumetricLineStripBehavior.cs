@@ -365,7 +365,7 @@ namespace VolumetricLines
 			// This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).
 			//  => make sure, everything stays up-to-date
 			CreateMaterial();
-			SetAllMaterialProperties();
+			//SetAllMaterialProperties();
 		}
 
 		void OnDrawGizmos()
