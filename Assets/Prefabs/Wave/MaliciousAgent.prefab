@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 82965717955527826}
   - component: {fileID: 82965203670409640}
   m_Layer: 0
-  m_Name: NewMaliciousAgent
+  m_Name: MaliciousAgent
   m_TagString: Agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -59,11 +59,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0
-  center: {x: 0, y: 0}
   startingRotation: 0
   radius: 30
   rotationMod: 30
-  viewRotation: 0
+  sizeMod: 30
 --- !u!114 &114513223417718876
 MonoBehaviour:
   m_ObjectHideFlags: 1

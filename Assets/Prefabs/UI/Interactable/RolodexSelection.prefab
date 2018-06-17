@@ -147,10 +147,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  leftKey: 113
-  rightKey: 101
-  resetKey: 9
-  nextKey: 32
   text1: {fileID: 114469363439872880}
   text2: {fileID: 114563334251970004}
   text3: {fileID: 114847787651276872}

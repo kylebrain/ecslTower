@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4156090725639438}
   - component: {fileID: 114470782226888944}
   m_Layer: 0
-  m_Name: Map
+  m_Name: MapTemplate
   m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,14 +51,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hidden: 0
+  locked: 1
   levelNumber: 0
   spawnRate: 1
   waveCount: 3
   spawnPerWave: 100
   decoyProbability: 3
+  markMalicious: 0
   loadLevel:
     levelName: DEFAULT_LEVEL
     wavePaths: []
     endAreas: []
   gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
     type: 2}
+  arrowColor: {r: 0, g: 0, b: 0, a: 1}
+  agentModel: {fileID: 0}

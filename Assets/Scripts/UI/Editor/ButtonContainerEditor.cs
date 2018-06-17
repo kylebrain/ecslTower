@@ -12,11 +12,11 @@ public class ButtonContainerEditor : Editor
         DrawDefaultInspector();
 
         // Get the button container component
-        ButtonContainer buttonConatiner = (ButtonContainer)target;
+        ButtonContainer buttonContainer = (ButtonContainer)target;
 
         if (GUILayout.Button("Resize and position buttons"))
         {
-            buttonConatiner.ResizeContainerAndPositionButtons();
+            buttonContainer.ResizeContainerAndPositionButtons();
         }
     }
 }

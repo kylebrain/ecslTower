@@ -2497,7 +2497,7 @@ GameObject:
   - component: {fileID: 23597679721386184}
   - component: {fileID: 114115394956606004}
   m_Layer: 0
-  m_Name: GovernmentGridMinimal
+  m_Name: GovernmentGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

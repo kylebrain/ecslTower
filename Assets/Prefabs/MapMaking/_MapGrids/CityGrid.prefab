@@ -3383,7 +3383,7 @@ GameObject:
   - component: {fileID: 23988592987890742}
   - component: {fileID: 114508448744789710}
   m_Layer: 0
-  m_Name: CityGridMinimal
+  m_Name: CityGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
