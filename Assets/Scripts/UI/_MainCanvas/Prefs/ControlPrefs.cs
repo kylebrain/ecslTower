@@ -6,7 +6,7 @@ using UnityEngine;
 public class ControlPrefs : MonoBehaviour {
 
 
-    private Dictionary<string, KeyCode> inputDictionary = new Dictionary<string, KeyCode>()
+    private static Dictionary<string, KeyCode> inputDictionary = new Dictionary<string, KeyCode>()
     {
         #region Tooltips
         {"toggleTooltips", KeyCode.F1},
