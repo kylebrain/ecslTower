@@ -43,7 +43,7 @@ public class LevelSelectionScript : MonoBehaviour {
             }  
         }
         levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
-        List<Map> mapList = Resources.LoadAll<Map>("Levels").ToList();
+        List<Map> mapList = Resources.LoadAll<Map>("Maps").ToList();
         mapList = mapList.OrderBy(map => map.levelNumber).ToList();
 
         if(!showHidden)
