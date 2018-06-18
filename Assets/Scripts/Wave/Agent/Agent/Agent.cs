@@ -10,7 +10,7 @@ public abstract class Agent : VisualAgent
 {
 
     /*-----------public variables-----------*/
-    
+
 
     public int scoreMod = 5;
 
@@ -66,20 +66,21 @@ public abstract class Agent : VisualAgent
         transform.position += Vector3.Normalize(currentNode.transform.position - transform.position) * Speed * Time.deltaTime;
 
         //points the object in the way it is falling
-        if(terminated && thrown)
+        if (terminated && thrown)
         {
             Rigidbody rigid;
             if ((rigid = GetComponent<Rigidbody>()) != null)
             {
                 transform.rotation = Quaternion.LookRotation(rigid.velocity);
-            } else
+            }
+            else
             {
                 Debug.LogError("Could not find the rigidbody of a thrown object!");
             }
         }
 
         //deletes the object if it falls too far
-        if(transform.position.y < minY)
+        if (transform.position.y < minY)
         {
             Destroy(gameObject);
         }
@@ -126,7 +127,8 @@ public abstract class Agent : VisualAgent
         {
             DestinationAction();
             audio = GetComponents<AudioSource>()[0];
-        } else
+        }
+        else
         {
             audio = GetComponents<AudioSource>()[1];
         }
@@ -144,7 +146,8 @@ public abstract class Agent : VisualAgent
         {
             audio.Play();
             yield return new WaitForSeconds(audio.clip.length);
-        } else
+        }
+        else
         {
             yield return null;
         }
@@ -192,7 +195,11 @@ public abstract class Agent : VisualAgent
         thrown = true;
         transform.parent = null; //to make sure the game doesn't wait for the Agent to reach the barrier
         model.GetComponent<Collider>().enabled = false;
-        Rigidbody rigid = gameObject.AddComponent<Rigidbody>();
+        Rigidbody rigid;
+        if ((rigid = GetComponent<Rigidbody>()) == null)
+        {
+            rigid = gameObject.AddComponent<Rigidbody>();
+        }
         rigid.velocity = velocity;
     }
 

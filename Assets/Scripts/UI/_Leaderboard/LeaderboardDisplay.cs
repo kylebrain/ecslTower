@@ -7,6 +7,7 @@ public class LeaderboardDisplay : MonoBehaviour
 {
     public Text[] textList;
     private int tempScoreDiff = 50;
+    private int defaultScore = 1000;
     private string[] bogeyNames = { "Michael", "Lisa", "John", "Mary", "David", "Karen", "James", "Kimberly", "Robert", "Susan" };
 
     void Start()
@@ -26,7 +27,7 @@ public class LeaderboardDisplay : MonoBehaviour
                 textList[i].text += highscoreList[i].username + " - " + highscoreList[i].score;
             } else
             {
-                textList[i].text += bogeyNames[i] + " - " + (highscoreList[highscoreList.Length - 1].score - tempScoreDiff * (i - highscoreList.Length + 1));
+                textList[i].text += bogeyNames[i - highscoreList.Length] + " - " + (defaultScore - tempScoreDiff * (i - highscoreList.Length));
             }
         }
     }

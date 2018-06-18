@@ -214,6 +214,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0
-  scoreMod: 15
+  scoreMod: 25
   destinationScaling: 0.01
   minY: -100

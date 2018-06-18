@@ -42,6 +42,10 @@ public class EndScreen : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            EndGame(true);
+        }
         if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return))
         {
             if (!string.IsNullOrEmpty(inputField.text))
