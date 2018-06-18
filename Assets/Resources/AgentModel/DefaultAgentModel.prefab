@@ -23,9 +23,9 @@ GameObject:
   - component: {fileID: 23123302307763046}
   - component: {fileID: 114637242611836106}
   - component: {fileID: 65895487203463972}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DefaultAgentModel
-  m_TagString: Untagged
+  m_TagString: AgentModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

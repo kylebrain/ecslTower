@@ -289,3 +289,4 @@ MonoBehaviour:
   scoreMod: 25
   destinationScaling: 0.01
   minY: -100
+  markerOffset: 0.1

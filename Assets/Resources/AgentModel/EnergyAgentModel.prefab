@@ -39,9 +39,9 @@ GameObject:
   - component: {fileID: 23679787376332800}
   - component: {fileID: 114067351701099612}
   - component: {fileID: 65367068995715300}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnergyAgentModel
-  m_TagString: Untagged
+  m_TagString: AgentModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

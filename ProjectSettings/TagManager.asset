@@ -16,6 +16,7 @@ TagManager:
   - Coin
   - Arrow
   - Pole
+  - AgentModel
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - 
   - 
   - Node
-  - 
+  - AgentModel
   - 
   - 
   - 

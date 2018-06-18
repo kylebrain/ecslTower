@@ -160,7 +160,10 @@ public abstract class Agent : VisualAgent
     protected override void ApplySize(float size)
     {
         model.SetSize(size);
+        DerivedApplySize(size, model);
     }
+
+    protected virtual void DerivedApplySize(float size, AgentModel model) { }
 
     public override void SetColor(AgentAttribute.PossibleColors color)
     {

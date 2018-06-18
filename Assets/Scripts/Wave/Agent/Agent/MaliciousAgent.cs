@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MaliciousAgent : Agent {
 
+    private GameObject maliciousMarker;
+    public float markerOffset = 0.1f;
+
     /*-----------public override function-----------*/
     /// <summary>
     /// Specific action for this type of Agent
@@ -13,16 +16,27 @@ public class MaliciousAgent : Agent {
         Health.health -= scoreMod;
     }
 
-    private void Start()
+    private void Awake()
     {
+        maliciousMarker = transform.Find("MaliciousMarker").gameObject;
         if (LevelLookup.markMalicious)
         {
-            transform.Find("MaliciousMarker").gameObject.SetActive(true);
+            maliciousMarker.SetActive(true);
         }
     }
 
     protected override void DerivedTerminated()
     {
-        transform.Find("MaliciousMarker").gameObject.SetActive(false); //should already be false for non-marked
+        maliciousMarker.SetActive(false); //should already be false for non-marked
+    }
+
+    protected override void DerivedApplySize(float size, AgentModel model)
+    {
+       if (LevelLookup.markMalicious)
+       {
+            Collider modelCollider = model.GetComponent<Collider>();
+            float height = transform.TransformDirection(modelCollider.bounds.size).y / 2f;
+            maliciousMarker.transform.localPosition = Vector3.up * (height + markerOffset);
+       }
     }
 }
