@@ -238,20 +238,16 @@ public class RouterBuilding : Building
                 {
                     if (delAgent.Attribute.Equals(attribute))
                     {
-                        //Debug.Log("Deleted: " + delAgent.Attribute);
-                        denied.Play();
-                        ThrowDeniedAgent(delAgent);
-                        laserScript.laser.LineColor = Color.red;
                         filtered = true;
                         break;
                     }
                 }
-                if (!filtered)
+                if(filtered == blacklist)
                 {
-                    //Debug.Log("Let in: " + delAgent.Attribute);
-                    allowed.Play();
-                    StartCoroutine(ChangeLaserColor(delAgent));
-                    delAgent.SetSpeed(delAgent.Attribute.Speed);
+                    DenyAgent(delAgent);
+                } else
+                {
+                    AllowAgent(delAgent);
                 }
                 processedList.Add(delAgent);
                 processedList.RemoveAll(agent => agent == null);
@@ -274,6 +270,20 @@ public class RouterBuilding : Building
              *       filtering out agents
              */
         }
+    }
+
+    private void AllowAgent(Agent agent)
+    {
+        allowed.Play();
+        StartCoroutine(ChangeLaserColor(agent));
+        agent.SetSpeed(agent.Attribute.Speed);
+    }
+
+    private void DenyAgent(Agent agent)
+    {
+        denied.Play();
+        ThrowDeniedAgent(agent);
+        laserScript.laser.LineColor = Color.red;
     }
 
     IEnumerator ChangeLaserColor(Agent processedAgent)
