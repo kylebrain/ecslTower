@@ -18,11 +18,13 @@ public class EnergyAgentModel : AgentModel {
 
     public override void SetSize(float size)
     {
-        Vector3 newSize = Vector3.one * size * 0.5f;
-        if(size < 0)
+        if (size > 0)
         {
-            newSize = new Vector3(1f, 0.5f, 1f);
+            transform.localScale = new Vector3(size / 2f, 1f, size);
         }
-        transform.localScale = newSize;
+        else
+        {
+            transform.localScale = Vector3.one;
+        }
     }
 }
