@@ -53,12 +53,31 @@ public class LevelSelectionScript : MonoBehaviour {
 
         int levelCount = mapList.Count;
         float midPoint = (levelCount - 1) / 2f;
+        List<LevelPanel> panelList = new List<LevelPanel>();
         for (int i = 0; i < levelCount; i++)
         {
             Map currentMap = mapList[i];
             LevelPanel currentPanel = Instantiate(levelPanelPrefab, transform);
-            currentPanel.Init(currentMap.levelNumber, currentMap.name, showHidden || currentMap.GetUnlocked()); //if we show hidden all are on the table
+            panelList.Add(currentPanel);
+            currentPanel.Init(currentMap.levelNumber, currentMap.name, showHidden || currentMap.GetUnlocked(), currentMap.publicLeaderboardCode); //if we show hidden all are on the table
             currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);
+        }
+        StartCoroutine(AttachHighscores(panelList));
+    }
+
+    IEnumerator AttachHighscores(List<LevelPanel> panelList)
+    {
+        LevelLookup.publicLeaderboardCode = "";
+        foreach(LevelPanel panel in panelList)
+        {
+            Leaderboard.DownloadHighscores(panel.publicCode);
+            yield return new WaitUntil(() => Leaderboard.fetchedHighscore != null);
+            Highscore newHighScore = Leaderboard.fetchedHighscore;
+            Leaderboard.fetchedHighscore = null;
+            if(!newHighScore.Equals(Highscore.nullValue))
+            {
+                panel.AddHighScore(newHighScore);
+            }
         }
     }
 

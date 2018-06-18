@@ -10,7 +10,6 @@ public class EndScreen : MonoBehaviour {
     private AudioSource winAudio;
     private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
     private GameObject screen;
-    private Leaderboard leaderboard;
     private UnityEngine.UI.InputField inputField;
 
     private void Awake()
@@ -20,7 +19,6 @@ public class EndScreen : MonoBehaviour {
         loseAudio = audioSources[1];
 
         screen = transform.Find("EndScreen").gameObject;
-        leaderboard = screen.transform.Find("Highscores").GetComponent<Leaderboard>();
         inputField = screen.transform.Find("Name").GetComponent<UnityEngine.UI.InputField>();
     }
 
@@ -50,7 +48,7 @@ public class EndScreen : MonoBehaviour {
         {
             if (!string.IsNullOrEmpty(inputField.text))
             {
-                leaderboard.AddNewHighscore(inputField.text, Score.score);
+                Leaderboard.AddNewHighscore(inputField.text, Score.score);
             }
         }
 	}
@@ -61,7 +59,7 @@ public class EndScreen : MonoBehaviour {
         AudioListener.volume = 0; //or find another way to turn off the game sfx maybe with an audio mixer?
         transform.parent.GetComponent<Canvas>().sortingOrder = 1; //this should overlay over the router UI
         screen.SetActive(true);
-        leaderboard.DownloadHighscores();
+        Leaderboard.DownloadHighscores();
         if (won)
         {
             inputField.gameObject.SetActive(true);

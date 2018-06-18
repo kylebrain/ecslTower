@@ -8,20 +8,27 @@ public class Leaderboard : MonoBehaviour
     const string webURL = "http://dreamlo.com/lb/";
     public Highscore[] highscoresList;
     private LeaderboardDisplay display;
+    private static Leaderboard instance;
+    public static Highscore fetchedHighscore = null;
 
     private void Awake()
     {
+        instance = this;
         display = GetComponent<LeaderboardDisplay>();
     }
 
-    public void AddNewHighscore(string username, int score)
+    public static void AddNewHighscore(string username, int score)
     {
-        StartCoroutine(UploadNewHighscore(username, score));
+        instance.StartCoroutine(instance.UploadNewHighscore(username, score));
     }
 
-    IEnumerator UploadNewHighscore(string username, int score)
+    IEnumerator UploadNewHighscore(string username, int score, string privateCode = null)
     {
-        WWW www = new WWW(webURL + LevelLookup.privateLeaderboardCode + "/add/" + WWW.EscapeURL(username) + "/" + score);
+        if(privateCode == null)
+        {
+            privateCode = LevelLookup.privateLeaderboardCode;
+        }
+        WWW www = new WWW(webURL + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score);
         yield return www;
 
         if (string.IsNullOrEmpty(www.error))
@@ -35,20 +42,38 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
-    public void DownloadHighscores()
+    public static void DownloadHighscores(string publicCode = null)
     {
-        StartCoroutine("DownloadHighscoresFromDatabase");
+        if(publicCode == null)
+        {
+            publicCode = LevelLookup.publicLeaderboardCode;
+        }
+        if (string.IsNullOrEmpty(publicCode))
+        {
+            return;
+        }
+        instance.StartCoroutine(instance.DownloadHighscoresFromDatabase(publicCode));
     }
 
-    IEnumerator DownloadHighscoresFromDatabase()
+    IEnumerator DownloadHighscoresFromDatabase(string publicCode)
     {
-        WWW www = new WWW(webURL + LevelLookup.publicLeaderboardCode + "/pipe/");
+        WWW www = new WWW(webURL + publicCode + "/pipe/");
         yield return www;
 
         if (string.IsNullOrEmpty(www.error))
         {
             FormatHighscores(www.text);
-            display.OnHighscoresDownloaded(highscoresList);
+            if (display != null)
+            {
+                display.OnHighscoresDownloaded(highscoresList);
+            }
+            if(highscoresList.Length > 0)
+            {
+                fetchedHighscore = highscoresList[0];
+            } else
+            {
+                fetchedHighscore = Highscore.nullValue;
+            }
         }
         else
         {
@@ -67,16 +92,23 @@ public class Leaderboard : MonoBehaviour
             string username = entryInfo[0];
             int score = int.Parse(entryInfo[1]);
             highscoresList[i] = new Highscore(username, score);
-            //print(highscoresList[i].username + ": " + highscoresList[i].score);
         }
     }
 
 }
 
-public struct Highscore
+public class Highscore
 {
     public string username;
     public int score;
+
+    public static Highscore nullValue
+    {
+        get
+        {
+            return new Highscore("DEFAULT", -1);
+        }
+    }
 
     public Highscore(string _username, int _score)
     {
@@ -84,4 +116,18 @@ public struct Highscore
         score = _score;
     }
 
+    public override bool Equals(object obj)
+    {
+        if(obj.GetType() != typeof(Highscore))
+        {
+            return false;
+        }
+        Highscore highscore = (Highscore)obj;
+        return username == highscore.username && score == highscore.score;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }
