@@ -31,11 +31,11 @@ public class EndScreen : MonoBehaviour {
             screen.transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
             winAudio.Play();
             LevelUnlocking.AddToUnlocked(LevelLookup.levelNumber + 1);
-            StartCoroutine(DisplayEnd(winAudio.clip.length)); //plays the sound then waits to show screen
+            StartCoroutine(DisplayEnd(won, winAudio.clip.length)); //plays the sound then waits to show screen
         } else
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "You were destroyed!";
-            StartCoroutine(DisplayEnd(loseAudio.clip.length)); //waits for the final explosion before showing the screen
+            StartCoroutine(DisplayEnd(won, loseAudio.clip.length)); //waits for the final explosion before showing the screen
         }
         
     }
@@ -46,25 +46,34 @@ public class EndScreen : MonoBehaviour {
         {
             if (!string.IsNullOrEmpty(inputField.text))
             {
-                leaderboard.AddNewHighscore(inputField.text.ToUpper(), Score.score);
+                leaderboard.AddNewHighscore(inputField.text, Score.score);
             }
-            AudioListener.volume = previousAudioVolume;
-            SceneManager.LoadScene("LevelSelect");
         }
 	}
 
-    private void Display()
+    private void Display(bool won)
     {
         previousAudioVolume = AudioListener.volume;
         AudioListener.volume = 0; //or find another way to turn off the game sfx maybe with an audio mixer?
         transform.parent.GetComponent<Canvas>().sortingOrder = 1; //this should overlay over the router UI
         screen.SetActive(true);
         leaderboard.DownloadHighscores();
+        if (won)
+        {
+            inputField.gameObject.SetActive(true);
+        }
     }
 
-    IEnumerator DisplayEnd(float afterSeconds)
+    IEnumerator DisplayEnd(bool won, float afterSeconds)
     {
         yield return new WaitForSeconds(afterSeconds);
-        Display();
+        Display(won);
     }
+
+    public void ReturnToLevelSelect()
+    {
+        AudioListener.volume = previousAudioVolume;
+        SceneManager.LoadScene("LevelSelect");
+    }
+
 }

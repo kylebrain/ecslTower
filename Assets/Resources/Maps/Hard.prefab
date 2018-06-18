@@ -207,3 +207,5 @@ MonoBehaviour:
   arrowColor: {r: 0, g: 0, b: 0, a: 1}
   agentModel: {fileID: 114129911881356896, guid: 4ebe8fb75064aca4d901fa736e7b0ecb,
     type: 2}
+  privateLeaderboardCode: N7rtWzknIUeGSWJgvQ1B1gpzZbIVi0x0-YaI7KyFBU7g
+  publicLeaderboardCode: 5b281ebf191a8a0bcc8b8be5
