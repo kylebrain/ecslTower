@@ -18,6 +18,8 @@ public static class LevelLookup {
     public static string arrowColor = "#000";
     public static readonly string defaultAgentModel = "DefaultAgentModel";
     public static string agentModel = defaultAgentModel;
+    public static string privateLeaderboardCode;
+    public static string publicLeaderboardCode;
 
     //statics added here must be reflected in Map
 

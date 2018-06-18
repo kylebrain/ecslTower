@@ -54,9 +54,9 @@ MonoBehaviour:
   hidden: 0
   locked: 0
   levelNumber: 1
-  spawnRate: 2
+  spawnRate: 0.1
   waveCount: 2
-  spawnPerWave: 100
+  spawnPerWave: 20
   decoyProbability: 0
   markMalicious: 1
   loadLevel:
@@ -112,3 +112,5 @@ MonoBehaviour:
   arrowColor: {r: 0, g: 0, b: 0, a: 1}
   agentModel: {fileID: 114067351701099612, guid: a372d39102351dd4f8ca13077fdeafda,
     type: 2}
+  privateLeaderboardCode: h1CxMhZerU2YQ55SFZ7pGw2l-_4hctzUKpQB2SY295Zw
+  publicLeaderboardCode: 5b27da2d191a8a0bcc8a9ed0
