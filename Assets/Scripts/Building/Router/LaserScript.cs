@@ -6,11 +6,13 @@ public class LaserScript : MonoBehaviour {
 
     public float bufferEnd = 0.15f; //how far from the contact point the laser stays
 
-    private VolumetricLines.VolumetricLineBehavior laser;
+    public VolumetricLines.VolumetricLineBehavior laser;
     private float bufferStart = 0.25f;
+
+    public Agent hitAgent;
     
 
-    private void Start()
+    private void Awake()
     {
         laser = transform.parent.Find("Laser").GetComponent<VolumetricLines.VolumetricLineBehavior>();
         if (laser == null)
@@ -34,6 +36,10 @@ public class LaserScript : MonoBehaviour {
             if(hit.transform.tag == "AgentModel" && hit.transform.parent.tag == "Agent")
             {
                 laser.EndPos = transform.parent.InverseTransformPoint(hit.point + transform.parent.TransformDirection(Vector3.right) * bufferEnd);
+                hitAgent = hit.transform.parent.GetComponent<Agent>();
+            } else
+            {
+                hitAgent = null;
             }
             laser.EndPos = new Vector3(laser.EndPos.x, laser.StartPos.y, laser.StartPos.z);
         }
