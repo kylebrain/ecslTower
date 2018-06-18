@@ -151,7 +151,7 @@ MonoBehaviour:
   Camera: {fileID: 0}
   CameraMode: 0
   UseWorldSpace: 1
-  CompensateForParentTransform: 0
+  CompensateForParentTransform: 1
   QualitySetting: 0
   MultiThreaded: 0
   SortLayerName: 

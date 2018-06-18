@@ -31,7 +31,7 @@ public class LaserScript : MonoBehaviour {
             {
                 laser.EndPos = hit.transform.localPosition;
             }
-            if(hit.transform.tag == "Agent" || hit.transform.parent.tag == "Agent")
+            if(hit.transform.tag == "AgentModel" && hit.transform.parent.tag == "Agent")
             {
                 laser.EndPos = transform.parent.InverseTransformPoint(hit.point + transform.parent.TransformDirection(Vector3.right) * bufferEnd);
             }

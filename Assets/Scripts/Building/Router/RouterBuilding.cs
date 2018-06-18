@@ -37,7 +37,7 @@ public class RouterBuilding : Building
     public float throwRange = 120f;
 
     public float highlightLightSaberValue = 0.7f;
-    public Color highlighEmissionColor;
+    public Color highlightEmissionColor;
 
     public RingDisplayAgent childDisplayAgent;
     public VolumetricLines.VolumetricLineBehavior laser;
@@ -153,7 +153,7 @@ public class RouterBuilding : Building
             foreach(GameObject obj in Poles)
             {
                 Renderer rend = obj.GetComponent<Renderer>();
-                rend.material.SetColor("_EmissionColor", highlighEmissionColor); //replace with variable when done
+                rend.material.SetColor("_EmissionColor", highlightEmissionColor); //replace with variable when done
             }
             laser.LightSaberFactor = highlightLightSaberValue;
         } else
@@ -253,6 +253,7 @@ public class RouterBuilding : Building
                     delAgent.SetSpeed(delAgent.Attribute.Speed);
                 }
                 processedList.Add(delAgent);
+                processedList.RemoveAll(agent => agent == null);
                 //add a way to delete Agents from the List who have been destroyed by reaching destination
             }
 
