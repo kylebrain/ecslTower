@@ -14,6 +14,6 @@ public class BenignAgent : Agent {
     /// </summary>
     public override void DestinationAction()
     {
-        Score.score += scoreMod;
+        Score.Money += scoreMod;
     }
 }

@@ -25,11 +25,11 @@ public class MoneyStack : MonoBehaviour
 
     private void Update()
     {
-        if (Modifying || Score.score < 0)
+        if (Modifying || Score.Money < 0)
         {
             return;
         }
-        int desireValue = (int)Score.score / coinPerCash;
+        int desireValue = (int)Score.Money / coinPerCash;
         int toModify = desireValue - (transform.childCount); //1 accounts for bottom
         if (Mathf.Abs(toModify) > 0)
         {

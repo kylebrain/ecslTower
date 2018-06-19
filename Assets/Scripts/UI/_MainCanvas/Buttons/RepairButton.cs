@@ -12,18 +12,16 @@ public class RepairButton : DisableButton
     private int rebuildCost;
     public static bool Rebuilding = false;
 
-    public Health healthReference;
-
     protected override void DerivedStart()
     {
         Rebuilding = false;
-        rebuildCost = (int)(repairCost * ((float)Health.maxHealth / healthRepaired));
+        rebuildCost = (int)(repairCost * ((float)Score.MaxHealth / healthRepaired));
         SetEnable(false);
     }
 
     private void Update()
     {
-        if (Health.health <= 0)
+        if (Score.Health <= 0)
         {
             GetText.text = "Rebuild: $" + rebuildCost;
         }
@@ -34,17 +32,17 @@ public class RepairButton : DisableButton
 
         if (!Rebuilding)
         {
-            if (Health.health < Health.maxHealth && Score.score >= repairCost && !ButtonEnabled)
+            if (Score.Health < Score.MaxHealth && Score.Money >= repairCost && !ButtonEnabled)
             {
                 SetEnable(true);
             }
-            if (Health.health >= Health.maxHealth || Score.score < repairCost && ButtonEnabled)
+            if (Score.Health >= Score.MaxHealth || Score.Money < repairCost && ButtonEnabled)
             {
                 SetEnable(false);
             }
-            if (Health.health <= 0 && Score.score < rebuildCost)
+            if (Score.Health <= 0 && Score.Money < rebuildCost)
             {
-                healthReference.GameLost();
+                Score.GameLost();
             }
         }
         
@@ -53,16 +51,16 @@ public class RepairButton : DisableButton
 
     private void Repair(int cost)
     {
-        if (Score.score >= cost)
+        if (Score.Money >= cost)
         {
-            Health.health += healthRepaired;
-            Score.score -= cost;
+            Score.Health += healthRepaired;
+            Score.Money -= cost;
         }
     }
 
     private void CheckRebuild()
     {
-        if (Score.score >= rebuildCost)
+        if (Score.Money >= rebuildCost)
         {
             StartCoroutine(Rebuild());
         }
@@ -70,10 +68,10 @@ public class RepairButton : DisableButton
 
     IEnumerator Rebuild()
     {
-        Score.score -= rebuildCost;
+        Score.Money -= rebuildCost;
         Rebuilding = true;
         SetEnable(false);
-        while (Health.health != Health.maxHealth)
+        while (Score.Health != Score.MaxHealth)
         {
             yield return new WaitForSeconds(rebuildTime);
             Repair(0);
@@ -84,7 +82,7 @@ public class RepairButton : DisableButton
 
     public override void PerformAction()
     {
-        if (Health.health <= 0)
+        if (Score.Health <= 0)
         {
             CheckRebuild();
         }

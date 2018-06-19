@@ -13,7 +13,7 @@ public class MaliciousAgent : Agent {
     /// </summary>
     public override void DestinationAction()
     {
-        Health.health -= scoreMod;
+        Score.Health -= scoreMod;
     }
 
     private void Awake()

@@ -123,7 +123,7 @@ public abstract class Agent : VisualAgent
         AudioSource audio;
 
         //add animation
-        if (Health.health > 0 && !RepairButton.Rebuilding)
+        if (Score.Health > 0 && !RepairButton.Rebuilding)
         {
             DestinationAction();
             audio = GetComponents<AudioSource>()[0];

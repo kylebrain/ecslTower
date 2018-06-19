@@ -127,7 +127,7 @@ public class WaveController : MonoBehaviour
 
     private void EndGame()
     {
-        endScreen.EndGame(true, Score.score);
+        endScreen.EndGame(true, Score.Money);
     }
 
     private void Update()

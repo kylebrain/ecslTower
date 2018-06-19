@@ -3539,7 +3539,7 @@ GameObject:
   - component: {fileID: 1479066947}
   - component: {fileID: 1479066946}
   m_Layer: 5
-  m_Name: ScoreText
+  m_Name: MoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3680,9 +3680,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1566021369}
   - component: {fileID: 1566021370}
-  - component: {fileID: 1566021371}
   m_Layer: 0
-  m_Name: ScoreHealthManager
+  m_Name: ScoreManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3713,21 +3712,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingAmount: 1000
-  scoreText: {fileID: 937614107}
---- !u!114 &1566021371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1566021368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 346ef37c057ff9446a47d414f9a56168, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endScreen: {fileID: 333279268}
+  moneyText: {fileID: 937614107}
   healthText: {fileID: 706943631}
   healthSlider: {fileID: 880993028}
+  endScreen: {fileID: 333279268}
 --- !u!1001 &1579748416
 Prefab:
   m_ObjectHideFlags: 0
@@ -4083,7 +4071,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca0139473158cd43b0a2c230def8cdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthReference: {fileID: 1566021371}
 --- !u!1 &1767277897
 GameObject:
   m_ObjectHideFlags: 0

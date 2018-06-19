@@ -48,7 +48,7 @@ public class EndScreen : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            EndGame(true, Score.score);
+            EndGame(true, Score.Money);
         }
         if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(inputField.text) && !highscoreSubmitted && inputField.interactable)
         {
