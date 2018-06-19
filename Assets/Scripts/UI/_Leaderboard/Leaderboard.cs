@@ -11,8 +11,12 @@ public class Leaderboard : MonoBehaviour
     const int numberOfBoards = maxScores / scoresPerBoard;
 
     const string webURL = "http://dreamlo.com/lb/";
-    const string privateCode = "h1CxMhZerU2YQ55SFZ7pGw2l-_4hctzUKpQB2SY295Zw";
-    const string publicCode = "5b27da2d191a8a0bcc8a9ed0";
+    readonly string privateCode = LeaderBoardKeys.PrivateKey;
+    readonly string publicCode = LeaderBoardKeys.PublicKey;
+
+    //create the class with the keys from the google drive
+    //must be placed in the UI/_Leaderboard folder
+        //see gitignore for location
 
     //public Highscore[] highscoresList;
     private LeaderboardDisplay display;
