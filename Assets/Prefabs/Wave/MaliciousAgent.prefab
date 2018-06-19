@@ -289,4 +289,6 @@ MonoBehaviour:
   scoreMod: 25
   destinationScaling: 0.01
   minY: -100
+  destinationParticles: {fileID: 19800014, guid: a57a6829db3568c4d9bdc37e9e63c017,
+    type: 2}
   markerOffset: 0.1

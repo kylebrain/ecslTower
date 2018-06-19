@@ -25,6 +25,7 @@ public abstract class Agent : VisualAgent
     }
 
     public float minY = -100f;
+    public ParticleSystem destinationParticles;
 
 
     /*-----------private variables-----------*/
@@ -123,29 +124,40 @@ public abstract class Agent : VisualAgent
         AudioSource audio;
 
         //add animation
-        if (Score.Health > 0 && !RepairButton.Rebuilding)
+        bool particles;
+        if (Score.Health > 0 && !RepairButton.Rebuilding) //if the servers are up
         {
             DestinationAction();
             audio = GetComponents<AudioSource>()[0];
+            particles = true;
         }
-        else
+        else //if the servers are down do not play animation
         {
             audio = GetComponents<AudioSource>()[1];
+            particles = false;
         }
         Destroy(GetComponent<Renderer>()); //or explode or other effect here
         model.gameObject.SetActive(false);
         DerivedTerminated();
-        StartCoroutine(playTerminationAudio(audio));
+        StartCoroutine(playTerminationAnimation(audio, particles));
     }
 
     protected virtual void DerivedTerminated() { }
 
-    IEnumerator playTerminationAudio(AudioSource audio)
+    IEnumerator playTerminationAnimation(AudioSource audio, bool particles = true)
     {
-        if (audio.clip != null)
+        if (audio.clip != null || destinationParticles != null)
         {
-            audio.Play();
-            yield return new WaitForSeconds(audio.clip.length);
+            if (audio.clip != null)
+            {
+                audio.Play();
+            }
+            if (particles && destinationParticles != null)
+            {
+                destinationParticles = Instantiate(destinationParticles, transform);
+                destinationParticles.Play();
+            }
+            yield return new WaitForSeconds(GetDestinationTime(audio, particles));
         }
         else
         {
@@ -201,6 +213,16 @@ public abstract class Agent : VisualAgent
             rigid = gameObject.AddComponent<Rigidbody>();
         }
         rigid.velocity = velocity;
+    }
+
+    private float GetDestinationTime(AudioSource audio, bool particles = true)
+    {
+        float ret = audio.clip.length;
+        if (particles && destinationParticles != null)
+        {
+            ret = Mathf.Max(ret, destinationParticles.main.duration);
+        }
+        return ret;
     }
 
 }

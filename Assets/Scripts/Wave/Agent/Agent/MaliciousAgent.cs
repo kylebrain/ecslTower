@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class MaliciousAgent : Agent {
 
-    private GameObject maliciousMarker;
     public float markerOffset = 0.1f;
+    //public ParticleSystem explosion;
+    private GameObject maliciousMarker;
 
     /*-----------public override function-----------*/
     /// <summary>
@@ -13,6 +14,10 @@ public class MaliciousAgent : Agent {
     /// </summary>
     public override void DestinationAction()
     {
+        /*
+        destinationParticles = Instantiate(destinationParticles, transform);
+        destinationParticles.Play();
+        */
         Score.Health -= scoreMod;
     }
 
