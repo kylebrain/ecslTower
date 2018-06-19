@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class EndScreen : MonoBehaviour {
+public class EndScreen : MonoBehaviour
+{
 
     private float previousAudioVolume;
     private AudioSource winAudio;
     private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
     private GameObject screen;
     private UnityEngine.UI.InputField inputField;
+    private bool highscoreSubmitted = false;
 
     private void Awake()
     {
@@ -30,28 +32,30 @@ public class EndScreen : MonoBehaviour {
             winAudio.Play();
             LevelUnlocking.AddToUnlocked(LevelLookup.levelNumber + 1);
             StartCoroutine(DisplayEnd(won, winAudio.clip.length)); //plays the sound then waits to show screen
-        } else
+        }
+        else
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "You were destroyed!";
             StartCoroutine(DisplayEnd(won, loseAudio.clip.length)); //waits for the final explosion before showing the screen
         }
-        
+
     }
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
         if (Input.GetKeyDown(KeyCode.M))
         {
             EndGame(true);
         }
-        if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return))
+        if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(inputField.text) && !highscoreSubmitted)
         {
-            if (!string.IsNullOrEmpty(inputField.text))
-            {
-                Leaderboard.AddNewHighscore(inputField.text, Score.score);
-            }
+            Leaderboard.AddNewHighscore(inputField.text, Score.score);
+            PlayerPrefs.SetString("highscoreUsername", inputField.text);
+            highscoreSubmitted = true;
+            inputField.interactable = false;
         }
-	}
+    }
 
     private void Display(bool won)
     {
@@ -63,6 +67,7 @@ public class EndScreen : MonoBehaviour {
         if (won)
         {
             inputField.gameObject.SetActive(true);
+            inputField.text = PlayerPrefs.GetString("highscoreUsername", null);
         }
     }
 

@@ -15,6 +15,7 @@ public class Leaderboard : MonoBehaviour
     {
         instance = this;
         display = GetComponent<LeaderboardDisplay>();
+        fetchedHighscore = null;
     }
 
     public static void AddNewHighscore(string username, int score)

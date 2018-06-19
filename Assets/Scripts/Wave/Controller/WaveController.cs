@@ -132,11 +132,12 @@ public class WaveController : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Backspace)) //change Backspace to be in ControlPrefs or remove entirely
         {
             SceneManager.LoadScene("LevelSelect");
         }
-
+        */
         if (currentWave == null && Playing)
         {
             Playing = false;
