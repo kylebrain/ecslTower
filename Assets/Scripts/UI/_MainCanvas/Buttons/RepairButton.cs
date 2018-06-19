@@ -16,6 +16,7 @@ public class RepairButton : DisableButton
 
     protected override void DerivedStart()
     {
+        Rebuilding = false;
         rebuildCost = (int)(repairCost * ((float)Health.maxHealth / healthRepaired));
         SetEnable(false);
     }

@@ -13,6 +13,7 @@ public class EndScreen : MonoBehaviour
     private GameObject screen;
     private UnityEngine.UI.InputField inputField;
     private bool highscoreSubmitted = false;
+    private int finalScore = 0;
 
     private void Awake()
     {
@@ -26,6 +27,7 @@ public class EndScreen : MonoBehaviour
 
     public void EndGame(bool won, int score = 0)
     {
+        finalScore = score;
         if (won)
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
@@ -50,7 +52,7 @@ public class EndScreen : MonoBehaviour
         }
         if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(inputField.text) && !highscoreSubmitted && inputField.interactable)
         {
-            Leaderboard.AddMapHighscore(inputField.text, Score.score, LevelLookup.levelNumber);
+            Leaderboard.AddMapHighscore(inputField.text, finalScore, LevelLookup.levelNumber);
             PlayerPrefs.SetString("highscoreUsername", inputField.text);
             highscoreSubmitted = true;
             inputField.interactable = false;
@@ -75,17 +77,6 @@ public class EndScreen : MonoBehaviour
         {
             inputField.gameObject.SetActive(true);
             inputField.text = PlayerPrefs.GetString("highscoreUsername", null);
-
-            //delete
-            score = Score.score;
-
-            if(Leaderboard.IsHighscoreAcceptable(score, LevelLookup.levelNumber))
-            {
-                inputField.interactable = true;
-            } else
-            {
-                inputField.interactable = false;
-            }
         }
     }
 

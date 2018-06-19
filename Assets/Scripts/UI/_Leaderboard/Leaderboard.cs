@@ -47,13 +47,16 @@ public class Leaderboard : MonoBehaviour
         DownloadHighscores();
         if (IsHighscoreAcceptable(score, mapNumber))
         {
-            RemoveLowestHighScore(score, mapNumber);
+            if (!IsReplacing(new Highscore(username, score, mapNumber)))
+            {
+                RemoveLowestHighScore(score, mapNumber);
+            }
             WWW www = new WWW(webURL + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score + "/" + mapNumber);
             yield return www;
 
             if (string.IsNullOrEmpty(www.error))
             {
-                print("Upload Successful");
+                print("Upload Successful: " + username);
                 DownloadHighscores();
             }
             else
@@ -67,14 +70,13 @@ public class Leaderboard : MonoBehaviour
     public static bool IsHighscoreAcceptable(int score, int mapNumber)
     {
         List<Highscore> highscoreList = mapHighscores[mapNumber - 1];
-        if(highscoreList == null || highscoreList.Count < scoresPerBoard)
+        if (highscoreList == null || highscoreList.Count < scoresPerBoard)
         {
             return true;
         }
         Highscore delHighscore = highscoreList[highscoreList.Count - 1];
         if (score > delHighscore.score)
         {
-            //StartCoroutine(DeleteHighScore(delHighscore.mapNumber.ToString("000") + delHighscore.username));
             return true;
         }
         else
@@ -83,14 +85,29 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
+    public static bool IsReplacing(Highscore highscore)
+    {
+        List<Highscore> highscoreList = mapHighscores[highscore.mapNumber - 1];
+        bool ret = true;
+        if (highscoreList != null)
+        {
+            Highscore exisitingScore = mapHighscores[highscore.mapNumber - 1].Find(x => x.username == highscore.cleanUsername);
+            if (exisitingScore != null)
+            {
+                ret = highscore.score > exisitingScore.score;
+            }
+        }
+        return ret;
+    }
+
     private void RemoveLowestHighScore(int score, int mapNumber)
     {
-        if(!IsHighscoreAcceptable(score, mapNumber))
+        if (!IsHighscoreAcceptable(score, mapNumber))
         {
             return;
         }
         List<Highscore> highscoreList = mapHighscores[mapNumber - 1];
-        if(highscoreList.Count < scoresPerBoard)
+        if (highscoreList.Count < scoresPerBoard)
         {
             return;
         }
@@ -104,7 +121,7 @@ public class Leaderboard : MonoBehaviour
         yield return www;
         if (string.IsNullOrEmpty(www.error))
         {
-            print("Delete Success");
+            print("Delete Success: " + username);
         }
         else
         {
@@ -191,10 +208,19 @@ public class Highscore
         }
     }
 
-    public Highscore(string _username, int _score, int mapNumber)
+    public string cleanUsername
+    {
+        get
+        {
+            return Regex.Replace(username, @"[\d-]", string.Empty);
+        }
+    }
+
+    public Highscore(string _username, int _score, int _mapNumber)
     {
         username = _username;
         score = _score;
+        mapNumber = _mapNumber;
     }
 
     public Highscore(string dataString)
