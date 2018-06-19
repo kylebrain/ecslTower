@@ -17,17 +17,21 @@ public class LeaderboardDisplay : MonoBehaviour
             textList[i].text = i + 1 + ". Fetching...";
         }
     }
-    public void OnHighscoresDownloaded(Highscore[] highscoreList)
+    public void OnHighscoresDownloaded(List<Highscore> highscoreList)
     {
+        if(highscoreList == null)
+        {
+            highscoreList = new List<Highscore>();
+        }
         for (int i = 0; i < textList.Length; i++)
         {
             textList[i].text = i + 1 + ". ";
-            if (i < highscoreList.Length)
+            if (i < highscoreList.Count)
             {
                 textList[i].text += highscoreList[i].username + " - " + highscoreList[i].score;
             } else
             {
-                textList[i].text += bogeyNames[i - highscoreList.Length] + " - " + (defaultScore - tempScoreDiff * (i - highscoreList.Length));
+                textList[i].text += bogeyNames[i - highscoreList.Count] + " - " + (defaultScore - tempScoreDiff * (i - highscoreList.Count));
             }
         }
     }

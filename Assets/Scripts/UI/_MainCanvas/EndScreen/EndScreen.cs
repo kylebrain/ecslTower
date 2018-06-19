@@ -31,12 +31,12 @@ public class EndScreen : MonoBehaviour
             screen.transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
             winAudio.Play();
             LevelUnlocking.AddToUnlocked(LevelLookup.levelNumber + 1);
-            StartCoroutine(DisplayEnd(won, winAudio.clip.length)); //plays the sound then waits to show screen
+            StartCoroutine(DisplayEnd(won, winAudio.clip.length, score)); //plays the sound then waits to show screen
         }
         else
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "You were destroyed!";
-            StartCoroutine(DisplayEnd(won, loseAudio.clip.length)); //waits for the final explosion before showing the screen
+            StartCoroutine(DisplayEnd(won, loseAudio.clip.length, score)); //waits for the final explosion before showing the screen
         }
 
     }
@@ -46,11 +46,11 @@ public class EndScreen : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            EndGame(true);
+            EndGame(true, Score.score);
         }
-        if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(inputField.text) && !highscoreSubmitted)
+        if (screen.activeSelf && Input.GetKeyDown(KeyCode.Return) && !string.IsNullOrEmpty(inputField.text) && !highscoreSubmitted && inputField.interactable)
         {
-            Leaderboard.AddNewHighscore(inputField.text, Score.score);
+            Leaderboard.AddMapHighscore(inputField.text, Score.score, LevelLookup.levelNumber);
             PlayerPrefs.SetString("highscoreUsername", inputField.text);
             highscoreSubmitted = true;
             inputField.interactable = false;
@@ -64,17 +64,29 @@ public class EndScreen : MonoBehaviour
         transform.parent.GetComponent<Canvas>().sortingOrder = 1; //this should overlay over the router UI
         screen.SetActive(true);
         Leaderboard.DownloadHighscores();
+        
+    }
+
+    IEnumerator DisplayEnd(bool won, float afterSeconds, int score)
+    {
+        yield return new WaitForSeconds(afterSeconds);
+        Display(won);
         if (won)
         {
             inputField.gameObject.SetActive(true);
             inputField.text = PlayerPrefs.GetString("highscoreUsername", null);
-        }
-    }
 
-    IEnumerator DisplayEnd(bool won, float afterSeconds)
-    {
-        yield return new WaitForSeconds(afterSeconds);
-        Display(won);
+            //delete
+            score = Score.score;
+
+            if(Leaderboard.IsHighscoreAcceptable(score, LevelLookup.levelNumber))
+            {
+                inputField.interactable = true;
+            } else
+            {
+                inputField.interactable = false;
+            }
+        }
     }
 
     public void ReturnToLevelSelect()

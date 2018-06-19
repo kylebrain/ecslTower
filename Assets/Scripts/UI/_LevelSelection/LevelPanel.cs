@@ -21,7 +21,7 @@ public class LevelPanel : MonoBehaviour
     }
 
     private string levelName;
-    private int levelNumber;
+    public int levelNumber;
     public string publicCode;
 
     private Text levelNameText;

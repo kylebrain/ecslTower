@@ -1,64 +1,125 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour
 {
+    const int scoresPerBoard = 10;
+    const int maxScores = 1000;
+    const int numberOfBoards = maxScores / scoresPerBoard;
 
     const string webURL = "http://dreamlo.com/lb/";
-    public Highscore[] highscoresList;
+    const string privateCode = "h1CxMhZerU2YQ55SFZ7pGw2l-_4hctzUKpQB2SY295Zw";
+    const string publicCode = "5b27da2d191a8a0bcc8a9ed0";
+
+    //public Highscore[] highscoresList;
     private LeaderboardDisplay display;
     private static Leaderboard instance;
-    public static Highscore fetchedHighscore = null;
+    //public static Highscore fetchedHighscore = null;
+    public static List<Highscore>[] mapHighscores = new List<Highscore>[numberOfBoards];
+    public static bool Downloaded = false;
 
     private void Awake()
     {
         instance = this;
         display = GetComponent<LeaderboardDisplay>();
-        fetchedHighscore = null;
     }
 
-    public static void AddNewHighscore(string username, int score)
+    public static void AddMapHighscore(string name, int score, int mapNumber)
     {
-        instance.StartCoroutine(instance.UploadNewHighscore(username, score));
+        AddNewHighscore(mapNumber.ToString("000") + name, score, mapNumber);
     }
 
-    IEnumerator UploadNewHighscore(string username, int score, string privateCode = null)
+    private static void AddNewHighscore(string username, int score, int mapNumber)
     {
-        if(privateCode == null)
+        if (mapNumber <= 0 || mapNumber > 100)
         {
-            privateCode = LevelLookup.privateLeaderboardCode;
+            Debug.LogError("Map number must be greater than 0 and less than or equal to 100!");
+            return;
         }
-        WWW www = new WWW(webURL + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score);
-        yield return www;
+        instance.StartCoroutine(instance.UploadNewHighscore(username, score, mapNumber));
+    }
 
-        if (string.IsNullOrEmpty(www.error))
+    IEnumerator UploadNewHighscore(string username, int score, int mapNumber)
+    {
+        DownloadHighscores();
+        if (IsHighscoreAcceptable(score, mapNumber))
         {
-            print("Upload Successful");
-            DownloadHighscores();
+            RemoveLowestHighScore(score, mapNumber);
+            WWW www = new WWW(webURL + privateCode + "/add/" + WWW.EscapeURL(username) + "/" + score + "/" + mapNumber);
+            yield return www;
+
+            if (string.IsNullOrEmpty(www.error))
+            {
+                print("Upload Successful");
+                DownloadHighscores();
+            }
+            else
+            {
+                print("Error uploading: " + www.error);
+            }
+        }
+        yield return null;
+    }
+
+    public static bool IsHighscoreAcceptable(int score, int mapNumber)
+    {
+        List<Highscore> highscoreList = mapHighscores[mapNumber - 1];
+        if(highscoreList == null || highscoreList.Count < scoresPerBoard)
+        {
+            return true;
+        }
+        Highscore delHighscore = highscoreList[highscoreList.Count - 1];
+        if (score > delHighscore.score)
+        {
+            //StartCoroutine(DeleteHighScore(delHighscore.mapNumber.ToString("000") + delHighscore.username));
+            return true;
         }
         else
         {
-            print("Error uploading: " + www.error);
+            return false;
         }
     }
 
-    public static void DownloadHighscores(string publicCode = null)
+    private void RemoveLowestHighScore(int score, int mapNumber)
     {
-        if(publicCode == null)
+        if(!IsHighscoreAcceptable(score, mapNumber))
         {
-            publicCode = LevelLookup.publicLeaderboardCode;
-        }
-        if (string.IsNullOrEmpty(publicCode))
-        {
-            fetchedHighscore = Highscore.nullValue;
             return;
         }
-        instance.StartCoroutine(instance.DownloadHighscoresFromDatabase(publicCode));
+        List<Highscore> highscoreList = mapHighscores[mapNumber - 1];
+        if(highscoreList.Count < scoresPerBoard)
+        {
+            return;
+        }
+        Highscore delHighscore = highscoreList[highscoreList.Count - 1];
+        StartCoroutine(DeleteHighScore(delHighscore.mapNumber.ToString("000") + delHighscore.username));
     }
 
-    IEnumerator DownloadHighscoresFromDatabase(string publicCode)
+    IEnumerator DeleteHighScore(string username)
     {
+        WWW www = new WWW(webURL + privateCode + "/delete/" + WWW.EscapeURL(username));
+        yield return www;
+        if (string.IsNullOrEmpty(www.error))
+        {
+            print("Delete Success");
+        }
+        else
+        {
+            print(www.error);
+        }
+    }
+
+    public static void DownloadHighscores()
+    {
+        instance.StartCoroutine(instance.DownloadHighscoresFromDatabase());
+    }
+
+    IEnumerator DownloadHighscoresFromDatabase()
+    {
+        Downloaded = false;
         WWW www = new WWW(webURL + publicCode + "/pipe/");
         yield return www;
 
@@ -67,8 +128,9 @@ public class Leaderboard : MonoBehaviour
             FormatHighscores(www.text);
             if (display != null)
             {
-                display.OnHighscoresDownloaded(highscoresList);
+                display.OnHighscoresDownloaded(mapHighscores[LevelLookup.levelNumber - 1]);
             }
+            /*
             if(highscoresList.Length > 0)
             {
                 fetchedHighscore = highscoresList[0];
@@ -76,6 +138,8 @@ public class Leaderboard : MonoBehaviour
             {
                 fetchedHighscore = Highscore.nullValue;
             }
+            */
+            Downloaded = true;
         }
         else
         {
@@ -85,15 +149,29 @@ public class Leaderboard : MonoBehaviour
 
     void FormatHighscores(string textStream)
     {
+        mapHighscores = new List<Highscore>[numberOfBoards];
+
         string[] entries = textStream.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-        highscoresList = new Highscore[entries.Length];
+        //highscoresList = new Highscore[entries.Length];
 
         for (int i = 0; i < entries.Length; i++)
         {
-            string[] entryInfo = entries[i].Split(new char[] { '|' });
-            string username = entryInfo[0];
-            int score = int.Parse(entryInfo[1]);
-            highscoresList[i] = new Highscore(username, score);
+            //Debug.Log(entries[i]);
+            Highscore newHighscore = new Highscore(entries[i]);
+            //Debug.Log(newHighscore.username + "|" + newHighscore.score + "|" + newHighscore.mapNumber);
+            if (newHighscore.mapNumber > 0)
+            {
+                //highscoresList[i] = newHighscore;
+                if (mapHighscores[newHighscore.mapNumber - 1] == null)
+                {
+                    mapHighscores[newHighscore.mapNumber - 1] = new List<Highscore>();
+                }
+                mapHighscores[newHighscore.mapNumber - 1].Add(newHighscore);
+            }
+            else
+            {
+                Debug.LogError("Map number must be greater than 0");
+            }
         }
     }
 
@@ -103,29 +181,38 @@ public class Highscore
 {
     public string username;
     public int score;
+    public int mapNumber;
 
     public static Highscore nullValue
     {
         get
         {
-            return new Highscore("DEFAULT", -1);
+            return new Highscore("DEFAULT", -1, -1);
         }
     }
 
-    public Highscore(string _username, int _score)
+    public Highscore(string _username, int _score, int mapNumber)
     {
         username = _username;
         score = _score;
     }
 
+    public Highscore(string dataString)
+    {
+        string[] entryInfo = dataString.Split(new char[] { '|' });
+        username = Regex.Replace(entryInfo[0], @"[\d-]", string.Empty);
+        score = int.Parse(entryInfo[1]);
+        mapNumber = int.Parse(entryInfo[2]);
+    }
+
     public override bool Equals(object obj)
     {
-        if(obj.GetType() != typeof(Highscore))
+        if (obj.GetType() != typeof(Highscore))
         {
             return false;
         }
         Highscore highscore = (Highscore)obj;
-        return username == highscore.username && score == highscore.score;
+        return username == highscore.username && score == highscore.score && mapNumber == highscore.mapNumber;
     }
 
     public override int GetHashCode()

@@ -68,14 +68,28 @@ public class LevelSelectionScript : MonoBehaviour
 
     IEnumerator AttachHighscores(List<LevelPanel> panelList)
     {
-        LevelLookup.publicLeaderboardCode = "";
+        Leaderboard.DownloadHighscores();
+        yield return new WaitUntil(() => Leaderboard.Downloaded);
         foreach (LevelPanel panel in panelList)
         {
+            /*
             Leaderboard.DownloadHighscores(panel.publicCode);
             yield return new WaitUntil(() => Leaderboard.fetchedHighscore != null);
             Highscore newHighScore = Leaderboard.fetchedHighscore;
-            Leaderboard.fetchedHighscore = null;
-            panel.AddHighScore(newHighScore);
+            Leaderboard.fetchedHighscore = null; 
+            */
+            List<Highscore> currentList = Leaderboard.mapHighscores[panel.levelNumber - 1];
+            if (currentList != null && currentList.Count > 0)
+            {
+                Highscore newHighScore = Leaderboard.mapHighscores[panel.levelNumber - 1][0];
+                panel.AddHighScore(newHighScore);
+            } else
+            {
+                panel.AddHighScore(Highscore.nullValue);
+            }
+
+
+            
         }
     }
 
