@@ -20,8 +20,6 @@ public class Map : MonoBehaviour {
     public BaseGrid gridPrefab;
     public Color arrowColor = Color.black;
     public AgentModel agentModel;
-    public string privateLeaderboardCode;
-    public string publicLeaderboardCode;
 
     //any values or changed must be change in LevelLookup
 
@@ -32,8 +30,6 @@ public class Map : MonoBehaviour {
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
         LevelLookup.markMalicious = markMalicious;
-        LevelLookup.privateLeaderboardCode = privateLeaderboardCode;
-        LevelLookup.publicLeaderboardCode = publicLeaderboardCode;
         if(agentModel != null)
         {
             LevelLookup.agentModel = agentModel.name;

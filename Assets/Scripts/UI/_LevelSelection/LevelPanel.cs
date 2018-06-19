@@ -22,7 +22,6 @@ public class LevelPanel : MonoBehaviour
 
     private string levelName;
     public int levelNumber;
-    public string publicCode;
 
     private Text levelNameText;
     private Text highscoreText;
@@ -40,11 +39,10 @@ public class LevelPanel : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
     }
 
-    public void Init(int levelNum, string levelName, bool unlocked, string _publicCode)
+    public void Init(int levelNum, string levelName, bool unlocked)
     {
         levelNumber = levelNum;
         LevelName = levelName;
-        publicCode = _publicCode;
         if (!unlocked)
         {
             GetComponent<Button>().interactable = false;

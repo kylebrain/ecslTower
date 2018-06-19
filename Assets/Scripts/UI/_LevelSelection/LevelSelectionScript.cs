@@ -60,7 +60,7 @@ public class LevelSelectionScript : MonoBehaviour
             Map currentMap = mapList[i];
             LevelPanel currentPanel = Instantiate(levelPanelPrefab, transform);
             panelList.Add(currentPanel);
-            currentPanel.Init(currentMap.levelNumber, currentMap.name, showHidden || currentMap.GetUnlocked(), currentMap.publicLeaderboardCode); //if we show hidden all are on the table
+            currentPanel.Init(currentMap.levelNumber, currentMap.name, showHidden || currentMap.GetUnlocked()); //if we show hidden all are on the table
             currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);
         }
         StartCoroutine(AttachHighscores(panelList));
