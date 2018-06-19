@@ -51,6 +51,7 @@ public class Leaderboard : MonoBehaviour
         }
         if (string.IsNullOrEmpty(publicCode))
         {
+            fetchedHighscore = Highscore.nullValue;
             return;
         }
         instance.StartCoroutine(instance.DownloadHighscoresFromDatabase(publicCode));

@@ -59,7 +59,13 @@ public class LevelPanel : MonoBehaviour
     {
         if (highscoreText != null)
         {
-            highscoreText.text = "Highscore:\n" + highscore.username + " - " + highscore.score;
+            if (!highscore.Equals(Highscore.nullValue))
+            {
+                highscoreText.text = "Highscore:\n" + highscore.username + " - " + highscore.score;
+            } else
+            {
+                highscoreText.text = "No Highscore";
+            }
         }
     }
 

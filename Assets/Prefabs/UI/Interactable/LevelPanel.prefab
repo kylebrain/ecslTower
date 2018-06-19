@@ -165,7 +165,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: No Highscore
+  m_Text: Fetching...
 --- !u!114 &114423429782181210
 MonoBehaviour:
   m_ObjectHideFlags: 1

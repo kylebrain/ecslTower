@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class LevelSelectionScript : MonoBehaviour {
+public class LevelSelectionScript : MonoBehaviour
+{
 
     public LevelPanel levelPanelPrefab;
     public float levelSpacing = 20f;
@@ -13,7 +14,7 @@ public class LevelSelectionScript : MonoBehaviour {
 
     private void Start()
     {
-        if(transform.childCount > 0)
+        if (transform.childCount > 0)
         {
             Debug.LogError("Level Selection should not start with any child objects!");
         }
@@ -26,7 +27,7 @@ public class LevelSelectionScript : MonoBehaviour {
         {
             DisplayLevels(showingHidden = !showingHidden);
         }
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             LevelUnlocking.ResetUnlocked();
             DisplayLevels(false);
@@ -35,18 +36,18 @@ public class LevelSelectionScript : MonoBehaviour {
 
     private void DisplayLevels(bool showHidden)
     {
-        foreach(Transform child in transform) //change this if the error was triggered
+        foreach (Transform child in transform) //change this if the error was triggered
         {
-            if(child.GetComponent<LevelPanel>() != null)
+            if (child.GetComponent<LevelPanel>() != null)
             {
                 Destroy(child.gameObject);
-            }  
+            }
         }
         levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
         List<Map> mapList = Resources.LoadAll<Map>("Maps").ToList();
         mapList = mapList.OrderBy(map => map.levelNumber).ToList();
 
-        if(!showHidden)
+        if (!showHidden)
         {
             mapList.RemoveAll(m => m.hidden);
         }
@@ -68,16 +69,13 @@ public class LevelSelectionScript : MonoBehaviour {
     IEnumerator AttachHighscores(List<LevelPanel> panelList)
     {
         LevelLookup.publicLeaderboardCode = "";
-        foreach(LevelPanel panel in panelList)
+        foreach (LevelPanel panel in panelList)
         {
             Leaderboard.DownloadHighscores(panel.publicCode);
             yield return new WaitUntil(() => Leaderboard.fetchedHighscore != null);
             Highscore newHighScore = Leaderboard.fetchedHighscore;
             Leaderboard.fetchedHighscore = null;
-            if(!newHighScore.Equals(Highscore.nullValue))
-            {
-                panel.AddHighScore(newHighScore);
-            }
+            panel.AddHighScore(newHighScore);
         }
     }
 
