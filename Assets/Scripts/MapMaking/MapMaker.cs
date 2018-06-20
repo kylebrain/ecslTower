@@ -5,20 +5,30 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-
 /// <summary>
 /// Manages the waves, allows for building of the WavePaths and Waves
 /// </summary>
 [ExecuteInEditMode]
 public class MapMaker : MapDisplay
 {
-
     #region public variables
-    /*-----------public variables-----------*/
+
+    /// <summary>
+    /// If the map can be edited and interacted with
+    /// </summary>
     public bool enableMapEditing = false;
 
-    public GameObject levelCreation;
+    /// <summary>
+    /// The GameObject which holds the UI aspects of the MapMaker
+    /// </summary>
+    public GameObject mapMakerDisplay;
 
+    /// <summary>
+    /// If the path can be edited
+    /// </summary>
+    /// <remarks>
+    /// Determines if you can edit the Sources/Sink vs. the Path
+    /// </remarks>
     [HideInInspector]
     public bool enablePathEditing = false;
 
@@ -27,26 +37,34 @@ public class MapMaker : MapDisplay
     /// </summary>
     public int makePerWave = 100;
 
+    /// <summary>
+    /// The map that is being edited
+    /// </summary>
     [HideInInspector]
     public Map mapToEdit;
 
     #endregion
 
     #region private variables
-    /*-----------private variables-----------*/
+
     /// <summary>
     /// Used for Arrow drawing, where the base of the Arrow will lay
     /// </summary>
     private Node currStart = null;
+
     /// <summary>
     /// Used for Arrow drawing, where the tip of the Arrow will lay
     /// </summary>
     private Node currEnd = null;
+
     /// <summary>
     /// The Arrow that is currently being drawn
     /// </summary>
     private Arrow drawArrow = null;
 
+    /// <summary>
+    /// Prevents the Update function from being called more than once in Edit mode
+    /// </summary>
     private bool ranOnEdit = false;
 
     #endregion
@@ -63,7 +81,8 @@ public class MapMaker : MapDisplay
     /// </summary>
     private void Update()
     {
-        
+        //In Edit mode, loads the level from a file and applies it to the Prefab
+            //Still need to click Apply to apply changes
         if (Application.isEditor && !Application.isPlaying && !ranOnEdit)
         {
             DerivedStart();
@@ -83,18 +102,10 @@ public class MapMaker : MapDisplay
 
         //above should be run in inspector, place everything below it
 
-        if (!levelCreation.activeSelf && enableMapEditing)
+        //enables toggling of the mapMakerDisplay display
+        if(enableMapEditing != mapMakerDisplay.activeSelf)
         {
-            levelCreation.SetActive(true);
-        }
-
-        if (!enableMapEditing)
-        {
-            if (levelCreation.activeSelf)
-            {
-                levelCreation.SetActive(false);
-            }
-            return;
+            mapMakerDisplay.SetActive(enableMapEditing);
         }
 
         if (enablePathEditing)
@@ -109,11 +120,17 @@ public class MapMaker : MapDisplay
 
     #region Level
 
+    /// <summary>
+    /// Allows Map to be cleared without reference
+    /// </summary>
     public void ClearMap()
     {
         Clear(mapToEdit);
     }
 
+    /// <summary>
+    /// Allows Map to be saved without reference
+    /// </summary>
     public void SaveMap()
     {
         Save(mapToEdit);
@@ -122,6 +139,7 @@ public class MapMaker : MapDisplay
     /// <summary>
     /// Clears both the wavePathList and the file of the Level
     /// </summary>
+    /// <param name="map">Map to be cleared</param>
     private void Clear(Map map)
     {
         wavePathList = new List<WavePath>();
@@ -132,6 +150,7 @@ public class MapMaker : MapDisplay
     /// <summary>
     /// Saves the current wavePathList to the Level which will write to file
     /// </summary>
+    /// <param name="map">Map to be saved</param>
     private void Save(Map map)
     {
         wavePathList = arrowContainer.ToWavePaths();
@@ -149,6 +168,7 @@ public class MapMaker : MapDisplay
     /// <summary>
     /// Loads the Level from file, can ultimately just read from the Level in the inspector
     /// </summary>
+    /// <param name="map">Map to be loaded</param>
     private void Load(Map map)
     {
         SerializableLevel tempLevel = map.loadLevel.LoadLevel();
@@ -172,6 +192,10 @@ public class MapMaker : MapDisplay
 
     #region arrowContainer
 
+    /// <summary>
+    /// Sets all the Nodes occupied by the ArrowContainer to empty, clears Arrows and EndAreas from the Container
+    /// </summary>
+    /// <param name="arrowContainer">ArrowContainer to be deleted</param>
     private void DeleteArrowContainer(ArrowContainer arrowContainer)
     {
         foreach (Stack<Arrow> stacks in arrowContainer.arrowStacks)
@@ -190,11 +214,7 @@ public class MapMaker : MapDisplay
             Destroy(obj);
         }
     }
-
-    protected override void HandleEndArea(EndArea endArea, SerializableEndArea area)
-    {
-
-    }
+    protected override void HandleEndArea(EndArea endArea, SerializableEndArea area) { }
 
     #endregion
 

@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hidden: 1
+  locked: 1
   levelNumber: 4
   spawnRate: 1
   waveCount: 3
@@ -68,15 +69,6 @@ MonoBehaviour:
         y: 1
       - x: 30
         y: 12
-    - list:
-      - x: 12
-        y: 8
-      - x: 12
-        y: 3
-      - x: 19
-        y: 3
-      - x: 19
-        y: 16
     - list:
       - x: 1
         y: 1
@@ -312,3 +304,5 @@ MonoBehaviour:
       height: 3
   gridPrefab: {fileID: 114176529288095122, guid: d8dd1987242856b47a204e05ba1d8b90,
     type: 2}
+  arrowColor: {r: 0, g: 0, b: 0, a: 1}
+  agentModel: {fileID: 0}

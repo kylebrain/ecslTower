@@ -8,8 +8,8 @@ using UnityEngine;
 [System.Serializable]
 public class WavePath {
 
+    #region Public Variables
 
-    /*-----------public variables-----------*/
     /// <summary>
     /// Where the Path starts (get only)
     /// </summary>
@@ -31,6 +31,9 @@ public class WavePath {
         }
     }
 
+    /// <summary>
+    /// The Queue of Nodes contained in the WavePath (get only)
+    /// </summary>
     public Queue<Node> NodeQueue
     {
         get
@@ -50,16 +53,29 @@ public class WavePath {
         }
     }
 
-    /*-----------private variables-----------*/
+    #endregion
+
+    #region Private Variables
+
+    /// <summary>
+    /// Local StartNode
+    /// </summary>
     private Node startNode;
+
+    /// <summary>
+    /// Local EndNode
+    /// </summary>
     private Node endNode;
+
     /// <summary>
     /// Holds the Path as a Queue
     /// </summary>
     private Queue<Node> nodeQueue = new Queue<Node>();
 
+    #endregion
 
-    /*-----------public functions-----------*/
+    #region Constructors
+
     /// <summary>
     /// Creates the object based on a given Node Queue
     /// </summary>
@@ -94,6 +110,10 @@ public class WavePath {
     /// <param name="other"></param>
     public WavePath(WavePath other) : this(other.nodeQueue) {}
 
+    #endregion
+
+
+
     /// <summary>
     /// Removes the next Node and returns it
     /// </summary>
@@ -109,6 +129,8 @@ public class WavePath {
         }
         
     }
+
+    #region Object Overrides
 
     /// <summary>
     /// Allows for printing of entire Node Queue to be viewed
@@ -130,7 +152,7 @@ public class WavePath {
         return ret;
     }
 
-    //might cause problems if not changed to mirror the Equals function
+    //***might cause problems if not changed to mirror the Equals function
     public override int GetHashCode()
     {
         return base.GetHashCode();
@@ -143,7 +165,7 @@ public class WavePath {
     /// <returns>True if equal, false if not</returns>
     public override bool Equals(object obj)
     {
-        if(obj.GetType() != this.GetType())
+        if(obj.GetType() != GetType())
         {
             return false;
         }
@@ -162,5 +184,7 @@ public class WavePath {
         }
         return true;
     }
+
+    #endregion
 
 }
