@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class EndScreen : MonoBehaviour
 {
-
     private float previousAudioVolume;
     private AudioSource winAudio;
     private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
@@ -14,6 +13,7 @@ public class EndScreen : MonoBehaviour
     private UnityEngine.UI.InputField inputField;
     private bool highscoreSubmitted = false;
     private int finalScore = 0;
+    private bool endGame = false;
 
     private void Awake()
     {
@@ -23,10 +23,16 @@ public class EndScreen : MonoBehaviour
 
         screen = transform.Find("EndScreen").gameObject;
         inputField = screen.transform.Find("Name").GetComponent<UnityEngine.UI.InputField>();
+        endGame = false;
     }
 
     public void EndGame(bool won, int score = 0)
     {
+        if (endGame)
+        {
+            return;
+        }
+        endGame = true;
         finalScore = score;
         if (won)
         {

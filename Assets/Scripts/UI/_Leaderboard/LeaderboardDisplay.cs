@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class LeaderboardDisplay : MonoBehaviour
 {
     public Text[] textList;
-    private int tempScoreDiff = 50;
-    private int defaultScore = 1000;
-    private string[] bogeyNames = { "Michael", "Lisa", "John", "Mary", "David", "Karen", "James", "Kimberly", "Robert", "Susan" };
 
     void Start()
     {
@@ -19,7 +16,7 @@ public class LeaderboardDisplay : MonoBehaviour
     }
     public void OnHighscoresDownloaded(List<Highscore> highscoreList)
     {
-        if(highscoreList == null)
+        if (highscoreList == null)
         {
             highscoreList = new List<Highscore>();
         }
@@ -29,9 +26,6 @@ public class LeaderboardDisplay : MonoBehaviour
             if (i < highscoreList.Count)
             {
                 textList[i].text += highscoreList[i].username + " - " + highscoreList[i].score;
-            } else
-            {
-                textList[i].text += bogeyNames[i - highscoreList.Count] + " - " + (defaultScore - tempScoreDiff * (i - highscoreList.Count));
             }
         }
     }
