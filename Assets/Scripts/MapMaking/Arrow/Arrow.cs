@@ -50,6 +50,7 @@ public class Arrow : MonoBehaviour
         Color color;
         if(ColorUtility.TryParseHtmlString(LevelLookup.arrowColor, out color)){
             GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
+            //GetComponent<Renderer>().material.SetColor("_Color2", color);
         }
     }
 
@@ -72,6 +73,8 @@ public class Arrow : MonoBehaviour
         transform.eulerAngles = new Vector3(0f, angle, 90f);
         transform.localScale = new Vector3(width, length, width);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(width, length));
+        //GetComponent<Renderer>().material.SetInt("_Tiling", Mathf.RoundToInt(length * 3f / 2f));
+        //GetComponent<Renderer>().material.SetFloat("_Direction", 2f * Mathf.Atan(length / 2f) / Mathf.PI);
     }
 
     /// <summary>
