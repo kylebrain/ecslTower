@@ -10,7 +10,7 @@ public class Leaderboard : MonoBehaviour
     const int maxScores = 1000;
     const int numberOfBoards = maxScores / scoresPerBoard;
 
-    const string webURL = "http://dreamlo.com/lb/";
+    const string webURL = "https://www.dreamlo.com/lb/";
     readonly string privateCode = LeaderBoardKeys.PrivateKey;
     readonly string publicCode = LeaderBoardKeys.PublicKey;
 

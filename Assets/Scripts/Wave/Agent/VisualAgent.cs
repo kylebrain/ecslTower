@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Base class for all classes that apply an AgentAttribute
+/// </summary>
 public abstract class VisualAgent : MonoBehaviour {
 
-    //have this retrieve an Agent from VisualPrefs on Start or in InitializeAtrr
-
     public AgentAttribute Attribute;
+
+    /// <summary>
+    /// Decides how fast the Agent moves
+    /// </summary>
+    /// <remarks>
+    /// Handled by derived classes
+    /// </remarks>
     public float Speed = 0f;
 
     /// <summary>
@@ -22,6 +30,10 @@ public abstract class VisualAgent : MonoBehaviour {
         SetSpeed(attributes.Speed);
     }
 
+    /// <summary>
+    /// Creates the visual AgentModel of the Agent if it needs one
+    /// </summary>
+    /// <seealso cref="AgentModel"/>
     protected virtual void CreateAgentModel() { }
 
     /// <summary>
