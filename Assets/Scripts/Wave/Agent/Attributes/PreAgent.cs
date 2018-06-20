@@ -14,7 +14,9 @@ public struct PreAgent {
     /// The Path that the agent will follow
     /// </summary>
     public WavePath agentPath;
-
+    /// <summary>
+    /// Agent will be created with this Attribute
+    /// </summary>
     public AgentAttribute agentAttribute;
 
     /// <summary>
@@ -22,6 +24,7 @@ public struct PreAgent {
     /// </summary>
     /// <param name="agent">Sets Agent struct variable to this</param>
     /// <param name="path">Sets WavePath struct variable to this</param>
+    /// <param name="attribute">Sets the AgentAttribute struct variable to this</param>
     public PreAgent(Agent agent, WavePath path, AgentAttribute attribute)
     {
         agentPrefab = agent;

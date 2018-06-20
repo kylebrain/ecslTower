@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Derived Agent class that is harmless or helpful to the player
+/// Derived Agent class that is helpful to the player
 /// </summary>
 public class BenignAgent : Agent {
 
-
-    /*-----------public override function-----------*/
     /// <summary>
-    /// Specific action for this type of Agent
+    /// Adds to the Money of the Agent based on the scoreMode
     /// </summary>
+    /// <seealso cref="Score"/>
     public override void DestinationAction()
     {
         Score.Money += scoreMod;

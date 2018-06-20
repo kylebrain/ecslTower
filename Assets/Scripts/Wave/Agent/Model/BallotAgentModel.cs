@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Legacy Model
+/// </summary>
+/// <seealso cref="MoneyAgentModel"/>
 public class BallotAgentModel : AgentModel {
 
-    public override void SetColor(Color color)
+    public override void SetModelColor(Color color)
     {
         Renderer rend = transform.Find("Border").GetComponent<Renderer>();
         rend.material.SetColor("_Color", color);
     }
 
-    public override void SetSize(float size)
+    public override void SetModelSize(float size)
     {
         if (size < 0)
         {

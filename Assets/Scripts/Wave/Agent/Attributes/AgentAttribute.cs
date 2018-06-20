@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Holds both the possible traits but values of those traits to be used by Agents
+/// </summary>
+/// <seealso cref="VisualAgent"/>
 public struct AgentAttribute {
-
-
 
     /// <summary>
     /// the possible colors af an agent
@@ -15,7 +17,6 @@ public struct AgentAttribute {
     /// The current active color
     /// </summary>
     public PossibleColors Color;
-
 
     /// <summary>
     /// The possible sizes of an agent

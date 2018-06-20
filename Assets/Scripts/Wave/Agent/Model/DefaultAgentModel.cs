@@ -2,15 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Default template Model for new maps
+/// </summary>
 public class DefaultAgentModel : AgentModel {
 
-    public override void SetColor(Color color)
+    /// <summary>
+    /// Sets the color
+    /// </summary>
+    /// <param name="color">Desired color</param>
+    public override void SetModelColor(Color color)
     {
         Renderer rend = GetComponent<Renderer>();
         rend.material.SetColor("_Color", color);
     }
 
-    public override void SetSize(float size)
+    /// <summary>
+    /// Prefab is scaled rectangular based
+    /// </summary>
+    /// <remarks>
+    /// X is half of Z, Y is constant
+    /// </remarks>
+    /// <param name="size">Desired size float</param>
+    public override void SetModelSize(float size)
     {
         if (size > 0)
         {
