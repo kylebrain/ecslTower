@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Displays a visual representation of the Agent on a Canvas
+/// Displays a visual representation of the VisualAgent on a Canvas
 /// </summary>
 [RequireComponent(typeof(Graphic))]
 public class RingDisplayAgent : VisualAgent
 {
     /// <summary>
-    /// When rotation is set to 0 the Agent is placed at this rotation
+    /// When rotation is set to 0 the VisualAgent is placed at this rotation
     /// </summary>
     public float startingRotation;
     /// <summary>
@@ -18,11 +18,11 @@ public class RingDisplayAgent : VisualAgent
     /// </summary>
     public float radius;
     /// <summary>
-    /// How fast the Agent rotates arround the radius
+    /// How fast the VisualAgent rotates arround the radius
     /// </summary>
     public float rotationMod = 0.5f;
     /// <summary>
-    /// How much the Agent is scaled proportional to the passed size float
+    /// How much the VisualAgent is scaled proportional to the passed size float
     /// </summary>
     /// <seealso cref="VisualAgent"/>
     public float sizeMod = 30f;
@@ -78,7 +78,7 @@ public class RingDisplayAgent : VisualAgent
         {
             Rotation = startingRotation;
         }
-        //places the Agent based on its polar coordinates
+        //places the VisualAgent based on its polar coordinates
         transform.localPosition = new Vector3(center.x + radius * Mathf.Cos(Rotation * Mathf.Deg2Rad), center.y + radius * Mathf.Sin(Rotation * Mathf.Deg2Rad));
         //rotates the Agent to "follow" the path its moving in
         transform.localEulerAngles = new Vector3(0f, 0f, Rotation);
