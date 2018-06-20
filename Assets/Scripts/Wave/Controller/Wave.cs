@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Container for Agents that have a destination to be Spawned
+/// Container for PreAgent to be spawned
 /// </summary>
 public class Wave : MonoBehaviour {
 
-    public float timeBetweenAgent = LevelLookup.spawnRate;
-    private float timeSpent = 0f;
-
-    /*-----------private variable-----------*/
     /// <summary>
-    /// Contains the Wave of Agents to be spawned that follow their assigned Path
+    /// How much time passes between each spawn
     /// </summary>
-    private Queue<PreAgent> waveQueue = new Queue<PreAgent>();
+    /// <remarks>
+    /// Different for each Map
+    /// </remarks>
+    public float timeBetweenAgent;
 
+    /// <summary>
+    /// Get only count of the waveQueue
+    /// </summary>
     public int AgentsRemaining
     {
         get
@@ -24,17 +26,28 @@ public class Wave : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Seconds spend waiting for the next spawn
+    /// </summary>
+    private float timeSpent = 0f;
+
+    /// <summary>
+    /// Contains the Wave of Agents to be spawned that follow their assigned Path
+    /// </summary>
+    private Queue<PreAgent> waveQueue = new Queue<PreAgent>();
+
+
     private void Awake()
     {
+        //sets the spawnRate based on the level value
         timeBetweenAgent = LevelLookup.spawnRate;
     }
 
-    /*-----------private MonoBehavoir function-----------*/
     /// <summary>
-    /// Spawns a queued Agent when Enter is pressed
+    /// Spawns an Agent when waveQueue has PreAgents in it
     /// </summary>
     /// <remarks>
-    /// To be changed later to automatically spawn
+    /// Calls Spawn after timeBetweenAgent seconds
     /// </remarks>
     private void Update()
     {
@@ -43,8 +56,9 @@ public class Wave : MonoBehaviour {
             timeSpent = 0;
             Spawn(waveQueue.Dequeue());
         }
-        timeSpent += Time.deltaTime;
+        timeSpent += Time.deltaTime; //increments until it reaches the timeBetweenAgent
 
+        //self-destructs if it has no Agents in game or queued
         if(transform.childCount == 0 && AgentsRemaining == 0)
         {
             Destroy(gameObject);
@@ -52,6 +66,11 @@ public class Wave : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Sets the waveQueue to a copy of a List of PreAgents created in WaveController
+    /// </summary>
+    /// <seealso cref="WaveController"/>
+    /// <param name="preAgents">PreAgents to become the Wave</param>
     public void CreateWaveWithList(List<PreAgent> preAgents)
     {
         waveQueue = new Queue<PreAgent>(preAgents);
@@ -63,9 +82,14 @@ public class Wave : MonoBehaviour {
     /// <param name="newPreAgent">The PreAgent to be spawned</param>
     public void Spawn(PreAgent newPreAgent)
     {
+        //creates a new path based on the one in the PreAgent
         WavePath newPath = new WavePath(newPreAgent.agentPath);
+        //gets the first Node which the Agent where the Agent will be spawned
         Node startNode = newPath.GetNextNode();
+        //Spawns the Agent at the first Node
         Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
+
+        //initializes the Agent through its methods
         newAgent.transform.parent = transform;
         newAgent.BeginMovement(newPath);
         newAgent.InitializeAttributes(newPreAgent.agentAttribute);

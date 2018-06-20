@@ -133,12 +133,12 @@ public abstract class Agent : VisualAgent
     /// <remarks>
     /// Cannot use a constructor because Agent must be a GameObject
     /// </remarks>
-    /// <param name="newWavePath">WavePath to be followed</param>
+    /// <param name="newWavePath">WavePath to be followed, must start with the first destination Node</param>
     public void BeginMovement(WavePath newWavePath)
     {
         wavePath = newWavePath;
         Node startNode = wavePath.GetNextNode();
-        currentNode = startNode;
+        currentNode = startNode; //Wave will remove the first Node before passing the WavePath will the first destination
         transform.LookAt(currentNode.transform.position);
     }
 
