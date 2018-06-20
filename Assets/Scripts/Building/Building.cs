@@ -239,7 +239,7 @@ public abstract class Building : MonoBehaviour
             }
             else
             {
-                Score.score += price;
+                Score.Money += price;
                 currentlyPlacing = false;
                 Destroy(gameObject);
             }

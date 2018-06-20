@@ -37,10 +37,11 @@ public class RouterBuilding : Building
     public float throwRange = 120f;
 
     public float highlightLightSaberValue = 0.7f;
-    public Color highlighEmissionColor;
+    public Color highlightEmissionColor;
 
     public RingDisplayAgent childDisplayAgent;
-    public VolumetricLines.VolumetricLineBehavior laser;
+    public LaserScript laserScript;
+    //public VolumetricLines.VolumetricLineBehavior laser;
     public List<GameObject> Poles = new List<GameObject>();
 
     /// <summary>
@@ -97,7 +98,7 @@ public class RouterBuilding : Building
         timeSinceLastFilter = 0f;
         timeBetweenFilters = 1f / RoutingRate;
 
-        initLightSaberValue = laser.LightSaberFactor;
+        initLightSaberValue = laserScript.laser.LightSaberFactor;
     }
 
     protected override void UpdateRotation(Node node)
@@ -153,9 +154,9 @@ public class RouterBuilding : Building
             foreach(GameObject obj in Poles)
             {
                 Renderer rend = obj.GetComponent<Renderer>();
-                rend.material.SetColor("_EmissionColor", highlighEmissionColor); //replace with variable when done
+                rend.material.SetColor("_EmissionColor", highlightEmissionColor); //replace with variable when done
             }
-            laser.LightSaberFactor = highlightLightSaberValue;
+            laserScript.laser.LightSaberFactor = highlightLightSaberValue;
         } else
         {
             foreach (GameObject obj in Poles)
@@ -163,7 +164,7 @@ public class RouterBuilding : Building
                 Renderer rend = obj.GetComponent<Renderer>();
                 rend.material.SetColor("_EmissionColor", Color.black); //default value
             }
-            laser.LightSaberFactor = initLightSaberValue;
+            laserScript.laser.LightSaberFactor = initLightSaberValue;
         }
     }
 
@@ -237,22 +238,19 @@ public class RouterBuilding : Building
                 {
                     if (delAgent.Attribute.Equals(attribute))
                     {
-                        //Debug.Log("Deleted: " + delAgent.Attribute);
-                        denied.Play();
-                        ThrowDeniedAgent(delAgent);
-                        laser.LineColor = Color.red;
                         filtered = true;
                         break;
                     }
                 }
-                if (!filtered)
+                if(filtered == blacklist)
                 {
-                    //Debug.Log("Let in: " + delAgent.Attribute);
-                    allowed.Play();
-                    laser.LineColor = Color.green;
-                    delAgent.SetSpeed(delAgent.Attribute.Speed);
+                    DenyAgent(delAgent);
+                } else
+                {
+                    AllowAgent(delAgent);
                 }
                 processedList.Add(delAgent);
+                processedList.RemoveAll(agent => agent == null);
                 //add a way to delete Agents from the List who have been destroyed by reaching destination
             }
 
@@ -272,6 +270,28 @@ public class RouterBuilding : Building
              *       filtering out agents
              */
         }
+    }
+
+    private void AllowAgent(Agent agent)
+    {
+        allowed.Play();
+        StartCoroutine(ChangeLaserColor(agent));
+        agent.SetSpeed(agent.Attribute.Speed);
+    }
+
+    private void DenyAgent(Agent agent)
+    {
+        denied.Play();
+        ThrowDeniedAgent(agent);
+        laserScript.laser.LineColor = Color.red;
+    }
+
+    IEnumerator ChangeLaserColor(Agent processedAgent)
+    {
+        laserScript.laser.LineColor = Color.green;
+        yield return new WaitUntil(() => laserScript.hitAgent == processedAgent || laserScript.laser.LineColor == Color.red);
+        yield return new WaitUntil(() => laserScript.hitAgent == null || laserScript.laser.LineColor == Color.red);
+        laserScript.laser.LineColor = Color.red;
     }
 
     private void ThrowDeniedAgent(Agent agent)

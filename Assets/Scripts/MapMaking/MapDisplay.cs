@@ -83,7 +83,7 @@ public class MapDisplay : MonoBehaviour
                 return;
             } else
             {
-                currentMap = Resources.Load<Map>("Levels/" + LevelLookup.levelName);
+                currentMap = Resources.Load<Map>("Maps/" + LevelLookup.levelName);
                 if (currentMap == null)
                 {
                     Debug.LogError("LevelLookup does not have a valid level name!");

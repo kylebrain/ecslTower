@@ -2,8 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))] //the collider must be here and not on the children
+/// <summary>
+/// Model of the Agent
+/// </summary>
+/// <remarks>
+/// Must have an encapsulating Collider, child objects should NOT have a Collider
+/// </remarks>
+[RequireComponent(typeof(Collider))]
 public abstract class AgentModel : MonoBehaviour {
-    public abstract void SetColor(Color color);
-    public abstract void SetSize(float size);
+    /// <summary>
+    /// Derived class sets color according to its set up
+    /// </summary>
+    /// <param name="color">Desired color</param>
+    public abstract void SetModelColor(Color color);
+    /// <summary>
+    /// Derived class sets size according to its set up
+    /// </summary>
+    /// <param name="color">Desired size</param>
+    public abstract void SetModelSize(float size);
 }

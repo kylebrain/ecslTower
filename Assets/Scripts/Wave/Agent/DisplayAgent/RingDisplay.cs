@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Displays a RingDisplayAgent based on attributes
+/// </summary>
+/// <remarks>
+/// Requires a child RingDisplayAgent called RingAgent, set up in the prefab
+/// </remarks>
+/// <seealso cref="RingDisplayAgent"/>
 public class RingDisplay : MonoBehaviour
 {
     public RingDisplayAgent currentRingAgent;
 
     private void Awake()
     {
+        //sets the RingDisplayAgent variable based on its child
         currentRingAgent = transform.Find("RingAgent").GetComponent<RingDisplayAgent>();
         if(currentRingAgent == null)
         {
@@ -16,6 +24,10 @@ public class RingDisplay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates its RingDisplayAgent based on a passed attribute
+    /// </summary>
+    /// <param name="attribute">Desired attribute</param>
     public void UpdateDisplay(AgentAttribute attribute)
     {
         currentRingAgent.InitializeAttributes(attribute);

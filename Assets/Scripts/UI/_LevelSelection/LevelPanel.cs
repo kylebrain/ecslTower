@@ -14,20 +14,22 @@ public class LevelPanel : MonoBehaviour
         }
         set
         {
-            text.text = value;
+            levelNameText.text = value;
             levelName = value;
             name = value;
         }
     }
 
     private string levelName;
-    private int levelNumber;
+    public int levelNumber;
 
-    private Text text;
+    private Text levelNameText;
+    private Text highscoreText;
 
     private void Awake()
     {
-        text = transform.GetChild(0).GetComponent<Text>();
+        levelNameText = transform.GetChild(0).GetComponent<Text>();
+        highscoreText = transform.GetChild(1).GetComponent<Text>();
     }
 
     public void LoadLevel()
@@ -48,6 +50,20 @@ public class LevelPanel : MonoBehaviour
         } else
         {
             GetComponent<Button>().interactable = true;
+        }
+    }
+
+    public void AddHighScore(Highscore highscore)
+    {
+        if (highscoreText != null)
+        {
+            if (!highscore.Equals(Highscore.nullValue))
+            {
+                highscoreText.text = "Highscore:\n" + highscore.username + " - " + highscore.score;
+            } else
+            {
+                highscoreText.text = "No Highscore";
+            }
         }
     }
 

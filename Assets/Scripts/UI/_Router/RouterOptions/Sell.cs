@@ -16,7 +16,7 @@ public class Sell: GameButton {
     }
 
     public override void PerformAction() {
-        Score.score += currentPrice;
+        Score.Money += currentPrice;
         root.removeFromMap();
         Building.currentlyPlacing = false; //if you are able to select a building when placing one this is wrong, currently works
     }

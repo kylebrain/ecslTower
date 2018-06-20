@@ -21,11 +21,11 @@ public class PlaceRouterButton : DisableButton {
 
     private void UpdateButton()
     {
-        if (!ButtonEnabled && Score.score >= RouterPrefab.price)
+        if (!ButtonEnabled && Score.Money >= RouterPrefab.price)
         {
             SetEnable(true);
         }
-        if (ButtonEnabled && Score.score < RouterPrefab.price)
+        if (ButtonEnabled && Score.Money < RouterPrefab.price)
         {
             SetEnable(false);
         }
@@ -36,9 +36,9 @@ public class PlaceRouterButton : DisableButton {
     }
 
     public override void PerformAction() {
-        if (Score.score >= RouterPrefab.price &&  !Building.currentlyPlacing)
+        if (Score.Money >= RouterPrefab.price &&  !Building.currentlyPlacing)
         {
-            Score.score -= RouterPrefab.price;
+            Score.Money -= RouterPrefab.price;
             //play a buying sound
             Building newBuilding = Instantiate(RouterPrefab);
             //newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);

@@ -1178,8 +1178,8 @@ MonoBehaviour:
   Radius: 1
   radiusColor: {r: 0.366, g: 1, b: 1, a: 1}
   radiusLineWidth: 0.1
-  price: 200
-  sellPrice: 50
+  price: 50
+  sellPrice: 25
   startingHealth: 15
   Location:
     bottomLeft: {x: 0, y: 0}
@@ -1192,9 +1192,9 @@ MonoBehaviour:
   throwMagnitude: 10
   throwRange: 120
   highlightLightSaberValue: 0.7
-  highlighEmissionColor: {r: 0.20588237, g: 0.20588237, b: 0.20588237, a: 1}
+  highlightEmissionColor: {r: 0, g: 0, b: 0, a: 0}
   childDisplayAgent: {fileID: 114784577423136672}
-  laser: {fileID: 114835427097623760}
+  laserScript: {fileID: 114466324950127212}
   Poles:
   - {fileID: 1311329606056492}
   - {fileID: 1865992862665950}
@@ -2080,6 +2080,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bufferEnd: 0.1
+  laser: {fileID: 0}
+  hitAgent: {fileID: 0}
 --- !u!114 &114469238783059954
 MonoBehaviour:
   m_ObjectHideFlags: 1

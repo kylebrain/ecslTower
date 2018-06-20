@@ -55,9 +55,9 @@ GameObject:
   - component: {fileID: 4952618573945444}
   - component: {fileID: 114129911881356896}
   - component: {fileID: 65505829532123608}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MoneyAgentModel
-  m_TagString: Untagged
+  m_TagString: AgentModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

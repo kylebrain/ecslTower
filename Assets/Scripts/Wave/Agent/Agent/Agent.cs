@@ -5,17 +5,28 @@ using UnityEngine;
 /// <summary>
 /// Moving unit that follows a WavePath and perform an action
 /// </summary>
-//[RequireComponent(typeof(NavMeshAgent))]
 public abstract class Agent : VisualAgent
 {
 
-    /*-----------public variables-----------*/
-    
+    #region Public Varibles
 
+    /// <summary>
+    /// How much the Agent effects the Score: Money or Health
+    /// </summary>
     public int scoreMod = 5;
 
+    /// <summary>
+    /// How close an Agent can get to a Node before moving to the next Node
+    /// </summary>
+    /// <remarks>
+    /// Lower: Agent follow more straight paths
+    /// Too low: Agent will never reach their destination
+    /// </remarks>
     public float destinationScaling = 0.01f;
 
+    /// <summary>
+    /// Get only of the Node the Agent is moving towards
+    /// </summary>
     public Node CurrentNode
     {
         get
@@ -24,10 +35,20 @@ public abstract class Agent : VisualAgent
         }
     }
 
+    /// <summary>
+    /// Agent is Destroyed when it reaches below this Y value in World Space
+    /// </summary>
     public float minY = -100f;
 
+    /// <summary>
+    /// The particle animation played with the Destination Action
+    /// </summary>
+    public ParticleSystem destinationParticles;
 
-    /*-----------private variables-----------*/
+    #endregion
+
+    #region Private Variables
+
     /// <summary>
     /// The WavePath the Agent will follow
     /// </summary>
@@ -36,27 +57,46 @@ public abstract class Agent : VisualAgent
     /// The Node that is currently the destination
     /// </summary>
     private Node currentNode;
-    bool terminated = false;
-    bool thrown = false;
+    /// <summary>
+    /// The Agent no longer tracks a Node
+    /// </summary>
+    private bool terminated = false;
+    /// <summary>
+    /// The Agent is thrown
+    /// </summary>
+    /// <remarks>
+    /// Thrown Agents should have a Rigidbody component
+    /// Thrown Agents face the direction they are falling
+    /// </remarks>
+    private bool thrown = false;
+    /// <summary>
+    /// The visual representation of the Agent
+    /// </summary>
+    /// <remarks>
+    /// ApplyColor and ApplySize used on this object
+    /// </remarks>
+    private AgentModel model = null;
 
-    private AgentModel model;
+    #endregion
 
-
-    /*-----------private MonoBehavior functions-----------*/
+    #region Movement
 
     /// <summary>
-    /// Checks the distance to the current Node, once in range switches to the next
+    /// Updates the position and rotation of the object
     /// </summary>
     private void FixedUpdate()
     {
+        //Checks the distance to the current Node, once in range switches to the next
         if (!terminated && (currentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
             Node nextNode = wavePath.GetNextNode();
+            //if the next node exists, point at it and move towards it
             if (nextNode != null)
             {
                 currentNode = nextNode;
-                transform.LookAt(currentNode.transform.position); //???
+                transform.LookAt(currentNode.transform.position);
             }
+            //if it is null, the Agent has reached its destination and terminates
             else
             {
                 Terminate();
@@ -66,131 +106,201 @@ public abstract class Agent : VisualAgent
         transform.position += Vector3.Normalize(currentNode.transform.position - transform.position) * Speed * Time.deltaTime;
 
         //points the object in the way it is falling
-        if(terminated && thrown)
+        if (terminated && thrown)
         {
             Rigidbody rigid;
             if ((rigid = GetComponent<Rigidbody>()) != null)
             {
                 transform.rotation = Quaternion.LookRotation(rigid.velocity);
-            } else
+            }
+            else
             {
                 Debug.LogError("Could not find the rigidbody of a thrown object!");
             }
         }
 
         //deletes the object if it falls too far
-        if(transform.position.y < minY)
+        if (transform.position.y < minY)
         {
             Destroy(gameObject);
         }
 
     }
 
-
-    /*-----------public function-----------*/
     /// <summary>
     /// Initializes the movement and begins following Path
     /// </summary>
     /// <remarks>
     /// Cannot use a constructor because Agent must be a GameObject
     /// </remarks>
-    /// <param name="newWavePath">WavePath to be followed</param>
+    /// <param name="newWavePath">WavePath to be followed, must start with the first destination Node</param>
     public void BeginMovement(WavePath newWavePath)
     {
-        //navAgent = GetComponent<NavMeshAgent>();
         wavePath = newWavePath;
         Node startNode = wavePath.GetNextNode();
-        currentNode = startNode;
+        currentNode = startNode; //Wave will remove the first Node before passing the WavePath will the first destination
         transform.LookAt(currentNode.transform.position);
     }
 
+    #endregion
 
-    /*-----------public abstract function-----------*/
+    #region Termination and Destination
+
     /// <summary>
-    /// What the Agent will do when it reaches its destination
-    /// </summary>
-    public abstract void DestinationAction();
-
-
-    /*-----------private function-----------*/
-    /// <summary>
-    /// Performs DestinationAction and Destroys the object itself
+    /// Decides what to do before terminating the object
     /// </summary>
     private void Terminate()
     {
         terminated = true;
         AudioSource audio;
-
-        //add animation
-        if (Health.health > 0 && !RepairButton.Rebuilding)
+        bool particles;
+        if (Score.Health > 0 && !RepairButton.Rebuilding) //if the servers are up
         {
             DestinationAction();
             audio = GetComponents<AudioSource>()[0];
-        } else
+            particles = true;
+        }
+        else //if the servers are down do not play animation
         {
             audio = GetComponents<AudioSource>()[1];
+            particles = false;
         }
         Destroy(GetComponent<Renderer>()); //or explode or other effect here
         model.gameObject.SetActive(false);
         DerivedTerminated();
-        StartCoroutine(playTerminationAudio(audio));
+        StartCoroutine(playTerminationAnimation(audio, particles));
     }
 
+    /// <summary>
+    /// What the derived Agent will do when it reaches its destination and the servers are up
+    /// </summary>
+    public abstract void DestinationAction();
+
+    /// <summary>
+    /// Allows the derived Agent to perform an action when terminated
+    /// </summary>
     protected virtual void DerivedTerminated() { }
 
-    IEnumerator playTerminationAudio(AudioSource audio)
+    /// <summary>
+    /// Plays audio and/or particle effect
+    /// </summary>
+    /// <param name="audio">The audio to be played</param>
+    /// <param name="particles">If the particle animation will be played</param>
+    IEnumerator playTerminationAnimation(AudioSource audio, bool particles = true)
     {
-        if (audio.clip != null)
+        if (audio.clip != null || destinationParticles != null)
         {
-            audio.Play();
-            yield return new WaitForSeconds(audio.clip.length);
-        } else
+            if (audio.clip != null)
+            {
+                audio.Play();
+            }
+            //particles must be enabled and exist
+            if (particles && destinationParticles != null)
+            {
+                destinationParticles = Instantiate(destinationParticles, transform);
+                destinationParticles.Play();
+            }
+            //waits for the audio and/or the particles to finish playing
+            yield return new WaitForSeconds(GetDestinationTime(audio, particles));
+        }
+        else
         {
             yield return null;
         }
         Destroy(gameObject);
     }
 
-    protected override void CreateAgentModel()
+    /// <summary>
+    /// Determines the longest wait time based on audio and particles
+    /// </summary>
+    /// <param name="audio">The audio to be played</param>
+    /// <param name="particles">If the particle animation will be played</param>
+    /// <returns></returns>
+    private float GetDestinationTime(AudioSource audio, bool particles = true)
     {
-        model = Resources.Load<AgentModel>("AgentModel/" + LevelLookup.agentModel);
-        model = Instantiate(model, transform);
-    }
-
-    protected override void ApplySize(float size)
-    {
-        model.SetSize(size);
-    }
-
-    public override void SetColor(AgentAttribute.PossibleColors color)
-    {
-        Color setColor;
-        switch (color)
+        float ret = audio.clip.length;
+        if (particles && destinationParticles != null)
         {
-            case AgentAttribute.PossibleColors.red:
-                setColor = Color.red;
-                break;
-            case AgentAttribute.PossibleColors.green:
-                setColor = Color.green;
-                break;
-            case AgentAttribute.PossibleColors.blue:
-                setColor = Color.blue;
-                break;
-            default:
-                setColor = Color.white;
-                break;
+            //if the particles are wanted and longer than the audio length, then return the particles' duration
+            ret = Mathf.Max(ret, destinationParticles.main.duration);
         }
-        model.SetColor(setColor);
+        return ret;
     }
 
+    /// <summary>
+    /// Attaches a rigidbody and "throws" the Agent
+    /// </summary>
+    /// <param name="velocity">The direction and magnitude to be thrown</param>
     public void Throw(Vector3 velocity)
     {
         terminated = true;
-        thrown = true;
+        thrown = true; //if the Agent has a rigidbody, thrown must be true
         transform.parent = null; //to make sure the game doesn't wait for the Agent to reach the barrier
         model.GetComponent<Collider>().enabled = false;
-        Rigidbody rigid = gameObject.AddComponent<Rigidbody>();
+        Rigidbody rigid;
+        if ((rigid = GetComponent<Rigidbody>()) == null)
+        {
+            rigid = gameObject.AddComponent<Rigidbody>();
+        }
         rigid.velocity = velocity;
     }
 
+    #endregion
+
+    #region AgentModel and Atrribute override
+
+    /// <summary>
+    /// Instantiates the AgentModel from Resources and sets the model variable
+    /// </summary>
+    protected override void CreateAgentModel()
+    {
+        //should only create one model
+        if(model != null)
+        {
+            return;
+        }
+        model = Resources.Load<AgentModel>("AgentModel/" + LevelLookup.agentModel);
+        if(model == null)
+        {
+            Debug.LogError("Could not find the requested AgentModel!");
+            return;
+        }
+        model = Instantiate(model, transform);
+    }
+
+    /// <summary>
+    /// Applies the size to the model and any derived classes
+    /// </summary>
+    /// <param name="size">Desired size</param>
+    protected override void ApplySize(float size)
+    {
+        model.SetModelSize(size);
+        DerivedApplySize(size, model);
+    }
+
+    /// <summary>
+    /// Derived class can define what to do based on the size
+    /// </summary>
+    /// <param name="size">Desired size</param>
+    /// <param name="model">Model to be changed</param>
+    protected virtual void DerivedApplySize(float size, AgentModel model) { }
+
+    /// <summary>
+    /// Sets the Model color
+    /// </summary>
+    /// <param name="color">Desired color</param>
+    protected override void ApplyColor(Color color)
+    {
+        model.SetModelColor(color);
+        DerivedApplyColor(color, model);
+    }
+
+    /// <summary>
+    /// Derived class can define what to do based on the size
+    /// </summary>
+    /// <param name="color">Desired color</param>
+    /// <param name="model">Model to be changed</param>
+    protected virtual void DerivedApplyColor(Color color, AgentModel model) { }
+
+    #endregion
 }

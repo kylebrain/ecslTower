@@ -127,16 +127,15 @@ public class WaveController : MonoBehaviour
 
     private void EndGame()
     {
-        endScreen.EndGame(true, Score.score);
+        endScreen.EndGame(true, Score.Money);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace)) //change Backspace to be in ControlPrefs or remove entirely
+        if (Input.GetKeyDown(KeyCode.BackQuote)) //change Backspace to be in ControlPrefs or remove entirely
         {
             SceneManager.LoadScene("LevelSelect");
         }
-
         if (currentWave == null && Playing)
         {
             Playing = false;

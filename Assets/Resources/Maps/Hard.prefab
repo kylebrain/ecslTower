@@ -1,0 +1,211 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1651085077954984}
+  m_IsPrefabParent: 1
+--- !u!1 &1651085077954984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4039687497525276}
+  - component: {fileID: 114722287159027294}
+  m_Layer: 0
+  m_Name: Hard
+  m_TagString: Map
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4039687497525276
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1651085077954984}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114722287159027294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1651085077954984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hidden: 0
+  locked: 1
+  levelNumber: 3
+  spawnRate: 0.5
+  waveCount: 5
+  spawnPerWave: 100
+  decoyProbability: 5
+  markMalicious: 0
+  loadLevel:
+    levelName: hard_level001
+    wavePaths:
+    - list:
+      - x: 11
+        y: 7
+      - x: 14
+        y: 7
+      - x: 14
+        y: 17
+    - list:
+      - x: 17
+        y: 7
+      - x: 17
+        y: 37
+      - x: 27
+        y: 37
+      - x: 27
+        y: 34
+    - list:
+      - x: 36
+        y: 26
+      - x: 36
+        y: 13
+      - x: 39
+        y: 13
+    - list:
+      - x: 28
+        y: 15
+      - x: 32
+        y: 15
+      - x: 32
+        y: 11
+      - x: 39
+        y: 11
+    - list:
+      - x: 42
+        y: 26
+      - x: 46
+        y: 26
+      - x: 46
+        y: 35
+      - x: 36
+        y: 35
+    - list:
+      - x: 27
+        y: 16
+      - x: 27
+        y: 31
+    - list:
+      - x: 10
+        y: 37
+      - x: 10
+        y: 32
+      - x: 14
+        y: 32
+      - x: 14
+        y: 21
+    - list:
+      - x: 42
+        y: 26
+      - x: 46
+        y: 26
+      - x: 46
+        y: 35
+      - x: 41
+        y: 35
+      - x: 41
+        y: 32
+      - x: 27
+        y: 32
+    - list:
+      - x: 17
+        y: 7
+      - x: 17
+        y: 9
+      - x: 30
+        y: 9
+      - x: 30
+        y: 12
+      - x: 39
+        y: 12
+    endAreas:
+    - Sink: 0
+      bottomLeft:
+        x: 8
+        y: 7
+      width: 4
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 17
+        y: 7
+      width: 4
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 26
+        y: 15
+      width: 3
+      height: 2
+    - Sink: 0
+      bottomLeft:
+        x: 8
+        y: 37
+      width: 5
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 33
+        y: 26
+      width: 4
+      height: 1
+    - Sink: 0
+      bottomLeft:
+        x: 39
+        y: 26
+      width: 4
+      height: 1
+    - Sink: 1
+      bottomLeft:
+        x: 14
+        y: 17
+      width: 1
+      height: 5
+    - Sink: 1
+      bottomLeft:
+        x: 39
+        y: 11
+      width: 2
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 33
+        y: 35
+      width: 4
+      height: 2
+    - Sink: 1
+      bottomLeft:
+        x: 26
+        y: 31
+      width: 2
+      height: 4
+  gridPrefab: {fileID: 114115394956606004, guid: 395d34ee5aacdeb47b127557c32441ba,
+    type: 2}
+  arrowColor: {r: 0, g: 0, b: 0, a: 1}
+  agentModel: {fileID: 114129911881356896, guid: 4ebe8fb75064aca4d901fa736e7b0ecb,
+    type: 2}
+  privateLeaderboardCode: N7rtWzknIUeGSWJgvQ1B1gpzZbIVi0x0-YaI7KyFBU7g
+  publicLeaderboardCode: 5b281ebf191a8a0bcc8b8be5
