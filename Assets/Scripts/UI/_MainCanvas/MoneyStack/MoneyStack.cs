@@ -11,7 +11,6 @@ public class MoneyStack : MonoBehaviour
     public float moveUpBy = 10f;
 
     public static bool Modifying = false;
-    public static int coinCount = 0;
 
     void Start()
     {
@@ -21,7 +20,6 @@ public class MoneyStack : MonoBehaviour
             return;
         }
 
-        coinCount = 0;
         Modifying = false;
 
     }
