@@ -21,6 +21,9 @@ public class MoneyStack : MonoBehaviour
             return;
         }
 
+        coinCount = 0;
+        Modifying = false;
+
     }
 
     private void Update()
