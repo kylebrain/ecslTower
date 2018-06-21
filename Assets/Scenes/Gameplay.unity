@@ -1306,7 +1306,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1386,7 +1386,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2682,6 +2682,48 @@ RectTransform:
   m_AnchoredPosition: {x: 3.7, y: 0}
   m_SizeDelta: {x: 152.5, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &979814661
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4504321819464564, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ed18f8adda5977448b6b23bf76c3df5a, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1007238538
 GameObject:
   m_ObjectHideFlags: 0
