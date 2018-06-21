@@ -76,6 +76,11 @@ public class Node : MonoBehaviour {
     /// Sets the material to hoverMaterial (hoverInvalidMaterial if the node is occupied).
     /// </summary>
     public void setHovered() {
+        if(PauseMenu.GamePaused)
+        {
+            return;
+        }
+
         rend.enabled = true;
 
         switch (Occupied)

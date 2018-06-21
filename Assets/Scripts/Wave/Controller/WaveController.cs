@@ -274,11 +274,6 @@ public class WaveController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote)) //change Backspace to be in ControlPrefs or remove entirely
-        {
-            SceneManager.LoadScene("LevelSelect");
-        }
-
         //Wave will delete itself when it is finished so currentWave will be set to null
         if (currentWave == null && Playing)
         {
