@@ -1101,11 +1101,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114394535267952798, guid: 0f2879b604aba83459bc80392276582d,
         type: 2}
-      propertyPath: levelCreation
-      value: 
-      objectReference: {fileID: 586010406}
-    - target: {fileID: 114394535267952798, guid: 0f2879b604aba83459bc80392276582d,
-        type: 2}
       propertyPath: mapMakerDisplay
       value: 
       objectReference: {fileID: 1818979932}

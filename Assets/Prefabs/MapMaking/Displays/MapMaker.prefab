@@ -90,7 +90,7 @@ MonoBehaviour:
     startAreas: []
     endAreas: []
   enableMapEditing: 1
-  levelCreation: {fileID: 0}
+  mapMakerDisplay: {fileID: 0}
   enablePathEditing: 0
   makePerWave: 100
   mapToEdit: {fileID: 0}
