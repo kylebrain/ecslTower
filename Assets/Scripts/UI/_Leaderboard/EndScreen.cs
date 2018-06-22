@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class EndScreen : MonoBehaviour
 {
     private float previousAudioVolume;
-    private AudioSource winAudio;
     private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
     private GameObject screen;
     private UnityEngine.UI.InputField inputField;
@@ -17,9 +16,7 @@ public class EndScreen : MonoBehaviour
 
     private void Awake()
     {
-        AudioSource[] audioSources = GetComponents<AudioSource>();
-        winAudio = audioSources[0];
-        loseAudio = audioSources[1];
+        loseAudio = GetComponent<AudioSource>();
 
         screen = transform.Find("EndScreen").gameObject;
         inputField = screen.transform.Find("Name").GetComponent<UnityEngine.UI.InputField>();
@@ -37,9 +34,10 @@ public class EndScreen : MonoBehaviour
         if (won)
         {
             screen.transform.Find("Score").GetComponent<Text>().text = "Score: " + score;
+            AudioManager.Mute("Theme");
             AudioManager.Play("Victory");
             LevelUnlocking.AddToUnlocked(LevelLookup.levelNumber + 1);
-            StartCoroutine(DisplayEnd(won, winAudio.clip.length, score)); //plays the sound then waits to show screen
+            StartCoroutine(DisplayEnd(won, AudioManager.GetLength("Victory"), score)); //plays the sound then waits to show screen
         }
         else
         {
@@ -89,6 +87,7 @@ public class EndScreen : MonoBehaviour
     public void ReturnToLevelSelect()
     {
         AudioListener.volume = previousAudioVolume;
+        AudioManager.Mute("Theme", false);
         SceneManager.LoadScene("LevelSelect");
     }
 

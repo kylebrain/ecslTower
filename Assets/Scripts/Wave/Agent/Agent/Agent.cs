@@ -192,6 +192,7 @@ public abstract class Agent : VisualAgent
         {
             if (audio.clip != null)
             {
+                audio.pitch = AudioManager.VaryPitch(0.1f);
                 audio.Play();
             }
             //particles must be enabled and exist

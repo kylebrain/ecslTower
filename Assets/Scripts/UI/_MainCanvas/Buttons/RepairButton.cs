@@ -53,6 +53,7 @@ public class RepairButton : DisableButton
     {
         if (Score.Money >= cost)
         {
+            AudioManager.Play("Repair");
             Score.Health += healthRepaired;
             Score.Money -= cost;
         }
@@ -68,6 +69,7 @@ public class RepairButton : DisableButton
 
     IEnumerator Rebuild()
     {
+        AudioManager.Play("Repair");
         Score.Money -= rebuildCost;
         Rebuilding = true;
         SetEnable(false);

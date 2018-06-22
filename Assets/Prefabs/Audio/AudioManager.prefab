@@ -54,13 +54,36 @@ MonoBehaviour:
   sounds:
   - name: Victory
     clip: {fileID: 8300000, guid: 698ec50a5e1d8a74db0c3321d7c32986, type: 3}
+    mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
     volume: 1
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: Theme
     clip: {fileID: 8300000, guid: 3a37fe274c0555641910da7b9003b568, type: 3}
-    volume: 0.2
+    mixer: {fileID: 243377483602678540, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.075
     pitch: 1
     loop: 1
+    source: {fileID: 0}
+  - name: PowerUp
+    clip: {fileID: 8300000, guid: 2a4d79b2d4ee44741bed8fa39a3591c6, type: 3}
+    mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: StartGame
+    clip: {fileID: 8300000, guid: 1b92904e44f8d4e4ba8ead337d2eacd0, type: 3}
+    mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Repair
+    clip: {fileID: 8300000, guid: c8f6efbf0c800764a896d7dc8b85c453, type: 3}
+    mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.5
+    pitch: 1
+    loop: 0
     source: {fileID: 0}

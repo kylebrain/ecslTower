@@ -274,6 +274,7 @@ public class RouterBuilding : Building
 
     private void AllowAgent(Agent agent)
     {
+        allowed.pitch = AudioManager.VaryPitch(0.1f);
         allowed.Play();
         StartCoroutine(ChangeLaserColor(agent));
         agent.SetSpeed(agent.Attribute.Speed);
@@ -281,10 +282,13 @@ public class RouterBuilding : Building
 
     private void DenyAgent(Agent agent)
     {
+        denied.pitch = AudioManager.VaryPitch(0.1f);
         denied.Play();
         ThrowDeniedAgent(agent);
         laserScript.laser.LineColor = Color.red;
     }
+
+    
 
     IEnumerator ChangeLaserColor(Agent processedAgent)
     {

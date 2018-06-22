@@ -229,7 +229,9 @@ public class WaveController : MonoBehaviour
         else
         {
             InitStaticsForWait();
-            yield return new WaitForSeconds(timeBetweenWaves);
+            yield return new WaitForSeconds(timeBetweenWaves - AudioManager.GetLength("PowerUp"));
+            AudioManager.Play("PowerUp");
+            yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
             PlayWave();
         }
     }
