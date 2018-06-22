@@ -76,7 +76,7 @@ MonoBehaviour:
   - name: StartGame
     clip: {fileID: 8300000, guid: 1b92904e44f8d4e4ba8ead337d2eacd0, type: 3}
     mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
-    volume: 0.5
+    volume: 0.3
     pitch: 1
     loop: 0
     source: {fileID: 0}

@@ -54,9 +54,9 @@ MonoBehaviour:
   hidden: 0
   locked: 0
   levelNumber: 1
-  spawnRate: 1
+  spawnRate: 2
   waveCount: 2
-  spawnPerWave: 20
+  spawnPerWave: 100
   decoyProbability: 0
   markMalicious: 1
   loadLevel:
