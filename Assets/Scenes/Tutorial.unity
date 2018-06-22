@@ -755,7 +755,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -30, y: -30}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &221311434
 MonoBehaviour:
@@ -778,7 +778,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 29d1861da7232b847ad1337bd27c3113, type: 3}
-    m_FontSize: 18
+    m_FontSize: 17
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -789,7 +789,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Benign packets give you money!
+  m_Text: Fetching tutorial...
 --- !u!222 &221311435
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1041,6 +1041,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 251937117}
+--- !u!1001 &263912985
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4734403132164708, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 3d41fe8403267d347820113c95f4bc3b, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &272670198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1653,7 +1695,9 @@ Prefab:
       propertyPath: m_FontData.m_VerticalOverflow
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61377521914971694, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
+    - {fileID: 61393944677438756, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &343187514 stripped
@@ -1876,13 +1920,14 @@ GameObject:
   m_Component:
   - component: {fileID: 515375923}
   - component: {fileID: 515375924}
+  - component: {fileID: 515375925}
   m_Layer: 5
   m_Name: TutorialTips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &515375923
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1902,7 +1947,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 402.9, y: 100}
+  m_SizeDelta: {x: 443.2, y: 140.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &515375924
 MonoBehaviour:
@@ -1918,6 +1963,18 @@ MonoBehaviour:
   text: {fileID: 221311434}
   dismiss: {fileID: 1356965583}
   tutorial: {fileID: 694734711}
+--- !u!114 &515375925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 515375922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!1 &543702462 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1182438572716764, guid: ef6113f1ad9025e44b89d5ebeada07d8,
@@ -1946,6 +2003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!1 &599804055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2100,6 +2158,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 94532999}
+--- !u!114 &630892063 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114389593707763174, guid: ef6113f1ad9025e44b89d5ebeada07d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1286137247}
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1001 &651168734
 Prefab:
   m_ObjectHideFlags: 0
@@ -2407,6 +2471,8 @@ MonoBehaviour:
   maliciousAgent: {fileID: 114606570728942684, guid: 45739009fcdf4d545a2150f76b2d7b40,
     type: 2}
   tutorialTips: {fileID: 515375924}
+  repairButton: {fileID: 1647255631}
+  shopButton: {fileID: 630892063}
 --- !u!1 &706943629
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,7 +3571,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -4352,6 +4418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!1 &1445317538
 GameObject:
   m_ObjectHideFlags: 0
@@ -5038,6 +5105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!1 &1637126895
 GameObject:
   m_ObjectHideFlags: 0
@@ -5112,6 +5180,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1637126895}
+--- !u!114 &1647255631 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114389593707763174, guid: ef6113f1ad9025e44b89d5ebeada07d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 343187513}
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1675012879
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,6 +5236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!114 &1708420088
 MonoBehaviour:
   m_ObjectHideFlags: 0

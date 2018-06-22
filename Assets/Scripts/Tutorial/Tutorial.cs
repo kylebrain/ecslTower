@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Tutorial : PreWaveCreator
 {
     public TutorialTips tutorialTips;
+    public Button repairButton;
+    public Button shopButton;
+
     private float bufferTime;
 
     List<PreAgent> firstPreWave = new List<PreAgent>();
@@ -32,7 +37,7 @@ public class Tutorial : PreWaveCreator
         AddBenignAgent(15, firstPreWave, 0);
         //2
         AddMaliciousAgent(2, firstPreWave, 0, 0);
-        //7
+        //7 change to random later
         AddBenignAgent(4, firstPreWave, 0);
         AddMaliciousAgent(1, firstPreWave, 0, 0);
         AddBenignAgent(4, firstPreWave, 0);
@@ -43,7 +48,7 @@ public class Tutorial : PreWaveCreator
         AddMaliciousAgent(4, firstPreWave, 0, 1);
         //9
         AddBenignAgent(15, firstPreWave);
-        //10
+        //10 change to random later
         AddBenignAgent(4, firstPreWave, 0);
         AddMaliciousAgent(1, firstPreWave, 0, 0);
         AddBenignAgent(4, firstPreWave, 0);
@@ -52,7 +57,10 @@ public class Tutorial : PreWaveCreator
         firstInitialCount = firstPreWave.Count;
 
         //Wave2
-        infectedAttributes[1] = MutateAttribute(infectedAttributes[0]);
+        do
+        {
+            infectedAttributes[1] = MutateAttribute(infectedAttributes[0]);
+        } while (infectedAttributes[1].Color == infectedAttributes[0].Color && infectedAttributes[1].Size == infectedAttributes[0].Size);
         do
         {
             infectedAttributes[2] = GenerateAttribute();
@@ -85,8 +93,26 @@ public class Tutorial : PreWaveCreator
 
     IEnumerator RunTutorial()
     {
+        shopButton.interactable = false;
+        foreach(Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
+        {
+            mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.empty);
+        }
+        currentWave.PauseSpawning();
+
+        //0
+        tutorialTips.Show("Welcome to NETWORKING!");
+        yield return new WaitUntil(() => DismissCheck());
+        yield return new WaitForSeconds(bufferTime);
+
+        //1
+        tutorialTips.Show("Use the WASD or Arrow keys to move the Camera.\nUse the scroll wheel to zoom in/out.");
+        yield return new WaitUntil(() => DismissCheck());
+        yield return new WaitForSeconds(bufferTime);
+
         //1
         tutorialTips.Show("Benign packets give you money when they reach their destination.");
+        currentWave.PauseSpawning(false);
         yield return new WaitUntil(() => currentWave.AgentsRemaining == firstInitialCount - 16);
         yield return new WaitForSeconds(bufferTime);
         currentWave.PauseSpawning();
@@ -114,7 +140,8 @@ public class Tutorial : PreWaveCreator
         tutorialTips.Show("The way to stop bad packets is by placing a router.");
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
-        tutorialTips.Show("Place a Router to filter out the malicious packet.", false);
+        tutorialTips.Show("Place a Router on the path to filter out the malicious packet.", false);
+        shopButton.interactable = true;
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -122,9 +149,9 @@ public class Tutorial : PreWaveCreator
 
         //5
         tutorialTips.Show("Set the first two color and size filters to filter out the malicious packet.", false);
-        AgentAttribute attr = infectedAttributes[0];
-        attr.Speed = AgentAttribute.PossibleSpeeds.dontCare;
-        yield return new WaitUntil(() => RouterSetCorrectly(attr));
+        AgentAttribute attr0 = infectedAttributes[0];
+        attr0.Speed = AgentAttribute.PossibleSpeeds.dontCare;
+        yield return new WaitUntil(() => RouterSetCorrectly(attr0));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
@@ -143,6 +170,8 @@ public class Tutorial : PreWaveCreator
         LevelLookup.markMalicious = false;
         yield return new WaitUntil(() => currentWave.AgentsRemaining == firstInitialCount - 36);
         currentWave.PauseSpawning();
+        yield return new WaitUntil(() => WaitForFunction(0));
+        repairButton.interactable = false;
         yield return new WaitUntil(() => Score.Health == 0);
         currentWave.Pause();
         tutorialTips.Show("Not all levels will mark bad packets.");
@@ -156,6 +185,7 @@ public class Tutorial : PreWaveCreator
 
         //10
         tutorialTips.Show("Rebuild your servers to keep making money", false);
+        repairButton.interactable = true;
         yield return new WaitUntil(() => WaitForFunction(2));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -170,14 +200,80 @@ public class Tutorial : PreWaveCreator
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
 
+        //Wave 2
 
+        //12
+        AudioManager.Play("PowerUp");
+        yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
+        tutorialTips.Show("But the malicious packets will be mutated to a new combination.");
+        currentWave = Instantiate(wavePrefab, transform);
+        currentWave.CreateWaveWithList(secondPreWave);
+        yield return new WaitUntil(() => currentWave.AgentsRemaining == secondInitialCount - 1);
+        currentWave.PauseSpawning();
+        yield return new WaitUntil(() => WaitForFunction(0));
 
+        //13
+        tutorialTips.Show("Change your filter to adapt to the new wave.\n(" + infectedAttributes[1].Color + ", " + infectedAttributes[1].Size + ", " + infectedAttributes[1].Speed +")", false);
+        yield return new WaitUntil(() => RouterSetCorrectly(infectedAttributes[1]));
+        tutorialTips.ShowDismiss();
+        yield return new WaitUntil(() => DismissCheck());
+        currentWave.PauseSpawning(false);
+        yield return new WaitUntil(() => currentWave.AgentsRemaining == secondInitialCount - 3);
+        currentWave.PauseSpawning();
+        yield return new WaitUntil(() => WaitForFunction(0));
 
+        //15a
+        tutorialTips.Show("There will be more than one combination to filter.");
+        yield return new WaitUntil(() => DismissCheck());
+        yield return new WaitForSeconds(bufferTime);
+
+        tutorialTips.Show("Place another Router to filter out the other packet.", false);
+        yield return new WaitUntil(() => WaitForFunction(1));
+        tutorialTips.ShowDismiss();
+        yield return new WaitUntil(() => DismissCheck());
+        tutorialTips.Show("Change the filter to filter out the other packet.\n(" + infectedAttributes[2].Color + ", " + infectedAttributes[2].Size + ", " + infectedAttributes[2].Speed + ")");
+        yield return new WaitUntil(() => DismissCheck());
+
+        //14
+        tutorialTips.Show("The more specific the filter is, the more money you'll make from benign packets.");
+        yield return new WaitUntil(() => DismissCheck());
+
+        //15b
+        tutorialTips.Show("Now place two more routers on the other path to mirror these.");
+        foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
+        {
+            mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.navigation);
+        }
+        yield return new WaitUntil(() => WaitForFunction(1));
+        yield return new WaitUntil(() => WaitForFunction(1));
+        tutorialTips.ShowDismiss();
+        yield return new WaitUntil(() => DismissCheck());
+        yield return new WaitForSeconds(bufferTime);
+        currentWave.PauseSpawning(false);
+
+        //16
+        tutorialTips.Show("Once you are filtering the most specific malicious combonations, you can sit back and relax.");
+        yield return new WaitUntil(() => currentWave == null);
+
+        //17
+        tutorialTips.Show("But watch out for the next wave!");
+        yield return new WaitUntil(() => DismissCheck());
+
+        //18
+        AudioManager.Play("PowerUp");
+        yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
+
+        //19
+        SceneManager.LoadScene("LevelSelect");
 
     }
 
     private bool WaitForFunction(int index)
     {
+        //0: Malicious packet reaches destination
+        //1: Building is placed
+        //2: Rebuilding of the server starts
+
         if(index == callFunction && index != -1 && callFunction != -1)
         {
             callFunction = -1;

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class CanvasHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public static bool Over;
-    private bool selfOver;
+    public bool selfOver;
 
     /// <summary>
     /// Basic workaround so that the menu does not close when clicked on, sets Over to true
@@ -32,8 +32,14 @@ public class CanvasHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (selfOver)
         {
-            Over = false;
-            selfOver = false;
+            CoroutineManager.Instance.StartCoroutine(Disable());
         }
+    }
+
+    IEnumerator Disable()
+    {
+        yield return null;
+        Over = false;
+        selfOver = false;
     }
 }
