@@ -39,13 +39,17 @@ public class AudioManager : MonoBehaviour {
         Play("Theme");
     }
 
-    public static void Play (string name)
+    public static void Play (string name, float pitchRange = 0)
     {
         Sound s = Array.Find(instance.sounds, sound => sound.name == name);
         if(s == null)
         {
             Debug.LogWarning("Could not find the sound: " + name);
             return;
+        }
+        if(pitchRange != 0)
+        {
+            s.source.pitch = VaryPitch(pitchRange);
         }
         s.source.Play();
     }
