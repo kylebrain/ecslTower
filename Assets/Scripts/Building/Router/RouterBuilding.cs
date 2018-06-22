@@ -274,6 +274,7 @@ public class RouterBuilding : Building
 
     private void AllowAgent(Agent agent)
     {
+        allowed.pitch = AudioManager.VaryPitch(0.1f);
         allowed.Play();
         StartCoroutine(ChangeLaserColor(agent));
         agent.SetSpeed(agent.Attribute.Speed);
@@ -281,10 +282,13 @@ public class RouterBuilding : Building
 
     private void DenyAgent(Agent agent)
     {
+        denied.pitch = AudioManager.VaryPitch(0.1f);
         denied.Play();
         ThrowDeniedAgent(agent);
         laserScript.laser.LineColor = Color.red;
     }
+
+    
 
     IEnumerator ChangeLaserColor(Agent processedAgent)
     {
@@ -339,7 +343,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedHide(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, false, canvas);
+        SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
     }
 
     /// <summary>
@@ -348,7 +352,7 @@ public class RouterBuilding : Building
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected override void derivedShow(GameObject canvas)
     {
-        SetChildActive(new[] { "RingDisplay", /*"Tooltips"*/ }, true, canvas);
+        SetChildActive(new[] { "RingDisplay", "Tooltips" }, true, canvas);
     }
 
 

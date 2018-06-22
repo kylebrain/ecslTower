@@ -70,10 +70,11 @@ public class Arrow : MonoBehaviour
         float width = baseRadius + widthScale * length;
 
         transform.position = midpoint;
-        transform.eulerAngles = new Vector3(0f, angle, 90f);
+        transform.localEulerAngles = new Vector3(0, angle, 90f);
+        //transform.Rotate(Vector3.up, angle);
         transform.localScale = new Vector3(width, length, width);
         GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(width, length));
-        //GetComponent<Renderer>().material.SetInt("_Tiling", Mathf.RoundToInt(length * 3f / 2f));
+        //GetComponent<Renderer>().material.SetInt("_Tiling", Mathf.RoundToInt(length * 2f) * 2);
         //GetComponent<Renderer>().material.SetFloat("_Direction", 2f * Mathf.Atan(length / 2f) / Mathf.PI);
     }
 

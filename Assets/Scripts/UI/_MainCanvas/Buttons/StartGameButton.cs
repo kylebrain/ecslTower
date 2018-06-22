@@ -11,6 +11,7 @@ public class StartGameButton : GameButton
 
     public override void PerformAction()
     {
+        AudioManager.Play("StartGame");
         waveController.PlayWave();
         gameObject.SetActive(false);
     }

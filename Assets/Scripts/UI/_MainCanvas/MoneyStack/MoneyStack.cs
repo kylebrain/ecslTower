@@ -11,7 +11,6 @@ public class MoneyStack : MonoBehaviour
     public float moveUpBy = 10f;
 
     public static bool Modifying = false;
-    public static int coinCount = 0;
 
     void Start()
     {
@@ -20,6 +19,8 @@ public class MoneyStack : MonoBehaviour
             Debug.LogError("Please place a valid Coin object in this script. (Must have the 'Coin' tag)");
             return;
         }
+
+        Modifying = false;
 
     }
 

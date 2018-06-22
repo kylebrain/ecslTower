@@ -9,6 +9,7 @@ public class RepairButton : DisableButton
     private int healthRepaired = 10;
     private float rebuildTime = 2; //time to rebuild each segment
 
+
     private int rebuildCost;
     public static bool Rebuilding = false;
 
@@ -53,6 +54,7 @@ public class RepairButton : DisableButton
     {
         if (Score.Money >= cost)
         {
+            AudioManager.Play("Repair", 0.1f);
             Score.Health += healthRepaired;
             Score.Money -= cost;
         }
@@ -68,6 +70,7 @@ public class RepairButton : DisableButton
 
     IEnumerator Rebuild()
     {
+        AudioManager.Play("Repair");
         Score.Money -= rebuildCost;
         Rebuilding = true;
         SetEnable(false);
@@ -92,4 +95,6 @@ public class RepairButton : DisableButton
         }
 
     }
+
+
 }

@@ -6,6 +6,8 @@
 		_Color2 ("Color 2", Color) = (1,1,1,1)
 		_Tiling ("Tiling", Range(1, 500)) = 10
 		_Direction ("Direction", Range(0, 1)) = 0
+		_Flipped("Flipped", Range(0, 1)) = 0
+		_ColorRatio("Color Ratio", Range(0, 1)) = 0.5
 	}
 
 	SubShader
@@ -22,6 +24,8 @@
 			fixed4 _Color2;
 			int _Tiling;
 			float _Direction;
+			float _Flipped;
+			float _ColorRatio;
 
 			struct appdata
 			{
@@ -45,8 +49,10 @@
 
 			fixed4 frag (v2f i) : SV_Target
 			{
-				float pos = lerp(i.uv.x, i.uv.y, _Direction) * _Tiling;
-				fixed value = floor(frac(pos) + 0.5);
+				fixed flip = sign(_Flipped - i.uv.x);
+				float colorRat = _ColorRatio - 0.5;
+				float pos = lerp(-1 * flip * i.uv.x, i.uv.y, _Direction) * _Tiling;
+				fixed value = floor(frac(pos) + 0.5 + colorRat);
 				return lerp(_Color1, _Color2, value);
 			}
 			ENDCG
