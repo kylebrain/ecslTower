@@ -67,7 +67,7 @@ public class MapDisplay : MonoBehaviour
 
     #endregion
 
-    private void Start()
+    private void Awake()
     {
         if (!Application.isPlaying)
         {

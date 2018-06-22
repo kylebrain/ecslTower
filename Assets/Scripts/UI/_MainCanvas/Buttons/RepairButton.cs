@@ -70,6 +70,7 @@ public class RepairButton : DisableButton
 
     IEnumerator Rebuild()
     {
+        Tutorial.CallFunction(2);
         AudioManager.Play("Repair");
         Score.Money -= rebuildCost;
         Rebuilding = true;

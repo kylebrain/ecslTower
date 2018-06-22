@@ -111,6 +111,7 @@ public abstract class Building : MonoBehaviour
         currentlyPlacing = false;
         placed = true;
 
+        Tutorial.CallFunction(1);
         return true;
     }
 

@@ -55,11 +55,11 @@ MonoBehaviour:
   locked: 0
   highscoreLevelIdentifier: 5
   displayOrder: 0
-  spawnRate: 1
+  spawnRate: 2
   waveCount: 3
   spawnPerWave: 100
   decoyProbability: 0
-  markMalicious: 0
+  markMalicious: 1
   loadLevel:
     levelName: tutorial_level
     wavePaths:
@@ -77,15 +77,6 @@ MonoBehaviour:
         y: 10
       - x: 11
         y: 10
-    - list:
-      - x: 18
-        y: 1
-      - x: 18
-        y: 5
-      - x: 10
-        y: 5
-      - x: 10
-        y: 9
     endAreas:
     - Sink: 0
       bottomLeft:
