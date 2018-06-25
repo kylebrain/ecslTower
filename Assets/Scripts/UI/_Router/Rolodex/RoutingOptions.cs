@@ -74,18 +74,51 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         attributeSelections[0].Selected = true;
     }
 
+    private void Update()
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha4 + i))
+            {
+                attributeSelections[i].Disabled = !attributeSelections[i].Disabled;
+            }
+        }
+    }
+
     public void NextSelection()
     {
+
+        RolodexSelection currentSelection = null;
+        int currentIndex = -1;
         for (int i = 0; i < attributeSelections.Count; i++)
         {
-            if(attributeSelections[i].Selected)
+            if (attributeSelections[i].Selected)
             {
-                attributeSelections[i].Selected = false;
-                RolodexSelection select = attributeSelections[(i + 1) % attributeSelections.Count];
-                StartCoroutine(SetSelectedAfterFrame(select));
+                currentSelection = attributeSelections[i];
+                currentIndex = i;
+                break;
+            }
+        }
+
+        if(currentSelection == null || currentIndex == -1)
+        {
+            Debug.LogWarning("No selections were selected.");
+            return;
+        }
+
+        int index = currentIndex;
+        RolodexSelection indexSelection = null;
+        while((indexSelection = attributeSelections[(++index) % attributeSelections.Count]) != currentSelection)
+        {
+            if(!indexSelection.Disabled)
+            {
+                currentSelection.Selected = false;
+                StartCoroutine(SetSelectedAfterFrame(indexSelection));
                 return;
             }
         }
+
+        currentSelection.Selected = false;
     }
 
     IEnumerator SetSelectedAfterFrame(RolodexSelection selection)

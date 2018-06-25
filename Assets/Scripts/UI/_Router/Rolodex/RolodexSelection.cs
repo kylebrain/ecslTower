@@ -9,21 +9,54 @@ using UnityEngine.Events;
 [RequireComponent(typeof(RectMask2D))]
 public class RolodexSelection : MonoBehaviour
 {
-
     private Dropdown dropdown;
 
     private Color selectedColor;
     private Color deselectedColor;
+    private Color disabledColor;
     public float shiftSpeed = 5f;
     public float fudge = 0.001f;
 
     public UnityEvent OnNext = new UnityEvent();
     public UnityEvent OnPrevious = new UnityEvent();
 
+    public RolodexArrow[] arrowArray = new RolodexArrow[2];
+
     private ControlPrefs controlPrefs;
 
     private VisualPrefs visualPrefs;
     private Graphic image;
+
+    public bool Disabled
+    {
+        get
+        {
+            return disabled;
+        }
+        set
+        {
+            if (value)
+            {
+                if (selected)
+                {
+                    OnNext.Invoke();
+                }
+                image.color = disabledColor;
+            }
+            else
+            {
+                //if this is the only enabled selection, select this
+                image.color = deselectedColor;
+            }
+
+            for (int i = 0; i < arrowArray.Length; i++)
+            {
+                arrowArray[i].Disabled(value);
+            }
+            disabled = value;
+        }
+    }
+    private bool disabled;
 
     public bool Selected
     {
@@ -33,6 +66,11 @@ public class RolodexSelection : MonoBehaviour
         }
         set
         {
+            if (Disabled)
+            {
+                selected = false;
+                return;
+            }
             if (value)
             {
                 image.color = selectedColor;
@@ -70,8 +108,12 @@ public class RolodexSelection : MonoBehaviour
         }
         selectedColor = visualPrefs.selectedColor;
         deselectedColor = visualPrefs.deselectedColor;
+        disabledColor = visualPrefs.disabledColor;
 
         image = GetComponent<Graphic>();
+
+        arrowArray[0] = transform.Find("LeftArrow").GetComponent<RolodexArrow>();
+        arrowArray[1] = transform.Find("RightArrow").GetComponent<RolodexArrow>();
 
         Selected = selected; //initialize the color
 
@@ -224,7 +266,8 @@ public class RolodexSelection : MonoBehaviour
 
     public void Hover(bool isHover)
     {
-        image.color = (isHover || Selected) ? selectedColor : deselectedColor;
+        if(!Disabled)
+            image.color = (isHover || Selected) ? selectedColor : deselectedColor;
     }
 
 }

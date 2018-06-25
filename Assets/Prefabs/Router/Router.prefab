@@ -1953,6 +1953,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  arrowArray:
+  - {fileID: 0}
+  - {fileID: 0}
   text1: {fileID: 114101766626687012}
   text2: {fileID: 114890233954659152}
   text3: {fileID: 114951470988051696}
@@ -2191,6 +2194,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  arrowArray:
+  - {fileID: 0}
+  - {fileID: 0}
   text1: {fileID: 114698659181652844}
   text2: {fileID: 114708055643798994}
   text3: {fileID: 114961638349186676}
@@ -2323,6 +2329,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  arrowArray:
+  - {fileID: 0}
+  - {fileID: 0}
   text1: {fileID: 114940947098959302}
   text2: {fileID: 114570615351326090}
   text3: {fileID: 114023216358013270}
