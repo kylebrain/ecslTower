@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour {
 	
     public static bool GamePaused = false;
     public GameObject pauseMenu;
+    public GameObject optionsMenu;
 
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -39,6 +40,12 @@ public class PauseMenu : MonoBehaviour {
     {
         Resume();
         SceneLoader.LoadScene("LevelSelect");
+    }
+
+    public void ShowOptions(bool show)
+    {
+        pauseMenu.SetActive(!show);
+        optionsMenu.SetActive(show);
     }
 
 }

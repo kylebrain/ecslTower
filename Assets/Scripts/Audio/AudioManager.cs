@@ -5,8 +5,9 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour {
 
     public Sound[] sounds;
+    public string[] volumes;
+    public AudioMixer mainMixer;
     
-
     private static AudioManager instance;
 
 	// Use this for initialization
@@ -32,10 +33,19 @@ public class AudioManager : MonoBehaviour {
             sound.source.pitch = sound.pitch;
             sound.source.loop = sound.loop;
         }
+
+        
+
+
+
 	}
 
     private void Start()
     {
+        foreach (string str in volumes)
+        {
+            mainMixer.SetFloat(str, PlayerPrefs.GetFloat(str, 0f));
+        }
         Play("Theme");
     }
 
