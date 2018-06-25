@@ -20,6 +20,7 @@ public class TutorialTips : MonoBehaviour {
         {
             SetText(_text);
         }
+        AudioManager.Play("TutorialPrompt");
         gameObject.SetActive(true);
         tutorial.Dismiss(false);
         ShowDismiss(showDismiss);

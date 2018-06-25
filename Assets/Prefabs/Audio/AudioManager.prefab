@@ -60,9 +60,9 @@ MonoBehaviour:
     loop: 0
     source: {fileID: 0}
   - name: Theme
-    clip: {fileID: 8300000, guid: 3a37fe274c0555641910da7b9003b568, type: 3}
+    clip: {fileID: 8300000, guid: cbfd9e25dadd07540b4b566e45177ebc, type: 3}
     mixer: {fileID: 243377483602678540, guid: efb315408f28f254d92d9e142a63100e, type: 2}
-    volume: 0.075
+    volume: 0.3
     pitch: 1
     loop: 1
     source: {fileID: 0}
@@ -87,3 +87,15 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: TutorialPrompt
+    clip: {fileID: 8300000, guid: 1b92904e44f8d4e4ba8ead337d2eacd0, type: 3}
+    mixer: {fileID: 243405525292716308, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.25
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  volumes:
+  - MasterVolume
+  - MusicVolume
+  - SFXVolume
+  mainMixer: {fileID: 24100000, guid: efb315408f28f254d92d9e142a63100e, type: 2}
