@@ -4834,7 +4834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4a5b908deb4b34cbee6f9476ad0d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingAmount: 5000
+  startingAmount: 1000
   moneyText: {fileID: 937614107}
   healthText: {fileID: 706943631}
   healthSlider: {fileID: 880993028}
@@ -5750,7 +5750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 1302751642014808, guid: 2adcab24a22e98c438218be9bdd57300, type: 2}
   coinPerCash: 50
-  scoreOffset: 4000
+  scoreOffset: 0
   updateTime: 0.1
   moveUpBy: 10
 --- !u!1 &1920508057
