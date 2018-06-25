@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour {
-	
+public class PauseMenu : MonoBehaviour
+{
+
     public static bool GamePaused = false;
     public GameObject pauseMenu;
     public GameObject optionsMenu;
+    public GameObject[] othersToHide;
 
-	void Update () {
+    void Update()
+    {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GamePaused)
             {
                 Resume();
-            } else
+            }
+            else
             {
                 Pause();
             }
         }
-	}
+    }
 
     public void Pause()
     {
@@ -44,7 +48,14 @@ public class PauseMenu : MonoBehaviour {
 
     public void ShowOptions(bool show)
     {
-        pauseMenu.SetActive(!show);
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(!show);
+        }
+        foreach(GameObject obj in othersToHide)
+        {
+            obj.SetActive(!show);
+        }
         optionsMenu.SetActive(show);
     }
 
