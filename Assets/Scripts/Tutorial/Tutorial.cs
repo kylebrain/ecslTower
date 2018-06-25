@@ -273,7 +273,7 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
 
         //19
-        SceneManager.LoadScene("LevelSelect");
+        SceneLoader.LoadScene("LevelSelect");
 
     }
 
