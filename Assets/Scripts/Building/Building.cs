@@ -20,6 +20,8 @@ public abstract class Building : MonoBehaviour
     public float startingHealth = 0f;
     public GridArea Location;
 
+    public AudioSource placeAudio;
+
     protected float health = 0f;
     protected bool placed = false;
     protected bool selected = false;
@@ -111,6 +113,7 @@ public abstract class Building : MonoBehaviour
         currentlyPlacing = false;
         placed = true;
 
+        placeAudio.Play();
         Tutorial.CallFunction(1);
         return true;
     }
