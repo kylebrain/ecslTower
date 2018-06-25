@@ -7,6 +7,7 @@ public class MoneyStack : MonoBehaviour
 
     public GameObject coinPrefab;
     public int coinPerCash = 50;
+    public int scoreOffset = 0;
     public float updateTime = 0.1f;
     public float moveUpBy = 10f;
 
@@ -30,8 +31,12 @@ public class MoneyStack : MonoBehaviour
         {
             return;
         }
-        int desireValue = (int)Score.Money / coinPerCash;
-        int toModify = desireValue - (transform.childCount); //1 accounts for bottom
+        int desireValue = (Score.Money - scoreOffset) / coinPerCash;
+        if(desireValue < 0)
+        {
+            desireValue = 0;
+        }
+        int toModify = desireValue - (transform.childCount);
         if (Mathf.Abs(toModify) > 0)
         {
             StartCoroutine(CreateCoins(toModify));

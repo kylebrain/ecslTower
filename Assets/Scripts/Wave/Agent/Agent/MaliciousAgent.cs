@@ -42,6 +42,7 @@ public class MaliciousAgent : Agent {
     /// <seealso cref="Score"/>
     public override void DestinationAction()
     {
+        Tutorial.CallFunction(0);
         Score.Health -= scoreMod;
     }
 

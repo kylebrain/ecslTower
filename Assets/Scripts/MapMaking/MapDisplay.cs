@@ -67,7 +67,7 @@ public class MapDisplay : MonoBehaviour
 
     #endregion
 
-    private void Start()
+    private void Awake()
     {
         if (!Application.isPlaying)
         {
@@ -248,7 +248,7 @@ public class MapDisplay : MonoBehaviour
     /// </summary>
     /// <param name="arrow">Arrow to be set</param>
     /// <param name="state">State that the Node will be set to (navigational or emmpty)</param>
-    protected void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
+    public void SetNodeOccupation(Arrow arrow, Node.nodeStates state)
     {
         bool vertical = arrow.Origin.Coordinate.x == arrow.Destination.Coordinate.x;
         if (vertical == (arrow.Origin.Coordinate.y == arrow.Destination.Coordinate.y))

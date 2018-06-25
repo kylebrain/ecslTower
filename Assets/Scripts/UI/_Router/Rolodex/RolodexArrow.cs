@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Graphic))]
-public class RolodexArrow : MonoBehaviour {
+public class RolodexArrow : MonoBehaviour
+{
 
     public bool right;
     private RolodexSelection parent;
     private Color hover;
     private Color unhover;
     private Color pressed;
+    private Color disabled;
 
     private VisualPrefs visualPrefs;
     private Graphic image;
@@ -26,7 +28,7 @@ public class RolodexArrow : MonoBehaviour {
             return;
         }
         parent = transform.parent.GetComponent<RolodexSelection>();
-        if(parent == null)
+        if (parent == null)
         {
             Debug.LogError("Cannot find Rolodex parent of Arrow!");
         }
@@ -36,6 +38,7 @@ public class RolodexArrow : MonoBehaviour {
         hover = visualPrefs.subSelectedColor;
         unhover = visualPrefs.subDeselectedColor;
         pressed = visualPrefs.subPressedColor;
+        disabled = visualPrefs.subDisabledColor;
 
         image.color = unhover;
 
@@ -43,20 +46,47 @@ public class RolodexArrow : MonoBehaviour {
 
     public void IncrementSelection()
     {
-        parent.ChangeDropdown(right);
-        image.color = pressed;
+        if (!parent.Disabled)
+        {
+            parent.ChangeDropdown(right);
+            image.color = pressed;
+        }
     }
 
     public void Hover(bool isHover)
     {
-        image.color = (isHover) ? hover : unhover;
+        if (!parent.Disabled)
+        {
+            image.color = (isHover) ? hover : unhover;
+        }
         isHoverActive = isHover;
     }
 
     public void Unpressed()
     {
-        image.color = isHoverActive ? hover : unhover;
+        if (!parent.Disabled)
+        {
+            image.color = isHoverActive ? hover : unhover;
+        }
     }
 
+    public void Disabled(bool isDisabled)
+    {
+        if (isDisabled)
+        {
+            image.color = disabled;
+        }
+        else
+        {
+            if (isHoverActive)
+            {
+                image.color = hover;
+            }
+            else
+            {
+                image.color = unhover;
+            }
+        }
+    }
 
 }

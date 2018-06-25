@@ -88,7 +88,7 @@ public class EndScreen : MonoBehaviour
     {
         AudioListener.volume = previousAudioVolume;
         AudioManager.Mute("Theme", false);
-        SceneManager.LoadScene("LevelSelect");
+        SceneLoader.LoadScene("LevelSelect");
     }
 
 }

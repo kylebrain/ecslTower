@@ -34,9 +34,15 @@ public class LevelPanel : MonoBehaviour
 
     public void LoadLevel()
     {
+        if(name == "Tutorial")
+        {
+            SceneLoader.LoadScene("Gameplay");
+            return;
+        }
+
         LevelLookup.levelNumber = levelNumber;
         LevelLookup.levelName = LevelName;
-        SceneManager.LoadScene("Gameplay");
+        SceneLoader.LoadScene("Gameplay");
     }
 
     public void Init(int levelNum, string levelName, bool unlocked)

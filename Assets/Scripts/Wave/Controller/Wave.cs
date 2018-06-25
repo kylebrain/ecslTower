@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class Wave : MonoBehaviour {
 
+    private bool WavePaused = false;
+
     /// <summary>
     /// How much time passes between each spawn
     /// </summary>
@@ -51,12 +53,18 @@ public class Wave : MonoBehaviour {
     /// </remarks>
     private void Update()
     {
-        if (timeSpent >= timeBetweenAgent && waveQueue.Count > 0)
+
+        if (!WavePaused)
         {
-            timeSpent = 0;
-            Spawn(waveQueue.Dequeue());
+
+            if (timeSpent >= timeBetweenAgent && waveQueue.Count > 0)
+            {
+                timeSpent = 0;
+                Spawn(waveQueue.Dequeue());
+            }
+            timeSpent += Time.deltaTime; //increments until it reaches the timeBetweenAgent
+
         }
-        timeSpent += Time.deltaTime; //increments until it reaches the timeBetweenAgent
 
         //self-destructs if it has no Agents in game or queued
         if(transform.childCount == 0 && AgentsRemaining == 0)
@@ -76,6 +84,11 @@ public class Wave : MonoBehaviour {
         waveQueue = new Queue<PreAgent>(preAgents);
     }
 
+    public void AddNewAgent(PreAgent preAgent)
+    {
+        waveQueue.Enqueue(preAgent);
+    }
+
     /// <summary>
     /// Spawn and start an Agent on its Path
     /// </summary>
@@ -93,5 +106,28 @@ public class Wave : MonoBehaviour {
         newAgent.transform.parent = transform;
         newAgent.BeginMovement(newPath);
         newAgent.InitializeAttributes(newPreAgent.agentAttribute);
+    }
+
+    public void PauseSpawning(bool pause = true)
+    {
+        WavePaused = pause;
+    }    
+
+    public void Pause(bool pause = true)
+    {
+        if(pause)
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).GetComponent<Agent>().Speed = 0f;
+            }
+        } else
+        {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Agent agent = transform.GetChild(i).GetComponent<Agent>();
+                agent.SetSpeed(agent.Attribute.Speed);
+            }
+        }
     }
 }

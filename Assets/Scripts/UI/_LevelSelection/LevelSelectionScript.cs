@@ -45,7 +45,7 @@ public class LevelSelectionScript : MonoBehaviour
         }
         levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
         List<Map> mapList = Resources.LoadAll<Map>("Maps").ToList();
-        mapList = mapList.OrderBy(map => map.levelNumber).ToList();
+        mapList = mapList.OrderBy(map => map.displayOrder).ToList();
 
         if (!showHidden)
         {
@@ -60,7 +60,7 @@ public class LevelSelectionScript : MonoBehaviour
             Map currentMap = mapList[i];
             LevelPanel currentPanel = Instantiate(levelPanelPrefab, transform);
             panelList.Add(currentPanel);
-            currentPanel.Init(currentMap.levelNumber, currentMap.name, showHidden || currentMap.GetUnlocked()); //if we show hidden all are on the table
+            currentPanel.Init(currentMap.highscoreLevelIdentifier, currentMap.name, showHidden || currentMap.GetUnlocked()); //if we show hidden all are on the table
             currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);
         }
         StartCoroutine(AttachHighscores(panelList));
@@ -78,6 +78,12 @@ public class LevelSelectionScript : MonoBehaviour
             Highscore newHighScore = Leaderboard.fetchedHighscore;
             Leaderboard.fetchedHighscore = null; 
             */
+            if(panel.levelNumber <= 0)
+            {
+                panel.AddHighScore(Highscore.nullValue);
+                continue;
+            }
+
             List<Highscore> currentList = Leaderboard.mapHighscores[panel.levelNumber - 1];
             if (currentList != null && currentList.Count > 0)
             {

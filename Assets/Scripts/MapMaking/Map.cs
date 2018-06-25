@@ -10,7 +10,9 @@ public class Map : MonoBehaviour {
 
     public bool hidden = false;
     public bool locked = true;
-    public int levelNumber = 0;
+    [Range(1, 100)]
+    public int highscoreLevelIdentifier = 0;
+    public int displayOrder = 0;
     public float spawnRate = 1f;
     public int waveCount = 3;
     public int spawnPerWave = 100;
@@ -51,7 +53,7 @@ public class Map : MonoBehaviour {
         {
             return true;
         }
-        if (LevelUnlocking.IsUnlocked(levelNumber))
+        if (LevelUnlocking.IsUnlocked(highscoreLevelIdentifier))
         {
             return true;
         } else

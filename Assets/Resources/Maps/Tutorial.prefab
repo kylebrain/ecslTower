@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1739239183155510}
+  m_RootGameObject: {fileID: 1994994671518918}
   m_IsPrefabParent: 1
---- !u!1 &1739239183155510
+--- !u!1 &1994994671518918
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4685853771142324}
-  - component: {fileID: 114914617995587358}
+  - component: {fileID: 4094790638852392}
+  - component: {fileID: 114021252064585886}
   m_Layer: 0
-  m_Name: Easy
+  m_Name: Tutorial
   m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4685853771142324
+--- !u!4 &4094790638852392
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1739239183155510}
+  m_GameObject: {fileID: 1994994671518918}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,12 +40,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114914617995587358
+--- !u!114 &114021252064585886
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1739239183155510}
+  m_GameObject: {fileID: 1994994671518918}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ece699a4ab0b4f438c74c12f63d7c56, type: 3}
@@ -53,63 +53,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hidden: 0
   locked: 0
-  highscoreLevelIdentifier: 1
-  displayOrder: 1
+  highscoreLevelIdentifier: 5
+  displayOrder: 0
   spawnRate: 2
-  waveCount: 2
+  waveCount: 3
   spawnPerWave: 100
   decoyProbability: 0
   markMalicious: 1
   loadLevel:
-    levelName: easy_level001
+    levelName: tutorial_level
     wavePaths:
     - list:
       - x: 1
         y: 1
-      - x: 7
-        y: 1
-      - x: 7
-        y: 4
-      - x: 4
-        y: 4
-      - x: 4
-        y: 7
+      - x: 1
+        y: 10
+      - x: 9
+        y: 10
     - list:
-      - x: 10
+      - x: 18
         y: 1
-      - x: 10
-        y: 8
-      - x: 16
-        y: 8
-      - x: 16
-        y: 6
+      - x: 18
+        y: 10
+      - x: 11
+        y: 10
     endAreas:
     - Sink: 0
       bottomLeft:
         x: 0
         y: 0
-      width: 2
-      height: 2
+      width: 3
+      height: 3
     - Sink: 0
       bottomLeft:
-        x: 9
+        x: 17
         y: 0
-      width: 2
-      height: 2
-    - Sink: 1
-      bottomLeft:
-        x: 1
-        y: 7
-      width: 4
-      height: 2
-    - Sink: 1
-      bottomLeft:
-        x: 15
-        y: 5
       width: 3
-      height: 2
-  gridPrefab: {fileID: 114670443817359868, guid: 81d0864db300c174cb84e17b2ce63da3,
+      height: 3
+    - Sink: 1
+      bottomLeft:
+        x: 9
+        y: 9
+      width: 3
+      height: 3
+  gridPrefab: {fileID: 114595962446193300, guid: be93be6f78e34614c9bb167571960399,
     type: 2}
   arrowColor: {r: 0, g: 0, b: 0, a: 1}
-  agentModel: {fileID: 114067351701099612, guid: a372d39102351dd4f8ca13077fdeafda,
-    type: 2}
+  agentModel: {fileID: 0}
