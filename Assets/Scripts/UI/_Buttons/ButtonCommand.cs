@@ -37,6 +37,10 @@ public sealed class ButtonCommand: MonoBehaviour
         if (button.interactable != eventTrigger.enabled)
         {
             eventTrigger.enabled = button.interactable;
+            if(!eventTrigger.enabled)
+            {
+                gameButton.GetButtonGlow.SetHoverColor(false);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ public class Tutorial : PreWaveCreator
     public TutorialTips tutorialTips;
     public Button repairButton;
     public Button shopButton;
+    public Button buyRouterButton;
 
     private float bufferTime;
 
@@ -21,7 +22,7 @@ public class Tutorial : PreWaveCreator
 
     Wave currentWave;
 
-    private bool  dismissed = false;
+    private bool dismissed = false;
 
     private static int callFunction = -1;
 
@@ -88,13 +89,13 @@ public class Tutorial : PreWaveCreator
 
         StartCoroutine(RunTutorial());
 
-        
+
     }
 
     IEnumerator RunTutorial()
     {
         shopButton.interactable = false;
-        foreach(Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
+        foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
         {
             mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.empty);
         }
@@ -142,6 +143,10 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(bufferTime);
         tutorialTips.Show("Place a Router on the path to filter out the malicious packet.", false);
         shopButton.interactable = true;
+        yield return new WaitUntil(() => FindObjectOfType<RouterBuilding>() != null);
+        buyRouterButton.interactable = false;
+        RouterBuilding routerBuilding = FindObjectOfType<RouterBuilding>();
+        routerBuilding.routingOptions.DisableSelection(2);
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -152,12 +157,13 @@ public class Tutorial : PreWaveCreator
         AgentAttribute attr0 = infectedAttributes[0];
         attr0.Speed = AgentAttribute.PossibleSpeeds.dontCare;
         yield return new WaitUntil(() => RouterSetCorrectly(attr0));
+        routerBuilding.routingOptions.DisableSelection(-1);
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
 
         //6
-        tutorialTips.Show("The ring packet on top of the router and in the HUD shows your filtering.");
+        tutorialTips.Show("The ring packet on top of the router and in the HUD shows what packet combination you are filtering.");
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
 
@@ -213,8 +219,10 @@ public class Tutorial : PreWaveCreator
         yield return new WaitUntil(() => WaitForFunction(0));
 
         //13
-        tutorialTips.Show("Change your filter to adapt to the new wave.\n(" + infectedAttributes[1].Color + ", " + infectedAttributes[1].Size + ", " + infectedAttributes[1].Speed +")", false);
+        tutorialTips.Show("Change your filter to adapt to the new wave.\n(" + infectedAttributes[1].Color + ", " + infectedAttributes[1].Size + ", " + infectedAttributes[1].Speed + ")", false);
+        routerBuilding.routingOptions.DisableSelection(-1, false);
         yield return new WaitUntil(() => RouterSetCorrectly(infectedAttributes[1]));
+        routerBuilding.routingOptions.DisableSelection(-1);
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         currentWave.PauseSpawning(false);
@@ -228,6 +236,7 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(bufferTime);
 
         tutorialTips.Show("Place another Router to filter out the other packet.", false);
+        buyRouterButton.interactable = true;
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -239,7 +248,7 @@ public class Tutorial : PreWaveCreator
         yield return new WaitUntil(() => DismissCheck());
 
         //15b
-        tutorialTips.Show("Now place two more routers on the other path to mirror these.");
+        tutorialTips.Show("Now place two more routers on the other path and filter to mirror these.", false);
         foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
         {
             mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.navigation);
@@ -252,7 +261,7 @@ public class Tutorial : PreWaveCreator
         currentWave.PauseSpawning(false);
 
         //16
-        tutorialTips.Show("Once you are filtering the most specific malicious combonations, you can sit back and relax.");
+        tutorialTips.Show("Once you are filtering the most specific malicious combinations, you can sit back and relax.");
         yield return new WaitUntil(() => currentWave == null);
 
         //17
@@ -274,11 +283,12 @@ public class Tutorial : PreWaveCreator
         //1: Building is placed
         //2: Rebuilding of the server starts
 
-        if(index == callFunction && index != -1 && callFunction != -1)
+        if (index == callFunction && index != -1 && callFunction != -1)
         {
             callFunction = -1;
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -292,7 +302,7 @@ public class Tutorial : PreWaveCreator
     private bool RouterSetCorrectly(AgentAttribute attribute)
     {
         RouterBuilding router = FindObjectOfType<RouterBuilding>();
-        if(router == null)
+        if (router == null)
         {
             return false;
         }
@@ -309,7 +319,8 @@ public class Tutorial : PreWaveCreator
         {
             dismissed = false;
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -322,12 +333,8 @@ public class Tutorial : PreWaveCreator
 
     private void AddBenignAgent(int count, List<PreAgent> preWave, int pathNumber = -1)
     {
-        WavePath wavePath;
-        if (pathNumber <= -1)
-        {
-            wavePath = GetRandomWavePath(mapDisplay);
-        }
-        else
+        WavePath wavePath = null;
+        if (pathNumber > -1)
         {
             wavePath = mapDisplay.WavePathList[pathNumber];
         }
@@ -338,22 +345,27 @@ public class Tutorial : PreWaveCreator
             {
                 attr = GenerateAttribute();
             } while (System.Array.Exists(infectedAttributes, a => a.Equals(attr)));
+            if (pathNumber <= -1)
+            {
+                wavePath = GetRandomWavePath(mapDisplay);
+            }
             preWave.Add(new PreAgent(benignAgent, wavePath, attr));
         }
     }
 
     private void AddMaliciousAgent(int count, List<PreAgent> preWave, int attr, int pathNumber = -1)
     {
-        WavePath wavePath;
-        if(pathNumber <= -1)
-        {
-            wavePath = GetRandomWavePath(mapDisplay);
-        } else
+        WavePath wavePath = null;
+        if (pathNumber > -1)
         {
             wavePath = mapDisplay.WavePathList[pathNumber];
         }
         for (int i = 0; i < count; i++)
         {
+            if (pathNumber <= -1)
+            {
+                wavePath = GetRandomWavePath(mapDisplay);
+            }
             preWave.Add(new PreAgent(maliciousAgent, wavePath, infectedAttributes[attr]));
         }
     }

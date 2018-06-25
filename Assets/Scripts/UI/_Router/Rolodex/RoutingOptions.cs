@@ -226,4 +226,22 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         worldSpaceDisplayAgent.InitializeAttributes(currentAttribute);
     }
 
+    public void DisableSelection(int index, bool disable = true)
+    {
+        if(index >= attributeSelections.Count)
+        {
+            throw new System.ArgumentOutOfRangeException();
+        }
+        if(index == -1)
+        {
+            for(int i = 0; i < attributeSelections.Count; i++)
+            {
+                attributeSelections[i].Disabled = disable;
+            }
+        } else
+        {
+            attributeSelections[index].Disabled = disable;
+        }
+    }
+
 }

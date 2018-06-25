@@ -1696,8 +1696,8 @@ Prefab:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 61377521914971694, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
-    - {fileID: 61393944677438756, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &343187514 stripped
@@ -2426,6 +2426,7 @@ MonoBehaviour:
   tutorialTips: {fileID: 515375924}
   repairButton: {fileID: 1647255631}
   shopButton: {fileID: 630892063}
+  buyRouterButton: {fileID: 1119244073}
 --- !u!1 &706943629
 GameObject:
   m_ObjectHideFlags: 0
@@ -3255,6 +3256,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1119244073 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114389593707763174, guid: ef6113f1ad9025e44b89d5ebeada07d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1119244072}
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1172323105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4827,7 +4834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4a5b908deb4b34cbee6f9476ad0d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingAmount: 1000
+  startingAmount: 5000
   moneyText: {fileID: 937614107}
   healthText: {fileID: 706943631}
   healthSlider: {fileID: 880993028}
@@ -5416,7 +5423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877f5f1de0f6de94aa4d61e332d0dafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RouterPrefab: {fileID: 114117969463014020, guid: 5edf97536ca7ac9419f84e546500a053,
+  RouterPrefab: {fileID: 114117969463014020, guid: abb6d7a2425d6434d8e5f8e8b09b15cb,
     type: 2}
 --- !u!1 &1805105616
 GameObject:
@@ -5743,6 +5750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinPrefab: {fileID: 1302751642014808, guid: 2adcab24a22e98c438218be9bdd57300, type: 2}
   coinPerCash: 50
+  scoreOffset: 4000
   updateTime: 0.1
   moveUpBy: 10
 --- !u!1 &1920508057

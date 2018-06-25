@@ -24,6 +24,8 @@ public class RouterBuilding : Building
     /// </summary>
     public List<AgentAttribute> filter = new List<AgentAttribute>();
 
+    public RoutingOptions routingOptions;
+
     /// <summary>
     /// The number of packets processed per second.
     /// The rate decreases based on the number of items in
