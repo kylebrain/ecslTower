@@ -36,7 +36,7 @@ public class LevelPanel : MonoBehaviour
     {
         if(name == "Tutorial")
         {
-            SceneLoader.LoadScene("Gameplay");
+            SceneLoader.LoadScene("Tutorial");
             return;
         }
 
