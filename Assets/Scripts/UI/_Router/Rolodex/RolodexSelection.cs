@@ -19,6 +19,7 @@ public class RolodexSelection : MonoBehaviour
 
     public UnityEvent OnNext = new UnityEvent();
     public UnityEvent OnPrevious = new UnityEvent();
+    public UnityEvent OnEnable = new UnityEvent();
 
     public RolodexArrow[] arrowArray = new RolodexArrow[2];
 
@@ -35,18 +36,21 @@ public class RolodexSelection : MonoBehaviour
         }
         set
         {
+            disabled = value;
             if (value)
             {
                 if (selected)
                 {
                     OnNext.Invoke();
+                    selected = false;
                 }
                 image.color = disabledColor;
             }
             else
             {
                 //if this is the only enabled selection, select this
-                image.color = deselectedColor;
+                OnEnable.Invoke();
+                Selected = selected;
             }
 
             for (int i = 0; i < arrowArray.Length; i++)
@@ -112,8 +116,7 @@ public class RolodexSelection : MonoBehaviour
 
         image = GetComponent<Graphic>();
 
-        arrowArray[0] = transform.Find("LeftArrow").GetComponent<RolodexArrow>();
-        arrowArray[1] = transform.Find("RightArrow").GetComponent<RolodexArrow>();
+        arrowArray = GetComponentsInChildren<RolodexArrow>();
 
         Selected = selected; //initialize the color
 

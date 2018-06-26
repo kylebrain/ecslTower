@@ -85,11 +85,41 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         }
     }
 
+    public void CheckEnable()
+    {
+        int disabledCount = 0;
+        int selectedCount = 0;
+        for (int i = 0; i < attributeSelections.Count; i++)
+        {
+            if (attributeSelections[i].Disabled)
+            {
+                disabledCount++;
+            }
+            if (attributeSelections[i].Selected)
+            {
+                selectedCount++;
+            }
+        }
+
+        if(selectedCount == 0 && disabledCount < attributeSelections.Count)
+        {
+            for (int i = 0; i < attributeSelections.Count; i++)
+            {
+                if (!attributeSelections[i].Disabled)
+                {
+                    attributeSelections[i].Selected = true;
+                    break;
+                }
+            }
+        }
+
+    }
+
     public void NextSelection()
     {
 
-        RolodexSelection currentSelection = null;
-        int currentIndex = -1;
+        RolodexSelection currentSelection = attributeSelections[0];
+        int currentIndex = 0;
         for (int i = 0; i < attributeSelections.Count; i++)
         {
             if (attributeSelections[i].Selected)
@@ -100,11 +130,12 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             }
         }
 
+        /*
         if(currentSelection == null || currentIndex == -1)
         {
             Debug.LogWarning("No selections were selected.");
             return;
-        }
+        }*/
 
         int index = currentIndex;
         RolodexSelection indexSelection = null;
@@ -118,7 +149,7 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             }
         }
 
-        currentSelection.Selected = false;
+        //currentSelection.Selected = false;
     }
 
     IEnumerator SetSelectedAfterFrame(RolodexSelection selection)
