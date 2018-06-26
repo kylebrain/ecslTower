@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114774861544634346}
   - component: {fileID: 82520761537446548}
   - component: {fileID: 82299915066447824}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BenignAgent
   m_TagString: Agent
   m_Icon: {fileID: 0}

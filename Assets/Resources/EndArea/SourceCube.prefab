@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4215936066402788}
   - component: {fileID: 33169448421490218}
   - component: {fileID: 23922442821073414}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: SourceCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

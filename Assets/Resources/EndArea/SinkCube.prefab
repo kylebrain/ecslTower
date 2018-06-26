@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4966712788961272}
   - component: {fileID: 33251043696749798}
   - component: {fileID: 23761676668870740}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: SinkCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
