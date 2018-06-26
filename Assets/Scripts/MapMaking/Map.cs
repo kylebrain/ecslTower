@@ -32,6 +32,7 @@ public class Map : MonoBehaviour {
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
         LevelLookup.markMalicious = markMalicious;
+        LevelLookup.levelNumber = highscoreLevelIdentifier;
         if(agentModel != null)
         {
             LevelLookup.agentModel = agentModel.name;
