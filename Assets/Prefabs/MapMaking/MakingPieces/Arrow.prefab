@@ -94,5 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4237b3f71eb6e2945bc56370bdfcfc62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _distance: 0
+  _7Model: {fileID: 1000011771324592, guid: d27ef882c72f17d45a9c68bcd0802949, type: 2}
+  _4Model: {fileID: 1000011840829744, guid: 77d4bd7101983954185b9e739b5a25b9, type: 2}
+  _3Model: {fileID: 1000011108506604, guid: 34c3dc61a6ca2c443adb281b50759dc7, type: 2}
   baseRadius: 0.2
   widthScale: 0.01
