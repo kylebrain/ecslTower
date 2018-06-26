@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 33917498256060976}
   - component: {fileID: 23998013548118546}
   - component: {fileID: 114466324950127212}
+  - component: {fileID: 64888866048410904}
   m_Layer: 0
   m_Name: castingPole
   m_TagString: Untagged
@@ -495,7 +496,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4767735839264670}
-  m_Layer: 0
+  - component: {fileID: 65916189023678796}
+  m_Layer: 11
   m_Name: Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -637,7 +639,7 @@ GameObject:
   - component: {fileID: 33465633768360602}
   - component: {fileID: 23009488330142884}
   - component: {fileID: 64483299283215990}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: recievingPole
   m_TagString: Pole
   m_Icon: {fileID: 0}
@@ -926,6 +928,32 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: fd28588cc05440e4199a2e61fdd082b9, type: 3}
+--- !u!64 &64888866048410904
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1311329606056492}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: fd28588cc05440e4199a2e61fdd082b9, type: 3}
+--- !u!65 &65916189023678796
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1649029272938866}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.0686862, y: 1.3145717, z: 0.4151775}
+  m_Center: {x: -0.031081041, y: 0.49067447, z: -0.004827612}
 --- !u!82 &82265340763535650
 AudioSource:
   m_ObjectHideFlags: 1

@@ -51,6 +51,7 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     private int numSegments = 100;
 
+    private static RaycastHit raycastHit;
 
 
     //------------PUBLIC---------------
@@ -219,6 +220,28 @@ public abstract class Building : MonoBehaviour
         transform.position = new Vector3((float)(startX + endX) / 2, transform.position.y, (float)(startY + endY) / 2);
     }
 
+    protected bool GetRayCastHit()
+    {
+        //statics should increase efficiency
+        if (raycastHit.transform == null)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out raycastHit, Mathf.Infinity, 1 << 11);
+        }
+        if (raycastHit.transform == null)
+        {
+            return false;
+        }
+        if (raycastHit.transform.parent == transform)
+        {
+            raycastHit = new RaycastHit();
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// Sets the object's transform to the mouse if the tower is not placed. Places the tower if the mouse button is released.
     /// </summary>
@@ -232,7 +255,7 @@ public abstract class Building : MonoBehaviour
         {
             currentlyPlacing = true;
             radiusLine.enabled = true;
-            HighlightBuidling(false); //change to a non-placeable color/highlight
+            HighlightBuilding(false); //change to a non-placeable color/highlight
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -271,7 +294,7 @@ public abstract class Building : MonoBehaviour
 
         Vector2Int selectedNodePos = selectedNode.Coordinate;
         Vector3 desiredPos = new Vector3(selectedNodePos.x, 0f, selectedNodePos.y);
-        bool mouseWithinBuilding = Location.Contains(selectedNodePos);
+        bool mouseWithinBuilding = Location.Contains(selectedNodePos) || GetRayCastHit(); //still have a problem where it is possible to select two Routers at once
 
         //if we find the raycast too performance intensive use the old solution below
         //just delete the current variables and replace the ones that error with the old ones
@@ -292,10 +315,10 @@ public abstract class Building : MonoBehaviour
         {
             if (mouseWithinBuilding)
             {
-                HighlightBuidling(true);
+                HighlightBuilding(true);
             } else if(!selected)
             {
-                HighlightBuidling(false);
+                HighlightBuilding(false);
             }
             if (Input.GetMouseButtonUp(0))
             {
@@ -318,7 +341,7 @@ public abstract class Building : MonoBehaviour
             } 
             if(selectedNode.Occupied == Node.nodeStates.navigation)
             {
-                HighlightBuidling(true); //ultimately change to change a placeable color/highlight
+                HighlightBuilding(true); //ultimately change to change a placeable color/highlight
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {
@@ -331,7 +354,7 @@ public abstract class Building : MonoBehaviour
 
     protected virtual void UpdateRotation(Node node) { }
 
-    protected virtual void HighlightBuidling(bool highlight) { }
+    protected virtual void HighlightBuilding(bool highlight) { }
 
     /// <summary>
     /// Shows the Sell option inherent to all buildings
@@ -343,7 +366,7 @@ public abstract class Building : MonoBehaviour
         {
             return;
         }
-        HighlightBuidling(false);
+        HighlightBuilding(false);
         radiusLine.enabled = false;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;
@@ -357,7 +380,7 @@ public abstract class Building : MonoBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void ShowUI(GameObject canvas)
     {
-        HighlightBuidling(true);
+        HighlightBuilding(true);
         radiusLine.enabled = true;
         canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         selected = true;
