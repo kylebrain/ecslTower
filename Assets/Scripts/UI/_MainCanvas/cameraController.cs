@@ -89,13 +89,13 @@ public class cameraController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         cam.fieldOfView = 60;
-        targetY = transform.position.y;
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
         {
             Debug.LogError("Could not find WorldGrid object in the scene. Either the tag was changed or the object is missing.");
         }
         initBounds();
+        targetY = transform.position.y;
         controlPrefs = GameObject.FindGameObjectWithTag("ControlPrefs").GetComponent<ControlPrefs>();
         if (controlPrefs == null)
         {
@@ -290,7 +290,7 @@ public class cameraController : MonoBehaviour
         private float minZoom;
         private float maxZoom;
         */
-        float tolerance = 0.25f;
+        float tolerance = 0.5f;
 
         leftBound = -tolerance * worldGrid.width;
         rightBound = (1 + tolerance) * worldGrid.width;
@@ -309,6 +309,9 @@ public class cameraController : MonoBehaviour
 
         zoomSpeed = Mathf.Sqrt(worldGrid.width * worldGrid.height);
         moveSpeed = 5f + Mathf.Sqrt(zoomSpeed);
+
+        //set the initial camera to the center, with about half zoom
+        transform.position = new Vector3(worldGrid.width / 2f, sqrt3Over2 * 0.75f * worldGrid.width, worldGrid.height / 2f);
     }
 }
 
