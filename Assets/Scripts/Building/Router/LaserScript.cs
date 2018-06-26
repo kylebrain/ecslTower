@@ -27,7 +27,7 @@ public class LaserScript : MonoBehaviour {
     {
         Ray ray = new Ray(transform.position, transform.parent.TransformDirection(Vector3.left));
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit))
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << 10 | 1 << 9))
         {
             if(hit.transform.tag == "Pole")
             {

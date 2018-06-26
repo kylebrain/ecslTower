@@ -28,8 +28,8 @@ TagManager:
   - 
   - Node
   - AgentModel
-  - 
-  - 
+  - RecievingPole
+  - Router
   - 
   - 
   - 

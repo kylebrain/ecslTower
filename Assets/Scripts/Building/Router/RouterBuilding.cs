@@ -149,7 +149,7 @@ public class RouterBuilding : Building
         }
     }
 
-    protected override void HighlightBuidling(bool highlight)
+    protected override void HighlightBuilding(bool highlight)
     {
         if (highlight)
         {

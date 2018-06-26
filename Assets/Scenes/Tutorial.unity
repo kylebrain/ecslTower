@@ -4940,7 +4940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877f5f1de0f6de94aa4d61e332d0dafb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RouterPrefab: {fileID: 114117969463014020, guid: abb6d7a2425d6434d8e5f8e8b09b15cb,
+  RouterPrefab: {fileID: 114117969463014020, guid: 3d9b8c3df33533e48b5ee9e5caffece1,
     type: 2}
 --- !u!1 &1805105616
 GameObject:
