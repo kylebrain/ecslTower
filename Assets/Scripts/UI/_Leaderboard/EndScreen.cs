@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class EndScreen : MonoBehaviour
 {
+    public StarScript starScript;
     private float previousAudioVolume;
     private AudioSource loseAudio; //make sure to change this sound to reflect the malicious agent sound
     private GameObject screen;
@@ -63,12 +64,16 @@ public class EndScreen : MonoBehaviour
         }
     }
 
-    private void Display(bool won)
+    private void Display(bool won, int score)
     {
         previousAudioVolume = AudioListener.volume;
         AudioListener.volume = 0; //or find another way to turn off the game sfx maybe with an audio mixer?
         transform.parent.GetComponent<Canvas>().sortingOrder = 1; //this should overlay over the router UI
         screen.SetActive(true);
+        if(won)
+        {
+            starScript.Display(score);
+        }
         Leaderboard.DownloadHighscores();
         
     }
@@ -76,7 +81,7 @@ public class EndScreen : MonoBehaviour
     IEnumerator DisplayEnd(bool won, float afterSeconds, int score)
     {
         yield return new WaitForSeconds(afterSeconds);
-        Display(won);
+        Display(won, score);
         if (won)
         {
             inputField.gameObject.SetActive(true);

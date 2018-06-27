@@ -16,6 +16,14 @@ public class Score : MonoBehaviour {
     /// Could be changed to a per Map basis
     /// </remarks>
     public int startingAmount = 0;
+
+    public static int StartingAmount
+    {
+        get
+        {
+            return instance.startingAmount;
+        }
+    }
     /// <summary>
     /// Amount of money the player currently has
     /// </summary>

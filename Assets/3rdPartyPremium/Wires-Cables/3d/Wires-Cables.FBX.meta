@@ -1,0 +1,123 @@
+fileFormatVersion: 2
+guid: ce37ed2dfe1260b42912a0135909b6e7
+timeCreated: 1493807996
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Object030
+    100002: Wire_3m
+    100004: Wire_4m
+    100006: Wire_7m_1
+    100008: Wire_7m_2
+    100010: Wire_7m_3
+    100012: Wire_90c
+    100014: Wire_twisi_up
+    100016: Wire_up
+    100018: Wire_vilka
+    100020: //RootNode
+    400000: Object030
+    400002: Wire_3m
+    400004: Wire_4m
+    400006: Wire_7m_1
+    400008: Wire_7m_2
+    400010: Wire_7m_3
+    400012: Wire_90c
+    400014: Wire_twisi_up
+    400016: Wire_up
+    400018: Wire_vilka
+    400020: //RootNode
+    2300000: Object030
+    2300002: Wire_3m
+    2300004: Wire_4m
+    2300006: Wire_7m_1
+    2300008: Wire_7m_2
+    2300010: Wire_7m_3
+    2300012: Wire_90c
+    2300014: Wire_twisi_up
+    2300016: Wire_up
+    2300018: Wire_vilka
+    3300000: Object030
+    3300002: Wire_3m
+    3300004: Wire_4m
+    3300006: Wire_7m_1
+    3300008: Wire_7m_2
+    3300010: Wire_7m_3
+    3300012: Wire_90c
+    3300014: Wire_twisi_up
+    3300016: Wire_up
+    3300018: Wire_vilka
+    4300000: Wire_4m
+    4300002: Wire_twisi_up
+    4300004: Wire_3m
+    4300006: Wire_7m_1
+    4300008: Object030
+    4300010: Wire_up
+    4300012: Wire_7m_2
+    4300014: Wire_7m_3
+    4300016: Wire_vilka
+    4300018: Wire_90c
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -30,9 +30,9 @@ TagManager:
   - AgentModel
   - RecievingPole
   - Router
-  - 
-  - 
-  - 
+  - Agent
+  - Arrow
+  - Minimap
   - 
   - 
   - 

@@ -257,6 +257,10 @@ public class MapMaker : MapDisplay
             if (nodePointedAt != null)
             {
                 drawArrow.DrawArrow(currStart.transform.position, GetCardinalNode(nodePointedAt, currStart).transform.position, arrowOffset);
+
+                //for the wire constuctor placement
+                    //also make sure that this script doesn't mess with scale if we switch over
+                //drawArrow.DrawArrow(currStart, GetCardinalNode(nodePointedAt, currStart), arrowOffset);
             }
         }
     }

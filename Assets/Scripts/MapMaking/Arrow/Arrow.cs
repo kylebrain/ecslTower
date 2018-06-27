@@ -7,6 +7,11 @@ using UnityEngine;
 /// </summary>
 public class Arrow : MonoBehaviour
 {
+    public int _distance;
+
+    public GameObject _7Model;
+    public GameObject _4Model;
+    public GameObject _3Model;
 
     /*-----------public variables-----------*/
     public float baseRadius = 0.3f;
@@ -78,6 +83,66 @@ public class Arrow : MonoBehaviour
         //GetComponent<Renderer>().material.SetFloat("_Direction", 2f * Mathf.Atan(length / 2f) / Mathf.PI);
     }
 
+    public void DrawArrow(Node src, Node dest, float overlay)
+    {
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        transform.position = new Vector3((src.Coordinate.x + dest.Coordinate.x) / 2f, overlay, (src.Coordinate.y + dest.Coordinate.y) / 2f);
+        float angle = Mathf.Atan2(dest.Coordinate.y - src.Coordinate.y, dest.Coordinate.x - src.Coordinate.x) * Mathf.Rad2Deg;
+        transform.localEulerAngles = new Vector3(90f, angle);
+
+        int distance = Mathf.Max(Mathf.Abs(dest.Coordinate.y - src.Coordinate.y), Mathf.Abs(dest.Coordinate.x - src.Coordinate.x));
+
+        _distance = distance;
+
+        //distance -= 2;
+        int number7 = distance / 7;
+        float midpoint = distance / 2f;
+        float end7 = -midpoint;
+        //place 7s
+        for(int i = 0; i < number7; i++)
+        {
+            GameObject obj = Instantiate(_7Model, transform);
+            end7 = -midpoint + 7f * (i + 1);
+            obj.transform.localPosition = new Vector3(end7 - 3.5f, 0f);
+            obj.transform.localEulerAngles = Vector3.zero;
+        }
+
+        int remainder = distance % 7;
+
+        if(remainder == 4 || remainder == 5)
+        {
+            GameObject obj = Instantiate(_4Model, transform);
+            obj.transform.localScale = new Vector3 (remainder / 4f, 1f, 1f);
+            obj.transform.localPosition = new Vector3(end7 + (remainder / 2f), 0f);
+            obj.transform.localEulerAngles = Vector3.zero;
+        } else if(remainder > 0)
+        {
+            if (remainder == 6)
+            {
+                for(int i = 0; i < 2; i++)
+                {
+                    GameObject obj = Instantiate(_3Model, transform);
+                    obj.transform.localScale = new Vector3(remainder / 3f, 1f, 1f);
+                    obj.transform.localPosition = new Vector3(end7 + (remainder / 2f), 0f);
+                    obj.transform.localEulerAngles = Vector3.zero;
+                }
+            }
+            else
+            {
+
+                GameObject obj = Instantiate(_3Model, transform);
+                obj.transform.localScale = new Vector3(remainder / 3f, 1f, 1f);
+                obj.transform.localPosition = new Vector3(end7 + (remainder / 2f), 0f);
+                obj.transform.localEulerAngles = Vector3.zero;
+            }
+        }
+
+    }
+
     /// <summary>
     /// Places the arrow and sets its values to be used as a data structure
     /// </summary>
@@ -87,6 +152,10 @@ public class Arrow : MonoBehaviour
     public void PlaceArrow(Node start, Node end, float overlay)
     {
         DrawArrow(start.transform.position, end.transform.position, overlay);
+
+        //for the wire constructor placement
+        //DrawArrow(start, end, overlay);
+
         origin = start;
         destination = end;
     }

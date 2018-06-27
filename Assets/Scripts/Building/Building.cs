@@ -51,7 +51,7 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     private int numSegments = 100;
 
-    private static RaycastHit raycastHit;
+    private static RaycastHit raycastHitBuilding;
 
 
     //------------PUBLIC---------------
@@ -220,26 +220,26 @@ public abstract class Building : MonoBehaviour
         transform.position = new Vector3((float)(startX + endX) / 2, transform.position.y, (float)(startY + endY) / 2);
     }
 
-    protected bool GetRayCastHit()
+    protected Building GetRayCastBuildingHit()
     {
         //statics should increase efficiency
-        if (raycastHit.transform == null)
+        if (raycastHitBuilding.transform == null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out raycastHit, Mathf.Infinity, 1 << 11);
+            Physics.Raycast(ray, out raycastHitBuilding, Mathf.Infinity, 1 << 11);
         }
-        if (raycastHit.transform == null)
+        if (raycastHitBuilding.transform == null)
         {
-            return false;
+            return null;
         }
-        if (raycastHit.transform.parent == transform)
-        {
-            raycastHit = new RaycastHit();
-            return true;
-        } else
-        {
-            return false;
-        }
+        return raycastHitBuilding.transform.parent.GetComponent<Building>();
+
+        //lastUpdate resets raycastHit to be recalculated each frame
+    }
+
+    private void LateUpdate()
+    {
+        raycastHitBuilding = new RaycastHit();
     }
 
     /// <summary>
@@ -294,7 +294,18 @@ public abstract class Building : MonoBehaviour
 
         Vector2Int selectedNodePos = selectedNode.Coordinate;
         Vector3 desiredPos = new Vector3(selectedNodePos.x, 0f, selectedNodePos.y);
-        bool mouseWithinBuilding = Location.Contains(selectedNodePos) || GetRayCastHit(); //still have a problem where it is possible to select two Routers at once
+
+        bool mouseWithinBuilding;
+        Building hitBuilding = GetRayCastBuildingHit();
+        //if there is no building hovered over, select the Building based on Node
+        if (hitBuilding == null)
+        {
+            mouseWithinBuilding = Location.Contains(selectedNodePos);
+        } else
+        {
+            //if it hits a building, select the Building hovered over
+            mouseWithinBuilding = hitBuilding == this;
+        }
 
         //if we find the raycast too performance intensive use the old solution below
         //just delete the current variables and replace the ones that error with the old ones

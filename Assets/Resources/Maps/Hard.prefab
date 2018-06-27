@@ -55,10 +55,12 @@ MonoBehaviour:
   locked: 1
   highscoreLevelIdentifier: 3
   displayOrder: 3
-  spawnRate: 0.5
+  spawnRate: 1
   waveCount: 5
   spawnPerWave: 100
   decoyProbability: 5
+  _2starScore: 1500
+  _3starScore: 2000
   markMalicious: 0
   loadLevel:
     levelName: hard_level001

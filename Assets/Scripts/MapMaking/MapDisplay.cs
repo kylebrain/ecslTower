@@ -193,11 +193,15 @@ public class MapDisplay : MonoBehaviour
             Debug.LogError("Passed invalid nodes to create segment!");
             return false;
         }
+
         if (toSet == null)
         {
             toSet = Instantiate(arrowPrefab, transform) as Arrow;
         }
+
+        //toSet.PlaceArrow(start, end, arrowOffset);
         toSet.PlaceArrow(start, end, arrowOffset);
+
         Arrow addedArrow = arrowContainer.AddArrowToContainer(toSet);
         if (addedArrow == null)
         {
