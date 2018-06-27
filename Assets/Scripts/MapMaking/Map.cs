@@ -17,6 +17,8 @@ public class Map : MonoBehaviour {
     public int waveCount = 3;
     public int spawnPerWave = 100;
     public int decoyProbability = 3;
+    public int _2starScore = 2000;
+    public int _3starScore = 3000;
     public bool markMalicious = false;
     public SerializableLevel loadLevel;
     public BaseGrid gridPrefab;
@@ -31,6 +33,8 @@ public class Map : MonoBehaviour {
         LevelLookup.waveCount = waveCount;
         LevelLookup.spawnPerWave = spawnPerWave;
         LevelLookup.decoyProbability = decoyProbability;
+        LevelLookup._2starScore = _2starScore;
+        LevelLookup._3starScore = _3starScore;
         LevelLookup.markMalicious = markMalicious;
         LevelLookup.levelNumber = highscoreLevelIdentifier;
         if(agentModel != null)
