@@ -7,6 +7,7 @@ public class TutorialTips : MonoBehaviour {
 
     public Text text;
     public GameObject dismiss;
+    public Text dismissText;
     public Tutorial tutorial;
 
     public void Hide()
@@ -37,6 +38,7 @@ public class TutorialTips : MonoBehaviour {
 
     public void ShowDismiss(bool showDismiss = true)
     {
+        dismissText.text = "Dismiss [" + ControlPrefs.GetKey("dismissTutorial") + "]";
         if (showDismiss)
         {
             dismiss.SetActive(true);

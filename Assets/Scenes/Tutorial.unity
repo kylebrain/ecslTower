@@ -432,6 +432,12 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114099786519910464, guid: 7accd3ecb1d1b054bab9bb2af9aab0cd,
+        type: 2}
+      propertyPath: RouterPrefab
+      value: 
+      objectReference: {fileID: 114117969463014020, guid: 62a84706347557e4ba0140eaac6d4449,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7accd3ecb1d1b054bab9bb2af9aab0cd, type: 2}
   m_IsPrefabParent: 0
@@ -1438,6 +1444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 221311434}
   dismiss: {fileID: 1356965583}
+  dismissText: {fileID: 1783301047}
   tutorial: {fileID: 694734711}
 --- !u!114 &515375925
 MonoBehaviour:
@@ -4193,7 +4200,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Dismiss [Enter]
+  m_Text: Dismiss
 --- !u!222 &1783301048
 CanvasRenderer:
   m_ObjectHideFlags: 0
