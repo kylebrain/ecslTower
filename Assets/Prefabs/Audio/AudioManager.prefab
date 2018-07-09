@@ -94,6 +94,20 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: MusicIntro
+    clip: {fileID: 8300000, guid: 7f3f9f849d4963743a1c52bfbe136481, type: 3}
+    mixer: {fileID: 243377483602678540, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: MusicLoop
+    clip: {fileID: 8300000, guid: fdec8311b285cc14aa463764c20e0162, type: 3}
+    mixer: {fileID: 243377483602678540, guid: efb315408f28f254d92d9e142a63100e, type: 2}
+    volume: 0.3
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
   volumes:
   - MasterVolume
   - MusicVolume

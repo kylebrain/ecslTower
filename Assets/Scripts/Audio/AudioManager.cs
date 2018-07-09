@@ -1,29 +1,33 @@
 ﻿using UnityEngine.Audio;
 using System;
 using UnityEngine;
+using System.Collections;
 
-public class AudioManager : MonoBehaviour {
+public class AudioManager : MonoBehaviour
+{
 
     public Sound[] sounds;
     public string[] volumes;
     public AudioMixer mainMixer;
-    
+
     private static AudioManager instance;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake()
+    {
 
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
-        } else
+        }
+        else
         {
             Destroy(gameObject);
         }
 
         DontDestroyOnLoad(gameObject);
 
-		foreach(Sound sound in sounds)
+        foreach (Sound sound in sounds)
         {
             sound.source = gameObject.AddComponent<AudioSource>();
             sound.source.clip = sound.clip;
@@ -34,11 +38,11 @@ public class AudioManager : MonoBehaviour {
             sound.source.loop = sound.loop;
         }
 
-        
 
 
 
-	}
+
+    }
 
     private void Start()
     {
@@ -46,18 +50,18 @@ public class AudioManager : MonoBehaviour {
         {
             mainMixer.SetFloat(str, PlayerPrefs.GetFloat(str, 0f));
         }
-        Play("Theme");
+        PlayLoop("MusicLoop", "MusicIntro");
     }
 
-    public static void Play (string name, float pitchRange = 0)
+    public static void Play(string name, float pitchRange = 0)
     {
-        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
-        if(s == null)
+        Sound s = instance.GetSound(name);
+        if (s == null)
         {
             Debug.LogWarning("Could not find the sound: " + name);
             return;
         }
-        if(pitchRange != 0)
+        if (pitchRange != 0)
         {
             s.source.pitch = VaryPitch(pitchRange);
         }
@@ -71,7 +75,7 @@ public class AudioManager : MonoBehaviour {
 
     public static void Mute(string name, bool mute = true)
     {
-        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
+        Sound s = instance.GetSound(name);
         if (s == null)
         {
             Debug.LogWarning("Could not find the sound: " + name);
@@ -80,22 +84,67 @@ public class AudioManager : MonoBehaviour {
         if (mute)
         {
             s.source.volume = 0;
-        } else
+        }
+        else
         {
             s.source.volume = s.volume;
         }
-        
+
     }
 
     public static float GetLength(string name)
     {
-        Sound s = Array.Find(instance.sounds, sound => sound.name == name);
+        Sound s = instance.GetSound(name);
         if (s == null)
         {
             Debug.LogWarning("Could not find the sound: " + name);
             return -1;
         }
         return s.source.clip.length;
+    }
+
+    public Sound GetSound(string name)
+    {
+        return Array.Find(instance.sounds, sound => sound.name == name);
+    }
+
+    public static void PlayLoop(string loop, string intro = null)
+    {
+        AudioSource loopSource;
+        AudioSource introSource;
+        if (string.IsNullOrEmpty(loop))
+        {
+            Debug.LogError("Must have a valid loop!");
+            return;
+        } else
+        {
+            loopSource = instance.GetSound(loop).source;
+        }
+
+        if (!string.IsNullOrEmpty(intro))
+        {
+            introSource = instance.GetSound(intro).source;
+        } else
+        {
+            introSource = null;
+        }
+
+        instance.StartCoroutine(instance.PlayIntro(loopSource, introSource));
+    }
+
+    IEnumerator PlayIntro(AudioSource loop, AudioSource intro = null)
+    {
+        if(intro == null)
+        {
+            yield return null;
+        } else
+        {
+            intro.loop = false;
+            intro.Play();
+            yield return new WaitForSeconds(intro.clip.length / intro.pitch);
+        }
+        loop.loop = true;
+        loop.Play();
     }
 
 }

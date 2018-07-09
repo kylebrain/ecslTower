@@ -1417,7 +1417,7 @@ MonoBehaviour:
   throwMagnitude: 10
   throwRange: 120
   highlightLightSaberValue: 0.7
-  highlightEmissionColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  highlightEmissionColor: {r: 0, g: 0, b: 0, a: 0}
   childDisplayAgent: {fileID: 114784577423136672}
   laserScript: {fileID: 114466324950127212}
   Poles:
@@ -2067,18 +2067,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   OnEnable:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114327791180633022}
-        m_MethodName: CheckEnable
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   arrowArray:
@@ -2324,18 +2313,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   OnEnable:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114327791180633022}
-        m_MethodName: CheckEnable
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   arrowArray:
@@ -2475,18 +2453,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   OnEnable:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114327791180633022}
-        m_MethodName: CheckEnable
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   arrowArray:
