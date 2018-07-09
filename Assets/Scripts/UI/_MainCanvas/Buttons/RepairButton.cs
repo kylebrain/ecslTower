@@ -22,13 +22,18 @@ public class RepairButton : DisableButton
 
     private void Update()
     {
+        if (ControlPrefs.GetKeyDown("repairServer") && GetButton.interactable && ButtonEnabled)
+        {
+            PerformAction();
+        }
+
         if (Score.Health <= 0)
         {
-            GetText.text = "Rebuild: $" + rebuildCost;
+            GetText.text = "[" + ControlPrefs.GetKey("repairServer")+ "] Rebuild: $" + rebuildCost;
         }
         else if (!Rebuilding)
         {
-            GetText.text = "Repair: $" + repairCost;
+            GetText.text = "[" + ControlPrefs.GetKey("repairServer") + "] Repair: $" + repairCost;
         }
 
         if (!Rebuilding)

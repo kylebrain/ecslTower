@@ -9,7 +9,7 @@ public class Tutorial : PreWaveCreator
     public TutorialTips tutorialTips;
     public Button repairButton;
     public Button shopButton;
-    public Button buyRouterButton;
+    //public Button buyRouterButton;
 
     private float bufferTime;
 
@@ -144,7 +144,7 @@ public class Tutorial : PreWaveCreator
         tutorialTips.Show("Place a Router on the path to filter out the malicious packet.", false);
         shopButton.interactable = true;
         yield return new WaitUntil(() => FindObjectOfType<RouterBuilding>() != null);
-        buyRouterButton.interactable = false;
+        shopButton.interactable = false;
         RouterBuilding routerBuilding = FindObjectOfType<RouterBuilding>();
         routerBuilding.routingOptions.DisableSelection(2);
         yield return new WaitUntil(() => WaitForFunction(1));
@@ -236,7 +236,7 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(bufferTime);
 
         tutorialTips.Show("Place another Router to filter out the other packet.", false);
-        buyRouterButton.interactable = true;
+        shopButton.interactable = true;
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());

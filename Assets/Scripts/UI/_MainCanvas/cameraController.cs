@@ -187,7 +187,7 @@ public class cameraController : MonoBehaviour
     private void Update()
     {
         //add actual UI queues if this make it past debug
-        if (controlPrefs.GetKeyDown("toggleCameraMode"))
+        if (ControlPrefs.GetKeyDown("toggleCameraMode"))
         {
             if (topDown)
             {

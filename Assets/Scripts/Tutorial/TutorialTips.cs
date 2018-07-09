@@ -14,6 +14,15 @@ public class TutorialTips : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if(ControlPrefs.GetKeyDown("dismissTutorial") && dismiss.activeSelf)
+        {
+            tutorial.Dismiss(true);
+            Hide();
+        }
+    }
+
     public void Show(string _text = "", bool showDismiss = true)
     {
         if(!string.IsNullOrEmpty(_text))

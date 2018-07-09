@@ -13,16 +13,22 @@ public class ControlPrefs : MonoBehaviour {
         #endregion
 
         #region Camera
-        {"toggleCameraMode", KeyCode.R},
+        {"toggleCameraMode", KeyCode.C},
         {"adjustCameraAngle", KeyCode.F },
         #endregion
 
         #region RolodexSelection
         {"rolodexLeftKey", KeyCode.Q},
         {"rolodexRightKey", KeyCode.E},
-        {"rolodexResetKey", KeyCode.Tab},
-        {"rolodexNextKey", KeyCode.Space}
+        {"rolodexResetKey", KeyCode.Space},
+        {"rolodexNextKey", KeyCode.Tab},
         #endregion
+
+        {"buyRouter", KeyCode.B },
+        {"repairServer", KeyCode.R },
+
+        //currently hardcoded into the text, fix when changing the key
+        {"dismissTutorial", KeyCode.Return}
     };
 
     private void Awake()
@@ -98,9 +104,14 @@ public class ControlPrefs : MonoBehaviour {
         return 0;
     }
 
-    public bool GetKeyDown(string str)
+    public static bool GetKeyDown(string str)
     {
         return Input.GetKeyDown(inputDictionary[str]);
+    }
+
+    public static KeyCode GetKey(string str)
+    {
+        return inputDictionary[str];
     }
 
     public KeyCode this[string str]

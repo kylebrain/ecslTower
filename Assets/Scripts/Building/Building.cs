@@ -250,6 +250,11 @@ public abstract class Building : MonoBehaviour
 
         GameObject canvas = transform.Find("Canvas").gameObject;
 
+        if (currentlyPlacing && placed)
+        {
+            HideUI(canvas);
+        }
+
         #region Node unrequired
         if (!placed)
         {

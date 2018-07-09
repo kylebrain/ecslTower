@@ -75,7 +75,7 @@ public class ToolTips : MonoBehaviour {
 
     private void Update()
     {
-        if (controlPrefs.GetKeyDown("toggleTooltips"))
+        if (ControlPrefs.GetKeyDown("toggleTooltips"))
         {
             if (toolPrompt.activeSelf)
             {

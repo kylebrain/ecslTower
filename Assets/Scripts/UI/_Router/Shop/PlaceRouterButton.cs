@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceRouterButton : DisableButton {
     public Building RouterPrefab;
 
+    public Text shopText;
     private int count = 0;
 
     protected override void DerivedStart()
     {
         GetText.text = "$" + RouterPrefab.price;
+        shopText.text = "Buy Router [" + ControlPrefs.GetKey("buyRouter") + "]";
         UpdateButton();
     }
 
@@ -32,11 +35,15 @@ public class PlaceRouterButton : DisableButton {
     }
     private void Update()
     {
+        if (ControlPrefs.GetKeyDown("buyRouter"))
+        {
+            PerformAction();
+        }
         UpdateButton();
     }
 
     public override void PerformAction() {
-        if (Score.Money >= RouterPrefab.price &&  !Building.currentlyPlacing)
+        if (Score.Money >= RouterPrefab.price &&  !Building.currentlyPlacing && GetButton.interactable)
         {
             Score.Money -= RouterPrefab.price;
             //play a buying sound
