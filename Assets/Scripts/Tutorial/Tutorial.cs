@@ -278,6 +278,16 @@ public class Tutorial : PreWaveCreator
 
     }
 
+    private void Update()
+    {
+        //not the most efficient but works for now
+        Sell[] sellButtons = GameObject.FindObjectsOfType<Sell>();
+        foreach(Sell s in sellButtons)
+        {
+            s.GetButton.interactable = false;
+        }
+    }
+
     private bool WaitForFunction(int index)
     {
         //0: Malicious packet reaches destination

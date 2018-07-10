@@ -20,6 +20,8 @@ public abstract class Building : MonoBehaviour
     public float startingHealth = 0f;
     public GridArea Location;
 
+    public GameObject UIOverlay;
+
     public AudioSource placeAudio;
 
     protected float health = 0f;
@@ -248,11 +250,11 @@ public abstract class Building : MonoBehaviour
     protected void handleMouse()
     {
 
-        GameObject canvas = transform.Find("Canvas").gameObject;
+        //GameObject canvas = transform.Find("Canvas").gameObject;
 
         if (currentlyPlacing && placed)
         {
-            HideUI(canvas);
+            HideUI(UIOverlay);
         }
 
         #region Node unrequired
@@ -267,7 +269,7 @@ public abstract class Building : MonoBehaviour
         {
             if (placed)
             {
-                HideUI(canvas);
+                HideUI(UIOverlay);
             }
             else
             {
@@ -284,7 +286,7 @@ public abstract class Building : MonoBehaviour
         {
             if (placed && Input.GetMouseButtonDown(0))
             {
-                HideUI(canvas); //mouseWithinBuidling must be false because there is no valid Node
+                HideUI(UIOverlay); //mouseWithinBuidling must be false because there is no valid Node
             }
             if (!placed) //draws the router over no-grid area, might need to be fixed to act like Nodes, because currently the rounding is off
             {
@@ -340,11 +342,11 @@ public abstract class Building : MonoBehaviour
             {
                 if (mouseWithinBuilding && !currentlyPlacing)
                 {
-                    ShowUI(canvas);
+                    ShowUI(UIOverlay);
                 }
                 else
                 {
-                    HideUI(canvas);
+                    HideUI(UIOverlay);
                 }
             }
         }
@@ -361,7 +363,7 @@ public abstract class Building : MonoBehaviour
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {
-                ShowUI(canvas);
+                ShowUI(UIOverlay);
             }
         }
 
@@ -384,9 +386,8 @@ public abstract class Building : MonoBehaviour
         }
         HighlightBuilding(false);
         radiusLine.enabled = false;
-        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;
-        derivedHide(canvas);
+        canvas.SetActive(false);
 
     }
 
@@ -398,9 +399,8 @@ public abstract class Building : MonoBehaviour
     {
         HighlightBuilding(true);
         radiusLine.enabled = true;
-        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         selected = true;
-        derivedShow(canvas);
+        canvas.SetActive(true);
     }
 
     #endregion
@@ -441,7 +441,7 @@ public abstract class Building : MonoBehaviour
     protected abstract void updateAction();
     #endregion
 
-    protected abstract void derivedHide(GameObject canvas);
+    //protected abstract void derivedHide(GameObject canvas);
 
-    protected abstract void derivedShow(GameObject canvas);
+    //protected abstract void derivedShow(GameObject canvas);
 }

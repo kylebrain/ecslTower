@@ -339,6 +339,8 @@ public class RouterBuilding : Building
         }
     }
 
+    /*
+
     /// <summary>
     /// Shows the RoutingOptions with the Sell option
     /// </summary>
@@ -358,5 +360,5 @@ public class RouterBuilding : Building
     }
 
 
-
+    */
 }
