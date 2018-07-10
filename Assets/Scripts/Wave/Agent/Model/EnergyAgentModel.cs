@@ -6,7 +6,7 @@ using DigitalRuby.ThunderAndLightning;
 /// <summary>
 /// Handles the Model for the Energy prefab
 /// </summary>
-public class EnergyAgentModel : AgentModel {
+public class EnergyAgentModel : RectangularModel {
 
     /// <summary>
     /// Sets the material color and the lightning color
@@ -21,25 +21,5 @@ public class EnergyAgentModel : AgentModel {
         rend.material.SetColor("_Color", color);
         LightningMeshSurfaceScript energy = transform.Find("Energy").GetComponent<LightningMeshSurfaceScript>();
         energy.GlowTintColor = color;
-    }
-
-    /// <summary>
-    /// Prefab is scaled rectangular based
-    /// </summary>
-    /// <remarks>
-    /// X is half of Z, Y is constant
-    /// </remarks>
-    /// <param name="size">Desired size float</param>
-    public override void SetModelSize(float size)
-    {
-        if (size > 0)
-        {
-            transform.localScale = new Vector3(size / 2f, 1f, size);
-        }
-        else
-        {
-            //perfect cube if size is not recognized
-            transform.localScale = Vector3.one;
-        }
     }
 }
