@@ -60,7 +60,8 @@ public class Tutorial : PreWaveCreator
         //Wave2
         do
         {
-            infectedAttributes[1] = MutateAttribute(infectedAttributes[0]);
+            int _bogey;
+            infectedAttributes[1] = MutateAttribute(infectedAttributes[0], out _bogey);
         } while (infectedAttributes[1].Color == infectedAttributes[0].Color && infectedAttributes[1].Size == infectedAttributes[0].Size);
         do
         {

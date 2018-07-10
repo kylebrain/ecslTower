@@ -42,7 +42,7 @@ public class WaveController : PreWaveCreator
     /// Script reference that displays information on the Wave
     /// </summary>
     public WaveInfo waveInfo;
-    
+
     /// <summary>
     /// Current Wave player is on
     /// </summary>
@@ -63,7 +63,7 @@ public class WaveController : PreWaveCreator
     /// </summary>
     public EndScreen endScreen;
 
-    
+
 
     #endregion
 
@@ -117,11 +117,17 @@ public class WaveController : PreWaveCreator
     private bool Playing;
     #endregion
 
-    int sameMutate = 0;
-    int sameRate = 0;
-    int sumTrials = 0;
-    int totalTrials = 500;
+    /* test area */
+    string placeholder = "abc";
+    int setSame = 0;
+    int randomSet = 0;
+    int currentTrial = 0;
     AgentAttribute[] agentArray = new AgentAttribute[2];
+
+    //change these values to run the tests
+    int totalTrials = 0;
+    int trialsPerFrame = 0;
+    
 
     void Start()
     {
@@ -129,37 +135,59 @@ public class WaveController : PreWaveCreator
         WaveCount = 0;
         StartCoroutine(FirstWave());
 
-        agentArray[0] = GenerateAttribute();
-        agentArray[1] = GenerateAttribute();
-        while (agentArray[0].Equals(agentArray[1]))
+        for (int i = 0; i < agentArray.Length; i++)
         {
-            agentArray[1] = GenerateAttribute();
+            AgentAttribute attr;
+            do
+            {
+                attr = GenerateAttribute();
+            } while (agentArray.Contains(attr));
+            agentArray[i] = attr;
+        }
+        UniqueCheck(agentArray);
+    }
+
+    private void UniqueCheck(IEnumerable<AgentAttribute> attributeArray)
+    {
+        if (attributeArray.GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToArray().Length > 0)
+        {
+            Debug.LogWarning("Unique check failed!");
         }
     }
+
     private void MutateTest()
     {
 
-        if(TraitsToMutate() == 0)
-        {
-            sameMutate++;
-        }
-        AgentAttribute[] mutatedArray = new AgentAttribute[2];
+        Debug.Log("" + placeholder[(int)agentArray[0].Color] + placeholder[(int)agentArray[0].Size] + placeholder[(int)agentArray[0].Speed] + " | " + placeholder[(int)agentArray[1].Color] + placeholder[(int)agentArray[1].Size] + placeholder[(int)agentArray[1].Speed]);
+
+        List<AgentAttribute> mutatedArray = new List<AgentAttribute>();
+
         for (int i = 0; i < agentArray.Length; i++)
         {
-            AgentAttribute attr = agentArray[i];
+            AgentAttribute attr;
+            int mutateCount;
             do
             {
-                mutatedArray[i] = MutateAttribute(attr); //mutates every Attribute if they have already been choosen
-            } while (mutatedArray.GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToArray().Length > 0); //if there are two of the same attribute, keep mutating
+                attr = MutateAttribute(agentArray[i], out mutateCount);
+            } while (mutatedArray.Contains(attr));
+            if (mutateCount == 0)
+            {
+                setSame++;
+            }
+            mutatedArray.Add(attr);
         }
+
+        UniqueCheck(mutatedArray);
+
         foreach (AgentAttribute attr in mutatedArray)
         {
             if (agentArray.Contains(attr))
             {
-                sameRate++;
+                randomSet++;
             }
         }
-        sumTrials++;
+
+        currentTrial++;
         agentArray = mutatedArray.ToArray();
     }
 
@@ -294,12 +322,17 @@ public class WaveController : PreWaveCreator
     private void Update()
     {
 
-        if(sumTrials < totalTrials)
+        if (currentTrial < totalTrials)
         {
-            MutateTest();
-        } else
+            for (int i = 0; i < trialsPerFrame; i++)
+            {
+                MutateTest();
+            }
+        }
+        else if(currentTrial > 0)
         {
-            //Debug.Log("Same trait mutate percentage is: " + (float)sameRate / sumTrials * 100 + "\n" + sameRate + " out of " + sumTrials);
+            Debug.Log("Random/set mutation percentage is: " + (float)randomSet / currentTrial * 100 + "\n" + randomSet + " out of " + currentTrial);
+            Debug.Log("Set same mutation percantage: " + (float)setSame / currentTrial * 100 + "\n" + setSame + " out of " + currentTrial);
         }
 
         //Wave will delete itself when it is finished so currentWave will be set to null
@@ -325,7 +358,8 @@ public class WaveController : PreWaveCreator
         {
             AgentAttribute attr = GenerateAttribute();
             Debug.Log("Original attr: " + attr);
-            AgentAttribute attr2 = MutateAttribute(attr);
+            int _bogey;
+            AgentAttribute attr2 = MutateAttribute(attr, out _bogey);
             Debug.Log("Mutated attr: " + attr2);
         }
 
@@ -356,7 +390,7 @@ public class WaveController : PreWaveCreator
         }
 
         //AgentsRemaining will wait at one until SecondsLeft is zero before finishing
-            //Just so the display looks nice and accurate
+        //Just so the display looks nice and accurate
         if (SecondsLeft == 0f && AgentsRemaining == 1)
         {
             AgentsRemaining = 0;
@@ -396,7 +430,8 @@ public class WaveController : PreWaveCreator
                 AgentAttribute attr = infectedAttributes[i];
                 do
                 {
-                    infectedAttributes[i] = MutateAttribute(attr); //mutates every Attribute if they have already been choosen
+                    int _bogey;
+                    infectedAttributes[i] = MutateAttribute(attr, out _bogey); //mutates every Attribute if they have already been choosen
                 } while (infectedAttributes.GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToArray().Length > 0); //if there are two of the same attribute, keep mutating
             }
         }
