@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Helper functions for PreWave creation
 /// </summary>
-public class PreWaveCreator : MonoBehaviour {
+public class PreWaveCreator : MonoBehaviour
+{
 
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
@@ -62,6 +63,30 @@ public class PreWaveCreator : MonoBehaviour {
         }
         return prefab;
     }
+
+    protected int TraitsToMutate()
+    {
+        //chooses 0-2 traits to mutate
+        int[] mutateWeight = {1, 8, 4 };
+
+        int sum = 0;
+        foreach (int i in mutateWeight)
+        {
+            sum += i;
+        }
+        int traitSelector = Random.Range(0, sum);
+        int range = 0;
+        for (int i = 0; i < mutateWeight.Length; i++)
+        {
+            range += mutateWeight[i];
+            if (traitSelector < range)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     /// <summary>
     /// Takes previous infected Attributes and mutate randomly 0-2 traits (shift up or down once)
     /// </summary>
@@ -71,7 +96,10 @@ public class PreWaveCreator : MonoBehaviour {
     {
         AgentAttribute ret = previousAttrribute;
         //chooses 0-2 traits to mutate
-        int traitMutateCount = Random.Range(0, 3);
+        int traitMutateCount = TraitsToMutate();
+
+
+
         //repeats traitMutateCount number of times
         for (int i = 0; i < traitMutateCount; i++)
         {
