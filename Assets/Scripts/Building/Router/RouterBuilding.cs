@@ -91,6 +91,8 @@ public class RouterBuilding : Building
         initLightSaberValue = laserScript.laser.LightSaberFactor;
     }
 
+    /*
+
     protected override void UpdateRotation(Node node)
     {
         if(node.Occupied != Node.nodeStates.navigation)
@@ -132,6 +134,20 @@ public class RouterBuilding : Building
         {
             childDisplayAgent.startingRotation = transform.eulerAngles.y;
         } else
+        {
+            Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
+        }
+    }
+
+    */
+
+    protected override void DerivedSetRotation()
+    {
+        if (childDisplayAgent != null)
+        {
+            childDisplayAgent.startingRotation = transform.eulerAngles.y;
+        }
+        else
         {
             Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
         }

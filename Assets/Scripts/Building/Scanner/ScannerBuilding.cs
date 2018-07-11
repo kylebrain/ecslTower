@@ -89,7 +89,8 @@ public class ScannerBuilding : Building
 
     protected override void HighlightBuilding(bool highlight)
     {
-        Material mat = GetComponent<Renderer>().material;
+        Material mat = transform.Find("Model").GetComponent<Renderer>().material;
+        //change to the name of the visual representation
         if (highlight)
         {
             mat.SetColor("_Color", Color.grey);
