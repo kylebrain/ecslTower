@@ -13,6 +13,7 @@ public class ScannerBuilding : Building
 
     public RectTransform displayHolder;
     public MovingRingDisplayAgent displayAgentPrefab;
+    //public GameObject circleGameObject;
 
     private List<Agent> scannedAgents = new List<Agent>();
     AgentAttribute nullAttribute;

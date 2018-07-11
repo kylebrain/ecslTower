@@ -89,6 +89,14 @@ public class RingDisplayAgent : VisualAgent
 
     private void Update()
     {
+        if(transform.parent.tag == "DisplayAgentCircle")
+        {
+            RectTransform circleTransform = transform.parent.GetComponent<RectTransform>();
+            if(circleTransform != null)
+            {
+                circleTransform.sizeDelta = Vector2.one * radius * 2f;
+            }
+        }
         //if the agent is not moving, its position is reset to the startingRotation
         if (Speed <= 0)
         {

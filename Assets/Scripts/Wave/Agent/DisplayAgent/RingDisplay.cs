@@ -17,7 +17,7 @@ public class RingDisplay : MonoBehaviour
     private void Awake()
     {
         //sets the RingDisplayAgent variable based on its child
-        currentRingAgent = transform.Find("RingAgent").GetComponent<RingDisplayAgent>();
+        currentRingAgent = GetComponentInChildren<RingDisplayAgent>();
         if(currentRingAgent == null)
         {
             Debug.LogError("Could not find RingAgent, perhaps it was moved or renamed?");
