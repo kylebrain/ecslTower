@@ -51,14 +51,15 @@ public class ScannerBuilding : Building
             {
                 scannedAgents.Add(currentAgent);
                 MovingRingDisplayAgent currentDisplayAgent = Instantiate(displayAgentPrefab, displayHolder.transform);
-                currentDisplayAgent.InitializeAttributes(currentAgent.Attribute);
-                currentDisplayAgent.SetCenter(new Vector2(-agentSize * (scanAgentCount + 1 / 2f), 0));
+                currentDisplayAgent.InitDisplayAgent();
+                currentDisplayAgent.displayAgent.InitializeAttributes(currentAgent.Attribute);
+                currentDisplayAgent.SetPosition(new Vector2(-agentSize * (scanAgentCount + 1 / 2f), 0));
                 currentDisplayAgent.SetDesiredPos(new Vector2(-agentSize * ((hudAgents.Count > scanAgentCount ? scanAgentCount : hudAgents.Count) + 1 / 2f), 0f));
                 foreach (MovingRingDisplayAgent movingAgent in hudAgents)
                 {
-                    if (movingAgent.Attribute.Speed == currentDisplayAgent.Attribute.Speed)
+                    if (movingAgent.displayAgent.Attribute.Speed == currentDisplayAgent.displayAgent.Attribute.Speed)
                     {
-                        currentDisplayAgent.startingRotation = movingAgent.GetRotation;
+                        currentDisplayAgent.displayAgent.startingRotation = movingAgent.displayAgent.GetRotation;
                         break;
                     }
                 }
@@ -67,7 +68,7 @@ public class ScannerBuilding : Building
                 for (int i = 0; i < hudAgents.Count; i++)
                 {
                     MovingRingDisplayAgent delAgent = hudAgents[i];
-                    if (delAgent.center.x > 0 && delAgent.IsAtDestination)
+                    if (delAgent.rectTransform.anchoredPosition.x > 0 && delAgent.IsAtDestination)
                     {
                         //Debug.Log(delAgent.center.x + "\n" + delAgent.desiredPos);
                         hudAgents.Remove(delAgent);
@@ -80,7 +81,7 @@ public class ScannerBuilding : Building
                 {
                     foreach (MovingRingDisplayAgent movingAgent in hudAgents)
                     {
-                        movingAgent.SetDesiredPos(movingAgent.desiredPos + Vector2.right * agentSize);
+                        movingAgent.SetDesiredPos(movingAgent.DesiredPos + Vector2.right * agentSize);
                     }
                 }
 

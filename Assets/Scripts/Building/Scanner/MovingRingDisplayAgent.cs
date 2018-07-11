@@ -2,33 +2,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingRingDisplayAgent : RingDisplayAgent {
+public class MovingRingDisplayAgent : MonoBehaviour {
 
-    public Vector2 desiredPos;
     public float transitionSpeed;
     public float fudge = 0.001f;
+
+    [HideInInspector]
+    public RingDisplayAgent displayAgent;
+    public Vector2 DesiredPos
+    {
+        get
+        {
+            return desiredPos;
+        }
+    }
+    public Vector2 desiredPos;
+
+    public RectTransform rectTransform
+    {
+        get
+        {
+            return GetComponent<RectTransform>();
+        }
+    }
+
     public bool IsAtDestination
     {
         get
         {
-            return Vector3.SqrMagnitude(center - desiredPos) < fudge;
+            return Vector3.SqrMagnitude(rectTransform.anchoredPosition - desiredPos) < fudge;
         }
     }
 
-    protected override void UpdateAction()
+    private void Awake()
+    {
+        displayAgent = GetComponentInChildren<RingDisplayAgent>();
+        if(displayAgent == null)
+        {
+            Debug.Log("Could not find Agent!");
+        }
+    }
+
+    public void InitDisplayAgent()
+    {
+        displayAgent = GetComponentInChildren<RingDisplayAgent>();
+        if (displayAgent == null)
+        {
+            Debug.Log("Could not find Agent!");
+        }
+    }
+
+    private void Update()
     {
         if (IsAtDestination)
         {
             return;
         }
-        center = Vector3.Lerp(center, desiredPos, transitionSpeed * Time.deltaTime);
+        rectTransform.anchoredPosition = Vector3.Lerp(rectTransform.anchoredPosition, desiredPos, transitionSpeed * Time.deltaTime);
     }
 
-    public void SetCenter(Vector2 _center)
+    public void SetPosition(Vector2 _position)
     {
-        center = _center;
-        desiredPos = _center;
-        UpdatePosition();
+        rectTransform.anchoredPosition = _position;
+        desiredPos = _position;
     }
 
     public void SetDesiredPos(Vector2 _desiredPos)

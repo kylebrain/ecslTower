@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224698111616716498}
   - component: {fileID: 222249577425815666}
   - component: {fileID: 114803720633952278}
+  - component: {fileID: 114267526792613370}
   m_Layer: 5
   m_Name: ScannerAgentCircle
   m_TagString: DisplayAgentCircle
@@ -38,7 +39,7 @@ GameObject:
   - component: {fileID: 224892756514752300}
   - component: {fileID: 222089427671329654}
   - component: {fileID: 114134228961384812}
-  - component: {fileID: 114106478223947004}
+  - component: {fileID: 114005497586707542}
   m_Layer: 5
   m_Name: ScannerRingAgent
   m_TagString: Untagged
@@ -46,7 +47,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114106478223947004
+--- !u!114 &114005497586707542
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -54,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1859186420351124}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 574d0da1c6570d04dbeaaecc77a22943, type: 3}
+  m_Script: {fileID: 11500000, guid: aaa2e587c0fda3d48aeabbd6e01c0869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0
@@ -63,9 +64,6 @@ MonoBehaviour:
   rotationMod: 30
   sizeMod: 30
   center: {x: 0, y: 0}
-  desiredPos: {x: 0, y: 0}
-  transitionSpeed: 5
-  fudge: 0.001
 --- !u!114 &114134228961384812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,6 +91,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114267526792613370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668851659750890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574d0da1c6570d04dbeaaecc77a22943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionSpeed: 5
+  fudge: 0.001
+  displayAgent: {fileID: 0}
+  desiredPos: {x: 0, y: 0}
 --- !u!114 &114803720633952278
 MonoBehaviour:
   m_ObjectHideFlags: 1

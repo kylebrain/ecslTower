@@ -435,7 +435,7 @@ MonoBehaviour:
   agentRadius: 30
   agentBuffer: 15
   displayHolder: {fileID: 224375173312680010}
-  displayAgentPrefab: {fileID: 114117361576942968, guid: d896030ac3b820e4f96bf1426730bada,
+  displayAgentPrefab: {fileID: 114267526792613370, guid: 5c24e5b4e60cebd48b4c125009b8214b,
     type: 2}
 --- !u!114 &114292489144404514
 MonoBehaviour:
@@ -977,7 +977,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224995152663432280}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1050,7 +1050,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224995152663432280}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -1069,8 +1069,8 @@ RectTransform:
   m_Children:
   - {fileID: 224269630971410826}
   - {fileID: 224680839326024606}
-  - {fileID: 224976451970808544}
   - {fileID: 224375173312680010}
+  - {fileID: 224976451970808544}
   m_Father: {fileID: 224263576832670186}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
