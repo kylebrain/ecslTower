@@ -5,14 +5,16 @@ using UnityEngine.UI;
 
 public class PlaceRouterButton : DisableButton {
     public Building RouterPrefab;
-
+    public string hotkeyString;
     public Text shopText;
     private int count = 0;
+    private string buildingName;
 
     protected override void DerivedStart()
     {
+        buildingName = RouterPrefab.GetType().ToString().Replace("Building", "");
         GetText.text = "$" + RouterPrefab.price;
-        shopText.text = "Buy Router [" + ControlPrefs.GetKey("buyRouter") + "]";
+        shopText.text = "Buy " + buildingName +  " [" + ControlPrefs.GetKey(hotkeyString) + "]";
         UpdateButton();
     }
 
@@ -35,7 +37,7 @@ public class PlaceRouterButton : DisableButton {
     }
     private void Update()
     {
-        if (ControlPrefs.GetKeyDown("buyRouter"))
+        if (ControlPrefs.GetKeyDown(hotkeyString))
         {
             PerformAction();
         }
@@ -49,7 +51,7 @@ public class PlaceRouterButton : DisableButton {
             //play a buying sound
             Building newBuilding = Instantiate(RouterPrefab);
             //newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
-            newBuilding.name = "Router " + count;
+            newBuilding.name = buildingName + " " + count;
             count++;
         }
     }

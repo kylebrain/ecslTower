@@ -438,6 +438,11 @@ Prefab:
       value: 
       objectReference: {fileID: 114117969463014020, guid: 5edf97536ca7ac9419f84e546500a053,
         type: 2}
+    - target: {fileID: 114099786519910464, guid: 7accd3ecb1d1b054bab9bb2af9aab0cd,
+        type: 2}
+      propertyPath: hotkeyString
+      value: buyRouter
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7accd3ecb1d1b054bab9bb2af9aab0cd, type: 2}
   m_IsPrefabParent: 0

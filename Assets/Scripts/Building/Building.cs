@@ -260,7 +260,12 @@ public abstract class Building : MonoBehaviour
         {
             return null;
         }
-        return raycastHitBuilding.transform.parent.GetComponent<Building>();
+        Building buildingHit = raycastHitBuilding.transform.root.GetComponent<Building>();
+        if(buildingHit == null)
+        {
+            buildingHit = raycastHitBuilding.transform.root.GetComponentInChildren<Building>();
+        }
+        return buildingHit;
 
         //lastUpdate resets raycastHit to be recalculated each frame
     }

@@ -27,6 +27,7 @@ public class ControlPrefs : MonoBehaviour
         #endregion
 
         {"buyRouter", KeyCode.B },
+        {"buyScanner", KeyCode.N },
         {"repairServer", KeyCode.R },
 
         //currently hardcoded into the text, fix when changing the key

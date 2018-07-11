@@ -29,7 +29,7 @@ TagManager:
   - Node
   - AgentModel
   - RecievingPole
-  - Router
+  - Building
   - Agent
   - Arrow
   - Minimap

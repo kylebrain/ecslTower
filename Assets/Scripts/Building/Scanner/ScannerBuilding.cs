@@ -5,49 +5,82 @@ using UnityEngine;
 public class ScannerBuilding : Building
 {
 
-    public RingDisplayAgent[] ringDisplayAgents;
-    bool[] filledDisplays;
-    public List<Agent> scannedAgents = new List<Agent>();
+    //public RingDisplayAgent[] ringDisplayAgents;
+    //bool[] filledDisplays;
+    public int scanAgentCount = 3;
+    public float agentRadius = 30f;
+    public float agentBuffer = 15f;
+
+    public RectTransform displayHolder;
+    public MovingRingDisplayAgent displayAgentPrefab;
+
+    private List<Agent> scannedAgents = new List<Agent>();
     AgentAttribute nullAttribute;
+
+    private List<MovingRingDisplayAgent> hudAgents = new List<MovingRingDisplayAgent>();
+    private float agentSize;
 
     protected override void derivedStart()
     {
-        filledDisplays = new bool[ringDisplayAgents.Length];
         nullAttribute.Color = AgentAttribute.PossibleColors.dontCare;
         nullAttribute.Size = AgentAttribute.PossibleSizes.dontCare;
         nullAttribute.Speed = AgentAttribute.PossibleSpeeds.dontCare;
+        agentSize = 2 * (agentRadius + agentRadius);
+        RectTransform parentRect = displayHolder.transform.parent.GetComponent<RectTransform>();
+        parentRect.sizeDelta = new Vector2(scanAgentCount * agentSize, parentRect.sizeDelta.y);
+
+        /*
+        filledDisplays = new bool[ringDisplayAgents.Length];
+        nullAttribute.Color = AgentAttribute.PossibleColors.dontCare;
+        nullAttribute.Size = AgentAttribute.PossibleSizes.large;
+        nullAttribute.Speed = AgentAttribute.PossibleSpeeds.normal;
         foreach (RingDisplayAgent ringDisplay in ringDisplayAgents)
         {
             ringDisplay.InitializeAttributes(nullAttribute);
         }
+        */
     }
 
     protected override void updateAction()
     {
         List<Agent> scanningAgents = GetAgentsInRadius();
-        foreach(Agent currentAgent in scanningAgents)
+        foreach (Agent currentAgent in scanningAgents)
         {
-            if(!scannedAgents.Contains(currentAgent))
+            if (!scannedAgents.Contains(currentAgent))
             {
                 scannedAgents.Add(currentAgent);
-                bool displayFilled = true;
-                for(int i = 0; i < filledDisplays.Length; i++)
+                MovingRingDisplayAgent currentDisplayAgent = Instantiate(displayAgentPrefab, displayHolder.transform);
+                currentDisplayAgent.InitializeAttributes(currentAgent.Attribute);
+                currentDisplayAgent.SetCenter(new Vector2(-agentSize * (scanAgentCount + 1 / 2f), 0));
+                currentDisplayAgent.SetDesiredPos(new Vector2(-agentSize * ((hudAgents.Count > scanAgentCount ? scanAgentCount : hudAgents.Count) + 1 / 2f), 0f));
+                foreach (MovingRingDisplayAgent movingAgent in hudAgents)
                 {
-                    if (!filledDisplays[i])
+                    if (movingAgent.Attribute.Speed == currentDisplayAgent.Attribute.Speed)
                     {
-                        ringDisplayAgents[i].InitializeAttributes(currentAgent.Attribute);
-                        filledDisplays[i] = true;
-                        displayFilled = false;
+                        currentDisplayAgent.startingRotation = movingAgent.GetRotation;
                         break;
                     }
                 }
-                if (displayFilled)
+                hudAgents.Add(currentDisplayAgent);
+
+                for (int i = 0; i < hudAgents.Count; i++)
                 {
-                    for(int i = ringDisplayAgents.Length - 1; i > 0; i--)
+                    MovingRingDisplayAgent delAgent = hudAgents[i];
+                    if (delAgent.center.x > 0 && delAgent.IsAtDestination)
                     {
-                        ringDisplayAgents[i].InitializeAttributes(ringDisplayAgents[i - 1].Attribute);
+                        //Debug.Log(delAgent.center.x + "\n" + delAgent.desiredPos);
+                        hudAgents.Remove(delAgent);
+                        Destroy(delAgent.gameObject);
+                        i--;
                     }
-                    ringDisplayAgents[0].InitializeAttributes(currentAgent.Attribute);
+                }
+
+                if (hudAgents.Count > scanAgentCount)
+                {
+                    foreach (MovingRingDisplayAgent movingAgent in hudAgents)
+                    {
+                        movingAgent.SetDesiredPos(movingAgent.desiredPos + Vector2.right * agentSize);
+                    }
                 }
 
             }
@@ -56,6 +89,13 @@ public class ScannerBuilding : Building
 
     protected override void HighlightBuilding(bool highlight)
     {
-        
+        Material mat = GetComponent<Renderer>().material;
+        if (highlight)
+        {
+            mat.SetColor("_Color", Color.grey);
+        } else
+        {
+            mat.SetColor("_Color", Color.white);
+        }
     }
 }

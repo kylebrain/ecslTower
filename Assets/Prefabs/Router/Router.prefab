@@ -2635,6 +2635,7 @@ MonoBehaviour:
   radius: 30
   rotationMod: 30
   sizeMod: 30
+  center: {x: 0, y: 0}
 --- !u!114 &114570615351326090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2835,6 +2836,7 @@ MonoBehaviour:
   radius: 2
   rotationMod: 30
   sizeMod: 1
+  center: {x: 0, y: 0}
 --- !u!114 &114787301303069234
 MonoBehaviour:
   m_ObjectHideFlags: 1
