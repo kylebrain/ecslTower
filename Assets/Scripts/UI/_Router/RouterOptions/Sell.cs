@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Sell: GameButton {
-    private RouterBuilding root;
+    private Building root;
     private int currentPrice; 
 
     private void Start()
     {
-        root = transform.root.GetComponent<RouterBuilding>();
+        root = transform.root.GetComponent<Building>();
         currentPrice = root.price;
         GetText.text = "[" + ControlPrefs.GetKey("sellRouter") + "] Return: $" + currentPrice;
         StartCoroutine(waitForPlace());

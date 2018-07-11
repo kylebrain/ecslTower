@@ -1456,7 +1456,6 @@ MonoBehaviour:
   radiusLineWidth: 0.1
   price: 50
   sellPrice: 25
-  startingHealth: 15
   Location:
     bottomLeft: {x: 0, y: 0}
     width: 1

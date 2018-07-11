@@ -17,7 +17,7 @@ public abstract class Building : MonoBehaviour
     public int price;
     public int sellPrice;
 
-    public float startingHealth = 0f;
+    //public float startingHealth = 0f;
     public GridArea Location;
 
     public GameObject UIOverlay;
@@ -58,6 +58,8 @@ public abstract class Building : MonoBehaviour
 
     //------------PUBLIC---------------
     #region PUBLIC
+
+    /*
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -66,6 +68,8 @@ public abstract class Building : MonoBehaviour
     {
         health += toAdd;
     }
+
+    */
 
     /// <summary>
     /// Checks to see if the requested location is available, and if so places the tower there
@@ -126,7 +130,7 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     public void removeFromMap()
     {
-        if(placed)
+        if (placed)
         {
             worldGrid.setOccupied(Location, Node.nodeStates.navigation);
         }
@@ -173,6 +177,28 @@ public abstract class Building : MonoBehaviour
             radiusLine.SetPosition(i, pos);
             theta += deltaTheta;
         }
+    }
+
+    protected List<Agent> GetAgentsInRadius()
+    {
+        GameObject[] agentArray = GameObject.FindGameObjectsWithTag("Agent");
+        List<Agent> agentList = new List<Agent>();
+        foreach (GameObject obj in agentArray)
+        {
+            if (Vector3.SqrMagnitude(transform.position - obj.transform.position) <= Mathf.Sqrt(Radius))
+            {
+                Agent currentAgent = obj.GetComponent<Agent>();
+                if (currentAgent == null)
+                {
+                    Debug.LogError("Cannot find Agent script of object tagged Agent!");
+                    continue;
+                }
+                agentList.Add(currentAgent);
+
+            }
+        }
+
+        return agentList;
     }
 
     /// <summary>
@@ -308,7 +334,8 @@ public abstract class Building : MonoBehaviour
         if (hitBuilding == null)
         {
             mouseWithinBuilding = Location.Contains(selectedNodePos);
-        } else
+        }
+        else
         {
             //if it hits a building, select the Building hovered over
             mouseWithinBuilding = hitBuilding == this;
@@ -334,7 +361,8 @@ public abstract class Building : MonoBehaviour
             if (mouseWithinBuilding)
             {
                 HighlightBuilding(true);
-            } else if(!selected)
+            }
+            else if (!selected)
             {
                 HighlightBuilding(false);
             }
@@ -356,8 +384,8 @@ public abstract class Building : MonoBehaviour
             {
                 setCenterPosition(desiredPos);
                 UpdateRotation(selectedNode);
-            } 
-            if(selectedNode.Occupied == Node.nodeStates.navigation)
+            }
+            if (selectedNode.Occupied == Node.nodeStates.navigation)
             {
                 HighlightBuilding(true); //ultimately change to change a placeable color/highlight
             }
@@ -440,8 +468,4 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     protected abstract void updateAction();
     #endregion
-
-    //protected abstract void derivedHide(GameObject canvas);
-
-    //protected abstract void derivedShow(GameObject canvas);
 }

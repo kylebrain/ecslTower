@@ -67,27 +67,15 @@ public class RouterBuilding : Building
 
     private float initLightSaberValue;
 
-    /// <summary>
-    /// Finds all Agents and checks if they are in range, adds to processQueue and slows to form clump around ROuter
-    /// </summary>
-    private void InRadius()
+    private void AddToProcess()
     {
-        GameObject[] agentArray = GameObject.FindGameObjectsWithTag("Agent");
-        foreach (GameObject obj in agentArray)
+        List<Agent> radiusAgents = GetAgentsInRadius();
+        foreach(Agent delAgent in radiusAgents)
         {
-            if (Vector3.SqrMagnitude(transform.position - obj.transform.position) <= Mathf.Sqrt(Radius))
+            if (!processedList.Contains(delAgent) && !processQueue.Contains(delAgent))
             {
-                Agent delAgent = obj.GetComponent<Agent>();
-                if (delAgent == null)
-                {
-                    Debug.LogError("Cannot find Agent script of object tagged Agent!");
-                    continue;
-                }
-                if (!processedList.Contains(delAgent) && !processQueue.Contains(delAgent))
-                {
-                    delAgent.Speed = processSpeed;
-                    processQueue.Enqueue(delAgent);
-                }
+                delAgent.Speed = processSpeed;
+                processQueue.Enqueue(delAgent);
             }
         }
     }
@@ -193,7 +181,7 @@ public class RouterBuilding : Building
 
         */
 
-        InRadius();
+        AddToProcess();
 
         //Store the value of RoutingRate at the beggining of this frame
         float prevRoutingRate = RoutingRate;
@@ -338,27 +326,4 @@ public class RouterBuilding : Building
             canvas.transform.Find(element).gameObject.SetActive(active);
         }
     }
-
-    /*
-
-    /// <summary>
-    /// Shows the RoutingOptions with the Sell option
-    /// </summary>
-    /// <param name="canvas">The canvas on which it is displayed</param>
-    protected override void derivedHide(GameObject canvas)
-    {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, false, canvas);
-    }
-
-    /// <summary>
-    /// Hides the RoutingOptions with the Sell option
-    /// </summary>
-    /// <param name="canvas">The canvas on which it is displayed</param>
-    protected override void derivedShow(GameObject canvas)
-    {
-        SetChildActive(new[] { "RingDisplay", "Tooltips" }, true, canvas);
-    }
-
-
-    */
 }
