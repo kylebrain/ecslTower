@@ -17,6 +17,7 @@ TagManager:
   - Arrow
   - Pole
   - AgentModel
+  - DisplayAgentCircle
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Node
   - AgentModel
   - RecievingPole
-  - Router
+  - Building
   - Agent
   - Arrow
   - Minimap

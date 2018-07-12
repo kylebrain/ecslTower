@@ -34,7 +34,23 @@ public class RingDisplayAgent : VisualAgent
     /// Set to its initial positon at start
     /// Must move center to move the ring
     /// </remarks>
-    private Vector2 center;
+    public Vector2 center;
+
+    public RectTransform rectTransform
+    {
+        get
+        {
+            return GetComponent<RectTransform>();
+        }
+    }
+
+    public float GetRotation
+    {
+        get
+        {
+            return rotation;
+        }
+    }
 
     /// <summary>
     /// Degrees ranges [0,360)
@@ -68,23 +84,41 @@ public class RingDisplayAgent : VisualAgent
     private void Start()
     {
         Rotation = startingRotation;
-        center = transform.localPosition;
+        center = rectTransform.anchoredPosition;
     }
 
     private void Update()
     {
+        if(transform.parent.tag == "DisplayAgentCircle")
+        {
+            RectTransform circleTransform = transform.parent.GetComponent<RectTransform>();
+            if(circleTransform != null)
+            {
+                circleTransform.sizeDelta = Vector2.one * radius * 2f;
+            }
+        }
         //if the agent is not moving, its position is reset to the startingRotation
         if (Speed <= 0)
         {
             Rotation = startingRotation;
         }
+        //rectTransform.anchoredPosition = center;
+
         //places the VisualAgent based on its polar coordinates
-        transform.localPosition = new Vector3(center.x + radius * Mathf.Cos(Rotation * Mathf.Deg2Rad), center.y + radius * Mathf.Sin(Rotation * Mathf.Deg2Rad));
+        UpdatePosition();
         //rotates the Agent to "follow" the path its moving in
         transform.localEulerAngles = new Vector3(0f, 0f, Rotation);
         //increases the rotation
         Rotation += Speed * rotationMod * Time.deltaTime;
+        UpdateAction();
     }
+
+    protected void UpdatePosition()
+    {
+        rectTransform.anchoredPosition = new Vector3(center.x + radius * Mathf.Cos(Rotation * Mathf.Deg2Rad), center.y + radius * Mathf.Sin(Rotation * Mathf.Deg2Rad));
+    }
+
+    protected virtual void UpdateAction() { }
 
     /// <summary>
     /// Changes the Graphic sizeDelta

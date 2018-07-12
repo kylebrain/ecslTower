@@ -4,15 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Sell: GameButton {
-    private RouterBuilding root;
+    private Building root;
     private int currentPrice; 
 
     private void Start()
     {
-        root = transform.root.GetComponent<RouterBuilding>();
+        root = transform.root.GetComponent<Building>();
         currentPrice = root.price;
-        transform.Find("Button").Find("Text").GetComponent<Text>().text = "Return: $" + currentPrice;
+        GetText.text = "[" + ControlPrefs.GetKey("sellRouter") + "] Return: $" + currentPrice;
         StartCoroutine(waitForPlace());
+    }
+
+    private void Update()
+    {
+        if(GetButton.interactable && ControlPrefs.GetKeyDown("sellRouter"))
+        {
+            PerformAction();
+        }
     }
 
     public override void PerformAction() {
@@ -25,6 +33,6 @@ public class Sell: GameButton {
     {
         yield return new WaitUntil(() => root.Placed);
         currentPrice = root.sellPrice;
-        transform.Find("Button").Find("Text").GetComponent<Text>().text = "Sell: $" + currentPrice;
+        GetText.text = "[" + ControlPrefs.GetKey("sellRouter") + "] Sell: $" + currentPrice;
     }
 }

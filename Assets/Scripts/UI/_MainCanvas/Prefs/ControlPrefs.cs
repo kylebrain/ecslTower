@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class ControlPrefs : MonoBehaviour {
+public class ControlPrefs : MonoBehaviour
+{
 
 
     private static Dictionary<string, KeyCode> inputDictionary = new Dictionary<string, KeyCode>()
@@ -13,28 +15,36 @@ public class ControlPrefs : MonoBehaviour {
         #endregion
 
         #region Camera
-        {"toggleCameraMode", KeyCode.R},
+        {"toggleCameraMode", KeyCode.C},
         {"adjustCameraAngle", KeyCode.F },
         #endregion
 
         #region RolodexSelection
         {"rolodexLeftKey", KeyCode.Q},
         {"rolodexRightKey", KeyCode.E},
-        {"rolodexResetKey", KeyCode.Tab},
-        {"rolodexNextKey", KeyCode.Space}
+        {"rolodexResetKey", KeyCode.Alpha4},
+        {"rolodexNextKey", KeyCode.Tab},
         #endregion
+
+        {"buyRouter", KeyCode.B },
+        {"buyScanner", KeyCode.N },
+        {"repairServer", KeyCode.R },
+
+        //currently hardcoded into the text, fix when changing the key
+        {"dismissTutorial", KeyCode.Space},
+        {"sellRouter", KeyCode.V }
     };
 
     private void Awake()
     {
-        foreach(string str in inputDictionary.Keys.ToList())
+        foreach (string str in inputDictionary.Keys.ToList())
         {
             if (!PlayerPrefs.HasKey(str))
             {
                 continue;
             }
             //gets the PlayerPref, defaults to itself if it doesn't find it, then parses to a KeyCode
-            inputDictionary[str] = (KeyCode) System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(str, inputDictionary[str].ToString()));
+            inputDictionary[str] = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(str, inputDictionary[str].ToString()));
         }
 
     }
@@ -65,9 +75,9 @@ public class ControlPrefs : MonoBehaviour {
         //is the first arguement a valid lookup key?
         KeyCode currentKeyCode;
 
-        if(inputDictionary.TryGetValue(keyLookupString, out currentKeyCode))
+        if (inputDictionary.TryGetValue(keyLookupString, out currentKeyCode))
         {
-            if(newKeyCodeKeyCode == currentKeyCode)
+            if (newKeyCodeKeyCode == currentKeyCode)
             {
                 Debug.LogWarning("Values are the same, are you call this function when key is changed?");
                 return 0;
@@ -79,7 +89,8 @@ public class ControlPrefs : MonoBehaviour {
             PlayerPrefs.SetString(keyLookupString, newKeyCodeKeyCode.ToString()); //add it to the preferences
 
 
-        } else
+        }
+        else
         {
             throw new System.ArgumentException("Passed lookup key string is not valid.", "keyLookupString");
         }
@@ -89,7 +100,7 @@ public class ControlPrefs : MonoBehaviour {
         List<KeyCode> duplicateValues = inputDictionary.Values.GroupBy(x => x)
                         .Where(group => group.Count() > 1)
                         .Select(group => group.Key).ToList();
-        if(duplicateValues.Count > 0)
+        if (duplicateValues.Count > 0)
         {
             Debug.LogWarning("Duplicate Key detected!");
             return duplicateValues.Count;
@@ -98,9 +109,28 @@ public class ControlPrefs : MonoBehaviour {
         return 0;
     }
 
-    public bool GetKeyDown(string str)
+    public static bool GetKeyDown(string str)
     {
         return Input.GetKeyDown(inputDictionary[str]);
+    }
+
+    public static KeyCode GetKey(string str)
+    {
+        return inputDictionary[str];
+    }
+
+    public static string GetKeyString(string str)
+    {
+        string _str = inputDictionary[str].ToString();
+        if (_str.Contains("Alpha"))
+        {
+            return Regex.Replace(_str, @"[^\d]", "");
+        }
+        else
+        {
+            return _str;
+        }
+
     }
 
     public KeyCode this[string str]

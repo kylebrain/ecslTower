@@ -74,17 +74,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         attributeSelections[0].Selected = true;
     }
 
-    private void Update()
-    {
-        for(int i = 0; i < 3; i++)
-        {
-            if(Input.GetKeyDown(KeyCode.Alpha4 + i))
-            {
-                attributeSelections[i].Disabled = !attributeSelections[i].Disabled;
-            }
-        }
-    }
-
     public void CheckEnable()
     {
         int disabledCount = 0;

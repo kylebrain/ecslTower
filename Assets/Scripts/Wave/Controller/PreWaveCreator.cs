@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// Helper functions for PreWave creation
 /// </summary>
-public class PreWaveCreator : MonoBehaviour {
+public class PreWaveCreator : MonoBehaviour
+{
 
     /// <summary>
     /// Mandatory prefab so a Wave can be created and used
@@ -62,16 +63,43 @@ public class PreWaveCreator : MonoBehaviour {
         }
         return prefab;
     }
+
+    protected int TraitsToMutate()
+    {
+        //chooses 0-2 traits to mutate
+        int[] mutateWeight = {1, 16, 8 };
+
+        int sum = 0;
+        foreach (int i in mutateWeight)
+        {
+            sum += i;
+        }
+        int traitSelector = Random.Range(0, sum);
+        int range = 0;
+        for (int i = 0; i < mutateWeight.Length; i++)
+        {
+            range += mutateWeight[i];
+            if (traitSelector < range)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     /// <summary>
     /// Takes previous infected Attributes and mutate randomly 0-2 traits (shift up or down once)
     /// </summary>
     /// <param name="previousAttrribute">The current Attribute</param>
     /// <returns>The randomly mutated Attribute</returns>
-    protected AgentAttribute MutateAttribute(AgentAttribute previousAttrribute)
+    protected AgentAttribute MutateAttribute(AgentAttribute previousAttrribute, out int mutatedTraits)
     {
         AgentAttribute ret = previousAttrribute;
         //chooses 0-2 traits to mutate
-        int traitMutateCount = Random.Range(0, 3);
+        int traitMutateCount = TraitsToMutate();
+
+        mutatedTraits = traitMutateCount;
+
         //repeats traitMutateCount number of times
         for (int i = 0; i < traitMutateCount; i++)
         {
@@ -168,7 +196,7 @@ public class PreWaveCreator : MonoBehaviour {
     /// <returns>A random AgentAttribute</returns>
     public AgentAttribute GenerateAttribute()
     {
-        AgentAttribute ret;
+        AgentAttribute ret = new AgentAttribute();
         int numberColors = System.Enum.GetNames(typeof(AgentAttribute.PossibleColors)).Length - 1;
         int numberSizes = System.Enum.GetNames(typeof(AgentAttribute.PossibleSizes)).Length - 1;
         int numberSpeed = System.Enum.GetNames(typeof(AgentAttribute.PossibleSpeeds)).Length - 1;

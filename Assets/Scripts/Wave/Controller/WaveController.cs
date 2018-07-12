@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 /// <summary>
 /// Basic, random AI that controls the Waves
@@ -41,7 +42,7 @@ public class WaveController : PreWaveCreator
     /// Script reference that displays information on the Wave
     /// </summary>
     public WaveInfo waveInfo;
-    
+
     /// <summary>
     /// Current Wave player is on
     /// </summary>
@@ -62,7 +63,7 @@ public class WaveController : PreWaveCreator
     /// </summary>
     public EndScreen endScreen;
 
-    
+
 
     #endregion
 
@@ -116,10 +117,78 @@ public class WaveController : PreWaveCreator
     private bool Playing;
     #endregion
 
+    /* test area */
+    string placeholder = "abc";
+    int setSame = 0;
+    int randomSet = 0;
+    int currentTrial = 0;
+    AgentAttribute[] agentArray = new AgentAttribute[2];
+
+    //change these values to run the tests
+    int totalTrials = 0;
+    int trialsPerFrame = 0;
+    
+
     void Start()
     {
+
         WaveCount = 0;
         StartCoroutine(FirstWave());
+
+        for (int i = 0; i < agentArray.Length; i++)
+        {
+            AgentAttribute attr;
+            do
+            {
+                attr = GenerateAttribute();
+            } while (agentArray.Contains(attr));
+            agentArray[i] = attr;
+        }
+        UniqueCheck(agentArray);
+    }
+
+    private void UniqueCheck(IEnumerable<AgentAttribute> attributeArray)
+    {
+        if (attributeArray.GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToArray().Length > 0)
+        {
+            Debug.LogWarning("Unique check failed!");
+        }
+    }
+
+    private void MutateTest()
+    {
+
+        Debug.Log("" + placeholder[(int)agentArray[0].Color] + placeholder[(int)agentArray[0].Size] + placeholder[(int)agentArray[0].Speed] + " | " + placeholder[(int)agentArray[1].Color] + placeholder[(int)agentArray[1].Size] + placeholder[(int)agentArray[1].Speed]);
+
+        List<AgentAttribute> mutatedArray = new List<AgentAttribute>();
+
+        for (int i = 0; i < agentArray.Length; i++)
+        {
+            AgentAttribute attr;
+            int mutateCount;
+            do
+            {
+                attr = MutateAttribute(agentArray[i], out mutateCount);
+            } while (mutatedArray.Contains(attr));
+            if (mutateCount == 0)
+            {
+                setSame++;
+            }
+            mutatedArray.Add(attr);
+        }
+
+        UniqueCheck(mutatedArray);
+
+        foreach (AgentAttribute attr in mutatedArray)
+        {
+            if (agentArray.Contains(attr))
+            {
+                randomSet++;
+            }
+        }
+
+        currentTrial++;
+        agentArray = mutatedArray.ToArray();
     }
 
     #region First Wave Initialization
@@ -252,6 +321,20 @@ public class WaveController : PreWaveCreator
     /// </summary>
     private void Update()
     {
+
+        if (currentTrial < totalTrials)
+        {
+            for (int i = 0; i < trialsPerFrame; i++)
+            {
+                MutateTest();
+            }
+        }
+        else if(currentTrial > 0)
+        {
+            Debug.Log("Random/set mutation percentage is: " + (float)randomSet / currentTrial * 100 + "\n" + randomSet + " out of " + currentTrial);
+            Debug.Log("Set same mutation percantage: " + (float)setSame / currentTrial * 100 + "\n" + setSame + " out of " + currentTrial);
+        }
+
         //Wave will delete itself when it is finished so currentWave will be set to null
         if (currentWave == null && Playing)
         {
@@ -275,7 +358,8 @@ public class WaveController : PreWaveCreator
         {
             AgentAttribute attr = GenerateAttribute();
             Debug.Log("Original attr: " + attr);
-            AgentAttribute attr2 = MutateAttribute(attr);
+            int _bogey;
+            AgentAttribute attr2 = MutateAttribute(attr, out _bogey);
             Debug.Log("Mutated attr: " + attr2);
         }
 
@@ -306,7 +390,7 @@ public class WaveController : PreWaveCreator
         }
 
         //AgentsRemaining will wait at one until SecondsLeft is zero before finishing
-            //Just so the display looks nice and accurate
+        //Just so the display looks nice and accurate
         if (SecondsLeft == 0f && AgentsRemaining == 1)
         {
             AgentsRemaining = 0;
@@ -329,31 +413,28 @@ public class WaveController : PreWaveCreator
             return null;
         }
 
-
+        while (infectedAttributes.Count < infectedCount)
+        {
+            AgentAttribute attribute;
+            do
+            {
+                attribute = GenerateAttribute();
+            } while (infectedAttributes.Contains(attribute));
+            infectedAttributes.Add(attribute);
+        }
 
         if (infectedAttributes.Count >= infectedCount)
         {
             for (int i = 0; i < infectedAttributes.Count; i++)
             {
-                infectedAttributes[i] = MutateAttribute(infectedAttributes[i]); //mutates every Attribute if they have already been choosen
-                //***there is a chance that the attribute might mutate to the same as the other
-            }
-        }
-        else
-        {
-            //generates infectedCount number of unique Attributes to infect
-            while (infectedAttributes.Count < infectedCount)
-            {
-                AgentAttribute attribute;
+                AgentAttribute attr = infectedAttributes[i];
                 do
                 {
-                    attribute = GenerateAttribute();
-                } while (infectedAttributes.Contains(attribute));
-                infectedAttributes.Add(attribute);
+                    int _bogey;
+                    infectedAttributes[i] = MutateAttribute(attr, out _bogey); //mutates every Attribute if they have already been choosen
+                } while (infectedAttributes.GroupBy(x => x).Where(x => x.Count() > 1).Select(x => x.Key).ToArray().Length > 0); //if there are two of the same attribute, keep mutating
             }
         }
-
-        //***if a new attribute is create it should mutate all that exist
 
         //generate a wave with proportional number of malicious agents
         if (infectedWeight < 1)
@@ -389,8 +470,12 @@ public class WaveController : PreWaveCreator
             //probility to become a decoy is decoyRate%
             Agent prefab = GetDecoy(benignAgent, decoyProbability);  //randomly converts some Agents to the other side based on the decoy value
             //BenignAgent Attributes and WavePath are completely random
-            ret.Add(new PreAgent(prefab, GetRandomWavePath(mapDisplay), GenerateAttribute()));
-            //***Might Generate a BenignAgent with the traits of a MaliciousAgent
+            AgentAttribute attr;
+            do
+            {
+                attr = GenerateAttribute();
+            } while (infectedAttributes.Contains(attr));
+            ret.Add(new PreAgent(prefab, GetRandomWavePath(mapDisplay), attr));
         }
 
         //generates indices to place MaliciousAgents at

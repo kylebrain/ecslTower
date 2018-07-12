@@ -17,8 +17,10 @@ public abstract class Building : MonoBehaviour
     public int price;
     public int sellPrice;
 
-    public float startingHealth = 0f;
+    //public float startingHealth = 0f;
     public GridArea Location;
+
+    public GameObject UIOverlay;
 
     public AudioSource placeAudio;
 
@@ -56,6 +58,8 @@ public abstract class Building : MonoBehaviour
 
     //------------PUBLIC---------------
     #region PUBLIC
+
+    /*
     /// <summary>
     /// Add to the tower's health
     /// </summary>
@@ -64,6 +68,8 @@ public abstract class Building : MonoBehaviour
     {
         health += toAdd;
     }
+
+    */
 
     /// <summary>
     /// Checks to see if the requested location is available, and if so places the tower there
@@ -124,7 +130,7 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     public void removeFromMap()
     {
-        if(placed)
+        if (placed)
         {
             worldGrid.setOccupied(Location, Node.nodeStates.navigation);
         }
@@ -171,6 +177,28 @@ public abstract class Building : MonoBehaviour
             radiusLine.SetPosition(i, pos);
             theta += deltaTheta;
         }
+    }
+
+    protected List<Agent> GetAgentsInRadius()
+    {
+        GameObject[] agentArray = GameObject.FindGameObjectsWithTag("Agent");
+        List<Agent> agentList = new List<Agent>();
+        foreach (GameObject obj in agentArray)
+        {
+            if (Vector3.SqrMagnitude(transform.position - obj.transform.position) <= Mathf.Sqrt(Radius))
+            {
+                Agent currentAgent = obj.GetComponent<Agent>();
+                if (currentAgent == null)
+                {
+                    Debug.LogError("Cannot find Agent script of object tagged Agent!");
+                    continue;
+                }
+                agentList.Add(currentAgent);
+
+            }
+        }
+
+        return agentList;
     }
 
     /// <summary>
@@ -232,7 +260,12 @@ public abstract class Building : MonoBehaviour
         {
             return null;
         }
-        return raycastHitBuilding.transform.parent.GetComponent<Building>();
+        Building buildingHit = raycastHitBuilding.transform.root.GetComponent<Building>();
+        if(buildingHit == null)
+        {
+            buildingHit = raycastHitBuilding.transform.root.GetComponentInChildren<Building>();
+        }
+        return buildingHit;
 
         //lastUpdate resets raycastHit to be recalculated each frame
     }
@@ -248,7 +281,12 @@ public abstract class Building : MonoBehaviour
     protected void handleMouse()
     {
 
-        GameObject canvas = transform.Find("Canvas").gameObject;
+        //GameObject canvas = transform.Find("Canvas").gameObject;
+
+        if (currentlyPlacing && placed)
+        {
+            HideUI(UIOverlay);
+        }
 
         #region Node unrequired
         if (!placed)
@@ -262,7 +300,7 @@ public abstract class Building : MonoBehaviour
         {
             if (placed)
             {
-                HideUI(canvas);
+                HideUI(UIOverlay);
             }
             else
             {
@@ -279,7 +317,7 @@ public abstract class Building : MonoBehaviour
         {
             if (placed && Input.GetMouseButtonDown(0))
             {
-                HideUI(canvas); //mouseWithinBuidling must be false because there is no valid Node
+                HideUI(UIOverlay); //mouseWithinBuidling must be false because there is no valid Node
             }
             if (!placed) //draws the router over no-grid area, might need to be fixed to act like Nodes, because currently the rounding is off
             {
@@ -301,7 +339,8 @@ public abstract class Building : MonoBehaviour
         if (hitBuilding == null)
         {
             mouseWithinBuilding = Location.Contains(selectedNodePos);
-        } else
+        }
+        else
         {
             //if it hits a building, select the Building hovered over
             mouseWithinBuilding = hitBuilding == this;
@@ -327,7 +366,8 @@ public abstract class Building : MonoBehaviour
             if (mouseWithinBuilding)
             {
                 HighlightBuilding(true);
-            } else if(!selected)
+            }
+            else if (!selected)
             {
                 HighlightBuilding(false);
             }
@@ -335,11 +375,11 @@ public abstract class Building : MonoBehaviour
             {
                 if (mouseWithinBuilding && !currentlyPlacing)
                 {
-                    ShowUI(canvas);
+                    ShowUI(UIOverlay);
                 }
                 else
                 {
-                    HideUI(canvas);
+                    HideUI(UIOverlay);
                 }
             }
         }
@@ -349,21 +389,62 @@ public abstract class Building : MonoBehaviour
             {
                 setCenterPosition(desiredPos);
                 UpdateRotation(selectedNode);
-            } 
-            if(selectedNode.Occupied == Node.nodeStates.navigation)
+            }
+            if (selectedNode.Occupied == Node.nodeStates.navigation)
             {
                 HighlightBuilding(true); //ultimately change to change a placeable color/highlight
             }
             if (Input.GetMouseButtonUp(0) && placeOnMap(Location))
             {
-                ShowUI(canvas);
+                ShowUI(UIOverlay);
             }
         }
 
         #endregion
     }
 
-    protected virtual void UpdateRotation(Node node) { }
+    protected virtual void UpdateRotation(Node node) {
+        if (node.Occupied != Node.nodeStates.navigation)
+        {
+            //router cannot be placed or rotated here
+            //set to default value?
+            //have to also handle what to do if no node is found
+            //possibly with a null check but calling from building would need to be changed
+            return;
+        }
+        List<Arrow> intersectingArrows = new List<Arrow>();
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Arrow"))
+        {
+            Arrow arrow = obj.GetComponent<Arrow>();
+            if (node.IsBetween(arrow))
+            {
+                intersectingArrows.Add(arrow);
+            }
+        }
+        SetRotation(intersectingArrows);
+    }
+
+    private void SetRotation(List<Arrow> arrowList)
+    {
+        if (arrowList.Count == 0)
+        {
+            return;
+        }
+        Vector3 pointVector;
+        if (arrowList.Count == 1)
+        {
+            pointVector = arrowList[0].GetCardinality();
+        }
+        else
+        {
+            pointVector = arrowList[1].GetCardinality() + arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
+        }
+        transform.localRotation = Quaternion.LookRotation(new Vector3(pointVector.x, 0f, pointVector.y));
+
+        DerivedSetRotation();
+    }
+
+    protected virtual void DerivedSetRotation() { }
 
     protected virtual void HighlightBuilding(bool highlight) { }
 
@@ -379,9 +460,8 @@ public abstract class Building : MonoBehaviour
         }
         HighlightBuilding(false);
         radiusLine.enabled = false;
-        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Hide();
         selected = false;
-        derivedHide(canvas);
+        canvas.SetActive(false);
 
     }
 
@@ -393,9 +473,8 @@ public abstract class Building : MonoBehaviour
     {
         HighlightBuilding(true);
         radiusLine.enabled = true;
-        canvas.transform.Find("Sell").gameObject.GetComponent<GameButton>().Show();
         selected = true;
-        derivedShow(canvas);
+        canvas.SetActive(true);
     }
 
     #endregion
@@ -435,8 +514,4 @@ public abstract class Building : MonoBehaviour
     /// </summary>
     protected abstract void updateAction();
     #endregion
-
-    protected abstract void derivedHide(GameObject canvas);
-
-    protected abstract void derivedShow(GameObject canvas);
 }

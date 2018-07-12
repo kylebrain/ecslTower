@@ -9,7 +9,7 @@ public class Tutorial : PreWaveCreator
     public TutorialTips tutorialTips;
     public Button repairButton;
     public Button shopButton;
-    public Button buyRouterButton;
+    //public Button buyRouterButton;
 
     private float bufferTime;
 
@@ -60,7 +60,8 @@ public class Tutorial : PreWaveCreator
         //Wave2
         do
         {
-            infectedAttributes[1] = MutateAttribute(infectedAttributes[0]);
+            int _bogey;
+            infectedAttributes[1] = MutateAttribute(infectedAttributes[0], out _bogey);
         } while (infectedAttributes[1].Color == infectedAttributes[0].Color && infectedAttributes[1].Size == infectedAttributes[0].Size);
         do
         {
@@ -144,7 +145,7 @@ public class Tutorial : PreWaveCreator
         tutorialTips.Show("Place a Router on the path to filter out the malicious packet.", false);
         shopButton.interactable = true;
         yield return new WaitUntil(() => FindObjectOfType<RouterBuilding>() != null);
-        buyRouterButton.interactable = false;
+        shopButton.interactable = false;
         RouterBuilding routerBuilding = FindObjectOfType<RouterBuilding>();
         routerBuilding.routingOptions.DisableSelection(2);
         yield return new WaitUntil(() => WaitForFunction(1));
@@ -236,7 +237,7 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(bufferTime);
 
         tutorialTips.Show("Place another Router to filter out the other packet.", false);
-        buyRouterButton.interactable = true;
+        shopButton.interactable = true;
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -275,6 +276,16 @@ public class Tutorial : PreWaveCreator
         //19
         SceneLoader.LoadScene("LevelSelect");
 
+    }
+
+    private void Update()
+    {
+        //not the most efficient but works for now
+        Sell[] sellButtons = GameObject.FindObjectsOfType<Sell>();
+        foreach(Sell s in sellButtons)
+        {
+            s.GetButton.interactable = false;
+        }
     }
 
     private bool WaitForFunction(int index)

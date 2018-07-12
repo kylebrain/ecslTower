@@ -170,21 +170,21 @@ public class RolodexSelection : MonoBehaviour
                 }
             }
 
-            if(controlPrefs.GetKeyDown("rolodexResetKey"))
+            if(ControlPrefs.GetKeyDown("rolodexResetKey"))
             {
                 ChangeValue(dropdown.options.Count - 1);
                 OnNext.Invoke();
             }
 
-            if (controlPrefs.GetKeyDown("rolodexLeftKey"))
+            if (ControlPrefs.GetKeyDown("rolodexLeftKey"))
             {
                 ChangeDropdown(false);
             }
-            else if (controlPrefs.GetKeyDown("rolodexRightKey"))
+            else if (ControlPrefs.GetKeyDown("rolodexRightKey"))
             {
                 ChangeDropdown(true);
             }
-            else if (controlPrefs.GetKeyDown("rolodexNextKey"))
+            else if (ControlPrefs.GetKeyDown("rolodexNextKey"))
             {
                 OnNext.Invoke();
             }

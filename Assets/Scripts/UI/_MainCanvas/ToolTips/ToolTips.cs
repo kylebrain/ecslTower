@@ -59,10 +59,12 @@ public class ToolTips : MonoBehaviour {
                         "[1-3 Number keys] to choose a trait directly\n" +
                         "[{3}] to reset selection to All\n\n" +
                         "[Shift + {4}] or click to close tooltips",
+
+                        //could change to GetKeyString but not neccessary until other buttons use alpha number keys
                         controlPrefs["rolodexLeftKey"],
                         controlPrefs["rolodexRightKey"],
                         controlPrefs["rolodexNextKey"],
-                        controlPrefs["rolodexResetKey"],
+                        ControlPrefs.GetKeyString("rolodexResetKey"),
                         controlPrefs["toggleTooltips"]);
     }
 
@@ -75,7 +77,7 @@ public class ToolTips : MonoBehaviour {
 
     private void Update()
     {
-        if (controlPrefs.GetKeyDown("toggleTooltips"))
+        if (ControlPrefs.GetKeyDown("toggleTooltips"))
         {
             if (toolPrompt.activeSelf)
             {
