@@ -9,6 +9,11 @@ public class StartGameButton : GameButton
 
     public WaveController waveController;
 
+    private void Awake()
+    {
+        waveController = GameObject.Find("WaveController").GetComponent<WaveController>();
+    }
+
     public override void PerformAction()
     {
         AudioManager.Play("StartGame");

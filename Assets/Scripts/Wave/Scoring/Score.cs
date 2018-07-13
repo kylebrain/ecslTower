@@ -108,9 +108,21 @@ public class Score : MonoBehaviour {
     /// </summary>
     private void Update()
     {
-        moneyText.text = "$" + Money + ".00";
-        healthText.text = Health.ToString();
-        healthSlider.value = Health;
+
+        //find or set these values explicitly
+        if(moneyText != null)
+        {
+            moneyText.text = "$" + Money + ".00";
+        }
+        if(healthText != null)
+        {
+            healthText.text = Health.ToString();
+        }
+        if(healthSlider != null)
+        {
+            healthSlider.value = Health;
+        }
+        
     }
 
     /// <summary>

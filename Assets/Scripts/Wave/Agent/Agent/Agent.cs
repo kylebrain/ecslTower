@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Moving unit that follows a WavePath and perform an action
@@ -86,6 +87,11 @@ public abstract class Agent : VisualAgent
     /// </summary>
     private void FixedUpdate()
     {
+        if(currentNode == null)
+        {
+            return;
+        }
+
         //Checks the distance to the current Node, once in range switches to the next
         if (!terminated && (currentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {

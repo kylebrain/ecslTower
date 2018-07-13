@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Base class for all classes that apply an AgentAttribute
 /// </summary>
-public abstract class VisualAgent : MonoBehaviour {
+public abstract class VisualAgent : NetworkBehaviour {
 
     /// <summary>
     /// The Attribute used by the Agent to determine traits
@@ -36,7 +37,10 @@ public abstract class VisualAgent : MonoBehaviour {
         SetColor(attributes.Color);
         SetSize(attributes.Size);
         SetSpeed(attributes.Speed);
+
     }
+
+    
 
     /// <summary>
     /// Creates the visual AgentModel of the Agent if it needs one

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Attacker : MonoBehaviour {
 
@@ -27,8 +28,16 @@ public class Attacker : MonoBehaviour {
             if(Input.GetKeyDown(KeyCode.Alpha5 + i))
             {
                 PreAgent preAgent = new PreAgent(maliciousAgentPrefab, mapDisplay.selectedPath, routingOptions[i].currentAttribute);
-                Wave wave = Instantiate(wavePrefab, transform);
-                wave.Spawn(preAgent);
+                Wave wave = Instantiate(wavePrefab);
+                List<PreAgent> agentList = new List<PreAgent> { preAgent };
+                wave.CreateWaveWithList(agentList);
+                //wave.GetComponent<NetworkIdentity>().AssignClientAuthority(transform.parent.GetComponent<NetworkIdentity>().connectionToClient);
+                if (transform.parent.GetComponent<Player>().isLocalPlayer)
+                {
+                    transform.parent.GetComponent<Player>().SpawnWithAuthority(wave.GetComponent<NetworkIdentity>());
+                    //transform.parent.GetComponent<Player>().Spawn(wave.GetComponent<NetworkIdentity>(), true);
+                }
+                //wave.Spawn(preAgent);
             }
         }
     }

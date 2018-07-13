@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4021182077235982}
   - component: {fileID: 114706130894599506}
+  - component: {fileID: 114808548717871032}
   m_Layer: 0
   m_Name: Wave
   m_TagString: Untagged
@@ -52,3 +53,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenAgent: 1
+--- !u!114 &114808548717871032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1909453644552984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 26
+    i1: 100
+    i2: 1
+    i3: 110
+    i4: 81
+    i5: 191
+    i6: 107
+    i7: 20
+    i8: 136
+    i9: 195
+    i10: 144
+    i11: 57
+    i12: 254
+    i13: 155
+    i14: 43
+    i15: 46
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1

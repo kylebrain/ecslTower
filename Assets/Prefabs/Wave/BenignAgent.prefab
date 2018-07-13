@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 114774861544634346}
   - component: {fileID: 82520761537446548}
   - component: {fileID: 82299915066447824}
+  - component: {fileID: 114957198599241126}
+  - component: {fileID: 114334515179633812}
   m_Layer: 12
   m_Name: BenignAgent
   m_TagString: Agent
@@ -204,6 +206,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114334515179633812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1624401310858866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114774861544634346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -220,3 +243,35 @@ MonoBehaviour:
   destinationScaling: 0.01
   minY: -100
   destinationParticles: {fileID: 0}
+--- !u!114 &114957198599241126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1624401310858866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 55
+    i1: 185
+    i2: 74
+    i3: 154
+    i4: 157
+    i5: 227
+    i6: 121
+    i7: 4
+    i8: 248
+    i9: 71
+    i10: 146
+    i11: 74
+    i12: 37
+    i13: 84
+    i14: 24
+    i15: 81
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

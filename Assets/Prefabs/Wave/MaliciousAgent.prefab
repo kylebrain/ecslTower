@@ -39,6 +39,8 @@ GameObject:
   - component: {fileID: 114606570728942684}
   - component: {fileID: 82965717955527826}
   - component: {fileID: 82965203670409640}
+  - component: {fileID: 114869487672304290}
+  - component: {fileID: 114591914836317372}
   m_Layer: 12
   m_Name: MaliciousAgent
   m_TagString: Agent
@@ -276,6 +278,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114591914836317372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1695256245401448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114606570728942684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -294,3 +317,35 @@ MonoBehaviour:
   destinationParticles: {fileID: 19800014, guid: a57a6829db3568c4d9bdc37e9e63c017,
     type: 2}
   markerOffset: 0.1
+--- !u!114 &114869487672304290
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1695256245401448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 69
+    i1: 115
+    i2: 144
+    i3: 9
+    i4: 252
+    i5: 223
+    i6: 77
+    i7: 84
+    i8: 90
+    i9: 33
+    i10: 80
+    i11: 247
+    i12: 107
+    i13: 45
+    i14: 123
+    i15: 64
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
