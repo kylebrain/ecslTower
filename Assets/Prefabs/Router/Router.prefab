@@ -1705,7 +1705,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   includeDontCare: 1
-  attributeSelections: []
+  attributeSelections:
+  - {fileID: 114469238783059954}
+  - {fileID: 114358318906566218}
+  - {fileID: 114453099236517394}
   radiusIncrease: 0.5
   worldSpaceDisplayAgent: {fileID: 114784577423136672}
 --- !u!114 &114226228874637468

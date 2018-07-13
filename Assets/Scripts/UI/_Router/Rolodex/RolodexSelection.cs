@@ -45,6 +45,10 @@ public class RolodexSelection : MonoBehaviour
         }
         set
         {
+            if (image == null)
+            {
+                image = GetComponent<Graphic>();
+            }
             disabled = value;
             if (value)
             {
@@ -79,6 +83,10 @@ public class RolodexSelection : MonoBehaviour
         }
         set
         {
+            if (image == null)
+            {
+                image = GetComponent<Graphic>();
+            }
             if (Disabled)
             {
                 selected = false;

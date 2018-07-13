@@ -2220,7 +2220,7 @@ MonoBehaviour:
   OnNext:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2029133828}
+      - m_Target: {fileID: 2080971421}
         m_MethodName: NextSelection
         m_Mode: 1
         m_Arguments:
@@ -2463,7 +2463,7 @@ MonoBehaviour:
   OnNext:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2029133828}
+      - m_Target: {fileID: 2080971421}
         m_MethodName: NextSelection
         m_Mode: 1
         m_Arguments:
@@ -2706,7 +2706,7 @@ MonoBehaviour:
   OnNext:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2029133828}
+      - m_Target: {fileID: 2080971421}
         m_MethodName: NextSelection
         m_Mode: 1
         m_Arguments:
@@ -11104,7 +11104,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   includeDontCare: 0
-  attributeSelections: []
+  attributeSelections:
+  - {fileID: 953107446}
+  - {fileID: 1694973215}
+  - {fileID: 1500684689}
+  - {fileID: 364712445}
+  - {fileID: 383222457}
+  - {fileID: 421484147}
 --- !u!1 &2092778015
 GameObject:
   m_ObjectHideFlags: 0

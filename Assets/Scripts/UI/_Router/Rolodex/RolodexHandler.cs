@@ -209,7 +209,7 @@ public class RolodexHandler : MonoBehaviour // , IPointerEnterHandler, IPointerE
                 selection.ChangeValue(0);
             }
             
-            attributeSelections.Add(selection);
+            //attributeSelections.Add(selection);
         }
         UpdateFilter();
         DefaultSelection();
