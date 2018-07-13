@@ -15,6 +15,7 @@ public abstract class VisualAgent : NetworkBehaviour {
     /// Used by the Router to determine whether an Agent passes a filter
     /// </remarks>
     /// <seealso cref="RouterBuilding"/>
+    [SyncVar]
     public AgentAttribute Attribute;
 
     /// <summary>

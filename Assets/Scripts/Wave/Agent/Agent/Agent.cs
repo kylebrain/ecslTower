@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -25,6 +24,14 @@ public abstract class Agent : VisualAgent
     /// </remarks>
     public float destinationScaling = 0.01f;
 
+    public WavePath WavePath
+    {
+        get
+        {
+            return new WavePath(wavePath);
+        }
+    }
+
     /// <summary>
     /// Get only of the Node the Agent is moving towards
     /// </summary>
@@ -34,7 +41,16 @@ public abstract class Agent : VisualAgent
         {
             return currentNode;
         }
+
+        set
+        {
+            currentCoordinate = value.Coordinate;
+            currentNode = value;
+        }
     }
+
+    [SyncVar(hook = "UpdateNode")]
+    public Vector2 currentCoordinate;
 
     /// <summary>
     /// Agent is Destroyed when it reaches below this Y value in World Space
@@ -61,7 +77,8 @@ public abstract class Agent : VisualAgent
     /// <summary>
     /// The Agent no longer tracks a Node
     /// </summary>
-    private bool terminated = false;
+    [SyncVar(hook = "OnTerminated")]
+    public bool terminated = false;
     /// <summary>
     /// The Agent is thrown
     /// </summary>
@@ -82,34 +99,69 @@ public abstract class Agent : VisualAgent
 
     #region Movement
 
+    public override void OnStartClient()
+    {
+        if (model == null)
+        {
+            InitializeAttributes(Attribute);
+        }
+        OnTerminated(terminated);
+        UpdateNode(currentCoordinate);
+    }
+
+    void UpdateNode(Vector2 pos)
+    {
+        //Debug.Log("Updated?");
+        if (CurrentNode != null && pos == CurrentNode.Coordinate)
+        {
+            return;
+        }
+
+        WorldGrid worldGrid = GameObject.FindGameObjectWithTag("WorldGrid").GetComponent<WorldGrid>();
+        CurrentNode = worldGrid.getAt(pos);
+        transform.LookAt(CurrentNode.transform.position);
+        //Debug.Log("Updated!");
+
+    }
+
+    void OnTerminated(bool terminated)
+    {
+        if(terminated)
+        {
+            Terminate();
+        }
+    }
+
     /// <summary>
     /// Updates the position and rotation of the object
     /// </summary>
     private void FixedUpdate()
     {
-        if(currentNode == null)
+        if (CurrentNode == null)
         {
             return;
         }
 
         //Checks the distance to the current Node, once in range switches to the next
-        if (!terminated && (currentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
+        if (!terminated && (CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
-            Node nextNode = wavePath.GetNextNode();
-            //if the next node exists, point at it and move towards it
-            if (nextNode != null)
+            if (wavePath != null)
             {
-                currentNode = nextNode;
-                transform.LookAt(currentNode.transform.position);
+                Node nextNode = wavePath.GetNextNode();
+                //if the next node exists, point at it and move towards it
+                if (nextNode != null)
+                {
+                    CurrentNode = nextNode;
+                    transform.LookAt(CurrentNode.transform.position);
+                }
+                //if it is null, the Agent has reached its destination and terminates
+                else
+                {
+                    Terminate();
+                }
             }
-            //if it is null, the Agent has reached its destination and terminates
-            else
-            {
-                Terminate();
-            }
-
         }
-        transform.position += Vector3.Normalize(currentNode.transform.position - transform.position) * Speed * Time.deltaTime;
+        transform.position += Vector3.Normalize(CurrentNode.transform.position - transform.position) * Speed * Time.deltaTime;
 
         //points the object in the way it is falling
         if (terminated && thrown)
@@ -144,8 +196,8 @@ public abstract class Agent : VisualAgent
     {
         wavePath = newWavePath;
         Node startNode = wavePath.GetNextNode();
-        currentNode = startNode; //Wave will remove the first Node before passing the WavePath will the first destination
-        transform.LookAt(currentNode.transform.position);
+        CurrentNode = startNode; //Wave will remove the first Node before passing the WavePath will the first destination
+        transform.LookAt(CurrentNode.transform.position);
     }
 
     #endregion
@@ -262,12 +314,12 @@ public abstract class Agent : VisualAgent
     protected override void CreateAgentModel()
     {
         //should only create one model
-        if(model != null)
+        if (model != null)
         {
             return;
         }
         model = Resources.Load<AgentModel>("AgentModel/" + LevelLookup.agentModel);
-        if(model == null)
+        if (model == null)
         {
             Debug.LogError("Could not find the requested AgentModel!");
             return;

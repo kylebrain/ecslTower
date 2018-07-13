@@ -57,8 +57,8 @@ public class Wave : NetworkBehaviour
     private void Update()
     {
 
-        //if (!WavePaused)
-        //{
+        if (!WavePaused)
+        {
 
         if (timeSpent >= timeBetweenAgent && waveQueue.Count > 0)
         {
@@ -67,7 +67,7 @@ public class Wave : NetworkBehaviour
         }
         timeSpent += Time.deltaTime; //increments until it reaches the timeBetweenAgent
 
-        //}
+        }
 
         //self-destructs if it has no Agents in game or queued
         if (transform.childCount == 0 && AgentsRemaining == 0)
@@ -125,28 +125,26 @@ public class Wave : NetworkBehaviour
             NetworkServer.Spawn(newAgent.gameObject);
 
             Node[] nodeArray = newPreAgent.agentPath.NodeList.ToArray();
-            Vector2Int[] coordArray = nodeArray.Select(x => x.Coordinate).ToArray();
-            int[] pathX = coordArray.Select(x => x.x).ToArray();
-            int[] pathY = coordArray.Select(x => x.y).ToArray();
+            Vector2[] coordArray = nodeArray.Select(x => new Vector2(x.Coordinate.x, x.Coordinate.y)).ToArray();
 
 
-            RpcUpdateAttributes(newAgent.gameObject, newAgent.Attribute, pathX, pathY, !hasAuthority);
+            RpcUpdateAttributes(newAgent.gameObject, newAgent.Attribute, coordArray, !hasAuthority);
         }
 
         //CmdSpawn(newAgent.GetComponent<NetworkIdentity>());
     }
 
     [ClientRpc]
-    void RpcUpdateAttributes(GameObject identity, AgentAttribute attribute, int[] pathX, int[] pathY, bool movementBegan)
+    void RpcUpdateAttributes(GameObject identity, AgentAttribute attribute, Vector2[] coordArray, bool movementBegan)
     {
         identity.GetComponent<Agent>().InitializeAttributes(attribute);
         if (!movementBegan)
         {
             WorldGrid worldGrid = GameObject.FindGameObjectWithTag("WorldGrid").GetComponent<WorldGrid>();
             List<Node> nodeArray = new List<Node>();
-            for(int i = 0; i < pathX.Length; i++)
+            for(int i = 0; i < coordArray.Length; i++)
             {
-                nodeArray.Add(worldGrid.getAt(pathX[i], pathY[i]));
+                nodeArray.Add(worldGrid.getAt((int)coordArray[i].x, (int)coordArray[i].y));
             }
             identity.GetComponent<Agent>().BeginMovement(new WavePath(new Queue<Node>(nodeArray)));
         }

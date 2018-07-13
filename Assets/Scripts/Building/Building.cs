@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(LineRenderer))]
-public abstract class Building : MonoBehaviour
+public abstract class Building : NetworkBehaviour
 {
 
     //----------VARIABLES--------------

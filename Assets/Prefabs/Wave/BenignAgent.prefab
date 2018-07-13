@@ -218,15 +218,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0
+  m_SendInterval: 0.125
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
-  m_MovementTheshold: 0.001
+  m_MovementTheshold: 0.5
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
+  m_InterpolateMovement: 0.05
 --- !u!114 &114774861544634346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,8 +241,10 @@ MonoBehaviour:
   Speed: 0
   scoreMod: 25
   destinationScaling: 0.01
+  currentCoordinate: {x: 0, y: 0}
   minY: -100
   destinationParticles: {fileID: 0}
+  terminated: 0
 --- !u!114 &114957198599241126
 MonoBehaviour:
   m_ObjectHideFlags: 1

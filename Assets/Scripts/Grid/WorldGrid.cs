@@ -38,6 +38,16 @@ public class WorldGrid : MonoBehaviour
         return m_grid[x, y];
     }
 
+    public Node getAt(Vector2 coords)
+    {
+        return getAt((int)coords.x, (int)coords.y);
+    }
+
+    public Node getAt(Vector2Int coords)
+    {
+        return getAt(coords.x, coords.y);
+    }
+
     /// <summary>
     /// Raycasts the mouse location to the WorldGrid.
     /// Returns the node it hit, or null if no collision occured.
