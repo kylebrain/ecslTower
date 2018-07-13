@@ -9,6 +9,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(RectMask2D))]
 public class RolodexSelection : MonoBehaviour
 {
+
     private Dropdown dropdown;
 
     private Color selectedColor;
@@ -27,6 +28,14 @@ public class RolodexSelection : MonoBehaviour
 
     private VisualPrefs visualPrefs;
     private Graphic image;
+
+    private bool IncludesAll
+    {
+        get
+        {
+            return dropdown.options[dropdown.options.Count - 1].text == "All";
+        }
+    }
 
     public bool Disabled
     {
@@ -160,7 +169,7 @@ public class RolodexSelection : MonoBehaviour
     {
         if (Selected)
         {
-            for (int i = 1; i < dropdown.options.Count; i++)
+            for (int i = 1; i < dropdown.options.Count + (IncludesAll ? 0 : 1); i++)
             {
                 if (Input.GetKeyDown(KeyCode.Alpha0 + i))
                 {
@@ -170,7 +179,7 @@ public class RolodexSelection : MonoBehaviour
                 }
             }
 
-            if(ControlPrefs.GetKeyDown("rolodexResetKey"))
+            if(ControlPrefs.GetKeyDown("rolodexResetKey") && IncludesAll)
             {
                 ChangeValue(dropdown.options.Count - 1);
                 OnNext.Invoke();
@@ -196,6 +205,7 @@ public class RolodexSelection : MonoBehaviour
         int origin = dropdown.value;
         if (origin == destination)
         {
+            textList[1].GetComponent<Text>().text = dropdown.options[origin].text;
             return;
         }
         int count = dropdown.options.Count;

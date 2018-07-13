@@ -67,6 +67,57 @@ public class MapDisplay : MonoBehaviour
 
     #endregion
 
+    int selectedPathIndex = -1;
+    public WavePath selectedPath = null;
+
+    private void Update()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            if (selectedPathIndex >= 0 && selectedPathIndex < wavePathList.Count)
+            {
+                HighLightWavePath(wavePathList[selectedPathIndex], false);
+            }
+            selectedPathIndex++;
+            selectedPathIndex %= wavePathList.Count;
+            selectedPath = wavePathList[selectedPathIndex];
+            HighLightWavePath(selectedPath, true);
+        }
+    }
+
+    public void HighLightWavePath(WavePath wavePath, bool highlight)
+    {
+        List<Arrow> highlightArrows = GetArrowsInPath(wavePath);
+        foreach (Arrow arrow in highlightArrows)
+        {
+            arrow.GetComponent<Renderer>().material.SetColor("_EmissionColor", highlight ? Color.white : Color.black);
+        }
+    }
+
+    private List<Arrow> GetArrowsInPath(WavePath wavePath)
+    {
+        List<Node> nodeList = wavePath.NodeList;
+        List<Arrow> arrowList = new List<Arrow>();
+
+        foreach (List<Arrow> containerList in arrowContainer.ArrowLists)
+        {
+            if (containerList != null && containerList.Count > 0 && ( /*containerList[containerList.Count - 1].Origin == wavePath.StartNode || */ containerList[0].Destination == wavePath.EndNode))
+            {
+                arrowList = containerList;
+                break;
+            }
+        }
+
+        //check to make sure this is the right list by checking each arrow with the Node
+
+        return arrowList;
+    }
+
     private void Awake()
     {
         if (!Application.isPlaying)
@@ -78,17 +129,20 @@ public class MapDisplay : MonoBehaviour
         currentMap = FindMap();
         if (currentMap == null)
         {
-            if (LevelLookup.levelName == "DEFAULT_VALUE") {
+            if (LevelLookup.levelName == "DEFAULT_VALUE")
+            {
                 Debug.LogError("Could not find map!");
                 return;
-            } else
+            }
+            else
             {
                 currentMap = Resources.Load<Map>("Maps/" + LevelLookup.levelName);
                 if (currentMap == null)
                 {
                     Debug.LogError("LevelLookup does not have a valid level name!");
                     return;
-                } else
+                }
+                else
                 {
                     currentMap = Instantiate(currentMap);
                 }
@@ -105,10 +159,10 @@ public class MapDisplay : MonoBehaviour
 
         mapLoaded = true;
 
-        DerivedStart();
+        DerivedAwake();
     }
 
-    protected virtual void DerivedStart() { }
+    protected virtual void DerivedAwake() { }
 
     protected void GetWorldGrid()
     {
@@ -208,7 +262,8 @@ public class MapDisplay : MonoBehaviour
             Destroy(toSet.gameObject); //if you want players to be able to highlight paths remove this
             //Debug.Log("Arrow could not be place or was a duplicate!");
             //return false?
-        } else
+        }
+        else
         {
             SetNodeOccupation(addedArrow, Node.nodeStates.navigation);
         }

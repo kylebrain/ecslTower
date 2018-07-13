@@ -97,8 +97,12 @@ public class WavePath {
     {
         List<Node> tempNodeList = new List<Node>();
         foreach (Coordinate c in path.list)
+        {
             tempNodeList.Add(grid.getAt(c.x, c.y));
+        }
         nodeQueue = new Queue<Node>(tempNodeList);
+        startNode = nodeQueue.Peek();
+        endNode = tempNodeList[tempNodeList.Count - 1];
     }
 
     /// <summary>

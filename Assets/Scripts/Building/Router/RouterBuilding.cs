@@ -24,7 +24,7 @@ public class RouterBuilding : Building
     /// </summary>
     public List<AgentAttribute> filter = new List<AgentAttribute>();
 
-    public RoutingOptions routingOptions;
+    public RolodexHandler routingOptions;
 
     /// <summary>
     /// The number of packets processed per second.

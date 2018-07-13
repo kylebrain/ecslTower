@@ -7,18 +7,15 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the Dropdown menus of the Router to select what to filter
 /// </summary>
-public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerExitHandler
+public class RolodexHandler : MonoBehaviour // , IPointerEnterHandler, IPointerExitHandler
 {
+    public bool includeDontCare = true;
 
-    public float radiusIncrease = 0.5f;
     /// <summary>
     /// The AgentAttribute that the Dropdowns currently represent
     /// </summary>
     public AgentAttribute currentAttribute;
-    /// <summary>
-    /// The parent Router that the Dropdown is attached to
-    /// </summary>
-    private RouterBuilding parentTower;
+    
     /// <summary>
     /// If the mouse if over the Dropdowns
     /// </summary>
@@ -29,8 +26,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
 
     private RingDisplay display;
 
-    public RingDisplayAgent worldSpaceDisplayAgent;
-
     public List<RolodexSelection> attributeSelections = new List<RolodexSelection>();
 
     /// <summary>
@@ -38,23 +33,14 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
     /// </summary>
     private void Start()
     {
-        parentTower = transform.root.gameObject.GetComponent<RouterBuilding>();
+        
         display = transform.parent.GetComponent<RingDisplay>();
-        if (parentTower == null)
-        {
-            Debug.LogError("Cannot find the Router Building object!");
-            return;
-        }
-        if (!parentTower.name.Contains("Router"))
-        {
-            Debug.LogError("Parent object is not named as expected!");
-            return;
-        }
         PopulateDropdowns();
-
-        worldSpaceDisplayAgent.radius = parentTower.Radius + radiusIncrease;
+        DerivedStart();
 
     }
+
+    protected virtual void DerivedStart() { }
 
     private void OnEnable()
     {
@@ -119,13 +105,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             }
         }
 
-        /*
-        if(currentSelection == null || currentIndex == -1)
-        {
-            Debug.LogWarning("No selections were selected.");
-            return;
-        }*/
-
         int index = currentIndex;
         RolodexSelection indexSelection = null;
         while((indexSelection = attributeSelections[(++index) % attributeSelections.Count]) != currentSelection)
@@ -137,8 +116,6 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
                 return;
             }
         }
-
-        //currentSelection.Selected = false;
     }
 
     IEnumerator SetSelectedAfterFrame(RolodexSelection selection)
@@ -159,6 +136,14 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         enumList.Add(colorList);
         enumList.Add(sizeList);
         enumList.Add(speedList);
+
+        if (!includeDontCare)
+        {
+            foreach (List<string> stringList in enumList)
+            {
+                stringList.RemoveAt(stringList.Count - 1);
+            }
+        }
 
         if (transform.childCount != enumList.Count + 1) //plus one for the background
         {
@@ -205,16 +190,25 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
             if(currentDropdown.options[currentDropdown.options.Count-1].text == "DontCare")
             {
                 currentDropdown.options[currentDropdown.options.Count - 1].text = "All";
-            } else
+            } /* else
             {
                 Debug.LogError("Last enum value should be 'DontCare.' Perhaps it was moved or renamed?");
             }
+
             if(enumList[i].Count - 1 != 3)
             {
                 Debug.LogWarning("Enum list length is not as expected!");
             }
+            */
             RolodexSelection selection = currentDropdown.GetComponent<RolodexSelection>();
-            selection.ChangeValue(enumList[i].Count - 1);
+            if(includeDontCare)
+            {
+                selection.ChangeValue(enumList[i].Count - 1);
+            } else
+            {
+                selection.ChangeValue(0);
+            }
+            
             attributeSelections.Add(selection);
         }
         UpdateFilter();
@@ -233,18 +227,13 @@ public class RoutingOptions : MonoBehaviour // , IPointerEnterHandler, IPointerE
         currentAttribute.Color = (AgentAttribute.PossibleColors)transform.Find("Color").GetComponent<Dropdown>().value;
         currentAttribute.Size = (AgentAttribute.PossibleSizes)transform.Find("Size").GetComponent<Dropdown>().value;
         currentAttribute.Speed = (AgentAttribute.PossibleSpeeds)transform.Find("Speed").GetComponent<Dropdown>().value;
-        if (parentTower.filter != null)
-        {
-            if (parentTower.filter.Count > 0)
-            {
-                parentTower.filter.Clear(); //change to support more than one filter later
-            }
-            parentTower.filter.Add(currentAttribute);
-        }
-
+        
         display.UpdateDisplay(currentAttribute);
-        worldSpaceDisplayAgent.InitializeAttributes(currentAttribute);
+        DerivedUpdateFilter(currentAttribute);
+        
     }
+
+    protected virtual void DerivedUpdateFilter(AgentAttribute agentAttribute) { }
 
     public void DisableSelection(int index, bool disable = true)
     {

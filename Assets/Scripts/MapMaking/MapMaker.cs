@@ -71,7 +71,7 @@ public class MapMaker : MapDisplay
 
     #region Start and Update
 
-    protected override void DerivedStart()
+    protected override void DerivedAwake()
     {
         mapToEdit = FindMap();
     }
@@ -85,7 +85,7 @@ public class MapMaker : MapDisplay
             //Still need to click Apply to apply changes
         if (Application.isEditor && !Application.isPlaying && !ranOnEdit)
         {
-            DerivedStart();
+            DerivedAwake();
             ranOnEdit = true;
             if (mapToEdit == null)
             {

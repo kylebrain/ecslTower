@@ -21,6 +21,19 @@ public class ArrowContainer
     /// </summary>
     public List<GridArea> endAreas = new List<GridArea>();
 
+    public List<List<Arrow>> ArrowLists
+    {
+        get
+        {
+            List<List<Arrow>> list = new List<List<Arrow>>();
+            foreach(Stack<Arrow> stack in arrowStacks)
+            {
+                list.Add(new List<Arrow>(stack));
+            }
+            return list;
+        }
+    }
+
     /// <summary>
     /// Will remove the desired Arrows from the arrowStack
     /// </summary>
