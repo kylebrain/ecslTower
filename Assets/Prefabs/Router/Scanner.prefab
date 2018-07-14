@@ -92,6 +92,8 @@ GameObject:
   - component: {fileID: 120121209329648830}
   - component: {fileID: 114221376701536280}
   - component: {fileID: 82953854007734212}
+  - component: {fileID: 114376309415743290}
+  - component: {fileID: 114487880102965774}
   m_Layer: 11
   m_Name: Scanner
   m_TagString: Untagged
@@ -480,6 +482,38 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114376309415743290
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1411928882210886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 170
+    i1: 87
+    i2: 23
+    i3: 10
+    i4: 190
+    i5: 113
+    i6: 169
+    i7: 212
+    i8: 10
+    i9: 39
+    i10: 175
+    i11: 115
+    i12: 231
+    i13: 96
+    i14: 58
+    i15: 201
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114446210702600694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -609,6 +643,27 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Scanner
+--- !u!114 &114487880102965774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1411928882210886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.125
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114603758998391108
 MonoBehaviour:
   m_ObjectHideFlags: 1

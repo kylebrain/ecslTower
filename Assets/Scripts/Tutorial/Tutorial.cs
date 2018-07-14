@@ -318,7 +318,7 @@ public class Tutorial : PreWaveCreator
             return false;
         }
 
-        AgentAttribute routerAttribute = router.filter[0];
+        AgentAttribute routerAttribute = router.filter;
         return routerAttribute.Color == attribute.Color && routerAttribute.Size == attribute.Size && routerAttribute.Speed == attribute.Speed;
 
     }

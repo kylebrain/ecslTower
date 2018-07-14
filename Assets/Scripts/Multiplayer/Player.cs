@@ -40,6 +40,23 @@ public class Player : NetworkBehaviour {
     }
 
     [Command]
+    public void CmdSpawnWithAuthority(GameObject identity, GameObject player)
+    {
+        //set to null when ran on the server
+        if(identity == null)
+        {
+            Debug.Log("Why is this null???");
+            return;
+        }
+        if(isServer)
+        {
+            NetworkServer.SpawnWithClientAuthority(identity.gameObject, player);
+        }
+            
+    }
+
+    /*
+    [Command]
     public void CmdSpawn(NetworkIdentity identity, bool withAuthority)
     {
         if(isLocalPlayer)
@@ -52,5 +69,5 @@ public class Player : NetworkBehaviour {
                 NetworkServer.Spawn(identity.gameObject);
             }
         }
-    }
+    }*/
 }

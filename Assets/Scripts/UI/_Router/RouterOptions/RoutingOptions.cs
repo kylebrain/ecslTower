@@ -21,13 +21,9 @@ public class RoutingOptions : RolodexHandler {
 
     protected override void DerivedUpdateFilter(AgentAttribute agentAttribute)
     {
-        if (parentTower != null && parentTower.filter != null)
+        if (parentTower != null)
         {
-            if (parentTower.filter.Count > 0)
-            {
-                parentTower.filter.Clear(); //change to support more than one filter later
-            }
-            parentTower.filter.Add(agentAttribute);
+            parentTower.filter = agentAttribute;
         }
         if (worldSpaceDisplayAgent != null)
         {

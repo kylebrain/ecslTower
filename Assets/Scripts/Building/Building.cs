@@ -492,11 +492,20 @@ public abstract class Building : NetworkBehaviour
 
         initLineRenderer();
         derivedStart();
+
+        if(!hasAuthority)
+        {
+            HideUI(UIOverlay);
+        }
     }
 
     private void Update()
     {
-        handleMouse();
+        if (hasAuthority)
+        {
+            handleMouse();
+        }
+
         updateAction();
 
     }

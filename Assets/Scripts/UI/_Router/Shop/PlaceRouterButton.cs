@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class PlaceRouterButton : DisableButton {
     public Building RouterPrefab;
@@ -53,6 +54,10 @@ public class PlaceRouterButton : DisableButton {
             //newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
             newBuilding.name = buildingName + " " + count;
             count++;
+            NetworkIdentity identity = newBuilding.GetComponent<NetworkIdentity>();
+
+            //spawned here, object is valid
+            transform.root.GetComponent<Player>().CmdSpawnWithAuthority(newBuilding.gameObject, transform.root.gameObject);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Basic unit of the CyberSecurity sim
@@ -22,9 +23,10 @@ public class RouterBuilding : Building
     /// the attributes, put "dontCare" as the attribute for the
     /// other fields of AgentAttribute.
     /// </summary>
-    public List<AgentAttribute> filter = new List<AgentAttribute>();
+    [SyncVar]
+    public AgentAttribute filter;
 
-    public RolodexHandler routingOptions;
+    public RoutingOptions routingOptions;
 
     /// <summary>
     /// The number of packets processed per second.
@@ -41,7 +43,7 @@ public class RouterBuilding : Building
     public float highlightLightSaberValue = 0.7f;
     public Color highlightEmissionColor;
 
-    public RingDisplayAgent childDisplayAgent;
+    public RingDisplayAgent worldSpaceDisplayAgent;
     public LaserScript laserScript;
     //public VolumetricLines.VolumetricLineBehavior laser;
     public List<GameObject> Poles = new List<GameObject>();
@@ -82,6 +84,11 @@ public class RouterBuilding : Building
 
     protected override void derivedStart()
     {
+        if(!hasAuthority)
+        {
+            Destroy(worldSpaceDisplayAgent.gameObject);
+        }
+
         AudioSource[] audios = GetComponents<AudioSource>();
         allowed = audios[0];
         denied = audios[1];
@@ -143,13 +150,13 @@ public class RouterBuilding : Building
 
     protected override void DerivedSetRotation()
     {
-        if (childDisplayAgent != null)
+        if (worldSpaceDisplayAgent != null)
         {
-            childDisplayAgent.startingRotation = transform.eulerAngles.y;
+            worldSpaceDisplayAgent.startingRotation = transform.eulerAngles.y;
         }
         else
         {
-            Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
+            //Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
         }
     }
 
@@ -239,15 +246,7 @@ public class RouterBuilding : Building
             }
             if (delAgent != null)
             {
-                bool filtered = false;
-                foreach (AgentAttribute attribute in filter)
-                {
-                    if (delAgent.Attribute.Equals(attribute))
-                    {
-                        filtered = true;
-                        break;
-                    }
-                }
+                bool filtered = delAgent.Attribute.Equals(filter);
                 if(filtered == blacklist)
                 {
                     DenyAgent(delAgent);

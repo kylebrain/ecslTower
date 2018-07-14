@@ -515,6 +515,8 @@ GameObject:
   - component: {fileID: 82265340763535650}
   - component: {fileID: 82590276772058998}
   - component: {fileID: 82383302935839484}
+  - component: {fileID: 114454268518074534}
+  - component: {fileID: 114440644014207968}
   m_Layer: 0
   m_Name: Router
   m_TagString: Untagged
@@ -1488,7 +1490,7 @@ MonoBehaviour:
   throwRange: 120
   highlightLightSaberValue: 0.7
   highlightEmissionColor: {r: 0, g: 0, b: 0, a: 0}
-  childDisplayAgent: {fileID: 114784577423136672}
+  worldSpaceDisplayAgent: {fileID: 114784577423136672}
   laserScript: {fileID: 114466324950127212}
   Poles:
   - {fileID: 1311329606056492}
@@ -2351,6 +2353,27 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114440644014207968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1620515129299064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.11111111
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114453099236517394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2477,6 +2500,38 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
+--- !u!114 &114454268518074534
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1620515129299064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 94
+    i1: 223
+    i2: 151
+    i3: 83
+    i4: 108
+    i5: 167
+    i6: 172
+    i7: 148
+    i8: 25
+    i9: 248
+    i10: 78
+    i11: 84
+    i12: 101
+    i13: 0
+    i14: 160
+    i15: 83
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114466324950127212
 MonoBehaviour:
   m_ObjectHideFlags: 1
