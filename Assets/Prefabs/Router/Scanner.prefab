@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 224995152663432280}
   - component: {fileID: 225529781913119588}
   - component: {fileID: 95816506720319414}
+  - component: {fileID: 114912028747594854}
   m_Layer: 0
   m_Name: ScannerHUD
   m_TagString: Untagged
@@ -425,6 +426,7 @@ MonoBehaviour:
   Radius: 1
   radiusColor: {r: 0.58823526, g: 0, b: 0.4949289, a: 1}
   radiusLineWidth: 0.1
+  Placed: 0
   price: 25
   sellPrice: 10
   Location:
@@ -826,6 +828,18 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
+--- !u!114 &114912028747594854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1338063621024786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa5f992268382743abf206e45c21550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfOver: 0
 --- !u!120 &120121209329648830
 LineRenderer:
   m_ObjectHideFlags: 1

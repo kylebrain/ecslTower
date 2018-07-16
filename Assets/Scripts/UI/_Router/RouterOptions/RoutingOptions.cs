@@ -21,6 +21,17 @@ public class RoutingOptions : RolodexHandler {
 
     protected override void DerivedUpdateFilter(AgentAttribute agentAttribute)
     {
+        if (parentTower == null)
+        {
+            parentTower = transform.root.gameObject.GetComponent<RouterBuilding>();
+        }
+        parentTower.CmdUpdateFilter(agentAttribute);
+
+        //not sure if this will update on other system?
+            //possibly is only updating on the local client and server and nothing else
+        parentTower.filter = agentAttribute;
+
+        /*
         if (parentTower != null)
         {
             parentTower.filter = agentAttribute;
@@ -28,7 +39,7 @@ public class RoutingOptions : RolodexHandler {
         if (worldSpaceDisplayAgent != null)
         {
             worldSpaceDisplayAgent.InitializeAttributes(agentAttribute);
-        }
+        } */
     }
 
 }

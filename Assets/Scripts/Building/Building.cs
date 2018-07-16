@@ -15,6 +15,10 @@ public abstract class Building : NetworkBehaviour
 
     public static bool currentlyPlacing = false;
 
+    //[HideInInspector]
+    [SyncVar]
+    public bool Placed = false;
+
     public int price;
     public int sellPrice;
 
@@ -26,13 +30,9 @@ public abstract class Building : NetworkBehaviour
     public AudioSource placeAudio;
 
     protected float health = 0f;
-    protected bool placed = false;
+
+    
     protected bool selected = false;
-    public bool Placed
-    {
-        get { return placed; }
-        set { placed = value; }
-    }
 
     /// <summary>
     /// Used to keep track of when the tower's position changes so the radius circle can be redrawn
@@ -119,23 +119,38 @@ public abstract class Building : NetworkBehaviour
         updatePosition();
         worldGrid.setOccupied(loc, Node.nodeStates.building);
         currentlyPlacing = false;
-        placed = true;
+        Placed = true;
+        CmdPlace(true);
 
         placeAudio.Play();
         Tutorial.CallFunction(1);
         return true;
     }
 
+    [Command]
+    void CmdPlace(bool _placed)
+    {
+        Placed = _placed;
+    }
+
+    public void RemoveFromMap()
+    {
+        if (Placed)
+        {
+            //probably need a clientRpc to update placement on all systems
+            worldGrid.setOccupied(Location, Node.nodeStates.navigation);
+        }
+        //Placed = false;
+        CmdRemoveFromMap();
+    }
+
     /// <summary>
     /// Removes the tower from the map
     /// </summary>
-    public void removeFromMap()
+    [Command]
+    void CmdRemoveFromMap()
     {
-        if (placed)
-        {
-            worldGrid.setOccupied(Location, Node.nodeStates.navigation);
-        }
-        placed = false;
+        
         Destroy(transform.root.gameObject);
     }
 
@@ -284,13 +299,13 @@ public abstract class Building : NetworkBehaviour
 
         //GameObject canvas = transform.Find("Canvas").gameObject;
 
-        if (currentlyPlacing && placed)
+        if (currentlyPlacing && Placed)
         {
             HideUI(UIOverlay);
         }
 
         #region Node unrequired
-        if (!placed)
+        if (!Placed)
         {
             currentlyPlacing = true;
             radiusLine.enabled = true;
@@ -299,7 +314,7 @@ public abstract class Building : NetworkBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            if (placed)
+            if (Placed)
             {
                 HideUI(UIOverlay);
             }
@@ -316,11 +331,11 @@ public abstract class Building : NetworkBehaviour
         Node selectedNode = worldGrid.getRaycastNode();
         if (selectedNode == null)
         {
-            if (placed && Input.GetMouseButtonDown(0))
+            if (Placed && Input.GetMouseButtonDown(0))
             {
                 HideUI(UIOverlay); //mouseWithinBuidling must be false because there is no valid Node
             }
-            if (!placed) //draws the router over no-grid area, might need to be fixed to act like Nodes, because currently the rounding is off
+            if (!Placed) //draws the router over no-grid area, might need to be fixed to act like Nodes, because currently the rounding is off
             {
                 Vector3 screenMousPos = Input.mousePosition;
                 screenMousPos.z = Camera.main.transform.position.y;
@@ -362,7 +377,7 @@ public abstract class Building : NetworkBehaviour
 
         #region Node required
 
-        if (placed)
+        if (Placed)
         {
             if (mouseWithinBuilding)
             {
@@ -492,11 +507,7 @@ public abstract class Building : NetworkBehaviour
 
         initLineRenderer();
         derivedStart();
-
-        if(!hasAuthority)
-        {
-            HideUI(UIOverlay);
-        }
+        HideUI(UIOverlay);
     }
 
     private void Update()

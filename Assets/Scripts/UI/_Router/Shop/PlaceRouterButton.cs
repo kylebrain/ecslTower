@@ -49,15 +49,17 @@ public class PlaceRouterButton : DisableButton {
         if (Score.Money >= RouterPrefab.price &&  !Building.currentlyPlacing && GetButton.interactable)
         {
             Score.Money -= RouterPrefab.price;
-            //play a buying sound
-            Building newBuilding = Instantiate(RouterPrefab);
+            // play a buying sound
+            //Building newBuilding = Instantiate(RouterPrefab);
             //newBuilding.transform.position = new Vector3(int.MinValue, RouterPrefab.transform.position.y, int.MinValue);
-            newBuilding.name = buildingName + " " + count;
-            count++;
-            NetworkIdentity identity = newBuilding.GetComponent<NetworkIdentity>();
+            //newBuilding.name = buildingName + " " + count;
+            //count++;
+            //NetworkIdentity identity = newBuilding.GetComponent<NetworkIdentity>();
 
             //spawned here, object is valid
-            transform.root.GetComponent<Player>().CmdSpawnWithAuthority(newBuilding.gameObject, transform.root.gameObject);
+            transform.root.GetComponent<Defender>().CmdSpawnBuilding(RouterPrefab.name);
+            //newBuilding.name = buildingName + " " + count;
+            count++;
         }
     }
 }

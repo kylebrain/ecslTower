@@ -51,6 +51,16 @@ public class Node : MonoBehaviour {
         setUnhovered();
     }
 
+    public static Node getAt(int x, int y)
+    {
+        return GameObject.FindGameObjectWithTag("WorldGrid").GetComponent<WorldGrid>().getAt(x, y);
+    }
+
+    public static Node getAt(Vector2 coords)
+    {
+        return GameObject.FindGameObjectWithTag("WorldGrid").GetComponent<WorldGrid>().getAt(coords);
+    }
+
     public bool IsBetween(Arrow arrow)
     {
         return IsBetween(arrow.Origin, arrow.Destination);

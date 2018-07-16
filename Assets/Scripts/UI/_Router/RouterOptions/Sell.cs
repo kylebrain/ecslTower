@@ -25,7 +25,7 @@ public class Sell: GameButton {
 
     public override void PerformAction() {
         Score.Money += currentPrice;
-        root.removeFromMap();
+        root.RemoveFromMap();
         Building.currentlyPlacing = false; //if you are able to select a building when placing one this is wrong, currently works
     }
 

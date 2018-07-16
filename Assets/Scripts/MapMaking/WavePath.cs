@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -114,6 +115,18 @@ public class WavePath {
     /// <param name="other"></param>
     public WavePath(WavePath other) : this(other.nodeQueue) {}
 
+    public WavePath(Vector2[] other)
+    {
+        List<Node> tempNodeList = new List<Node>();
+        foreach (Vector2 vector in other)
+        {
+            tempNodeList.Add(Node.getAt(vector));
+        }
+        nodeQueue = new Queue<Node>(tempNodeList);
+        startNode = nodeQueue.Peek();
+        endNode = tempNodeList[tempNodeList.Count - 1];
+    }
+
     #endregion
 
 
@@ -134,6 +147,11 @@ public class WavePath {
         
     }
 
+    public Vector2[] ToVector2Array()
+    {
+        return nodeQueue.ToArray().Select(x => new Vector2(x.Coordinate.x, x.Coordinate.y)).ToArray();
+    }
+
     #region Object Overrides
 
     /// <summary>
@@ -142,6 +160,10 @@ public class WavePath {
     /// <returns>String to be outputted</returns>
     public override string ToString()
     {
+        if(nodeQueue == null)
+        {
+            return "null";
+        }
         List<Node> NodeList = new List<Node>(nodeQueue);
         string ret = base.ToString() + " [";
         foreach(Node n in NodeList)

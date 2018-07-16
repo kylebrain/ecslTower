@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+public class Player : NetworkBehaviour
+{
 
     public GameObject attacker;
     public GameObject defender;
@@ -11,48 +12,57 @@ public class Player : NetworkBehaviour {
     public override void OnStartLocalPlayer()
     {
 
-        if(NetworkServer.connections.Count != 1) //change to 1 after testing
+        if (NetworkServer.connections.Count != 1) //change to 1 after testing
         {
             defender.SetActive(true);
+            GetComponent<Attacker>().enabled = false;
             Destroy(attacker);
-        } else
+            name = "DefenderPlayer " + NetworkServer.connections.Count;
+        }
+        else
         {
             attacker.SetActive(true);
+            GetComponent<Defender>().enabled = false;
             Destroy(defender);
+            name = "AttackerPlayer " + NetworkServer.connections.Count;
         }
     }
 
     private void Start()
     {
-        if(!isLocalPlayer)
+        if (!isLocalPlayer)
         {
             Destroy(attacker);
             Destroy(defender);
+            GetComponent<Attacker>().enabled = false;
+            GetComponent<Defender>().enabled = false;
         }
+
+        name = "Player " + NetworkServer.connections.Count;
     }
 
     public void SpawnWithAuthority(NetworkIdentity identity)
     {
         if (isLocalPlayer)
         {
-            NetworkServer.SpawnWithClientAuthority(identity.gameObject, gameObject);
+            NetworkServer.SpawnWithClientAuthority(identity.gameObject, FindObjectOfType<NetworkManager>().client.connection);
         }
     }
 
     [Command]
-    public void CmdSpawnWithAuthority(GameObject identity, GameObject player)
+    public void CmdSpawnWithAuthority(NetworkIdentity identity)
     {
         //set to null when ran on the server
-        if(identity == null)
+        //something about invalid pass types to commands
+
+        if (identity == null)
         {
-            Debug.Log("Why is this null???");
+            Debug.LogError("Object to spawn is null!");
             return;
         }
-        if(isServer)
-        {
-            NetworkServer.SpawnWithClientAuthority(identity.gameObject, player);
-        }
-            
+
+        GameObject obj = Instantiate(identity.gameObject);
+        NetworkServer.SpawnWithClientAuthority(obj, connectionToClient);
     }
 
     /*

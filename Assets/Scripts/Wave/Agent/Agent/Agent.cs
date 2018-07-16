@@ -86,7 +86,7 @@ public abstract class Agent : VisualAgent
     /// Thrown Agents should have a Rigidbody component
     /// Thrown Agents face the direction they are falling
     /// </remarks>
-    private bool thrown = false;
+    //private bool thrown = false;
     /// <summary>
     /// The visual representation of the Agent
     /// </summary>
@@ -143,7 +143,7 @@ public abstract class Agent : VisualAgent
         }
 
         //Checks the distance to the current Node, once in range switches to the next
-        if (!terminated && (CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
+        if (!terminated && GetComponent<Rigidbody>() == null && (CurrentNode.transform.position - transform.position).sqrMagnitude < destinationScaling)
         {
             if (wavePath != null)
             {
@@ -157,14 +157,15 @@ public abstract class Agent : VisualAgent
                 //if it is null, the Agent has reached its destination and terminates
                 else
                 {
-                    Terminate();
+                    terminated = true;
+                    //Terminate();
                 }
             }
         }
         transform.position += Vector3.Normalize(CurrentNode.transform.position - transform.position) * Speed * Time.deltaTime;
 
         //points the object in the way it is falling
-        if (terminated && thrown)
+        if (GetComponent<Rigidbody>() != null)
         {
             Rigidbody rigid;
             if ((rigid = GetComponent<Rigidbody>()) != null)
@@ -292,14 +293,15 @@ public abstract class Agent : VisualAgent
     /// <param name="velocity">The direction and magnitude to be thrown</param>
     public void Throw(Vector3 velocity)
     {
-        terminated = true;
-        thrown = true; //if the Agent has a rigidbody, thrown must be true
+        //terminated = true;
+        //thrown = true; //if the Agent has a rigidbody, thrown must be true
         transform.parent = null; //to make sure the game doesn't wait for the Agent to reach the barrier
         model.GetComponent<Collider>().enabled = false;
         Rigidbody rigid;
         if ((rigid = GetComponent<Rigidbody>()) == null)
         {
             rigid = gameObject.AddComponent<Rigidbody>();
+            GetComponent<NetworkTransform>().sendInterval = 0f;
         }
         rigid.velocity = velocity;
     }

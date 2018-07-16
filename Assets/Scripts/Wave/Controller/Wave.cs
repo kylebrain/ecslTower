@@ -101,6 +101,10 @@ public class Wave : NetworkBehaviour
     /// <param name="newPreAgent">The PreAgent to be spawned</param>
     public void Spawn(PreAgent newPreAgent)
     {
+
+        CmdSpawn(newPreAgent.agentPrefab.gameObject, newPreAgent.agentAttribute, newPreAgent.agentPath.ToVector2Array());
+
+        /*
             //creates a new path based on the one in the PreAgent
         WavePath newPath = new WavePath(newPreAgent.agentPath);
         //gets the first Node which the Agent where the Agent will be spawned
@@ -118,21 +122,18 @@ public class Wave : NetworkBehaviour
             newAgent.BeginMovement(newPath);
         }
 
-        //NetworkServer.Spawn(newAgent.gameObject);
-
         if (hasAuthority)
         {
             NetworkServer.Spawn(newAgent.gameObject);
-
-            Node[] nodeArray = newPreAgent.agentPath.NodeList.ToArray();
-            Vector2[] coordArray = nodeArray.Select(x => new Vector2(x.Coordinate.x, x.Coordinate.y)).ToArray();
-
-
-            RpcUpdateAttributes(newAgent.gameObject, newAgent.Attribute, coordArray, !hasAuthority);
+            //CmdSpawn(newAgent.GetComponent<NetworkIdentity>());
+            RpcUpdateAttributes(newAgent.gameObject, newAgent.Attribute, newPreAgent.agentPath.ToVector2Array(), !hasAuthority);
         }
 
         //CmdSpawn(newAgent.GetComponent<NetworkIdentity>());
+
+        */
     }
+
 
     [ClientRpc]
     void RpcUpdateAttributes(GameObject identity, AgentAttribute attribute, Vector2[] coordArray, bool movementBegan)
@@ -140,13 +141,7 @@ public class Wave : NetworkBehaviour
         identity.GetComponent<Agent>().InitializeAttributes(attribute);
         if (!movementBegan)
         {
-            WorldGrid worldGrid = GameObject.FindGameObjectWithTag("WorldGrid").GetComponent<WorldGrid>();
-            List<Node> nodeArray = new List<Node>();
-            for(int i = 0; i < coordArray.Length; i++)
-            {
-                nodeArray.Add(worldGrid.getAt((int)coordArray[i].x, (int)coordArray[i].y));
-            }
-            identity.GetComponent<Agent>().BeginMovement(new WavePath(new Queue<Node>(nodeArray)));
+            identity.GetComponent<Agent>().BeginMovement(new WavePath(coordArray));
         }
         
 
@@ -154,16 +149,24 @@ public class Wave : NetworkBehaviour
     }
 
     [Command]
-    public void CmdSpawn(NetworkIdentity agentIdentity)
+    public void CmdSpawn(GameObject agent, AgentAttribute attribute, Vector2[] coordArray)
     {
-        if (agentIdentity != null)
+        WavePath newPath = new WavePath(coordArray);
+        Node startNode = newPath.GetNextNode();
+        //Spawns the Agent at the first Node
+        Agent newAgent = Instantiate(agent.GetComponent<Agent>(), startNode.transform.position, Quaternion.identity) as Agent;
+
+        //initializes the Agent through its methods
+        newAgent.transform.parent = transform;
+
+        newAgent.InitializeAttributes(attribute);
+
+        if (newPath != null && newPath.NodeList.Count > 0)
         {
-            NetworkServer.Spawn(agentIdentity.gameObject);
+            newAgent.BeginMovement(newPath);
         }
-        else
-        {
-            Debug.LogError("Agent passed is null!");
-        }
+
+        NetworkServer.Spawn(newAgent.gameObject);
     }
 
     public void PauseSpawning(bool pause = true)

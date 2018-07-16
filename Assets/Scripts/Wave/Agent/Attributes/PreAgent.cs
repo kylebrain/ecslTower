@@ -31,4 +31,9 @@ public struct PreAgent {
         agentPath = path;
         agentAttribute = attribute;
     }
+
+    public override string ToString()
+    {
+        return "Agent - " + (agentPrefab == null ? "null" : agentPrefab.ToString()) + "; Path - " + (agentPath == null ? "null" : agentPath.ToString()) + "; Attribute - " + agentAttribute;
+    }
 }

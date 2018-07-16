@@ -23,8 +23,8 @@ public class RouterBuilding : Building
     /// the attributes, put "dontCare" as the attribute for the
     /// other fields of AgentAttribute.
     /// </summary>
-    [SyncVar]
-    public AgentAttribute filter;
+    [SyncVar(hook = "UpdateFilter")]
+    public AgentAttribute filter = AgentAttribute.NullAttribute;
 
     public RoutingOptions routingOptions;
 
@@ -72,7 +72,7 @@ public class RouterBuilding : Building
     private void AddToProcess()
     {
         List<Agent> radiusAgents = GetAgentsInRadius();
-        foreach(Agent delAgent in radiusAgents)
+        foreach (Agent delAgent in radiusAgents)
         {
             if (!processedList.Contains(delAgent) && !processQueue.Contains(delAgent))
             {
@@ -82,12 +82,15 @@ public class RouterBuilding : Building
         }
     }
 
+    public override void OnStartAuthority()
+    {
+        worldSpaceDisplayAgent.gameObject.SetActive(true);
+        //display agent shifts position when placed
+    }
+
     protected override void derivedStart()
     {
-        if(!hasAuthority)
-        {
-            Destroy(worldSpaceDisplayAgent.gameObject);
-        }
+
 
         AudioSource[] audios = GetComponents<AudioSource>();
         allowed = audios[0];
@@ -96,57 +99,9 @@ public class RouterBuilding : Building
         timeBetweenFilters = 1f / RoutingRate;
 
         initLightSaberValue = laserScript.laser.LightSaberFactor;
+
+        worldSpaceDisplayAgent.gameObject.SetActive(hasAuthority);
     }
-
-    /*
-
-    protected override void UpdateRotation(Node node)
-    {
-        if(node.Occupied != Node.nodeStates.navigation)
-        {
-            //router cannot be placed or rotated here
-            //set to default value?
-                //have to also handle what to do if no node is found
-                //possibly with a null check but calling from building would need to be changed
-            return;
-        }
-        List<Arrow> intersectingArrows = new List<Arrow>();
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Arrow"))
-        {
-            Arrow arrow = obj.GetComponent<Arrow>();
-            if (node.IsBetween(arrow))
-            {
-                intersectingArrows.Add(arrow);
-            }
-        }
-        SetRotation(intersectingArrows);
-    }
-
-    private void SetRotation(List<Arrow> arrowList)
-    {
-        if(arrowList.Count == 0)
-        {
-            return;
-        }
-        Vector3 pointVector;
-        if(arrowList.Count == 1)
-        {
-            pointVector = arrowList[0].GetCardinality();
-        } else
-        {
-            pointVector = arrowList[1].GetCardinality() + arrowList[0].GetCardinality(); //not the most eligant solution but it works to make sure that any thing over 1 is diagonal
-        }
-        transform.localRotation = Quaternion.LookRotation(new Vector3(pointVector.x, 0f, pointVector.y));
-        if(childDisplayAgent != null)
-        {
-            childDisplayAgent.startingRotation = transform.eulerAngles.y;
-        } else
-        {
-            Debug.LogError("Cannot find the childDisplayAgent please attach the Ring Agent in the inspector!");
-        }
-    }
-
-    */
 
     protected override void DerivedSetRotation()
     {
@@ -164,13 +119,14 @@ public class RouterBuilding : Building
     {
         if (highlight)
         {
-            foreach(GameObject obj in Poles)
+            foreach (GameObject obj in Poles)
             {
                 Renderer rend = obj.GetComponent<Renderer>();
                 rend.material.SetColor("_EmissionColor", highlightEmissionColor); //replace with variable when done
             }
             laserScript.laser.LightSaberFactor = highlightLightSaberValue;
-        } else
+        }
+        else
         {
             foreach (GameObject obj in Poles)
             {
@@ -183,26 +139,15 @@ public class RouterBuilding : Building
 
     protected override void updateAction()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("Router (" + (int)transform.position.x + "," + (int)transform.position.z + ") - " + filter);
+        }
+
         if (!Placed)
         {
             return;
         }
-
-        /*
-        //test area
-        if (selected)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha0 + i))
-                {
-                    RoutingRate = i;
-                    break;
-                }
-            }
-        }
-
-        */
 
         AddToProcess();
 
@@ -246,11 +191,12 @@ public class RouterBuilding : Building
             }
             if (delAgent != null)
             {
-                bool filtered = delAgent.Attribute.Equals(filter);
-                if(filtered == blacklist)
+                bool filtered = delAgent.Attribute.Contains(filter);
+                if (filtered == blacklist)
                 {
                     DenyAgent(delAgent);
-                } else
+                }
+                else
                 {
                     AllowAgent(delAgent);
                 }
@@ -277,6 +223,20 @@ public class RouterBuilding : Building
         }
     }
 
+    [Command]
+    public void CmdUpdateFilter(AgentAttribute _filter)
+    {
+        filter = _filter;
+        //UpdateFilter(_filter);
+    }
+
+    void UpdateFilter(AgentAttribute _filter)
+    {
+        Debug.Log("Updated filter! " + _filter);
+        filter = _filter;
+        worldSpaceDisplayAgent.InitializeAttributes(_filter);
+    }
+
     private void AllowAgent(Agent agent)
     {
         allowed.pitch = AudioManager.VaryPitch(0.1f);
@@ -293,7 +253,7 @@ public class RouterBuilding : Building
         laserScript.laser.LineColor = Color.red;
     }
 
-    
+
 
     IEnumerator ChangeLaserColor(Agent processedAgent)
     {
@@ -309,10 +269,11 @@ public class RouterBuilding : Building
         float yComponent = throwMagnitude * Mathf.Sin(theta);
         float horizontalMagnitude = throwMagnitude * Mathf.Cos(theta);
         Vector3 directionalVector;
-        if(agent.CurrentNode.transform.position == transform.position)
+        if (agent.CurrentNode.transform.position == transform.position)
         {
             directionalVector = Vector3.Normalize(transform.position - agent.transform.position);
-        } else
+        }
+        else
         {
             directionalVector = Vector3.Normalize(agent.CurrentNode.transform.position - transform.position);
         }
@@ -327,16 +288,16 @@ public class RouterBuilding : Building
 
     private void OnDestroy()
     {
-        foreach(Agent delAgent in processQueue)
+        foreach (Agent delAgent in processQueue)
         {
             delAgent.SetSpeed(delAgent.Attribute.Speed);
             processedList.Add(delAgent);
         }
     }
 
-    protected void SetChildActive(string [] elements, bool active, GameObject canvas)
+    protected void SetChildActive(string[] elements, bool active, GameObject canvas)
     {
-        foreach(string element in elements)
+        foreach (string element in elements)
         {
             canvas.transform.Find(element).gameObject.SetActive(active);
         }

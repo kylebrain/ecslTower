@@ -43,6 +43,7 @@ public struct AgentAttribute {
     /// </summary>
     /// <param name="obj">The other AgentAttribute object</param>
     /// <returns>True if the Attributes are the same or either is a dontCare</returns>
+
     public override bool Equals(object obj)
     {
         if (obj.GetType() != this.GetType())
@@ -50,9 +51,27 @@ public struct AgentAttribute {
             return false;
         }
         AgentAttribute other = (AgentAttribute)obj;
+
+        return other.Color == Color && other.Size == Size && other.Speed == Speed;
+    }
+
+    public bool Contains(AgentAttribute other)
+    {
         return (other.Color == Color || other.Color == PossibleColors.dontCare || Color == PossibleColors.dontCare)
             && (other.Size == Size || other.Size == PossibleSizes.dontCare || Size == PossibleSizes.dontCare)
             && (other.Speed == Speed || other.Speed == PossibleSpeeds.dontCare || Speed == PossibleSpeeds.dontCare);
+    }
+
+    public static AgentAttribute NullAttribute
+    {
+        get
+        {
+            AgentAttribute ret;
+            ret.Color = PossibleColors.dontCare;
+            ret.Size = PossibleSizes.dontCare;
+            ret.Speed = PossibleSpeeds.dontCare;
+            return ret;
+        }
     }
 
     public override int GetHashCode()
