@@ -263,7 +263,7 @@ public class WaveController : PreWaveCreator
     }
 
     [Command]
-    void CmdSpawnWave(SerializablePreAgent[] preAgents)
+    protected void CmdSpawnWave(SerializablePreAgent[] preAgents)
     {
         List<PreAgent> preAgentList = preAgents.Select(x => x.ToPreAgent()).ToList();
         currentWave = Instantiate(wavePrefab, transform);

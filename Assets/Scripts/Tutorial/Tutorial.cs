@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using UnityEngine.Networking;
 
 public class Tutorial : PreWaveCreator
 {
@@ -85,22 +87,38 @@ public class Tutorial : PreWaveCreator
 
         secondInitialCount = secondPreWave.Count;
 
-        currentWave = Instantiate(wavePrefab, transform);
-        currentWave.CreateWaveWithList(firstPreWave);
+        CmdSpawnWave(firstPreWave.Select(x => new SerializablePreAgent(x)).ToArray());
 
         StartCoroutine(RunTutorial());
 
 
     }
 
+    [Command]
+    protected void CmdSpawnWave(SerializablePreAgent[] preAgents)
+    {
+        List<PreAgent> preAgentList = preAgents.Select(x => x.ToPreAgent()).ToList();
+        currentWave = Instantiate(wavePrefab, transform);
+        currentWave.CreateWaveWithList(preAgentList);
+
+        NetworkServer.SpawnWithClientAuthority(currentWave.gameObject, connectionToClient);
+
+    }
+
     IEnumerator RunTutorial()
     {
-        shopButton.interactable = false;
+        //shopButton.interactable = false;
         foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
         {
             mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.empty);
         }
         currentWave.PauseSpawning();
+
+        yield return new WaitForSeconds(bufferTime);
+
+        //find a way to set this false at the beginning
+            //currently must wait a little bit before setting it
+        shopButton.interactable = false;
 
         //0
         tutorialTips.Show("Welcome to NETWORKING!");
@@ -213,8 +231,7 @@ public class Tutorial : PreWaveCreator
         AudioManager.Play("PowerUp");
         yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
         tutorialTips.Show("But the malicious packets will be mutated to a new combination.");
-        currentWave = Instantiate(wavePrefab, transform);
-        currentWave.CreateWaveWithList(secondPreWave);
+        CmdSpawnWave(secondPreWave.Select(x => new SerializablePreAgent(x)).ToArray());
         yield return new WaitUntil(() => currentWave.AgentsRemaining == secondInitialCount - 1);
         currentWave.PauseSpawning();
         yield return new WaitUntil(() => WaitForFunction(0));

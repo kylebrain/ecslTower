@@ -35,6 +35,7 @@ public class PreWaveCreator : NetworkBehaviour
         }
     }
 
+
     /// <summary>
     /// Flips the Malicious/Benign agent weighted randomly
     /// </summary>

@@ -22,6 +22,7 @@ public class Player : NetworkBehaviour
         {
             attacker.SetActive(true);
             GetComponent<Defender>().enabled = false;
+            GetComponent<WaveController>().enabled = false;
             Destroy(defender);
             name = "AttackerPlayer " + NetworkServer.connections.Count;
         }
@@ -35,9 +36,10 @@ public class Player : NetworkBehaviour
             Destroy(defender);
             GetComponent<Attacker>().enabled = false;
             GetComponent<Defender>().enabled = false;
-        }
+            GetComponent<WaveController>().enabled = false;
 
-        name = "Player " + NetworkServer.connections.Count;
+            name = "Player " + NetworkServer.connections.Count;
+        }
     }
 
     public void SpawnWithAuthority(NetworkIdentity identity)
