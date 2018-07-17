@@ -18,13 +18,14 @@ public class Player : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         PauseGame += PauseListener;
+        int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
 
-        if (NetworkServer.connections.Count == 1) //change to 1 after testing
+        if (playerCount == 1) //change to 1 after testing
         {
             defender.SetActive(true);
             GetComponent<Attacker>().enabled = false;
             Destroy(attacker);
-            name = "DefenderPlayer " + NetworkServer.connections.Count;
+            name = "DefenderPlayer " + playerCount;
         }
         else
         {
@@ -32,7 +33,7 @@ public class Player : NetworkBehaviour
             GetComponent<Defender>().enabled = false;
             GetComponent<WaveController>().enabled = false;
             Destroy(defender);
-            name = "AttackerPlayer " + NetworkServer.connections.Count;
+            name = "AttackerPlayer " + playerCount;
         }
     }
 

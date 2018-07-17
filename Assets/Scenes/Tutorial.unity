@@ -371,9 +371,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 560466361}
-  - component: {fileID: 560466360}
   - component: {fileID: 560466359}
   - component: {fileID: 560466362}
+  - component: {fileID: 560466360}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -411,7 +411,7 @@ MonoBehaviour:
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
   m_NetworkAddress: localhost
-  m_DontDestroyOnLoad: 0
+  m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01

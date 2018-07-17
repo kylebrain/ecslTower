@@ -30,7 +30,11 @@ public class PauseMenu : MonoBehaviour
     {
         GamePaused = true;
         Time.timeScale = 0f;
-        GetComponent<Player>().CmdPause(true);
+        Player player;
+        if ((player = GetComponent<Player>()) != null)
+        {
+            player.CmdPause(true);
+        }
         pauseMenu.SetActive(true);
     }
 
@@ -38,7 +42,11 @@ public class PauseMenu : MonoBehaviour
     {
         GamePaused = false;
         Time.timeScale = 1f;
-        GetComponent<Player>().CmdPause(false);
+        Player player;
+        if ((player = GetComponent<Player>()) != null)
+        {
+            player.CmdPause(false);
+        }
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
     }
