@@ -42,7 +42,7 @@ public class LevelPanel : MonoBehaviour
 
         LevelLookup.levelNumber = levelNumber;
         LevelLookup.levelName = LevelName;
-        SceneLoader.LoadScene("Gameplay");
+        SceneLoader.LoadScene("Multiplayer");
     }
 
     public void Init(int levelNum, string levelName, bool unlocked)

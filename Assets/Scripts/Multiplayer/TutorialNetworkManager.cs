@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TutorialNetworkManager : NetworkManager {
+public class TutorialNetworkManager : MonoBehaviour {
 
-    public GameObject player;
-
-    public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+    private void Start()
     {
-        base.OnServerAddPlayer(conn, playerControllerId);
+        GetComponent<NetworkManager>().StartHost();
     }
 }

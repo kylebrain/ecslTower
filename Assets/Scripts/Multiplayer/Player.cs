@@ -7,9 +7,17 @@ public class Player : NetworkBehaviour
 {
     public GameObject attacker;
     public GameObject defender;
+    public GameObject pauseButton;
+
+    private delegate void GamePaused(bool paused);
+    private static event GamePaused PauseGame;
+
+    //[SyncVar(hook = "UpdateTime")]
+    //public bool Paused = false;
 
     public override void OnStartLocalPlayer()
     {
+        PauseGame += PauseListener;
 
         if (NetworkServer.connections.Count == 1) //change to 1 after testing
         {
@@ -34,6 +42,7 @@ public class Player : NetworkBehaviour
         {
             Destroy(attacker);
             Destroy(defender);
+            Destroy(pauseButton);
             GetComponent<Attacker>().enabled = false;
             GetComponent<Defender>().enabled = false;
             GetComponent<WaveController>().enabled = false;
@@ -47,6 +56,33 @@ public class Player : NetworkBehaviour
         if (isLocalPlayer)
         {
             NetworkServer.SpawnWithClientAuthority(identity.gameObject, FindObjectOfType<NetworkManager>().client.connection);
+        }
+    }
+
+    void PauseListener(bool paused)
+    {
+        if (PauseMenu.GamePaused == paused || !isLocalPlayer)
+        {
+            return;
+        }
+
+        PauseMenu pauseMenu = GetComponent<PauseMenu>();
+        if (paused)
+        {
+            pauseMenu.Pause();
+        }
+        else
+        {
+            pauseMenu.Resume();
+        }
+    }
+
+    [ClientRpc]
+    void RpcUpdateTime(bool paused)
+    {
+        if(PauseGame != null)
+        {
+            PauseGame(paused);
         }
     }
 
@@ -64,6 +100,18 @@ public class Player : NetworkBehaviour
 
         GameObject obj = Instantiate(identity.gameObject);
         NetworkServer.SpawnWithClientAuthority(obj, connectionToClient);
+    }
+
+    [Command]
+    public void CmdPause(bool paused)
+    {
+        /*
+        if (PauseGame != null)
+        {
+            PauseGame(paused);
+        }*/
+        RpcUpdateTime(paused);
+
     }
 
     /*

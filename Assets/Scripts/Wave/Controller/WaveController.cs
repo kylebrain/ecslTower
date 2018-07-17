@@ -266,6 +266,9 @@ public class WaveController : PreWaveCreator
     protected void CmdSpawnWave(SerializablePreAgent[] preAgents)
     {
         List<PreAgent> preAgentList = preAgents.Select(x => x.ToPreAgent()).ToList();
+
+        // public gameObject can't be set in the command
+            // need some way to set it locally as well
         currentWave = Instantiate(wavePrefab, transform);
         currentWave.CreateWaveWithList(preAgentList);
 

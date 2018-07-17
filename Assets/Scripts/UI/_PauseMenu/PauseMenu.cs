@@ -30,6 +30,7 @@ public class PauseMenu : MonoBehaviour
     {
         GamePaused = true;
         Time.timeScale = 0f;
+        GetComponent<Player>().CmdPause(true);
         pauseMenu.SetActive(true);
     }
 
@@ -37,7 +38,9 @@ public class PauseMenu : MonoBehaviour
     {
         GamePaused = false;
         Time.timeScale = 1f;
+        GetComponent<Player>().CmdPause(false);
         pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
     }
 
     public void LoadLevelSelect()
