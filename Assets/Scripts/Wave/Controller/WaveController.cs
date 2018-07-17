@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Basic, random AI that controls the Waves
@@ -127,7 +128,7 @@ public class WaveController : PreWaveCreator
     //change these values to run the tests
     int totalTrials = 0;
     int trialsPerFrame = 0;
-    
+
 
     void Start()
     {
@@ -229,14 +230,17 @@ public class WaveController : PreWaveCreator
     /// </summary>
     public void PlayWave()
     {
-        currentWave = Instantiate(wavePrefab, transform);
+        //currentWave = Instantiate(wavePrefab, transform);
         if (currentPreWave == null)
         {
             Debug.LogError("PreWave not found");
             return;
         }
-        //currentPreWave will be created in FirstWave or at the end of this function
-        currentWave.CreateWaveWithList(currentPreWave); //allow initialization then push the wave
+        // currentPreWave will be created in FirstWave or at the end of this function
+        //currentWave.CreateWaveWithList(currentPreWave); // allow initialization then push the wave
+
+        CmdSpawnWave(currentPreWave.ToArray().Select(x => new SerializablePreAgent(x)).ToArray());
+
         currentWaveAttributes = new List<AgentAttribute>(infectedAttributes);
 
         InitStaticsForWave();
@@ -255,6 +259,17 @@ public class WaveController : PreWaveCreator
         {
             Debug.LogError("Building Wave failed!");
         }
+
+    }
+
+    [Command]
+    void CmdSpawnWave(SerializablePreAgent[] preAgents)
+    {
+        List<PreAgent> preAgentList = preAgents.Select(x => x.ToPreAgent()).ToList();
+        currentWave = Instantiate(wavePrefab, transform);
+        currentWave.CreateWaveWithList(preAgentList);
+
+        NetworkServer.SpawnWithClientAuthority(currentWave.gameObject, connectionToClient);
 
     }
 
@@ -329,7 +344,7 @@ public class WaveController : PreWaveCreator
                 MutateTest();
             }
         }
-        else if(currentTrial > 0)
+        else if (currentTrial > 0)
         {
             Debug.Log("Random/set mutation percentage is: " + (float)randomSet / currentTrial * 100 + "\n" + randomSet + " out of " + currentTrial);
             Debug.Log("Set same mutation percantage: " + (float)setSame / currentTrial * 100 + "\n" + setSame + " out of " + currentTrial);

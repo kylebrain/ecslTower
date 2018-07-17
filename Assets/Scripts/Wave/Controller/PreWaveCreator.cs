@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Helper functions for PreWave creation
 /// </summary>
-public class PreWaveCreator : MonoBehaviour
+public class PreWaveCreator : NetworkBehaviour
 {
 
     /// <summary>

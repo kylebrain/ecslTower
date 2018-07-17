@@ -5,14 +5,13 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
-
     public GameObject attacker;
     public GameObject defender;
 
     public override void OnStartLocalPlayer()
     {
 
-        if (NetworkServer.connections.Count != 1) //change to 1 after testing
+        if (NetworkServer.connections.Count == 1) //change to 1 after testing
         {
             defender.SetActive(true);
             GetComponent<Attacker>().enabled = false;

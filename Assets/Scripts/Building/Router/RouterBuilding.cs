@@ -232,7 +232,7 @@ public class RouterBuilding : Building
 
     void UpdateFilter(AgentAttribute _filter)
     {
-        Debug.Log("Updated filter! " + _filter);
+        //Debug.Log("Updated filter! " + _filter);
         filter = _filter;
         worldSpaceDisplayAgent.InitializeAttributes(_filter);
     }

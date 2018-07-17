@@ -11,7 +11,8 @@ public class StartGameButton : GameButton
 
     private void Awake()
     {
-        waveController = GameObject.Find("WaveController").GetComponent<WaveController>();
+        // just set in the inspector
+        //waveController = GameObject.Find("WaveController").GetComponent<WaveController>();
     }
 
     public override void PerformAction()
