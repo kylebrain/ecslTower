@@ -19,8 +19,8 @@ public class TutorialNetworkManager : MonoBehaviour {
 
     private void OnSceneChange(Scene scene)
     {
-        GetComponent<NetworkManager>().StopHost();
-        Destroy(gameObject);
+        //GetComponent<NetworkManager>().StopHost();
+        //Destroy(gameObject);
     }
 
 }

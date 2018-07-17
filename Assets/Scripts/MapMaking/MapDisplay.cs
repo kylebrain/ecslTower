@@ -129,25 +129,23 @@ public class MapDisplay : MonoBehaviour
         currentMap = FindMap();
         if (currentMap == null)
         {
-            if (LevelLookup.levelName == "DEFAULT_VALUE")
+            if (LevelLookup.levelName == LevelLookup.defaultLevelName)
             {
                 Debug.LogError("Could not find map!");
                 return;
             }
             else
             {
-                currentMap = Resources.Load<Map>("Maps/" + LevelLookup.levelName);
-                if (currentMap == null)
+                currentMap = LoadMapFromName(LevelLookup.levelName);
+                if(currentMap == null)
                 {
-                    Debug.LogError("LevelLookup does not have a valid level name!");
                     return;
                 }
-                else
-                {
-                    currentMap = Instantiate(currentMap);
-                }
-
             }
+        } else if(currentMap.name != LevelLookup.levelName && LevelLookup.levelName != LevelLookup.defaultLevelName)
+        {
+            Destroy(currentMap.gameObject);
+            currentMap = LoadMapFromName(LevelLookup.levelName);
         }
 
         currentMap.BuildWorldGrid(worldGrid);
@@ -160,6 +158,21 @@ public class MapDisplay : MonoBehaviour
         mapLoaded = true;
 
         DerivedAwake();
+    }
+
+    private Map LoadMapFromName(string name)
+    {
+        Map newMap = Resources.Load<Map>("Maps/" + name);
+        if (newMap == null)
+        {
+            Debug.LogError("LevelLookup does not have a valid level name!");
+            return null;
+        }
+        else
+        {
+            newMap = Instantiate(newMap);
+            return newMap;
+        }
     }
 
     protected virtual void DerivedAwake() { }

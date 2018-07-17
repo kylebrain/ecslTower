@@ -1,21 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : NetworkBehaviour
 {
 
-    public static bool GamePaused = false;
+    public static bool IsGamePaused = false;
     public GameObject pauseMenu;
     public GameObject optionsMenu;
     public GameObject[] othersToHide;
+
+    private delegate void OnPause(bool paused);
+    private static event OnPause PauseGame;
+
+    public override void OnStartLocalPlayer()
+    {
+        PauseGame = PauseListener;
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GamePaused)
+            if (IsGamePaused)
             {
                 Resume();
             }
@@ -28,25 +37,17 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        GamePaused = true;
+        IsGamePaused = true;
         Time.timeScale = 0f;
-        Player player;
-        if ((player = GetComponent<Player>()) != null)
-        {
-            player.CmdPause(true);
-        }
+        CmdPause(true);
         pauseMenu.SetActive(true);
     }
 
     public void Resume()
     {
-        GamePaused = false;
+        IsGamePaused = false;
         Time.timeScale = 1f;
-        Player player;
-        if ((player = GetComponent<Player>()) != null)
-        {
-            player.CmdPause(false);
-        }
+        CmdPause(false);
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
     }
@@ -54,6 +55,10 @@ public class PauseMenu : MonoBehaviour
     public void LoadLevelSelect()
     {
         Resume();
+        if(isServer)
+        {
+            NetworkManager.Shutdown();
+        }
         SceneLoader.LoadScene("LevelSelect");
     }
 
@@ -68,6 +73,40 @@ public class PauseMenu : MonoBehaviour
             obj.SetActive(!show);
         }
         optionsMenu.SetActive(show);
+    }
+
+    // networked functions, must be attached to a Player object
+
+    [Command]
+    public void CmdPause(bool paused)
+    {
+        RpcPauseOnClients(paused);
+    }
+
+    [ClientRpc]
+    void RpcPauseOnClients(bool paused)
+    {
+        if (PauseGame != null)
+        {
+            PauseGame(paused);
+        }
+    }
+
+    void PauseListener(bool paused)
+    {
+        if (IsGamePaused == paused || !isLocalPlayer)
+        {
+            return;
+        }
+
+        if (paused)
+        {
+            Pause();
+        }
+        else
+        {
+            Resume();
+        }
     }
 
 }

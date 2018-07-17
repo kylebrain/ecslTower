@@ -9,7 +9,8 @@ using UnityEngine;
 public static class LevelLookup {
 
     public static int levelNumber = 0;
-    public static string levelName = "DEFAULT_VALUE";
+    public static readonly string defaultLevelName = "DEFAULT_VALUE";
+    public static string levelName = defaultLevelName;
     public static float spawnRate = 1f;
     public static int waveCount = 3;
     public static int spawnPerWave = 100;
