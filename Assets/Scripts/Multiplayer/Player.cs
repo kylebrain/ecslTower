@@ -9,24 +9,49 @@ public class Player : NetworkBehaviour
     public GameObject defender;
     public GameObject pauseButton;
 
+    public PlayerType PlayerType;
+
     public override void OnStartLocalPlayer()
     {
         int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
 
-        if (playerCount == 1) //change to 1 after testing
+
+        if(PlayerType == PlayerType.None)
         {
-            defender.SetActive(true);
-            GetComponent<Attacker>().enabled = false;
-            Destroy(attacker);
-            name = "DefenderPlayer " + playerCount;
+            Debug.LogWarning("Player was not given a type!");
+            InitializePlayer(playerCount == 1 ? PlayerType.Defender : PlayerType.Attacker);
         }
-        else
+
+        
+    }
+
+    public void InitializePlayer(PlayerType playerType)
+    {
+        PlayerType = playerType;
+
+        int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
+
+        switch (playerType)
         {
-            attacker.SetActive(true);
-            GetComponent<Defender>().enabled = false;
-            GetComponent<WaveController>().enabled = false;
-            Destroy(defender);
-            name = "AttackerPlayer " + playerCount;
+            case PlayerType.Defender:
+                defender.SetActive(true);
+                GetComponent<Attacker>().enabled = false;
+                Destroy(attacker);
+                name = "DefenderPlayer " + playerCount;
+                break;
+            case PlayerType.Attacker:
+                attacker.SetActive(true);
+                GetComponent<Defender>().enabled = false;
+                GetComponent<WaveController>().enabled = false;
+                Destroy(defender);
+                name = "AttackerPlayer " + playerCount;
+                break;
+            case PlayerType.None:
+                Debug.LogError("Player should have a valid type!");
+                return;
+            default:
+                Debug.LogError("There is no case for this enum value\nAdd one or remove the enum value!");
+                return;
         }
     }
 
@@ -41,7 +66,7 @@ public class Player : NetworkBehaviour
             GetComponent<Defender>().enabled = false;
             GetComponent<WaveController>().enabled = false;
 
-            name = "Player " + NetworkServer.connections.Count;
+            name = "Player " + FindObjectOfType<NetworkManager>().numPlayers;
         }
     }
 }
