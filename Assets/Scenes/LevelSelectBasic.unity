@@ -739,6 +739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9254172ecf1a96340973851734bb5fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsNetworked: 0
   levelPanelPrefab: {fileID: 114764291344780014, guid: fb7ddb3f1dfb3894f9573ba71d858a97,
     type: 2}
 --- !u!114 &514869193
@@ -2656,7 +2657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!223 &1857704834
 Canvas:
   m_ObjectHideFlags: 0
@@ -2774,6 +2775,11 @@ MonoBehaviour:
   m_LobbyScene: LevelSelect
   m_PlayScene: Multiplayer
   lobbySlots: []
+  lobby: {fileID: 0}
+  select: {fileID: 0}
+  playerList: {fileID: 0}
+  backButton: {fileID: 0}
+  connectingDisplay: {fileID: 0}
 --- !u!114 &1857704836
 MonoBehaviour:
   m_ObjectHideFlags: 0

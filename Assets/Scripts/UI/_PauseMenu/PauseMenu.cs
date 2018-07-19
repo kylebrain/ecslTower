@@ -60,27 +60,7 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        //Resume();
-
-        /*
-        if(isServer)
-        {
-            NetworkManager.Shutdown();
-        }
-        SceneLoader.LoadScene("LevelSelect"); */
-
-        //*** need to wait for resume to finish before exiting the lobby ***//
-
-
-        FindObjectOfType<Lobby>().SendReturnToLobby();
-        //CmdReturnToLobby();
-        
-    }
-
-    [Command]
-    public void CmdReturnToLobby()
-    {
-        FindObjectOfType<Lobby>().ServerReturnToLobby();
+        Lobby.instance.SendReturnToLobby();
     }
 
     public void ShowOptions(bool show)

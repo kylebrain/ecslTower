@@ -11,6 +11,7 @@ public class Player : NetworkBehaviour
     public GameObject attacker;
     public GameObject defender;
     public GameObject pauseButton;
+    public GameObject singlePlayerStartWave;
     public Text functionText;
 
     [SyncVar]
@@ -25,6 +26,11 @@ public class Player : NetworkBehaviour
         InitializePlayer(PlayerType);
         functionText.text = isHost ? "Hosting" : "Client";
 
+        if (PlayerType == PlayerType.Defender)
+        {
+            CmdDeleteSinglePlayerWave();
+        }
+
         /*
         int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
 
@@ -37,6 +43,29 @@ public class Player : NetworkBehaviour
         */
 
 
+    }
+
+    [Command]
+    void CmdDeleteSinglePlayerWave()
+    {
+        int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
+        if (playerCount > 1)
+        {
+            Destroy(singlePlayerStartWave);
+            RpcDeleteWave();
+        } else
+        {
+            singlePlayerStartWave.SetActive(true);
+        }
+    }
+
+    [ClientRpc]
+    void RpcDeleteWave()
+    {
+        if (singlePlayerStartWave != null)
+        {
+            Destroy(singlePlayerStartWave);
+        }
     }
 
     public void InitializePlayer(PlayerType playerType)
@@ -76,6 +105,7 @@ public class Player : NetworkBehaviour
             Destroy(attacker);
             Destroy(defender);
             Destroy(pauseButton);
+            Destroy(singlePlayerStartWave);
             Destroy(functionText.gameObject);
             GetComponent<Attacker>().enabled = false;
             GetComponent<Defender>().enabled = false;
