@@ -20,6 +20,13 @@ public class LobbyPlayer : NetworkLobbyPlayer {
 
     public ReadyButton readyButton;
 
+    /*
+    private void OnEnable()
+    {
+        readyButton.SetReadyAppearance(readyButton);
+    }
+    */
+
     public override void OnStartLocalPlayer()
     {
         localPlayer = this;
@@ -49,6 +56,11 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     void UpdateText(PlayerType _playerType)
     {
         playerType = _playerType;
+        if (playerType == PlayerType.None && readyToBegin && isLocalPlayer)
+        {
+            Debug.Log("Not ready!");
+            SendNotReadyToBeginMessage();
+        }
         typeText.text = _playerType.ToString();
     }
 
@@ -56,9 +68,22 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     void CmdUpdateType()
     {
         int typeIndex = (int)playerType;
-        typeIndex++;
-        typeIndex %= System.Enum.GetNames(typeof(PlayerType)).Length;
+        PlayerType previousType = playerType;
+
+        do
+        {
+            typeIndex++;
+            typeIndex %= System.Enum.GetNames(typeof(PlayerType)).Length;
+        } while (usedPlayerTypes.Contains((PlayerType)typeIndex) && (PlayerType)typeIndex != PlayerType.None);
+
         playerType = (PlayerType)typeIndex;
+
+        usedPlayerTypes.Remove(previousType);
+
+        if(!usedPlayerTypes.Contains(playerType))
+        {
+            usedPlayerTypes.Add(playerType);
+        }
     }
 
     public override void OnClientEnterLobby()
@@ -68,6 +93,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         playerText.text = "Player " + (slot + 1);
         Transform parent = FindObjectOfType<Lobby>().transform.Find("PlayerList");
         transform.SetParent(parent, false);
+        readyButton.SetReadyAppearance(readyToBegin);
         //GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
     }
 

@@ -55,14 +55,18 @@ public class ReadyButton : MonoBehaviour
 
     public void SetReadyAppearance(bool ready)
     {
-        if(ready)
+        Image image = GetComponent<Image>();
+
+        if (ready)
         {
             text.text = "Ready!";
-            GetComponent<Image>().color = Color.green;
+            if(image.color != Color.green)
+                image.color = Color.green;
         } else
         {
             text.text = "Not ready!";
-            GetComponent<Image>().color = Color.red;
+            if (image.color != Color.red)
+                image.color = Color.red;
         }
     }
 }

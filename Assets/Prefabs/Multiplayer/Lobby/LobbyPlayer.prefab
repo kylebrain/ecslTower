@@ -73,8 +73,8 @@ GameObject:
   m_Component:
   - component: {fileID: 224903882666680106}
   - component: {fileID: 114075185234307878}
-  - component: {fileID: 114065503243491142}
   - component: {fileID: 114282110459085694}
+  - component: {fileID: 114065503243491142}
   m_Layer: 5
   m_Name: LobbyPlayer
   m_TagString: Untagged
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowLobbyGUI: 1
-  PlayerType: 0
+  playerType: 0
   typeText: {fileID: 114471272654086294}
   playerText: {fileID: 114119905166363992}
   readyButton: {fileID: 114792031529093660}
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

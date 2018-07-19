@@ -9,6 +9,7 @@ public class Lobby : NetworkLobbyManager
 
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
+        //bool ret = base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
         gamePlayer.GetComponent<Player>().PlayerType = lobbyPlayer.GetComponent<LobbyPlayer>().playerType;
 
         return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);

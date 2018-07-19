@@ -21,6 +21,11 @@ public class PauseMenu : NetworkBehaviour
         Resume();
     }
 
+    private void OnDestroy()
+    {
+        PauseGame = null;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -56,7 +61,7 @@ public class PauseMenu : NetworkBehaviour
     public void LoadLevelSelect()
     {
         //Resume();
-        
+
         /*
         if(isServer)
         {
@@ -66,6 +71,13 @@ public class PauseMenu : NetworkBehaviour
 
         //*** need to wait for resume to finish before exiting the lobby ***//
 
+        CmdReturnToLobby();
+        
+    }
+
+    [Command]
+    public void CmdReturnToLobby()
+    {
         FindObjectOfType<Lobby>().ServerReturnToLobby();
     }
 
