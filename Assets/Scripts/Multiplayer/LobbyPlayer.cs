@@ -12,6 +12,8 @@ public class LobbyPlayer : NetworkLobbyPlayer {
 
     static List<PlayerType> usedPlayerTypes = new List<PlayerType>();
 
+    public float increasedAlpha = 200f;
+
     [SyncVar(hook = "UpdateText")]
     public PlayerType playerType = PlayerType.None;
     public Text typeText;
@@ -19,6 +21,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     public Text playerText;
 
     public ReadyButton readyButton;
+    public Button typeButton;
 
     /*
     private void OnEnable()
@@ -32,8 +35,12 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         localPlayer = this;
         Image panelImage = transform.Find("Panel").GetComponent<Image>();
         Color panelColor = Color.blue;
-        panelColor.a = panelImage.color.a;
+        panelColor.a = panelImage.color.a + increasedAlpha / 255f;
         panelImage.color = panelColor;
+
+        // ultimately change to sync function of all players
+        playerText.text += " - " + (isServer ? "hosting" : "client");
+        typeButton.onClick.AddListener(UpdateType);
     }
 
     private void Start()
@@ -41,6 +48,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         if(!isLocalPlayer)
         {
             readyButton.Button.interactable = false;
+            typeButton.interactable = false;
             UpdateText(playerType);
         }
     }
@@ -51,6 +59,12 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         {
             CmdUpdateType();
         }
+    }
+
+    // can't add a command as a listener
+    void UpdateType()
+    {
+        CmdUpdateType();
     }
 
     void UpdateText(PlayerType _playerType)
@@ -91,7 +105,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         base.OnClientEnterLobby();
 
         playerText.text = "Player " + (slot + 1);
-        Transform parent = FindObjectOfType<Lobby>().transform.Find("PlayerList");
+        Transform parent = FindObjectOfType<Lobby>().playerList.transform;
         transform.SetParent(parent, false);
         readyButton.SetReadyAppearance(readyToBegin);
         //GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
@@ -100,7 +114,14 @@ public class LobbyPlayer : NetworkLobbyPlayer {
     [Command]
     public void CmdSetLevel(string _levelName)
     {
-        SelectedLevel.instance.SelectedLevelName = _levelName;
+        SelectedLevel.instance.UpdateSelectedLevel(_levelName);
+        RpcSetLevel(_levelName);
+    }
+
+    [ClientRpc]
+    void RpcSetLevel(string _levelName)
+    {
+        SelectedLevel.instance.UpdateSelectedLevel(_levelName);
     }
 
     public override void OnClientReady(bool readyState)
@@ -111,5 +132,21 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         }
         readyButton.SetReadyAppearance(readyState);
     }
+
+    /*public void Disconnect()
+    {
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
+        if(isServer)
+        {
+            FindObjectOfType<Lobby>().StopHost();
+        } else
+        {
+            FindObjectOfType<Lobby>().StopClient();
+        }
+    }*/
 
 }

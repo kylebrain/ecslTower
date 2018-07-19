@@ -71,7 +71,9 @@ public class PauseMenu : NetworkBehaviour
 
         //*** need to wait for resume to finish before exiting the lobby ***//
 
-        CmdReturnToLobby();
+
+        FindObjectOfType<Lobby>().SendReturnToLobby();
+        //CmdReturnToLobby();
         
     }
 

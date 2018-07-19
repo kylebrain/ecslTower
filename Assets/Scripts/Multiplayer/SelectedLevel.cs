@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SelectedLevel : NetworkBehaviour {
 
-    [SyncVar(hook = "UpdateSelectedLevel")]
+    //[SyncVar(hook = "UpdateSelectedLevel")]
     public string SelectedLevelName = LevelLookup.defaultLevelName;
 
     public Text levelText;
@@ -22,6 +22,7 @@ public class SelectedLevel : NetworkBehaviour {
 
     public void UpdateSelectedLevel(string _selectedLevelName)
     {
+        //Debug.Log("Updated level!");
         if (_selectedLevelName != LevelLookup.defaultLevelName)
         {
             levelText.text = _selectedLevelName;
