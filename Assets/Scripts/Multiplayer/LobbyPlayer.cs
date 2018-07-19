@@ -16,6 +16,10 @@ public class LobbyPlayer : NetworkLobbyPlayer {
 
     [SyncVar(hook = "UpdateText")]
     public PlayerType playerType = PlayerType.None;
+
+    [SyncVar]
+    public bool isHost = false;
+
     public Text typeText;
 
     public Text playerText;
@@ -39,13 +43,15 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         panelImage.color = panelColor;
 
         // ultimately change to sync function of all players
-        playerText.text += " - " + (isServer ? "hosting" : "client");
+        isHost = isServer;
         typeButton.onClick.AddListener(UpdateType);
     }
 
     private void Start()
     {
-        if(!isLocalPlayer)
+        playerText.text += " - " + (isHost ? "hosting" : "client");
+
+        if (!isLocalPlayer)
         {
             readyButton.Button.interactable = false;
             typeButton.interactable = false;

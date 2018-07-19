@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 {
@@ -10,14 +11,19 @@ public class Player : NetworkBehaviour
     public GameObject attacker;
     public GameObject defender;
     public GameObject pauseButton;
+    public Text functionText;
 
     [SyncVar]
     public PlayerType PlayerType;
+
+    [SyncVar]
+    public bool isHost = false;
 
     public override void OnStartLocalPlayer()
     {
         localPlayer = this;
         InitializePlayer(PlayerType);
+        functionText.text = isHost ? "Hosting" : "Client";
 
         /*
         int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
@@ -30,7 +36,7 @@ public class Player : NetworkBehaviour
 
         */
 
-        
+
     }
 
     public void InitializePlayer(PlayerType playerType)
@@ -70,6 +76,7 @@ public class Player : NetworkBehaviour
             Destroy(attacker);
             Destroy(defender);
             Destroy(pauseButton);
+            Destroy(functionText.gameObject);
             GetComponent<Attacker>().enabled = false;
             GetComponent<Defender>().enabled = false;
             GetComponent<WaveController>().enabled = false;
