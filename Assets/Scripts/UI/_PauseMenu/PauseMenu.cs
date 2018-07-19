@@ -18,6 +18,7 @@ public class PauseMenu : NetworkBehaviour
     public override void OnStartLocalPlayer()
     {
         PauseGame = PauseListener;
+        Resume();
     }
 
     void Update()
@@ -54,12 +55,18 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        Resume();
+        //Resume();
+        
+        /*
         if(isServer)
         {
             NetworkManager.Shutdown();
         }
-        SceneLoader.LoadScene("LevelSelect");
+        SceneLoader.LoadScene("LevelSelect"); */
+
+        //*** need to wait for resume to finish before exiting the lobby ***//
+
+        FindObjectOfType<Lobby>().ServerReturnToLobby();
     }
 
     public void ShowOptions(bool show)

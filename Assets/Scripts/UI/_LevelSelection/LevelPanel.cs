@@ -40,7 +40,9 @@ public class LevelPanel : MonoBehaviour
             return;
         }
 
+        // is this neccessary here?
         LevelLookup.levelNumber = levelNumber;
+
         LevelLookup.levelName = LevelName;
         SceneLoader.LoadScene("Multiplayer");
     }

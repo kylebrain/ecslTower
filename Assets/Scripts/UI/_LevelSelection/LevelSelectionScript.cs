@@ -6,10 +6,11 @@ using UnityEngine;
 public class LevelSelectionScript : MonoBehaviour
 {
 
+    public bool IsNetworked = false;
     public LevelPanel levelPanelPrefab;
-    public float levelSpacing = 20f;
+    //public float levelSpacing = 20f;
 
-    private float levelPanelWidth;
+    //private float levelPanelWidth;
     private bool showingHidden = false;
 
     private void Start()
@@ -43,7 +44,7 @@ public class LevelSelectionScript : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
-        levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
+        //levelPanelWidth = levelPanelPrefab.GetComponent<RectTransform>().sizeDelta.x;
         List<Map> mapList = Resources.LoadAll<Map>("Maps").ToList();
         mapList = mapList.OrderBy(map => map.displayOrder).ToList();
 
@@ -52,16 +53,20 @@ public class LevelSelectionScript : MonoBehaviour
             mapList.RemoveAll(m => m.hidden);
         }
 
-        int levelCount = mapList.Count;
-        float midPoint = (levelCount - 1) / 2f;
+        //int levelCount = mapList.Count;
+        //float midPoint = (levelCount - 1) / 2f;
         List<LevelPanel> panelList = new List<LevelPanel>();
-        for (int i = 0; i < levelCount; i++)
+        for (int i = 0; i < mapList.Count; i++)
         {
             Map currentMap = mapList[i];
             LevelPanel currentPanel = Instantiate(levelPanelPrefab, transform);
+            if(IsNetworked)
+            {
+                currentPanel.gameObject.AddComponent<SelectableLevelPanel>();
+            }
             panelList.Add(currentPanel);
             currentPanel.Init(currentMap.highscoreLevelIdentifier, currentMap.name, showHidden || currentMap.GetUnlocked()); //if we show hidden all are on the table
-            currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);
+            //currentPanel.transform.localPosition = new Vector3((i - midPoint) * (levelPanelWidth + levelSpacing), 0f);
         }
         StartCoroutine(AttachHighscores(panelList));
     }

@@ -5,22 +5,30 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
+
+    public static Player localPlayer;
     public GameObject attacker;
     public GameObject defender;
     public GameObject pauseButton;
 
+    [SyncVar]
     public PlayerType PlayerType;
 
     public override void OnStartLocalPlayer()
     {
-        int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
+        localPlayer = this;
+        InitializePlayer(PlayerType);
 
+        /*
+        int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
 
         if(PlayerType == PlayerType.None)
         {
             Debug.LogWarning("Player was not given a type!");
             InitializePlayer(playerCount == 1 ? PlayerType.Defender : PlayerType.Attacker);
         }
+
+        */
 
         
     }
