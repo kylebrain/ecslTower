@@ -7,10 +7,18 @@ using UnityEngine.UI;
 
 public class Lobby : NetworkLobbyManager
 {
+    public static Lobby instance;
+
     public GameObject lobby;
     public GameObject select;
     public GameObject playerList;
     public Button backButton;
+    public GameObject connectingDisplay;
+
+    private void Start()
+    {
+        instance = this;
+    }
 
     public override void OnStopClient()
     {
@@ -28,6 +36,13 @@ public class Lobby : NetworkLobbyManager
     {
         base.OnClientConnect(conn);
         backButton.onClick.AddListener(StopClient);
+        connectingDisplay.SetActive(false);
+    }
+
+    public override void OnClientDisconnect(NetworkConnection conn)
+    {
+        base.OnClientDisconnect(conn);
+        connectingDisplay.SetActive(false);
     }
 
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
@@ -40,6 +55,12 @@ public class Lobby : NetworkLobbyManager
 
         return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
 
+    }
+
+    public override void OnLobbyClientAddPlayerFailed()
+    {
+        base.OnLobbyClientAddPlayerFailed();
+        StopClient();
     }
 
     public override void OnStartHost()

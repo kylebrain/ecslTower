@@ -9,20 +9,25 @@ public class DirectPlayScript : MonoBehaviour {
     public Button connectButton;
     public UnityEngine.UI.InputField connectionInputField;
 
-    private Lobby lobby;
-
     private void Start()
     {
         //lobby = transform.root.GetComponent<Lobby>();
-        lobby = FindObjectOfType<Lobby>();
         playAndHostButton.onClick.AddListener(OnClickHost);
         connectButton.onClick.AddListener(OnClickJoin);
-        //connectionInputField.onEndEdit.AddListener(OnClickJoin);
+        connectionInputField.onEndEdit.AddListener(OnEndEditIP);
     }
 
     public void OnClickHost()
     {
-        lobby.StartHost();
+        Lobby.instance.StartHost();
+    }
+
+    public void OnEndEditIP(string text)
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            OnClickJoin();
+        }
     }
 
     public void OnClickJoin()
@@ -32,8 +37,11 @@ public class DirectPlayScript : MonoBehaviour {
         {
             ipAddress = connectionInputField.placeholder.GetComponent<Text>().text;
         }
-        lobby.networkAddress = ipAddress;
-        lobby.StartClient();
+        Lobby.instance.networkAddress = ipAddress;
+
+        Lobby.instance.connectingDisplay.SetActive(true);
+
+        Lobby.instance.StartClient();
     }
 
 
