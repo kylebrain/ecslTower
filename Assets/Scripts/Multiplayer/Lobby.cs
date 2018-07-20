@@ -26,6 +26,10 @@ public class Lobby : NetworkLobbyManager
     // the lobby must be displayed when the user connects
     public override void OnLobbyClientConnect(NetworkConnection conn)
     {
+        if (SelectedLevel.instance != null)
+        {
+            SelectedLevel.instance.gameObject.SetActive(true);
+        }
         lobby.SetActive(true);
         select.SetActive(false);
     }
