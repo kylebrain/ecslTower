@@ -224,6 +224,7 @@ MonoBehaviour:
   ShowLobbyGUI: 1
   increasedAlpha: 200
   playerType: 0
+  isHost: 0
   typeText: {fileID: 114471272654086294}
   playerText: {fileID: 114119905166363992}
   readyButton: {fileID: 114792031529093660}
@@ -378,7 +379,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114435334399265442}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114075185234307878}
+        m_MethodName: TypeButtonFunction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114561335235464266

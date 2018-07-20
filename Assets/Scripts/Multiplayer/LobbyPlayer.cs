@@ -8,53 +8,69 @@ public enum PlayerType {None, Defender, Attacker};
 
 public class LobbyPlayer : NetworkLobbyPlayer {
 
+    // statics
     public static LobbyPlayer localPlayer;
+    private static List<PlayerType> usedPlayerTypes = new List<PlayerType>();
 
-    static List<PlayerType> usedPlayerTypes = new List<PlayerType>();
-
+    // inspector values
     public float increasedAlpha = 200f;
 
-    [SyncVar(hook = "UpdateText")]
+    // syncVars
+    [SyncVar(hook = "UpdateTypeText")]
     public PlayerType playerType = PlayerType.None;
 
     [SyncVar]
     public bool isHost = false;
 
+    // UI/gameObject inspector references
     public Text typeText;
-
     public Text playerText;
-
     public ReadyButton readyButton;
     public Button typeButton;
 
-    /*
-    private void OnEnable()
-    {
-        readyButton.SetReadyAppearance(readyButton);
-    }
-    */
-    
+    private delegate void TypeButtonDelegate();
+    private TypeButtonDelegate typeButtonDelegate;
+
+    // networkBehaviour override functions
 
     public override void OnStartLocalPlayer()
     {
         localPlayer = this;
+
         Image panelImage = transform.Find("Panel").GetComponent<Image>();
         Color panelColor = Color.blue;
         panelColor.a = panelImage.color.a + increasedAlpha / 255f;
         panelImage.color = panelColor;
 
-        // ultimately change to sync function of all players
+        // this will be only true for the host player on the server
+            // which will then be synced to each client
         isHost = isServer;
-        typeButton.onClick.AddListener(UpdateType);
+        //typeButton.onClick.AddListener(UpdateType);
+        typeButtonDelegate = UpdateType;
     }
 
-
-    // needs to be set on enable, but on enable breaks the code
-    public void SetLobbyValues()
+    public override void OnClientEnterLobby()
     {
-        typeButton.onClick.AddListener(UpdateType);
-        playerText.text += " - " + (isHost ? "hosting" : "client");
+        base.OnClientEnterLobby();
+
+        playerText.text = "Player " + (slot + 1);
+        Transform parent = FindObjectOfType<Lobby>().playerList.transform;
+        transform.SetParent(parent, false);
+        readyButton.SetReadyAppearance(readyToBegin);
+        //GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
     }
+
+    public override void OnClientReady(bool readyState)
+    {
+        if (readyState)
+        {
+            //Debug.Log("Client is ready!");
+        }
+        readyButton.SetReadyAppearance(readyState);
+    }
+
+
+    // start/update functions, general monoBehaviour functions
 
     private void Start()
     {
@@ -64,8 +80,14 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         {
             readyButton.Button.interactable = false;
             typeButton.interactable = false;
-            UpdateText(playerType);
+            UpdateTypeText(playerType);
         }
+
+        if(isServer)
+        {
+            RpcSetLevel(SelectedLevel.instance.SelectedLevelName);
+        }
+
     }
 
     private void Update()
@@ -76,13 +98,29 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         }
     }
 
+    // general functions
+
+    // needs to be set on enable, but on enable breaks the code
+    public void SetLobbyValues()
+    {
+        typeButtonDelegate = UpdateType;
+        playerText.text += " - " + (isHost ? "hosting" : "client");
+    }
+
+    // playerType functions
+
+    public void TypeButtonFunction()
+    {
+        typeButtonDelegate();
+    }
+
     // can't add a command as a listener
     void UpdateType()
     {
         CmdUpdateType();
     }
 
-    void UpdateText(PlayerType _playerType)
+    void UpdateTypeText(PlayerType _playerType)
     {
         playerType = _playerType;
         if (playerType == PlayerType.None && readyToBegin && isLocalPlayer)
@@ -115,16 +153,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         }
     }
 
-    public override void OnClientEnterLobby()
-    {
-        base.OnClientEnterLobby();
-
-        playerText.text = "Player " + (slot + 1);
-        Transform parent = FindObjectOfType<Lobby>().playerList.transform;
-        transform.SetParent(parent, false);
-        readyButton.SetReadyAppearance(readyToBegin);
-        //GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
-    }
+    // selectedLevel functions
 
     [Command]
     public void CmdSetLevel(string _levelName)
@@ -139,29 +168,6 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         SelectedLevel.instance.UpdateSelectedLevel(_levelName);
     }
 
-    public override void OnClientReady(bool readyState)
-    {
-        if(readyState)
-        {
-            //Debug.Log("Client is ready!");
-        }
-        readyButton.SetReadyAppearance(readyState);
-    }
-
-    /*public void Disconnect()
-    {
-        if(!isLocalPlayer)
-        {
-            return;
-        }
-
-        if(isServer)
-        {
-            FindObjectOfType<Lobby>().StopHost();
-        } else
-        {
-            FindObjectOfType<Lobby>().StopClient();
-        }
-    }*/
+    
 
 }

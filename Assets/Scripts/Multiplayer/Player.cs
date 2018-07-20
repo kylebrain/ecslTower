@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ public class Player : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
+
         localPlayer = this;
         InitializePlayer(PlayerType);
         functionText.text = isHost ? "Hosting" : "Client";
@@ -100,6 +103,8 @@ public class Player : NetworkBehaviour
 
     private void Start()
     {
+
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
         if (!isLocalPlayer)
         {
             Destroy(attacker);

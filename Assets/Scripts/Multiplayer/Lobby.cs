@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Reflection;
 
 public class Lobby : NetworkLobbyManager
 {
@@ -39,8 +40,15 @@ public class Lobby : NetworkLobbyManager
     // hide/shows the lobby changing between game/lobby scene
     public override void OnLobbyClientSceneChanged(NetworkConnection conn)
     {
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
+        base.OnLobbyClientSceneChanged(conn);
+
+        
+        //****
         lobby.SetActive(SceneManager.GetActiveScene().name == lobbyScene);
 
+
+        
         if (SceneManager.GetActiveScene().name == lobbyScene)
         {
 
@@ -60,6 +68,7 @@ public class Lobby : NetworkLobbyManager
                 backButton.onClick.AddListener(StopClient);
             }
         }
+        
     }
 
     // client
@@ -67,9 +76,11 @@ public class Lobby : NetworkLobbyManager
     // sets the back button to stop client, closes the "connecting" popup
     public override void OnClientConnect(NetworkConnection conn)
     {
-        base.OnClientConnect(conn);
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
+        //base.OnClientConnect(conn);
         backButton.onClick.AddListener(StopClient);
         connectingDisplay.SetActive(false);
+        base.OnClientConnect(conn);
     }
 
     // sets the back button to stop host
@@ -89,6 +100,7 @@ public class Lobby : NetworkLobbyManager
     // if the client disconnects (including cannot find a server) "connecting" popup is closed
     public override void OnClientDisconnect(NetworkConnection conn)
     {
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
         base.OnClientDisconnect(conn);
         connectingDisplay.SetActive(false);
     }
@@ -96,11 +108,15 @@ public class Lobby : NetworkLobbyManager
     // server
 
     // sets up the values for the gamePlayer based on the values of the lobbyPlayer
-        //run on the server, values show be syncVars or updated with an RPC
+        //run on the server, values should be syncVars or updated with an RPC
     public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
     {
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
+
+        //****
         lobby.SetActive(false);
         select.SetActive(false);
+
 
         //bool ret = base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
         gamePlayer.GetComponent<Player>().PlayerType = lobbyPlayer.GetComponent<LobbyPlayer>().playerType;
@@ -110,7 +126,14 @@ public class Lobby : NetworkLobbyManager
 
     }
 
-    
+    public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+    {
+        //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
 
-    
+        base.OnServerAddPlayer(conn, playerControllerId);
+    }
+
+
+
+
 }

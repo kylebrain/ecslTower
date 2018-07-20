@@ -60,7 +60,13 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        Lobby.instance.SendReturnToLobby();
+        //if(Player.localPlayer.isHost)
+        //{
+            Lobby.instance.StopHost();
+        //} else
+        //{
+            //Lobby.instance.StopClient();
+        //}
     }
 
     public void ShowOptions(bool show)
