@@ -43,6 +43,13 @@ public class Lobby : NetworkLobbyManager
 
         if (SceneManager.GetActiveScene().name == lobbyScene)
         {
+
+            // needs to set the lobby values for each PLAYER
+            foreach(var playerController in conn.playerControllers)
+            {
+                playerController.unetView.GetComponent<LobbyPlayer>().SetLobbyValues();
+            }
+
             backButton.onClick.RemoveAllListeners();
             if (conn.playerControllers[0].unetView.isServer)
             {

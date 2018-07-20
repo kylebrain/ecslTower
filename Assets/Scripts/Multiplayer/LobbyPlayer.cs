@@ -33,6 +33,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         readyButton.SetReadyAppearance(readyButton);
     }
     */
+    
 
     public override void OnStartLocalPlayer()
     {
@@ -45,6 +46,14 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         // ultimately change to sync function of all players
         isHost = isServer;
         typeButton.onClick.AddListener(UpdateType);
+    }
+
+
+    // needs to be set on enable, but on enable breaks the code
+    public void SetLobbyValues()
+    {
+        typeButton.onClick.AddListener(UpdateType);
+        playerText.text += " - " + (isHost ? "hosting" : "client");
     }
 
     private void Start()
