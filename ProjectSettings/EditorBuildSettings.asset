@@ -6,7 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/LevelSelect.unity
+    path: Assets/Scenes/ModeSelect.unity
+    guid: dd796e1230cb151439d2a50575e5e933
+  - enabled: 1
+    path: Assets/Scenes/SinglePlayerLevelSelect.unity
+    guid: 6375d69a2b306344a96c02713b797b56
+  - enabled: 1
+    path: Assets/Scenes/SinglePlayerOnline.unity
+    guid: c993892c4ca680e42a91f6ad08c5afcb
+  - enabled: 1
+    path: Assets/Scenes/MultiplayerLobby.unity
     guid: 9df0e33f1011a7b4c93ba2ce02673145
   - enabled: 1
     path: Assets/Scenes/Multiplayer.unity

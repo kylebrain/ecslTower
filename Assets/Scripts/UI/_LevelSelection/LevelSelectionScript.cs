@@ -33,6 +33,10 @@ public class LevelSelectionScript : MonoBehaviour
             LevelUnlocking.ResetUnlocked();
             DisplayLevels(false);
         }
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            SceneLoader.LoadScene("ModeSelect");
+        }
     }
 
     private void DisplayLevels(bool showHidden)

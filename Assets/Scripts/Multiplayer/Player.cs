@@ -26,13 +26,19 @@ public class Player : NetworkBehaviour
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
 
         localPlayer = this;
-        InitializePlayer(PlayerType);
-        functionText.text = isHost ? "Hosting" : "Client";
+        //InitializePlayer(PlayerType);
+        functionText.text = (isHost || isServer) ? "Hosting" : "Client";
 
+        CmdDeleteSinglePlayerWave();
+
+        InitializePlayer(PlayerType);
+
+        /*
         if (PlayerType == PlayerType.Defender)
         {
             CmdDeleteSinglePlayerWave();
         }
+        */
 
         /*
         int playerCount = FindObjectOfType<NetworkManager>().numPlayers;
@@ -58,6 +64,10 @@ public class Player : NetworkBehaviour
             RpcDeleteWave();
         } else
         {
+            if(PlayerType == PlayerType.None)
+            {
+                PlayerType = PlayerType.Defender;
+            }
             singlePlayerStartWave.SetActive(true);
         }
     }

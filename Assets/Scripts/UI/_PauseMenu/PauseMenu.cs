@@ -60,13 +60,15 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        if (Player.localPlayer.isHost)
+        NetworkManager networkManager = FindObjectOfType<NetworkManager>();
+
+        if (Player.localPlayer.isHost || Player.localPlayer.isServer)
         {
-            Lobby.instance.StopHost();
+            networkManager.StopHost();
         }
         else
         {
-            Lobby.instance.StopClient();
+            networkManager.StopClient();
         }
     }
 

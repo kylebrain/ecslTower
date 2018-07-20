@@ -34,6 +34,7 @@ public class LevelPanel : MonoBehaviour
 
     public void LoadLevel()
     {
+        /*
         if(name == "Tutorial")
         {
             SceneLoader.LoadScene("Tutorial");
@@ -44,7 +45,13 @@ public class LevelPanel : MonoBehaviour
         LevelLookup.levelNumber = levelNumber;
 
         LevelLookup.levelName = LevelName;
-        SceneLoader.LoadScene("Multiplayer");
+        SceneLoader.LoadScene("Multiplayer"); 
+        */
+
+        LevelLookup.levelName = LevelName;
+        SinglePlayerNetworkManager.instance.StartHost();
+
+
     }
 
     public void Init(int levelNum, string levelName, bool unlocked)
