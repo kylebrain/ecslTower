@@ -60,13 +60,14 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        //if(Player.localPlayer.isHost)
-        //{
+        if (Player.localPlayer.isHost)
+        {
             Lobby.instance.StopHost();
-        //} else
-        //{
-            //Lobby.instance.StopClient();
-        //}
+        }
+        else
+        {
+            Lobby.instance.StopClient();
+        }
     }
 
     public void ShowOptions(bool show)
@@ -75,7 +76,7 @@ public class PauseMenu : NetworkBehaviour
         {
             pauseMenu.SetActive(!show);
         }
-        foreach(GameObject obj in othersToHide)
+        foreach (GameObject obj in othersToHide)
         {
             obj.SetActive(!show);
         }

@@ -133,7 +133,11 @@ public class Lobby : NetworkLobbyManager
         base.OnServerAddPlayer(conn, playerControllerId);
     }
 
-
+    public override void OnLobbyStartHost()
+    {
+        base.OnLobbyStartHost();
+        LobbyPlayer.usedPlayerTypes.Clear();
+    }
 
 
 }

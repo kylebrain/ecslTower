@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class SelectableLevelPanel : NetworkBehaviour {
+public class SelectableLevelPanel : MonoBehaviour {
 
     private void Start()
     {
@@ -19,14 +19,6 @@ public class SelectableLevelPanel : NetworkBehaviour {
 
         // not sure if this will work with more than one client
         //SelectedLevel.instance.UpdateSelectedLevel(levelName);
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.I))
-        {
-            Debug.LogError("Selected level id is: " + netId);
-        }
     }
 
 }

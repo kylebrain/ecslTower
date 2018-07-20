@@ -10,7 +10,7 @@ public class LobbyPlayer : NetworkLobbyPlayer {
 
     // statics
     public static LobbyPlayer localPlayer;
-    private static List<PlayerType> usedPlayerTypes = new List<PlayerType>();
+    public static List<PlayerType> usedPlayerTypes = new List<PlayerType>();
 
     // inspector values
     public float increasedAlpha = 200f;
@@ -151,6 +151,14 @@ public class LobbyPlayer : NetworkLobbyPlayer {
         {
             usedPlayerTypes.Add(playerType);
         }
+
+        RpcUpdateType(playerType);
+    }
+
+    [ClientRpc]
+    void RpcUpdateType(PlayerType _playerType)
+    {
+        UpdateTypeText(_playerType);
     }
 
     // selectedLevel functions
