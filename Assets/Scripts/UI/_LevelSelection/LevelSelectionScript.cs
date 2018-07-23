@@ -57,6 +57,8 @@ public class LevelSelectionScript : MonoBehaviour
             mapList.RemoveAll(m => m.hidden);
         }
 
+        mapList.RemoveAll(m => m.name == "Tutorial");
+
         //int levelCount = mapList.Count;
         //float midPoint = (levelCount - 1) / 2f;
         List<LevelPanel> panelList = new List<LevelPanel>();

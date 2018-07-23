@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 
 public class Tutorial : PreWaveCreator
 {
+    public static Tutorial instance;
+
     public TutorialTips tutorialTips;
     public Button repairButton;
     public Button shopButton;
@@ -30,6 +32,8 @@ public class Tutorial : PreWaveCreator
 
     private void Start()
     {
+        instance = this;
+
         bufferTime = mapDisplay.currentMap.spawnRate / 2f;
 
         //Wave 1

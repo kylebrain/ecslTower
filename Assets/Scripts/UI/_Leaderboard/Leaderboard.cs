@@ -164,7 +164,7 @@ public class Leaderboard : MonoBehaviour
         }
         else
         {
-            print("Error Downloading: " + www.error);
+            Debug.LogError("Error Downloading: " + www.error);
         }
     }
 

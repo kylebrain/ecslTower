@@ -9,11 +9,6 @@ public class TutorialNetworkManager : MonoBehaviour {
 
     private void Awake()
     {
-        SceneManager.sceneUnloaded += OnSceneChange;
-    }
-
-    private void Start()
-    {
         GetComponent<NetworkManager>().StartHost();
     }
 

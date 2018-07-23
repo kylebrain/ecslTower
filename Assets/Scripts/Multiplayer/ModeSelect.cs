@@ -13,5 +13,10 @@ public class ModeSelect : MonoBehaviour {
         {
             Destroy(manager.gameObject);
         }
+
+        if(LevelLookup.levelName != LevelLookup.defaultLevelName)
+        {
+            LevelLookup.levelName = LevelLookup.defaultLevelName;
+        }
     }
 }

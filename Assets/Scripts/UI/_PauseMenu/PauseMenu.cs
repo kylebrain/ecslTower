@@ -62,8 +62,28 @@ public class PauseMenu : NetworkBehaviour
     {
         NetworkManager networkManager = FindObjectOfType<NetworkManager>();
 
-        if (Player.localPlayer.isHost || Player.localPlayer.isServer)
+        Player player = Player.localPlayer;
+        bool host;
+
+        if(player != null)
         {
+            host = player.isHost || player.isServer;
+        } else
+        {
+            Tutorial tutorial = Tutorial.instance;
+            if(tutorial != null)
+            {
+                host = tutorial.isServer;
+            } else
+            {
+                Debug.LogError("Cannot find a player!\nMake sure Player or Tutorial set their static instance on Start.");
+                return;
+            }
+        }
+
+        if (host)
+        {
+            //Debug.Log("Stopping Host!");
             networkManager.StopHost();
         }
         else
