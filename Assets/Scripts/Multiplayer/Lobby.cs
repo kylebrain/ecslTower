@@ -19,6 +19,7 @@ public class Lobby : NetworkLobbyManager
     private void Start()
     {
         instance = this;
+        ShowSelect();
     }
 
     // lobby client
@@ -30,8 +31,7 @@ public class Lobby : NetworkLobbyManager
         {
             SelectedLevel.instance.gameObject.SetActive(true);
         }
-        lobby.SetActive(true);
-        select.SetActive(false);
+        ShowLobby();
     }
 
     // if the server is full, the client must be booted
@@ -46,21 +46,24 @@ public class Lobby : NetworkLobbyManager
     {
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
         base.OnLobbyClientSceneChanged(conn);
-
         
         //****
+
+        /*
         lobby.SetActive(SceneManager.GetActiveScene().name == lobbyScene);
-
-
         
         if (SceneManager.GetActiveScene().name == lobbyScene)
         {
+            // this is never true because currently the player must disconnect from the server and will not be sent to the lobby
+                //triggering this script
 
             // needs to set the lobby values for each PLAYER
             foreach(var playerController in conn.playerControllers)
             {
                 playerController.unetView.GetComponent<LobbyPlayer>().SetLobbyValues();
             }
+
+            backButton.transform.parent.gameObject.SetActive(true);
 
             backButton.onClick.RemoveAllListeners();
             if (conn.playerControllers[0].unetView.isServer)
@@ -71,9 +74,49 @@ public class Lobby : NetworkLobbyManager
             {
                 backButton.onClick.AddListener(StopClient);
             }
+
+            //this will be true everytime the client enters the game scene
+
+        } else if(SceneManager.GetActiveScene().name == playScene)
+        {
+            backButton.transform.parent.gameObject.SetActive(false);
         }
+        */
         
     }
+
+    // general
+
+    private void ShowSelect()
+    {
+        lobby.SetActive(false);
+        select.SetActive(true);
+        backButton.transform.parent.gameObject.SetActive(true);
+        backButton.onClick.RemoveAllListeners();
+        backButton.onClick.AddListener(LoadModeSelect);
+    }
+
+    private void ShowLobby()
+    {
+        lobby.SetActive(true);
+        select.SetActive(false);
+        backButton.onClick.RemoveAllListeners();
+        backButton.onClick.AddListener(StopHost);
+        backButton.transform.parent.gameObject.SetActive(true);
+    }
+
+    private void ShowGame()
+    {
+        lobby.SetActive(false);
+        select.SetActive(false);
+        backButton.transform.parent.gameObject.SetActive(false);
+    }
+
+    void LoadModeSelect()
+    {
+        SceneLoader.LoadScene("ModeSelect");
+    }
+
 
     // client
 
@@ -82,7 +125,8 @@ public class Lobby : NetworkLobbyManager
     {
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
         //base.OnClientConnect(conn);
-        backButton.onClick.AddListener(StopClient);
+        //backButton.onClick.AddListener(StopClient);
+        ShowLobby();
         connectingDisplay.SetActive(false);
         base.OnClientConnect(conn);
     }
@@ -91,20 +135,20 @@ public class Lobby : NetworkLobbyManager
     public override void OnStartHost()
     {
         base.OnStartHost();
-        backButton.onClick.AddListener(StopHost);
+        //backButton.onClick.AddListener(StopHost);
     }
 
     // when a client disconnects, show the select screen
     public override void OnStopClient()
     {
-        lobby.SetActive(false);
-        select.SetActive(true);
+        ShowSelect();
     }
 
     // if the client disconnects (including cannot find a server) "connecting" popup is closed
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
+
         base.OnClientDisconnect(conn);
         connectingDisplay.SetActive(false);
     }
@@ -118,8 +162,7 @@ public class Lobby : NetworkLobbyManager
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
 
         //****
-        lobby.SetActive(false);
-        select.SetActive(false);
+        ShowGame();
 
 
         //bool ret = base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
@@ -141,6 +184,16 @@ public class Lobby : NetworkLobbyManager
     {
         base.OnLobbyStartHost();
         LobbyPlayer.usedPlayerTypes.Clear();
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        PlayerType type = conn.playerControllers[0].unetView.GetComponent<LobbyPlayer>().playerType;
+        if(LobbyPlayer.usedPlayerTypes.Contains(type))
+        {
+            LobbyPlayer.usedPlayerTypes.Remove(type);
+        }
+        base.OnServerDisconnect(conn);
     }
 
 

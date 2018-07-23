@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//deprecated
 public class SelectScript : MonoBehaviour {
 
+    /*
     private void Start()
     {
         ListenWithButton();
@@ -28,5 +30,5 @@ public class SelectScript : MonoBehaviour {
     void ReturnToModeSelect()
     {
         SceneLoader.LoadScene("ModeSelect");
-    }
+    } */
 }

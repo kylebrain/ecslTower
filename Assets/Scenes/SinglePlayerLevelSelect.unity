@@ -2733,6 +2733,7 @@ GameObject:
   - component: {fileID: 1782574012}
   - component: {fileID: 1782574011}
   - component: {fileID: 1782574010}
+  - component: {fileID: 1782574013}
   - component: {fileID: 1782574009}
   m_Layer: 5
   m_Name: Button
@@ -2882,7 +2883,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1782574011}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1782574013}
+        m_MethodName: ButtonAction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1782574011
@@ -2920,6 +2932,17 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1782574007}
+--- !u!114 &1782574013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1782574007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa451d6096611cd4eaa515df28c4c027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1812930808
 Prefab:
   m_ObjectHideFlags: 0
@@ -3066,7 +3089,6 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  backButton: {fileID: 1782574010}
 --- !u!4 &1857704835
 Transform:
   m_ObjectHideFlags: 0
