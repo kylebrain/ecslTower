@@ -95,15 +95,18 @@ public class Tutorial : PreWaveCreator
 
     IEnumerator RunTutorial()
     {
-        shopButton.interactable = false;
+        
         foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
         {
             mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.empty);
         }
         currentWave.PauseSpawning();
 
+        yield return new WaitForSeconds(bufferTime);
+        shopButton.interactable = false;
+
         //0
-        tutorialTips.Show("Welcome to NETWORKING!");
+        tutorialTips.Show("Welcome to NET DEFENSE!");
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
 
