@@ -50,6 +50,10 @@ public class WavePath {
     {
         get
         {
+            if(nodeQueue == null)
+            {
+                return null;
+            }
             return new List<Node>(nodeQueue);
         }
     }
@@ -129,7 +133,18 @@ public class WavePath {
 
     #endregion
 
-
+    public bool Contains(Node node)
+    {
+        List<Node> nodeList = NodeList;
+        for(int i = 0; i < nodeList.Count - 1; i++)
+        {
+            if(node.IsBetween(nodeList[i], nodeList[i + 1]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /// <summary>
     /// Removes the next Node and returns it
@@ -191,7 +206,7 @@ public class WavePath {
     /// <returns>True if equal, false if not</returns>
     public override bool Equals(object obj)
     {
-        if(obj.GetType() != GetType())
+        if(obj == null || obj.GetType() != GetType())
         {
             return false;
         }

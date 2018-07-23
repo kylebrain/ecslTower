@@ -77,6 +77,8 @@ public class MapDisplay : MonoBehaviour
             return;
         }
 
+        /*
+
         if(Input.GetKeyDown(KeyCode.L))
         {
             if (selectedPathIndex >= 0 && selectedPathIndex < wavePathList.Count)
@@ -86,13 +88,74 @@ public class MapDisplay : MonoBehaviour
             selectedPathIndex++;
             selectedPathIndex %= wavePathList.Count;
             selectedPath = wavePathList[selectedPathIndex];
-            HighLightWavePath(selectedPath, true);
+            HighLightWavePath(selectedPath, true); 
+        }
+
+        */
+
+        Node selectedNode = worldGrid.getRaycastNode();
+        if (selectedNode != null)
+        {
+            WavePath localSelectedPath = null;
+            List<WavePath> selectedList = new List<WavePath>();
+            foreach (WavePath currentPath in wavePathList)
+            {
+                if (currentPath.Contains(selectedNode))
+                {
+                    selectedList.Add(currentPath);
+                    //localSelectedPath = currentPath;
+                    //break;
+                }
+            }
+
+            if (selectedList.Count > 0 && selectedList.Contains(selectedPath))
+            {
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    localSelectedPath = selectedList[(selectedList.IndexOf(selectedPath) + 1) % selectedList.Count];
+                } else
+                {
+                    localSelectedPath = selectedPath;
+                }
+                
+            }
+            else if (selectedList.Count > 0)
+            {
+                localSelectedPath = selectedList[0];
+            }
+
+            if (localSelectedPath != null)
+            {
+                if (localSelectedPath != selectedPath)
+                {
+                    if (selectedPath != null) // if there is a hovered path and a selectedPath and they are not the same, unhighlight
+                    {
+                        HighLightWavePath(selectedPath, false);
+                    }
+                    selectedPath = localSelectedPath; // select a new path and highlight it
+                    HighLightWavePath(selectedPath, true);
+                }
+            }
+            else if (selectedPath != null) // if there is a selectedPath and no hovered path, unhighlight
+            {
+                HighLightWavePath(selectedPath, false);
+                selectedPath = null;
+            }
+        }
+        else if (selectedPath != null) // if there is a selectedPath and no selectedNode, unhighlight
+        {
+            HighLightWavePath(selectedPath, false);
+            selectedPath = null;
         }
     }
 
     public void HighLightWavePath(WavePath wavePath, bool highlight)
     {
         List<Arrow> highlightArrows = GetArrowsInPath(wavePath);
+        if (highlightArrows == null)
+        {
+            return;
+        }
         foreach (Arrow arrow in highlightArrows)
         {
             arrow.GetComponent<Renderer>().material.SetColor("_EmissionColor", highlight ? Color.white : Color.black);
@@ -102,6 +165,11 @@ public class MapDisplay : MonoBehaviour
     private List<Arrow> GetArrowsInPath(WavePath wavePath)
     {
         List<Node> nodeList = wavePath.NodeList;
+        if (nodeList == null)
+        {
+            //Debug.LogError("WavePath must be valid!");
+            return null;
+        }
         List<Arrow> arrowList = new List<Arrow>();
 
         foreach (List<Arrow> containerList in arrowContainer.ArrowLists)
@@ -137,12 +205,13 @@ public class MapDisplay : MonoBehaviour
             else
             {
                 currentMap = LoadMapFromName(LevelLookup.levelName);
-                if(currentMap == null)
+                if (currentMap == null)
                 {
                     return;
                 }
             }
-        } else if(currentMap.name != LevelLookup.levelName && LevelLookup.levelName != LevelLookup.defaultLevelName)
+        }
+        else if (currentMap.name != LevelLookup.levelName && LevelLookup.levelName != LevelLookup.defaultLevelName)
         {
             Destroy(currentMap.gameObject);
             currentMap = LoadMapFromName(LevelLookup.levelName);
