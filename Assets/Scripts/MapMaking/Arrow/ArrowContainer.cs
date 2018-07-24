@@ -175,6 +175,7 @@ public class ArrowContainer
     {
         foreach (Stack<Arrow> arrowStack in arrowStacks) //if it is at the end of an arrow
         {
+            /*
             Stack<Arrow> arrowStackFlipped = new Stack<Arrow>(arrowStack);
             foreach(Arrow currentArrow in arrowStackFlipped)
             {
@@ -184,6 +185,7 @@ public class ArrowContainer
                     return null;
                 }
             }
+            */
 
 
             if (arrowStack.Count > 0 && arrowStack.Peek().Destination == arrow.Origin)

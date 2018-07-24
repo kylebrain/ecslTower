@@ -93,7 +93,12 @@ public class MapDisplay : MonoBehaviour
 
         */
 
-        Node selectedNode = worldGrid.getRaycastNode();
+        Node selectedNode = null;
+        if(Player.localPlayer != null && Player.localPlayer.PlayerType == PlayerType.Attacker)
+        {
+            selectedNode = worldGrid.getRaycastNode();
+        }
+        
         if (selectedNode != null)
         {
             WavePath localSelectedPath = null;
@@ -159,6 +164,7 @@ public class MapDisplay : MonoBehaviour
         foreach (Arrow arrow in highlightArrows)
         {
             arrow.GetComponent<Renderer>().material.SetColor("_EmissionColor", highlight ? Color.white : Color.black);
+            arrow.transform.position = new Vector3(arrow.transform.position.x, arrowOffset * (highlight ? 2f : 1f), arrow.transform.position.z);
         }
     }
 
