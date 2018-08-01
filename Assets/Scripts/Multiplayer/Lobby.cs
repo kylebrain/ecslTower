@@ -46,44 +46,48 @@ public class Lobby : NetworkLobbyManager
     {
         //Debug.LogWarning(GetType() + ": " + MethodBase.GetCurrentMethod().Name);
         base.OnLobbyClientSceneChanged(conn);
-        
-        //****
 
-        /*
-        lobby.SetActive(SceneManager.GetActiveScene().name == lobbyScene);
-        
-        if (SceneManager.GetActiveScene().name == lobbyScene)
+        if (SceneManager.GetActiveScene().name == playScene)
         {
-            // this is never true because currently the player must disconnect from the server and will not be sent to the lobby
-                //triggering this script
-
-            // needs to set the lobby values for each PLAYER
-            foreach(var playerController in conn.playerControllers)
-            {
-                playerController.unetView.GetComponent<LobbyPlayer>().SetLobbyValues();
-            }
-
-            backButton.transform.parent.gameObject.SetActive(true);
-
-            backButton.onClick.RemoveAllListeners();
-            if (conn.playerControllers[0].unetView.isServer)
-            {
-                backButton.onClick.AddListener(StopHost);
-            }
-            else
-            {
-                backButton.onClick.AddListener(StopClient);
-            }
-
-            //this will be true everytime the client enters the game scene
-
-        } else if(SceneManager.GetActiveScene().name == playScene)
-        {
-            backButton.transform.parent.gameObject.SetActive(false);
+            ShowGame();
         }
-        */
-        
-    }
+            //****
+
+            /*
+            lobby.SetActive(SceneManager.GetActiveScene().name == lobbyScene);
+
+            if (SceneManager.GetActiveScene().name == lobbyScene)
+            {
+                // this is never true because currently the player must disconnect from the server and will not be sent to the lobby
+                    //triggering this script
+
+                // needs to set the lobby values for each PLAYER
+                foreach(var playerController in conn.playerControllers)
+                {
+                    playerController.unetView.GetComponent<LobbyPlayer>().SetLobbyValues();
+                }
+
+                backButton.transform.parent.gameObject.SetActive(true);
+
+                backButton.onClick.RemoveAllListeners();
+                if (conn.playerControllers[0].unetView.isServer)
+                {
+                    backButton.onClick.AddListener(StopHost);
+                }
+                else
+                {
+                    backButton.onClick.AddListener(StopClient);
+                }
+
+                //this will be true everytime the client enters the game scene
+
+            } else if(SceneManager.GetActiveScene().name == playScene)
+            {
+                backButton.transform.parent.gameObject.SetActive(false);
+            }
+            */
+
+        }
 
     // general
 

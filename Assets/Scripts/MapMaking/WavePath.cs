@@ -58,6 +58,14 @@ public class WavePath {
         }
     }
 
+    public bool Valid
+    {
+        get
+        {
+            return nodeQueue != null && nodeQueue.Count > 1;
+        }
+    }
+
     #endregion
 
     #region Private Variables

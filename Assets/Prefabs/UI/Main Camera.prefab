@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9506d181b4507ae40adb86c1d497ce4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EdgeScrollTolerance: 0.01
+  EdgeScrollTolerance: 0
   topDown: 1
   angledPitch: 60
   angleRange: 5

@@ -8,7 +8,7 @@ public class Attacker : NetworkBehaviour
 {
 
     [SerializeField]
-    RolodexHandler[] routingOptions;
+    RingDisplayAgent[] agents;
     public MaliciousAgent maliciousAgentPrefab;
     public Wave wavePrefab;
 
@@ -23,10 +23,10 @@ public class Attacker : NetworkBehaviour
         }
     }
 
+    
+    /*
     private void Update()
     {
-
-        /*
         if(Input.GetKeyDown(KeyCode.Semicolon))
         {
             List<WavePath> wavePaths = new List<WavePath>(mapDisplay.WavePathList);
@@ -37,21 +37,35 @@ public class Attacker : NetworkBehaviour
             }
 
             CmdBogey(vector2Array);
-        } */
+        } 
 
-        for (int i = 0; i < routingOptions.Length; i++)
+        for (int i = 0; i < agents.Length; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha5 + i))
             {
                 if(mapDisplay.selectedPath != null)
                 {
-                    CmdSpawnWave(i, routingOptions[i].currentAttribute, mapDisplay.selectedPath.ToVector2Array());
+                    CmdSpawnWave(i, agents[i].Attribute, mapDisplay.selectedPath.ToVector2Array());
                 } else
                 {
                     Debug.LogWarning("No selected path!");
                 }
                 
             }
+        }
+    }
+
+    */
+
+    public void DeployAgent(int agentIndex)
+    {
+        if (mapDisplay.selectedPath != null && mapDisplay.selectedPath.Valid)
+        {
+            CmdSpawnWave(agentIndex, agents[agentIndex].Attribute, mapDisplay.selectedPath.ToVector2Array());
+        }
+        else
+        {
+            Debug.LogWarning("No selected path!");
         }
     }
 
