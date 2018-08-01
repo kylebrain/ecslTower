@@ -35,7 +35,7 @@ public class PolygonVertex {
         } else
         {
             PolygonVertex vertex = (PolygonVertex)obj;
-            return position == vertex.position;
+            return position == vertex.position && selection == vertex.selection && left == vertex.left && right == vertex.right;
         }
     }
 

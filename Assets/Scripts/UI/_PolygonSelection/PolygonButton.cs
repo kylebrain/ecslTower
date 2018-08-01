@@ -22,7 +22,7 @@ public class PolygonButton : Button {
         }
     }
 
-    public void ButtonClicked()
+    public void MoveTraveler()
     {
         //PolygonVertex nextVertex = (vertex == left ? right : left);
         selection.MoveTraveler(this);

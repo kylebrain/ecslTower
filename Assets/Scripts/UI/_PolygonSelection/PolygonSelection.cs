@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PolygonSelection : MonoBehaviour {
 
+    [HideInInspector]
     [Tooltip("Circumradius of the polygon")]
-    public float radius;
+    public float radius = 100;
+    [HideInInspector]
     [Tooltip("Number of sides of the polygon")]
-    public int sideCount;
+    public int sideCount = 3;
     [Tooltip("Numbers are rounded is they are 10^-x close to the nearest integer")]
-    public int cutoffExponent;
+    public int cutoffExponent = 5;
     [Tooltip("Percentage from the original position out from the center")]
-    public float dotBuffer;
+    public float dotBuffer = 50;
+
+    [SerializeField]
+    public string[] selections;
 
     public RectTransform side;
     public RectTransform dot;
@@ -20,8 +26,10 @@ public class PolygonSelection : MonoBehaviour {
 
     public PolygonTraveler traveler;
 
-    public List<PolygonVertex> vertices = new List<PolygonVertex>();
-    public List<PolygonButton> buttons = new List<PolygonButton>();
+    public UnityEvent OnSelectionChanged;
+
+    private List<PolygonVertex> vertices = new List<PolygonVertex>();
+    private List<PolygonButton> buttons = new List<PolygonButton>();
 
     public int Selection
     {
@@ -39,11 +47,41 @@ public class PolygonSelection : MonoBehaviour {
 
     private List<Vector3> sideCoords = new List<Vector3>();
 
-    private void Start()
+    private void Awake()
     {
+        if(selections != null && selections.Length > 0)
+        {
+            Initialize(selections);
+        }
+    }
+
+    public void Initialize(string [] labels)
+    {
+        if(vertices.Count > 0)
+        {
+            Debug.LogError("PolygonSelection has already been initialized!");
+            return;
+        }
+
+        if (labels == null || labels.Length == 0)
+        {
+            Debug.Log("PolygonSelection must be initialized with a valid list!");
+            return;
+        }
+
+        sideCount = labels.Length;
+        Vector2 size = GetComponent<RectTransform>().sizeDelta;
+        radius = (size.x + size.y) / 4f;
+
+        Graphic graphic = GetComponent<Graphic>();
+        if(graphic != null)
+        {
+            Destroy(graphic);
+        }
+
         Polygon polygon = new Polygon(sideCount, radius, cutoffExponent);
         InstantiatePolygon(polygon);
-        
+
         for (int i = 0; i < sideCoords.Count; i++)
         {
             Vector3 positionAndAngle = sideCoords[i];
@@ -68,12 +106,23 @@ public class PolygonSelection : MonoBehaviour {
             vertices[i].right = buttons[i];
             //Debug.Log((i - 1) % buttons.Count);
             vertices[i].left = buttons[Bounded(i - 1, buttons.Count)];
+
+            Text currentText = vertexDot.transform.GetChild(0).GetComponent<Text>();
+            if(currentText != null && i < labels.Length)
+            {
+                currentText.text = labels[i];
+            }
         }
 
         traveler = Instantiate(traveler, transform);
         int initialPosition = Random.Range(0, vertices.Count);
         traveler.SetCurrentVertex(vertices[initialPosition]);
+        traveler.OnValueChanged += _SelectionChanged;
+    }
 
+    private void _SelectionChanged()
+    {
+        OnSelectionChanged.Invoke();
     }
 
     private int Bounded(int index, int bound)
