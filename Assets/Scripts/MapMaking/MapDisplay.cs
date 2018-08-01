@@ -67,7 +67,9 @@ public class MapDisplay : MonoBehaviour
 
     #endregion
 
-    int selectedPathIndex = -1;
+    //int selectedPathIndex = -1;
+    private WavePath highlightedPath = null;
+
     public WavePath selectedPath = null;
 
     private void Update()
@@ -77,28 +79,29 @@ public class MapDisplay : MonoBehaviour
             return;
         }
 
-        /*
+        UpdatePathSelected();
+    }
 
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            if (selectedPathIndex >= 0 && selectedPathIndex < wavePathList.Count)
-            {
-                HighLightWavePath(wavePathList[selectedPathIndex], false);
-            }
-            selectedPathIndex++;
-            selectedPathIndex %= wavePathList.Count;
-            selectedPath = wavePathList[selectedPathIndex];
-            HighLightWavePath(selectedPath, true); 
-        }
-
-        */
-
+    // uses the global selectedPath
+    // could remove the dependency but can't return the new selected path because some paths execute code after changing the selected path
+    private void UpdatePathSelected()
+    {
         Node selectedNode = null;
-        if(Player.localPlayer != null && Player.localPlayer.PlayerType == PlayerType.Attacker)
+        if (Player.localPlayer != null && Player.localPlayer.PlayerType == PlayerType.Attacker) // player must exist and be an attacker to select a path
         {
             selectedNode = worldGrid.getRaycastNode();
         }
-        
+
+        if (selectedPath != null && Input.GetMouseButtonDown(1))
+        {
+            HighLightWavePath(selectedPath, Highlight.None);
+            if (selectedPath == highlightedPath)
+            {
+                highlightedPath = null;
+            }
+            selectedPath = null;
+        }
+
         if (selectedNode != null)
         {
             WavePath localSelectedPath = null;
@@ -107,64 +110,104 @@ public class MapDisplay : MonoBehaviour
             {
                 if (currentPath.Contains(selectedNode))
                 {
-                    selectedList.Add(currentPath);
-                    //localSelectedPath = currentPath;
-                    //break;
+                    selectedList.Add(currentPath); // if the path is hovered, add it to the list
                 }
             }
 
-            if (selectedList.Count > 0 && selectedList.Contains(selectedPath))
+            if (selectedList.Count > 0) // there must be at least one path in the list
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if (selectedList.Contains(highlightedPath)) // if the list contains the selected path
                 {
-                    localSelectedPath = selectedList[(selectedList.IndexOf(selectedPath) + 1) % selectedList.Count];
-                } else
-                {
-                    localSelectedPath = selectedPath;
+                    if (Input.GetKeyDown(KeyCode.Space)) // if the player press space, cycle through the list
+                    {
+                        localSelectedPath = selectedList[(selectedList.IndexOf(highlightedPath) + 1) % selectedList.Count];
+                    }
+                    else
+                    {
+                        localSelectedPath = highlightedPath; // or just maintain the selected path
+                    }
                 }
-                
-            }
-            else if (selectedList.Count > 0)
-            {
-                localSelectedPath = selectedList[0];
+                else
+                {
+                    localSelectedPath = selectedList[0]; //if the path select is unique from the current selected, just select the first one
+                }
+
             }
 
             if (localSelectedPath != null)
             {
-                if (localSelectedPath != selectedPath)
+                if (localSelectedPath != highlightedPath)
                 {
-                    if (selectedPath != null) // if there is a hovered path and a selectedPath and they are not the same, unhighlight
+                    if (highlightedPath != null && highlightedPath != selectedPath) // if there is a hovered path and a selectedPath and they are not the same, unhighlight
                     {
-                        HighLightWavePath(selectedPath, false);
+                        HighLightWavePath(highlightedPath, Highlight.None);
                     }
-                    selectedPath = localSelectedPath; // select a new path and highlight it
-                    HighLightWavePath(selectedPath, true);
+
+                    highlightedPath = localSelectedPath; // select a new path and highlight it
+
+                    if (highlightedPath != selectedPath)
+                    {
+                        HighLightWavePath(highlightedPath, Highlight.Highlighted);
+                    }
+                }
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    if (selectedPath != null)
+                    {
+                        HighLightWavePath(selectedPath, Highlight.None);
+                    }
+                    selectedPath = localSelectedPath;
+                    HighLightWavePath(selectedPath, Highlight.Selected);
                 }
             }
-            else if (selectedPath != null) // if there is a selectedPath and no hovered path, unhighlight
+            else if (highlightedPath != null && highlightedPath != selectedPath) // if there is a selectedPath and no hovered path, unhighlight
             {
-                HighLightWavePath(selectedPath, false);
-                selectedPath = null;
+                HighLightWavePath(highlightedPath, Highlight.None);
+                highlightedPath = null;
             }
         }
-        else if (selectedPath != null) // if there is a selectedPath and no selectedNode, unhighlight
+        else if (highlightedPath != null && highlightedPath != selectedPath) // if there is a selectedPath and no selectedNode, unhighlight
         {
-            HighLightWavePath(selectedPath, false);
-            selectedPath = null;
+            HighLightWavePath(highlightedPath, Highlight.None);
+            highlightedPath = null;
         }
     }
 
-    public void HighLightWavePath(WavePath wavePath, bool highlight)
+    public enum Highlight { None, Highlighted, Selected };
+
+    public void HighLightWavePath(WavePath wavePath, Highlight highlight)
     {
         List<Arrow> highlightArrows = GetArrowsInPath(wavePath);
         if (highlightArrows == null)
         {
             return;
         }
+
+        Color color;
+        float offsetMod;
+
+        switch (highlight)
+        {
+            case Highlight.None:
+                color = Color.black;
+                offsetMod = 1f;
+                break;
+            case Highlight.Highlighted:
+                color = Color.gray;
+                offsetMod = 2f;
+                break;
+            case Highlight.Selected:
+                color = Color.white;
+                offsetMod = 1.5f;
+                break;
+            default:
+                throw new System.ArgumentOutOfRangeException();
+        }
+
         foreach (Arrow arrow in highlightArrows)
         {
-            arrow.GetComponent<Renderer>().material.SetColor("_EmissionColor", highlight ? Color.white : Color.black);
-            arrow.transform.position = new Vector3(arrow.transform.position.x, arrowOffset * (highlight ? 2f : 1f), arrow.transform.position.z);
+            arrow.GetComponent<Renderer>().material.SetColor("_EmissionColor", color);
+            arrow.transform.position = new Vector3(arrow.transform.position.x, arrowOffset * offsetMod, arrow.transform.position.z);
         }
     }
 

@@ -43,7 +43,14 @@ public class Attacker : NetworkBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha5 + i))
             {
-                CmdSpawnWave(i, routingOptions[i].currentAttribute, mapDisplay.selectedPath.ToVector2Array());
+                if(mapDisplay.selectedPath != null)
+                {
+                    CmdSpawnWave(i, routingOptions[i].currentAttribute, mapDisplay.selectedPath.ToVector2Array());
+                } else
+                {
+                    Debug.LogWarning("No selected path!");
+                }
+                
             }
         }
     }

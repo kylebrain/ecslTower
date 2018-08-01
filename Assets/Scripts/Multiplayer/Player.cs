@@ -15,8 +15,9 @@ public class Player : NetworkBehaviour
     public GameObject singlePlayerStartWave;
     public Text functionText;
 
+    // @ should work but might have to remove it
     [SyncVar]
-    public PlayerType PlayerType;
+    public PlayerType @PlayerType;
 
     [SyncVar]
     public bool isHost = false;
