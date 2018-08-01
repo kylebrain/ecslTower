@@ -24,8 +24,8 @@ public class PolygonTraveler : MonoBehaviour
         }
     }
 
-    public float buffer = 2f;
-    public float speed = 1f;
+    public float fudge = 10f;
+    public float speed = 100f;
 
     public delegate void TravelerDelegate();
     public event TravelerDelegate OnValueChanged;
@@ -35,7 +35,7 @@ public class PolygonTraveler : MonoBehaviour
         if (destinationVertex != null)
         {
             Vector2 movement = (destinationVertex.position - currentVertex.position).normalized * speed * Time.deltaTime;
-            if (Vector2.SqrMagnitude(new Vector2(transform.localPosition.x, transform.localPosition.y) - destinationVertex.position) < buffer && !currentVertex.Equals(destinationVertex))
+            if (Vector2.SqrMagnitude(new Vector2(transform.localPosition.x, transform.localPosition.y) - destinationVertex.position) < fudge && !currentVertex.Equals(destinationVertex))
             {
                 
                 currentVertex = destinationVertex;

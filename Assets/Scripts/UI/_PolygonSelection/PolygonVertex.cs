@@ -10,15 +10,17 @@ public class PolygonVertex {
     public Vector2 position;
     public Button left;
     public Button right;
+    public Graphic graphic;
 
     public PolygonVertex () : this(-1, Vector2.zero) { }
 
-    public PolygonVertex(int _selection, Vector2 _position, Button _left = null, Button _right = null)
+    public PolygonVertex(int _selection, Vector2 _position, Graphic _graphic = null, Button _left = null, Button _right = null)
     {
         selection = _selection;
         position = _position;
         left = _left;
         right = _right;
+        graphic = _graphic;
     }
 
     public void Enable(bool enabled)
