@@ -130,6 +130,7 @@ public class Score : MonoBehaviour {
     /// </summary>
     public static void GameLost()
     {
+
         instance.endScreen.EndGame(false);
     }
 }

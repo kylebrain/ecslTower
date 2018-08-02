@@ -101,39 +101,10 @@ public class Wave : NetworkBehaviour
     /// <param name="newPreAgent">The PreAgent to be spawned</param>
     public void Spawn(PreAgent newPreAgent)
     {
-
         CmdSpawn(newPreAgent.agentPrefab.gameObject, newPreAgent.agentAttribute, newPreAgent.agentPath.ToVector2Array());
-
-        /*
-            //creates a new path based on the one in the PreAgent
-        WavePath newPath = new WavePath(newPreAgent.agentPath);
-        //gets the first Node which the Agent where the Agent will be spawned
-        Node startNode = newPath.GetNextNode();
-        //Spawns the Agent at the first Node
-        Agent newAgent = Instantiate(newPreAgent.agentPrefab, startNode.transform.position, Quaternion.identity) as Agent;
-
-        //initializes the Agent through its methods
-        newAgent.transform.parent = transform;
-        
-        newAgent.InitializeAttributes(newPreAgent.agentAttribute);
-
-        if(newPath != null && newPath.NodeList.Count > 0)
-        {
-            newAgent.BeginMovement(newPath);
-        }
-
-        if (hasAuthority)
-        {
-            NetworkServer.Spawn(newAgent.gameObject);
-            //CmdSpawn(newAgent.GetComponent<NetworkIdentity>());
-            RpcUpdateAttributes(newAgent.gameObject, newAgent.Attribute, newPreAgent.agentPath.ToVector2Array(), !hasAuthority);
-        }
-
-        //CmdSpawn(newAgent.GetComponent<NetworkIdentity>());
-
-        */
     }
 
+    /*
 
     [ClientRpc]
     void RpcUpdateAttributes(GameObject identity, AgentAttribute attribute, Vector2[] coordArray, bool movementBegan)
@@ -148,6 +119,8 @@ public class Wave : NetworkBehaviour
 
     }
 
+    */
+
     [Command]
     public void CmdSpawn(GameObject agent, AgentAttribute attribute, Vector2[] coordArray)
     {
@@ -161,7 +134,7 @@ public class Wave : NetworkBehaviour
 
         newAgent.InitializeAttributes(attribute);
 
-        if (newPath != null && newPath.NodeList.Count > 0)
+        if (newPath.Valid)
         {
             newAgent.BeginMovement(newPath);
         }

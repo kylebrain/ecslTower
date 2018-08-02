@@ -1491,7 +1491,7 @@ MonoBehaviour:
   throwRange: 120
   highlightLightSaberValue: 0.7
   highlightEmissionColor: {r: 0, g: 0, b: 0, a: 0}
-  worldSpaceDisplayAgent: {fileID: 0}
+  worldSpaceDisplayAgent: {fileID: 114784577423136672}
   laserScript: {fileID: 114466324950127212}
   Poles:
   - {fileID: 1311329606056492}

@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class Attacker : NetworkBehaviour
+public class Attacker : NetworkBehaviour //inherit from PreWaveCreator to use helper functions
 {
 
     public readonly static int StartingHackerCurrency = 0;
     public static int HackerCurrency = StartingHackerCurrency;
 
-    readonly float passiveRate = 2;
+    readonly float passiveRate = 0.5f;
 
     float passiveTimer = 0;
 
@@ -28,6 +28,11 @@ public class Attacker : NetworkBehaviour
 
 
     protected MapDisplay mapDisplay;
+
+    // queue deployed Agents here
+        // spawn Agents (contained in Waves at a constant rate)
+            // if this queue is empty spawn a random benignAgent or else spawn from the queue
+    private Queue<PreAgent> deployedAgents = new Queue<PreAgent>();
 
     private void Awake()
     {
