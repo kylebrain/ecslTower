@@ -3,14 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Attacker : NetworkBehaviour
 {
+
+    public readonly static int StartingHackerCurrency = 0;
+    public static int HackerCurrency = StartingHackerCurrency;
+
+    readonly float passiveRate = 2;
+
+    float passiveTimer = 0;
+
+    public readonly static int AdvanceTimeCost = 10;
+    public readonly static int MutateCost = 10;
+
+    public HackCooldown hackCooldown;
+    public Text currencyText;
 
     [SerializeField]
     RingDisplayAgent[] agents;
     public MaliciousAgent maliciousAgentPrefab;
     public Wave wavePrefab;
+
 
     protected MapDisplay mapDisplay;
 
@@ -23,49 +38,35 @@ public class Attacker : NetworkBehaviour
         }
     }
 
-    
-    /*
-    private void Update()
+    public void DeployAgent(int agentIndex)
     {
-        if(Input.GetKeyDown(KeyCode.Semicolon))
+        if (hackCooldown != null && hackCooldown.DeployCount() > 0)
         {
-            List<WavePath> wavePaths = new List<WavePath>(mapDisplay.WavePathList);
-            Vector2Array[] vector2Array = new Vector2Array[wavePaths.Count];
-            for(int i = 0; i < vector2Array.Length; i++)
+            if (mapDisplay.selectedPath != null && mapDisplay.selectedPath.Valid)
             {
-                vector2Array[i].array = wavePaths[i].ToVector2Array();
+                CmdSpawnWave(agentIndex, agents[agentIndex].Attribute, mapDisplay.selectedPath.ToVector2Array());
+                hackCooldown.DeployCount(-1);
+            }
+            else
+            {
+                Debug.LogWarning("No selected path!");
             }
 
-            CmdBogey(vector2Array);
-        } 
-
-        for (int i = 0; i < agents.Length; i++)
+        } else
         {
-            if (Input.GetKeyDown(KeyCode.Alpha5 + i))
-            {
-                if(mapDisplay.selectedPath != null)
-                {
-                    CmdSpawnWave(i, agents[i].Attribute, mapDisplay.selectedPath.ToVector2Array());
-                } else
-                {
-                    Debug.LogWarning("No selected path!");
-                }
-                
-            }
+            Debug.LogWarning("No hack available right now!");
         }
     }
 
-    */
-
-    public void DeployAgent(int agentIndex)
+    private void Update()
     {
-        if (mapDisplay.selectedPath != null && mapDisplay.selectedPath.Valid)
+        currencyText.text = HackerCurrency.ToString();
+
+        passiveTimer += Time.deltaTime;
+        if (passiveTimer * passiveRate >= 1)
         {
-            CmdSpawnWave(agentIndex, agents[agentIndex].Attribute, mapDisplay.selectedPath.ToVector2Array());
-        }
-        else
-        {
-            Debug.LogWarning("No selected path!");
+            HackerCurrency++;
+            passiveTimer %= 1 / passiveRate;
         }
     }
 

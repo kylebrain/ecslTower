@@ -44,6 +44,11 @@ public class MaliciousAgent : Agent {
     {
         Tutorial.CallFunction(0);
         Score.Health -= scoreMod;
+        if(Player.localPlayer != null && Player.localPlayer.PlayerType == PlayerType.Attacker)
+        {
+            Debug.Log("Successful attack!");
+            Attacker.HackerCurrency += scoreMod;
+        }
     }
 
     /// <summary>

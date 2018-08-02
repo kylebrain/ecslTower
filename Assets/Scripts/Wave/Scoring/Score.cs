@@ -72,7 +72,7 @@ public class Score : MonoBehaviour {
     /// <summary>
     /// Local variable for health
     /// </summary>
-    private static int health;
+    private static int health = MaxHealth;
 
     /// <summary>
     /// Text that displays Health
