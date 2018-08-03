@@ -9,6 +9,23 @@ public class Player : NetworkBehaviour
 {
 
     public static Player localPlayer;
+
+    public static bool IsAttacker
+    {
+        get
+        {
+            return localPlayer != null && localPlayer.PlayerType == PlayerType.Attacker;
+        }
+    }
+
+    public static bool IsDefender
+    {
+        get
+        {
+            return localPlayer != null && localPlayer.PlayerType == PlayerType.Defender;
+        }
+    }
+
     public GameObject attacker;
     public GameObject defender;
     public GameObject pauseButton;

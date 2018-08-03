@@ -213,6 +213,15 @@ public abstract class Agent : VisualAgent
         terminated = true;
         AudioSource audio;
         bool particles;
+
+        // remove when syncing defender health
+
+        if(GetType() == typeof(MaliciousAgent) && Player.IsAttacker)
+        {
+            Debug.Log("Successful attack!");
+            Attacker.HackerCurrency += scoreMod;
+        }
+
         if (Score.Health > 0 && !RepairButton.Rebuilding) //if the servers are up
         {
             DestinationAction();

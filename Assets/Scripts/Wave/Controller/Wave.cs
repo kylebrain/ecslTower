@@ -34,7 +34,7 @@ public class Wave : NetworkBehaviour
     /// <summary>
     /// Seconds spend waiting for the next spawn
     /// </summary>
-    private float timeSpent = 0f;
+    private float timeSpent;
 
     /// <summary>
     /// Contains the Wave of Agents to be spawned that follow their assigned Path
@@ -46,6 +46,7 @@ public class Wave : NetworkBehaviour
     {
         //sets the spawnRate based on the level value
         timeBetweenAgent = LevelLookup.spawnRate;
+        timeSpent = timeBetweenAgent;
     }
 
     /// <summary>

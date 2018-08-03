@@ -80,7 +80,7 @@ MonoBehaviour:
     right: {fileID: 0}
     graphic: {fileID: 0}
   fudge: 10
-  speed: 100
+  speed: 25
 --- !u!222 &222544025708870064
 CanvasRenderer:
   m_ObjectHideFlags: 1

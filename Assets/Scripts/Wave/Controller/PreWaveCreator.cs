@@ -26,7 +26,7 @@ public class PreWaveCreator : NetworkBehaviour
 
     protected MapDisplay mapDisplay;
 
-    private void Awake()
+    protected void Awake()
     {
         mapDisplay = GameObject.FindWithTag("MapDisplay").GetComponent<MapDisplay>();
         if (mapDisplay == null)

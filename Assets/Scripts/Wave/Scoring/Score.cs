@@ -31,6 +31,12 @@ public class Score : MonoBehaviour {
     /// <summary>
     /// Text that displays the value of Money
     /// </summary>
+    /// 
+
+    public readonly float passiveTaxation = 0.5f;
+
+    private float taxationTimer = 0;
+
     public Text moneyText;
 
     #endregion
@@ -108,6 +114,12 @@ public class Score : MonoBehaviour {
     /// </summary>
     private void Update()
     {
+        taxationTimer += Time.deltaTime;
+        if(taxationTimer * passiveTaxation >= 1)
+        {
+            Score.Money -= 1;
+            taxationTimer %= 1 / passiveTaxation;
+        }
 
         //find or set these values explicitly
         if(moneyText != null)

@@ -27,7 +27,7 @@ public class MaliciousAgent : Agent {
         //initializes the maliciousMarker
         maliciousMarker = transform.Find("MaliciousMarker").gameObject;
         //shows the marker if the level enables it
-        if (LevelLookup.markMalicious)
+        if (LevelLookup.markMalicious || Player.IsAttacker)
         {
             maliciousMarker.SetActive(true);
         }
@@ -44,11 +44,16 @@ public class MaliciousAgent : Agent {
     {
         Tutorial.CallFunction(0);
         Score.Health -= scoreMod;
-        if(Player.localPlayer != null && Player.localPlayer.PlayerType == PlayerType.Attacker)
+        
+        //use when syncing defender health
+
+        /*
+        if(Player.localPlayer != null && Player.IsAttacker)
         {
             Debug.Log("Successful attack!");
             Attacker.HackerCurrency += scoreMod;
         }
+        */
     }
 
     /// <summary>
