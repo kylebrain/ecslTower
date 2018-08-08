@@ -17,7 +17,7 @@ public class TutorialTips : MonoBehaviour {
 
     private void Update()
     {
-        if(ControlPrefs.GetKeyDown("dismissTutorial") && dismiss.activeSelf)
+        if(ControlPrefs.GetKeyDown("dismissTutorial") && dismiss.activeSelf && Time.timeScale > 0)
         {
             tutorial.Dismiss(true);
             Hide();
@@ -38,7 +38,7 @@ public class TutorialTips : MonoBehaviour {
 
     public void ShowDismiss(bool showDismiss = true)
     {
-        dismissText.text = "Dismiss [" + ControlPrefs.GetKey("dismissTutorial") + "]";
+        dismissText.text = "Continue [" + ControlPrefs.GetKey("dismissTutorial") + "]";
         if (showDismiss)
         {
             dismiss.SetActive(true);

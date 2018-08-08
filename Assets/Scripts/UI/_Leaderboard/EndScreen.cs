@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class EndScreen : MonoBehaviour
 {
@@ -91,9 +92,7 @@ public class EndScreen : MonoBehaviour
 
     public void ReturnToLevelSelect()
     {
-        AudioListener.volume = previousAudioVolume;
-        AudioManager.Mute("Theme", false);
-        SceneLoader.LoadScene("LevelSelect");
+        SceneLoader.ExitGame();
     }
 
 }

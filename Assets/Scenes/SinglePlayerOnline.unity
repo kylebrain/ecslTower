@@ -656,7 +656,7 @@ MonoBehaviour:
   m_ServerBindAddress: 
   m_NetworkAddress: localhost
   m_DontDestroyOnLoad: 0
-  m_RunInBackground: 1
+  m_RunInBackground: 0
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2

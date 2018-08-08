@@ -10,6 +10,12 @@ public class Tutorial : PreWaveCreator
 {
     public static Tutorial instance;
 
+    public List<TutorialArrow.Spawn> spawnPoints = new List<TutorialArrow.Spawn>();
+
+    private List<TutorialArrow> spawnedArrows = new List<TutorialArrow>();
+
+    public TutorialArrow tutorialArrowPrefab;
+    public TutorialArrow canvasTutorialArrowPrefab;
     public TutorialTips tutorialTips;
     public Button repairButton;
     public Button shopButton;
@@ -150,7 +156,10 @@ public class Tutorial : PreWaveCreator
 
         //3
         tutorialTips.Show("Spend money to repair your health to full.", false);
+
+        CreateArrow("RepairButton", canvasTutorialArrowPrefab);
         yield return new WaitUntil(() => Score.Health == Score.MaxHealth);
+        DeleteArrow("RepairButton");
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
@@ -166,11 +175,17 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(bufferTime);
         tutorialTips.Show("Place a Router on the path to filter out the malicious packet.", false);
         shopButton.interactable = true;
+        CreateArrow("RouterBuy", canvasTutorialArrowPrefab);
         yield return new WaitUntil(() => FindObjectOfType<RouterBuilding>() != null);
+        DeleteArrow("RouterBuy");
+        CreateArrow("PlaceFirstRouter", tutorialArrowPrefab);
         shopButton.interactable = false;
         RouterBuilding routerBuilding = FindObjectOfType<RouterBuilding>();
         routerBuilding.routingOptions.DisableSelection(2);
         yield return new WaitUntil(() => WaitForFunction(1));
+        DeleteArrow("PlaceFirstRouter");
+        
+
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         yield return new WaitForSeconds(bufferTime);
@@ -259,6 +274,8 @@ public class Tutorial : PreWaveCreator
 
         tutorialTips.Show("Place another Router to filter out the other packet.", false);
         shopButton.interactable = true;
+        yield return new WaitUntil(() => FindObjectsOfType<RouterBuilding>().Length >= 2);
+        shopButton.interactable = false;
         yield return new WaitUntil(() => WaitForFunction(1));
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
@@ -271,9 +288,14 @@ public class Tutorial : PreWaveCreator
 
         //15b
         tutorialTips.Show("Now place two more routers on the other path and filter to mirror these.", false);
+        shopButton.interactable = true;
         foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[1])
         {
             mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.navigation);
+        }
+        foreach (Arrow arrow in mapDisplay.arrowContainer.arrowStacks[0])
+        {
+            mapDisplay.SetNodeOccupation(arrow, Node.nodeStates.empty);
         }
         yield return new WaitUntil(() => WaitForFunction(1));
         yield return new WaitUntil(() => WaitForFunction(1));
@@ -295,8 +317,27 @@ public class Tutorial : PreWaveCreator
         yield return new WaitForSeconds(AudioManager.GetLength("PowerUp"));
 
         //19
-        SceneLoader.LoadScene("LevelSelect");
+        SceneLoader.LoadScene("ModeSelect");
 
+    }
+
+    private void CreateArrow(string _name, TutorialArrow prefab)
+    {
+        TutorialArrow arrow = Instantiate(prefab, transform);
+        arrow.PlaceArrow(spawnPoints, _name);
+        spawnedArrows.Add(arrow);
+    }
+
+    private void DeleteArrow(string _name)
+    {
+        TutorialArrow delArrow = spawnedArrows.Find(x => x.name == _name);
+        if(delArrow == null)
+        {
+            Debug.LogError("Could not find TutorialArrow with that name!");
+            return;
+        }
+        spawnedArrows.Remove(delArrow);
+        delArrow.DeleteArrow();
     }
 
     private void Update()

@@ -60,36 +60,7 @@ public class PauseMenu : NetworkBehaviour
 
     public void LoadLevelSelect()
     {
-        NetworkManager networkManager = FindObjectOfType<NetworkManager>();
-
-        Player player = Player.localPlayer;
-        bool host;
-
-        if(player != null)
-        {
-            host = player.isHost || player.isServer;
-        } else
-        {
-            Tutorial tutorial = Tutorial.instance;
-            if(tutorial != null)
-            {
-                host = tutorial.isServer;
-            } else
-            {
-                Debug.LogError("Cannot find a player!\nMake sure Player or Tutorial set their static instance on Start.");
-                return;
-            }
-        }
-
-        if (host)
-        {
-            //Debug.Log("Stopping Host!");
-            networkManager.StopHost();
-        }
-        else
-        {
-            networkManager.StopClient();
-        }
+        SceneLoader.ExitGame();
     }
 
     public void ShowOptions(bool show)

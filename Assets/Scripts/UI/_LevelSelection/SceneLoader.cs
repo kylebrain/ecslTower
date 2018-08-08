@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class SceneLoader : MonoBehaviour {
 
@@ -46,5 +47,40 @@ public class SceneLoader : MonoBehaviour {
             yield return null;
         }
         loadScreen.SetActive(false);
+    }
+
+    public static void ExitGame()
+    {
+        NetworkManager networkManager = FindObjectOfType<NetworkManager>();
+
+        Player player = Player.localPlayer;
+        bool host;
+
+        if (player != null)
+        {
+            host = player.isHost || player.isServer;
+        }
+        else
+        {
+            Tutorial tutorial = Tutorial.instance;
+            if (tutorial != null)
+            {
+                host = tutorial.isServer;
+            }
+            else
+            {
+                Debug.LogError("Cannot find a player!\nMake sure Player or Tutorial set their static instance on Start.");
+                return;
+            }
+        }
+
+        if (host)
+        {
+            networkManager.StopHost();
+        }
+        else
+        {
+            networkManager.StopClient();
+        }
     }
 }

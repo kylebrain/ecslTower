@@ -82,6 +82,8 @@ public class WorldGrid : MonoBehaviour
         {
             //make all adjacent Nodes hovered
             hit.setHovered();
+
+            /*
             Node current;
             if ((current = getAt(hit.Coordinate.x + 1, hit.Coordinate.y)) != null)
             {
@@ -98,7 +100,7 @@ public class WorldGrid : MonoBehaviour
             if ((current = getAt(hit.Coordinate.x, hit.Coordinate.y - 1)) != null)
             {
                 current.setHovered();
-            }
+            } */
         }
     }
 
