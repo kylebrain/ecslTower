@@ -43,7 +43,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -89,7 +89,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: dc27cc1e30bcb6e4bb9cad5a0eb299b0,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -544,7 +545,7 @@ RectTransform:
   - {fileID: 2125378315}
   - {fileID: 1925669957}
   m_Father: {fileID: 1007479424}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1028,8 +1029,8 @@ RectTransform:
   m_Children:
   - {fileID: 390770641}
   - {fileID: 1097447919}
-  - {fileID: 1586376284}
   - {fileID: 434112719}
+  - {fileID: 1586376284}
   - {fileID: 1160162841}
   m_Father: {fileID: 2116624676}
   m_RootOrder: 2
@@ -1157,7 +1158,7 @@ Prefab:
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -80
+      value: -155
       objectReference: {fileID: 0}
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
@@ -1272,6 +1273,19 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: MultiplayerLobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 1898963065688096, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114389593707763174, guid: ef6113f1ad9025e44b89d5ebeada07d8,
+        type: 2}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1182438572716764, guid: ef6113f1ad9025e44b89d5ebeada07d8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -1759,7 +1773,7 @@ Prefab:
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
@@ -1769,7 +1783,7 @@ Prefab:
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -155
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
@@ -1992,7 +2006,7 @@ Prefab:
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -5
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 224069988873371012, guid: ef6113f1ad9025e44b89d5ebeada07d8,
         type: 2}
