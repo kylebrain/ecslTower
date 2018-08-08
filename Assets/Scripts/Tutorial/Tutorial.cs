@@ -192,9 +192,13 @@ public class Tutorial : PreWaveCreator
 
         //5
         tutorialTips.Show("Set the first two color and size filters to filter out the malicious packet.", false);
+        CreateArrow("RouterSelection", canvasTutorialArrowPrefab);
+        CreateArrow("FirstEnemy", tutorialArrowPrefab);
         AgentAttribute attr0 = infectedAttributes[0];
         attr0.Speed = AgentAttribute.PossibleSpeeds.dontCare;
         yield return new WaitUntil(() => RouterSetCorrectly(attr0));
+        DeleteArrow("RouterSelection");
+        DeleteArrow("FirstEnemy");
         routerBuilding.routingOptions.DisableSelection(-1);
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
