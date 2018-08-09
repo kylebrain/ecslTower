@@ -9,6 +9,8 @@ public abstract class Building : NetworkBehaviour
 
     //----------VARIABLES--------------
 
+    public static int Count = 0;
+
     public float Radius = 1f;
     public Color radiusColor = new Color(10, 10, 120);
     public float radiusLineWidth = 0.1f;
@@ -143,6 +145,7 @@ public abstract class Building : NetworkBehaviour
             worldGrid.setOccupied(Location, Node.nodeStates.navigation);
         }
         //Placed = false;
+        Count--;
         CmdRemoveFromMap();
     }
 
@@ -323,6 +326,7 @@ public abstract class Building : NetworkBehaviour
             else
             {
                 Score.Money += price;
+                Count--;
                 currentlyPlacing = false;
                 Destroy(gameObject);
             }
@@ -516,6 +520,9 @@ public abstract class Building : NetworkBehaviour
     #region PRIVATE
     private void Start()
     {
+        Count++;
+        name = GetType() + " " + Count;
+
         worldGrid = GameObject.FindWithTag("WorldGrid").GetComponent<WorldGrid>();
         if (worldGrid == null)
         {
@@ -537,6 +544,15 @@ public abstract class Building : NetworkBehaviour
         updateAction();
 
     }
+
+    /*
+    private void OnDestroy()
+    {
+        Debug.Log("Destroyed!");
+        Count--;
+    }
+    */
+
     #endregion
 
     //------------ABSTRACT-------------
