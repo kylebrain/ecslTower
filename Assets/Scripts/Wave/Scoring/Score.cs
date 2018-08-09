@@ -128,7 +128,7 @@ public class Score : MonoBehaviour {
         }
         if(healthText != null)
         {
-            healthText.text = Health.ToString();
+            healthText.text = Health.ToString() + "%";
         }
         if(healthSlider != null)
         {

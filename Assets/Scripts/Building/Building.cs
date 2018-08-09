@@ -34,6 +34,8 @@ public abstract class Building : NetworkBehaviour
     
     protected bool selected = false;
 
+    static Building selectedBuilding = null;
+
     /// <summary>
     /// Used to keep track of when the tower's position changes so the radius circle can be redrawn
     /// </summary>
@@ -474,6 +476,10 @@ public abstract class Building : NetworkBehaviour
         {
             return;
         }
+        if(selectedBuilding == this)
+        {
+            selectedBuilding = null;
+        }
         HighlightBuilding(false);
         radiusLine.enabled = false;
         selected = false;
@@ -487,6 +493,17 @@ public abstract class Building : NetworkBehaviour
     /// <param name="canvas">The canvas on which it is displayed</param>
     protected void ShowUI(GameObject canvas)
     {
+        if(selectedBuilding != null && selectedBuilding != this)
+        {
+            bool temp = CanvasHover.Over;
+            CanvasHover.Over = false;
+            selectedBuilding.HideUI(selectedBuilding.UIOverlay);
+            CanvasHover.Over = temp;
+        }
+        if(selectedBuilding == null)
+        {
+            selectedBuilding = this;
+        }
         HighlightBuilding(true);
         radiusLine.enabled = true;
         selected = true;

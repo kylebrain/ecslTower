@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 /// <summary>
 /// Basic unit of the CyberSecurity sim
@@ -85,7 +87,22 @@ public class RouterBuilding : Building
     public override void OnStartAuthority()
     {
         worldSpaceDisplayAgent.gameObject.SetActive(true);
+        worldSpaceDisplayAgent.gameObject.AddComponent<CanvasHover>();
+        Button agentButton = worldSpaceDisplayAgent.gameObject.AddComponent<Button>();
+        ColorBlock colorBlock = agentButton.colors;
+        colorBlock.highlightedColor = Color.grey;
+        colorBlock.pressedColor = Color.black;
+        agentButton.colors = colorBlock;
+        agentButton.onClick.AddListener(ShowUIButton);
+        Navigation nav = agentButton.navigation;
+        nav.mode = Navigation.Mode.None;
+        agentButton.navigation = nav;
         //display agent shifts position when placed
+    }
+
+    void ShowUIButton()
+    {
+        ShowUI(UIOverlay);
     }
 
     protected override void derivedStart()
