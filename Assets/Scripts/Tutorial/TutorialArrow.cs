@@ -24,7 +24,13 @@ public class TutorialArrow : MonoBehaviour {
 
     public void PlaceArrow(Spawn spawn)
     {
+        if (spawn.spawnPoint.GetComponent<RectTransform>() != null && GetComponent<RectTransform>() != null)
+        {
+            GetComponent<RectTransform>().anchorMax = spawn.spawnPoint.GetComponent<RectTransform>().anchorMax;
+            GetComponent<RectTransform>().anchorMin = spawn.spawnPoint.GetComponent<RectTransform>().anchorMin;
+        }
         PlaceArrow(spawn.spawnPoint.position, spawn.angle);
+        
     }
 
     public void PlaceArrow(List<Spawn> spawns, string _name)

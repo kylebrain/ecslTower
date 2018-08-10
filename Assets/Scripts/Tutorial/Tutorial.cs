@@ -38,6 +38,12 @@ public class Tutorial : PreWaveCreator
 
     private void Start()
     {
+        NonCanvasArrowSpawnPoints nonCanvasArrowSpawnPoints = FindObjectOfType<NonCanvasArrowSpawnPoints>();
+        if(nonCanvasArrowSpawnPoints != null)
+        {
+            spawnPoints.AddRange(nonCanvasArrowSpawnPoints.spawns);
+        }
+
         instance = this;
 
         bufferTime = mapDisplay.currentMap.spawnRate / 2f;
@@ -108,7 +114,7 @@ public class Tutorial : PreWaveCreator
     protected void CmdSpawnWave(SerializablePreAgent[] preAgents)
     {
         List<PreAgent> preAgentList = preAgents.Select(x => x.ToPreAgent()).ToList();
-        currentWave = Instantiate(wavePrefab, transform);
+        currentWave = Instantiate(wavePrefab);
         currentWave.CreateWaveWithList(preAgentList);
 
         NetworkServer.SpawnWithClientAuthority(currentWave.gameObject, connectionToClient);
@@ -300,7 +306,10 @@ public class Tutorial : PreWaveCreator
         tutorialTips.ShowDismiss();
         yield return new WaitUntil(() => DismissCheck());
         tutorialTips.Show("Change the filter to filter out the other packet.\n(" + infectedAttributes[2].Color + ", " + infectedAttributes[2].Size + ", " + infectedAttributes[2].Speed + ")");
+        Transform secondRouter = System.Array.Find(FindObjectsOfType<RouterBuilding>(), x => x.name.Contains("2")).transform;
+        CreateArrow("SecondRouterPointer", tutorialArrowPrefab, transform, secondRouter, 315);
         yield return new WaitUntil(() => DismissCheck());
+        DeleteArrow("SecondRouterPointer");
 
         //14
         tutorialTips.Show("The more specific the filter is, the more money you'll make from benign packets.");
@@ -347,7 +356,7 @@ public class Tutorial : PreWaveCreator
 
     private void CreateArrow(string _name, TutorialArrow prefab, Transform parent = null, Transform tracker = null, float angle = 0)
     {
-        if(parent == null)
+        if(parent == null && prefab != tutorialArrowPrefab)
         {
             parent = transform;
         }
