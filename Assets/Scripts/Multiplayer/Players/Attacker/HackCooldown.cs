@@ -12,7 +12,7 @@ public class HackCooldown : MonoBehaviour {
 
     Slider slider;
     // in seconds
-    const float cycleDuration = 10; // change to 10
+    const float cycleDuration = 20; // change to 10
     const int purchasePercentage = 20;
     float currentTime = 0;
 

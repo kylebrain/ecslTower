@@ -33,7 +33,7 @@ public class Score : MonoBehaviour {
     /// </summary>
     /// 
 
-    public readonly float passiveTaxation = 0.5f;
+    public readonly float passiveTaxation = 10f;
 
     private float taxationTimer = 0;
 
@@ -114,6 +114,7 @@ public class Score : MonoBehaviour {
     /// </summary>
     private void Update()
     {
+
         taxationTimer += Time.deltaTime;
         if(taxationTimer * passiveTaxation >= 1)
         {
@@ -142,7 +143,13 @@ public class Score : MonoBehaviour {
     /// </summary>
     public static void GameLost()
     {
-
-        instance.endScreen.EndGame(false);
+        if(instance != null && instance.endScreen != null)
+        {
+            instance.endScreen.EndGame(false);
+        } else
+        {
+            FindObjectOfType<UnityEngine.Networking.NetworkManager>().StopHost();
+        }
+        
     }
 }

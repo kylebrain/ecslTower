@@ -3326,7 +3326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a98beff155d2c48b3ab8bdece75d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentRingAgent: {fileID: 0}
+  currentRingAgent: {fileID: 114784577423136672}
 --- !u!114 &114889603488225384
 MonoBehaviour:
   m_ObjectHideFlags: 1

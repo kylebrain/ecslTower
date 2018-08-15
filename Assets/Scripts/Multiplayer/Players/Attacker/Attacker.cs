@@ -12,13 +12,13 @@ public class Attacker : PreWaveCreator //inherit from PreWaveCreator to use help
     public static int HackerCurrency = StartingHackerCurrency;
 
     readonly float spawnRate = 2;
-    readonly float passiveRate = 1f;
+    readonly float passiveRate = 0.25f;
 
     float passiveTimer = 0;
     float spawnTimer = 0;
 
-    public readonly static int AdvanceTimeCost = 10;
-    public readonly static int MutateCost = 10;
+    public readonly static int AdvanceTimeCost = 50;
+    public readonly static int MutateCost = 50;
 
     public HackCooldown hackCooldown;
     public Text currencyText;
