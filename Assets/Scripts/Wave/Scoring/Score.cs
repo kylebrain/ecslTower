@@ -33,7 +33,7 @@ public class Score : MonoBehaviour {
     /// </summary>
     /// 
 
-    public readonly float passiveTaxation = 10f;
+    public readonly float passiveTaxation = 5f;
 
     private float taxationTimer = 0;
 

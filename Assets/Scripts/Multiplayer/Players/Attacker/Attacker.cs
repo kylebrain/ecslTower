@@ -17,8 +17,8 @@ public class Attacker : PreWaveCreator //inherit from PreWaveCreator to use help
     float passiveTimer = 0;
     float spawnTimer = 0;
 
-    public readonly static int AdvanceTimeCost = 50;
-    public readonly static int MutateCost = 50;
+    public readonly static int AdvanceTimeCost = 5;
+    public readonly static int MutateCost = 100;
 
     public HackCooldown hackCooldown;
     public Text currencyText;
