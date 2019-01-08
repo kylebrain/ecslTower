@@ -14,6 +14,7 @@ public class QuitMainMenuButton : GameButton
 
     public override void PerformAction()
     {
+        Application.Quit();
     }
 
     public override void Show()
