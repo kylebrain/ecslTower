@@ -33,9 +33,10 @@ public class Score : MonoBehaviour {
     /// </summary>
     /// 
 
-    public readonly float passiveTaxation = 5f;
+    // add back but only to multiplayer
+    public readonly float passiveTaxation = 0f; // originally 5
 
-    private float taxationTimer = 0;
+    private float taxationTimer = 0; 
 
     public Text moneyText;
 
